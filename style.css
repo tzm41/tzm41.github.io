@@ -56,6 +56,9 @@ a,button{outline: none!important;} /* Prevent ugly blue glow on chrome and safar
 .bloc-lg{
 	padding:100px 50px;
 }
+.bloc-sm{
+	padding:20px 50px;
+}
 
 
 /* Light theme */
@@ -97,7 +100,7 @@ a,button{outline: none!important;} /* Prevent ugly blue glow on chrome and safar
 
 /* Bloc text custom styling */
 
-#bloc-0 h3{
+#bloc-1 h3{
 	line-height: 50px;
 	font-family: Helvetica;
 }
@@ -227,11 +230,6 @@ button{
 
 .dropdown a .caret{
 	margin:0 0 0 5px}
-/* = Icons
--------------------------------------------------------------- */
-.icon-md{
-	font-size:30px!important;
-}
 
 
 
