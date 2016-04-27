@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------------------
-        My Site
+        Github.io
         Built with Blocs
 -----------------------------------------------------------------------------------*/
 
@@ -19,11 +19,8 @@ a,button{outline: none!important;} /* Prevent ugly blue glow on chrome and safar
    
 
 
-
-
 /* Globals type styling */
-   
- h1, h2, h3, h4, h5, h6, p, label, .btn, a{
+    h1, h2, h3, h4, h5, h6, p, label, .btn, a{
 	font-family:"Helvetica";
 }
 
@@ -93,6 +90,12 @@ a,button{outline: none!important;} /* Prevent ugly blue glow on chrome and safar
 .l-bloc .btn-wire, .l-bloc .btn-wire:hover{
 	color:rgba(0,0,0,.7);
 	border-color:rgba(0,0,0,.3);
+}
+
+/* Row Margin Offsets */
+
+.voffset{
+	margin-top:30px;
 }
 
 /* Bloc text custom styling */
@@ -198,6 +201,13 @@ nav .caret{
 	margin: 0 5px;
 }
 
+/* = Bric adjustment margins
+-------------------------------------------------------------- */
+
+.mg-md{
+	margin-top:10px;
+	margin-bottom:20px;
+}
 
 /* = Buttons
 -------------------------------------------------------------- */
@@ -220,6 +230,11 @@ button{
 
 .dropdown a .caret{
 	margin:0 0 0 5px}
+/* = Icons
+-------------------------------------------------------------- */
+.icon-md{
+	font-size:30px!important;
+}
 
 
 
