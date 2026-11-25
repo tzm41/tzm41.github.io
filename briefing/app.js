@@ -1845,13 +1845,14 @@ async function bootstrap() {
     btn.innerHTML = collapsed ? "Expand &#9662;" : "Collapse &#9652;";
   });
 
-  // News category filters
+  // News category filters (click active filter again to reset to All)
   els.newsFilters.addEventListener("click", (e) => {
     const btn = e.target.closest(".filter-btn");
     if (!btn) return;
-    state.newsCategory = btn.dataset.category;
+    const clicked = btn.dataset.category;
+    state.newsCategory = state.newsCategory === clicked ? "All" : clicked;
     els.newsFilters.querySelectorAll(".filter-btn").forEach((b) => {
-      const active = b === btn;
+      const active = b.dataset.category === state.newsCategory;
       b.classList.toggle("active", active);
       b.setAttribute("aria-selected", String(active));
     });
