@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
 import httpx
@@ -163,32 +164,40 @@ def _merge_daily_closes(prior_30d: list[float], recent_5d: list[float]) -> list[
 
 
 def _download_timeframes(
-    symbols: list[str],
+    quote_symbols: list[str],
+    sector_symbols: list[str] | None = None,
     include_intraday: bool = True,
     prior_map: dict[str, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Download 5D daily (stitching onto cached 30D when possible), 5D hourly, and 1D 30-min closes."""
-    df_5d_daily = _download_df(symbols, "5d", "1d")
+    """Download 5D daily (stitching cached 30D when possible), 5D hourly, and 1D 30-min closes in parallel."""
+    all_daily_symbols = list(quote_symbols) + list(sector_symbols or [])
 
-    # Determine which symbols can reuse cached 30D history vs needing a full 45D backfill
-    stitched_30d: dict[str, list[float]] = {}
-    need_45d: list[str] = []
-    for sym in symbols:
-        s5_daily = _extract_series(df_5d_daily, sym)
-        recent = [round(float(x), 2) for x in s5_daily.tolist()] if s5_daily is not None else []
-        prior_30d = (prior_map or {}).get(sym, {}).get("sparkline_30d", [])
-        merged = _merge_daily_closes(prior_30d, recent)
-        if merged is not None:
-            stitched_30d[sym] = merged
-        else:
-            need_45d.append(sym)
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        fut_5d_daily = pool.submit(_download_df, all_daily_symbols, "5d", "1d")
+        fut_5d_1h = pool.submit(_download_df, quote_symbols, "5d", "1h") if include_intraday else None
+        fut_1d_30m = pool.submit(_download_df, quote_symbols, "2d", "30m") if include_intraday else None
 
-    df_45d = _download_df(need_45d, "45d", "1d") if need_45d else None
+        df_5d_daily = fut_5d_daily.result()
+
+        # Determine which symbols can reuse cached 30D history vs needing a 45D backfill
+        stitched_30d: dict[str, list[float]] = {}
+        need_45d: list[str] = []
+        for sym in all_daily_symbols:
+            s5_daily = _extract_series(df_5d_daily, sym)
+            recent = [round(float(x), 2) for x in s5_daily.tolist()] if s5_daily is not None else []
+            prior_30d = (prior_map or {}).get(sym, {}).get("sparkline_30d", [])
+            merged = _merge_daily_closes(prior_30d, recent)
+            if merged is not None:
+                stitched_30d[sym] = merged
+            else:
+                need_45d.append(sym)
+
+        df_45d = _download_df(need_45d, "45d", "1d") if need_45d else None
+        df_5d = fut_5d_1h.result() if fut_5d_1h else None
+        df_1d = fut_1d_30m.result() if fut_1d_30m else None
+
     if stitched_30d:
-        print(f"[markets] Reused cached 30D history for {len(stitched_30d)}/{len(symbols)} symbols.")
-
-    df_5d = _download_df(symbols, "5d", "1h") if include_intraday else None
-    df_1d = _download_df(symbols, "2d", "30m") if include_intraday else None
+        print(f"[markets] Reused cached 30D history for {len(stitched_30d)}/{len(all_daily_symbols)} symbols.")
 
     def get_30d(symbol: str) -> list[float]:
         if symbol in stitched_30d:
@@ -281,8 +290,12 @@ def _fetch_markets_sync(prior_markets: dict[str, Any] | None = None) -> tuple[di
             if q.get("symbol"):
                 prior_map[q["symbol"]] = q
 
-    tf_quotes = _download_timeframes(quote_symbols, include_intraday=True, prior_map=prior_map)
-    tf_sectors = _download_timeframes(sector_symbols, include_intraday=False)
+    tf_all = _download_timeframes(
+        quote_symbols,
+        sector_symbols=sector_symbols,
+        include_intraday=True,
+        prior_map=prior_map,
+    )
 
     gf_client: httpx.Client | None = None
 
@@ -295,12 +308,12 @@ def _fetch_markets_sync(prior_markets: dict[str, Any] | None = None) -> tuple[di
             )
         return gf_client
 
-    watchlist = _build_quote_list(MARKET_WATCHLIST, tf_quotes, get_gf_client)
-    big7 = _build_quote_list(MARKET_BIG7, tf_quotes, get_gf_client)
+    watchlist = _build_quote_list(MARKET_WATCHLIST, tf_all, get_gf_client)
+    big7 = _build_quote_list(MARKET_BIG7, tf_all, get_gf_client)
 
     sectors: list[dict[str, Any]] = []
     for cfg in MARKET_SECTORS:
-        closes = tf_sectors["30d"](cfg["symbol"])
+        closes = tf_all["30d"](cfg["symbol"])
         if len(closes) >= 2:
             latest = closes[-1]
             prev_1d = closes[-2]

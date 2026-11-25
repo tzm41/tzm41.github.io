@@ -15,19 +15,28 @@ from bs4 import BeautifulSoup
 from ..config import HTTP_TIMEOUT_SECONDS, NEWS_FEEDS, USER_AGENT
 
 
+_WS_RE = re.compile(r"\s+")
+_SOURCE_SUFFIX_RE = re.compile(r"\s*[-|–—]\s*[^-|–—]{2,40}$")
+_NON_ALNUM_RE = re.compile(r"[^a-z0-9\s]")
+
+
 def clean_text(raw: str | None, max_len: int = 320) -> str:
     if not raw:
         return ""
-    text = BeautifulSoup(html.unescape(raw), "html.parser").get_text(" ", strip=True)
-    text = re.sub(r"\s+", " ", text).strip()
+    unescaped = html.unescape(raw)
+    if "<" in unescaped:
+        text = BeautifulSoup(unescaped, "html.parser").get_text(" ", strip=True)
+    else:
+        text = unescaped
+    text = _WS_RE.sub(" ", text).strip()
     if len(text) > max_len:
         text = text[: max_len - 1].rsplit(" ", 1)[0] + "…"
     return text
 
 
 def normalize_title(title: str) -> str:
-    cleaned = re.sub(r"\s*[-|–—]\s*[^-|–—]{2,40}$", "", title.strip())
-    return re.sub(r"[^a-z0-9\s]", "", cleaned.lower()).strip()
+    cleaned = _SOURCE_SUFFIX_RE.sub("", title.strip())
+    return _NON_ALNUM_RE.sub("", cleaned.lower()).strip()
 
 
 async def _fetch_feed(client: httpx.AsyncClient, feed_cfg: dict[str, str]) -> list[dict[str, Any]]:
@@ -68,9 +77,10 @@ def deduplicate_articles(articles: list[dict[str, Any]], max_items: int = 45) ->
             continue
         matched = False
         for cluster in clusters:
-            ratio = SequenceMatcher(None, norm, cluster["_norm"]).ratio()
-            if ratio >= 0.72:
-                if art["source"] not in {s["name"] for s in cluster["sources"]}:
+            matcher = SequenceMatcher(None, norm, cluster["_norm"])
+            if matcher.quick_ratio() >= 0.72 and matcher.ratio() >= 0.72:
+                if art["source"] not in cluster["_source_names"]:
+                    cluster["_source_names"].add(art["source"])
                     cluster["sources"].append({"name": art["source"], "url": art["url"]})
                     cluster["cluster_size"] += 1
                 if len(art["summary"]) > len(cluster["summary"]):
@@ -81,6 +91,7 @@ def deduplicate_articles(articles: list[dict[str, Any]], max_items: int = 45) ->
             clusters.append(
                 {
                     "_norm": norm,
+                    "_source_names": {art["source"]},
                     "title": art["title"],
                     "summary": art["summary"],
                     "category": art["category"],
@@ -94,6 +105,7 @@ def deduplicate_articles(articles: list[dict[str, Any]], max_items: int = 45) ->
     clusters.sort(key=lambda c: c["cluster_size"], reverse=True)
     for c in clusters:
         c.pop("_norm", None)
+        c.pop("_source_names", None)
     return clusters[:max_items]
 
 

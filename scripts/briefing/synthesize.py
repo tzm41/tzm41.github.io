@@ -73,6 +73,17 @@ def _build_prompt(
                 }
                 for q in raw_markets.get("watchlist", [])
             ],
+            "big7": [
+                {
+                    "symbol": q["symbol"],
+                    "name": q["name"],
+                    "price": q["price"],
+                    "change_pct": q["change_pct"],
+                    "change_5d_pct": q["change_5d_pct"],
+                }
+                for q in raw_markets.get("big7", [])
+            ],
+            "fear_greed": raw_markets.get("fear_greed"),
             "sectors": raw_markets.get("sectors", []),
         },
         "conflict_theaters": [

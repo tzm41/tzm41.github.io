@@ -135,8 +135,16 @@ async def _fetch_google_news_intensity_fallback(
         return []
 
 
-async def fetch_conflicts() -> tuple[list[dict[str, Any]], str]:
-    """Fetch conflict intensity metrics (GDELT with Google News RSS fallback) and RSS headlines."""
+async def fetch_conflicts(
+    prior_conflicts: dict[str, Any] | None = None,
+) -> tuple[list[dict[str, Any]], str]:
+    """Fetch conflict intensity metrics (GDELT with cached-prior & RSS fallbacks) and RSS headlines."""
+    prior_by_id: dict[str, list[float]] = {
+        t["id"]: t.get("intensity_series_14d", [])
+        for t in (prior_conflicts or {}).get("theaters", [])
+        if t.get("id") and t.get("intensity_series_14d")
+    }
+
     async with httpx.AsyncClient(
         timeout=HTTP_TIMEOUT_SECONDS,
         headers={"User-Agent": USER_AGENT},
@@ -145,15 +153,20 @@ async def fetch_conflicts() -> tuple[list[dict[str, Any]], str]:
         rss_task = asyncio.gather(
             *[_fetch_theater_rss(client, cfg["rss_query"]) for cfg in CONFLICT_THEATERS]
         )
-        # Fetch GDELT sequentially with polite 5.5s spacing; fall back to Google News RSS on 429/empty
+        # Fetch GDELT sequentially with polite 5.5s spacing; preserve scale on 429 via prior cache
         gdelt_series_list: list[list[float]] = []
         for idx, cfg in enumerate(CONFLICT_THEATERS):
             if idx > 0:
                 await asyncio.sleep(5.5)
             series = await _fetch_gdelt_intensity(client, cfg["gdelt_query"])
             if not series:
-                print(f"[conflicts] Falling back to Google News RSS intensity for {cfg['id']}.")
-                series = await _fetch_google_news_intensity_fallback(client, cfg["rss_query"])
+                cached = prior_by_id.get(cfg["id"], [])
+                if cached:
+                    print(f"[conflicts] Reusing prior cached intensity series for {cfg['id']} after GDELT failure.")
+                    series = cached
+                else:
+                    print(f"[conflicts] Falling back to Google News RSS intensity for {cfg['id']}.")
+                    series = await _fetch_google_news_intensity_fallback(client, cfg["rss_query"])
             gdelt_series_list.append(series)
 
         rss_results = await rss_task

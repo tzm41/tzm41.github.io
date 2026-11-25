@@ -205,23 +205,6 @@ a {
   outline: none;
 }
 
-.theme-btn {
-  background: var(--surface-subtle);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--ink-secondary);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  padding: 7px 12px;
-  cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
-}
-
-.theme-btn:hover {
-  border-color: var(--border-strong);
-  color: var(--ink);
-}
-
 /* ---------- Section Nav ---------- */
 
 .section-nav {

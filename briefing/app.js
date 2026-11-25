@@ -114,16 +114,16 @@ function fmtLocalTimestamp(isoStr) {
   });
 }
 
+const SUMMARY_HIGHLIGHT_RE =
+  /\*\*([^*]+)\*\*|(?<![\w.$])([+-]?\$\d[\d,]*(?:\.\d+)?(?:\s?(?:million|billion|trillion|M|B|K))?|[+-]?\d[\d,]*(?:\.\d+)?%|\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b)(?!\w)|(['"][A-Z][^'"]{1,40}['"])|\b([A-Z][A-Za-z0-9.&'-]*(?:\s+(?:of|and|for|the|in|on|to)\s+)?(?:[A-Z][A-Za-z0-9.&'-]*)(?:\s+[A-Z0-9][A-Za-z0-9.&'-]*)*)\b|\b([A-Z]{2,5}(?:\s*&\s*[A-Z]{2,5})?)\b/g;
+
 function highlightSummaryHtml(text) {
   const raw = String(text ?? "");
   if (!raw) return "";
 
-  const pattern =
-    /\*\*([^*]+)\*\*|(?<![\w.$])([+-]?\$\d[\d,]*(?:\.\d+)?(?:\s?(?:million|billion|trillion|M|B|K))?|[+-]?\d[\d,]*(?:\.\d+)?%|\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b)(?!\w)|(['"][A-Z][^'"]{1,40}['"])|\b([A-Z][A-Za-z0-9.&'-]*(?:\s+(?:of|and|for|the|in|on|to)\s+)?(?:[A-Z][A-Za-z0-9.&'-]*)(?:\s+[A-Z0-9][A-Za-z0-9.&'-]*)*)\b|\b([A-Z]{2,5}(?:\s*&\s*[A-Z]{2,5})?)\b/g;
-
   let out = "";
   let lastIdx = 0;
-  for (const match of raw.matchAll(pattern)) {
+  for (const match of raw.matchAll(SUMMARY_HIGHLIGHT_RE)) {
     const idx = match.index ?? 0;
     if (idx > lastIdx) {
       out += escapeHtml(raw.slice(lastIdx, idx));
@@ -224,7 +224,7 @@ function applyThemePreference(pref) {
     btn.setAttribute("aria-pressed", String(active));
   });
 
-  if (state.briefing) renderMarkets(state.briefing.markets);
+  if (state.briefing) renderSectorHeatmap(state.briefing.markets);
 }
 
 function initTheme() {
@@ -486,13 +486,7 @@ function renderFearGreed(fg) {
   `;
 }
 
-function renderMarkets(markets = {}) {
-  const regime = markets.regime_tag || "Mixed";
-  const regimeSlug = regime.toLowerCase().replace(/\s+/g, "-");
-  els.marketRegime.textContent = regime;
-  els.marketRegime.className = `regime-badge ${regimeSlug}`;
-  els.marketNarrative.innerHTML = highlightSummaryHtml(markets.narrative || "");
-
+function renderSectorHeatmap(markets = {}) {
   const tf = state.marketTimeframe;
   const tfLabels = {
     "1d": "Daily ETF performance (SPDR Select Sectors)",
@@ -501,6 +495,36 @@ function renderMarkets(markets = {}) {
   };
   els.heatmapLabel.textContent = tfLabels[tf] || tfLabels["1d"];
 
+  const sectors = [...(markets.sectors || [])].sort(
+    (a, b) => getTimeframeValue(b, tf) - getTimeframeValue(a, tf)
+  );
+
+  if (!sectors.length) {
+    els.sectorHeatmap.innerHTML = `<div class="empty-state">Sector heatmap unavailable for this date.</div>`;
+  } else {
+    els.sectorHeatmap.innerHTML = sectors
+      .map((s) => {
+        const pct = getTimeframeValue(s, tf);
+        return `
+          <div class="sector-tile" style="${sectorTileStyle(pct)}">
+            <span class="sector-sym">${escapeHtml(s.symbol)}</span>
+            <span class="sector-name">${escapeHtml(s.name)}</span>
+            <span class="sector-val">${fmtPct(pct)}</span>
+          </div>
+        `;
+      })
+      .join("");
+  }
+}
+
+function renderMarkets(markets = {}) {
+  const regime = markets.regime_tag || "Mixed";
+  const regimeSlug = regime.toLowerCase().replace(/\s+/g, "-");
+  els.marketRegime.textContent = regime;
+  els.marketRegime.className = `regime-badge ${regimeSlug}`;
+  els.marketNarrative.innerHTML = highlightSummaryHtml(markets.narrative || "");
+
+  const tf = state.marketTimeframe;
   renderFearGreed(markets.fear_greed);
 
   renderQuoteGrid(
@@ -529,26 +553,7 @@ function renderMarkets(markets = {}) {
     }
   }
 
-  const sectors = [...(markets.sectors || [])].sort(
-    (a, b) => getTimeframeValue(b, tf) - getTimeframeValue(a, tf)
-  );
-
-  if (!sectors.length) {
-    els.sectorHeatmap.innerHTML = `<div class="empty-state">Sector heatmap unavailable for this date.</div>`;
-  } else {
-    els.sectorHeatmap.innerHTML = sectors
-      .map((s) => {
-        const pct = getTimeframeValue(s, tf);
-        return `
-          <div class="sector-tile" style="${sectorTileStyle(pct)}">
-            <span class="sector-sym">${escapeHtml(s.symbol)}</span>
-            <span class="sector-name">${escapeHtml(s.name)}</span>
-            <span class="sector-val">${fmtPct(pct)}</span>
-          </div>
-        `;
-      })
-      .join("");
-  }
+  renderSectorHeatmap(markets);
 }
 
 function renderConflicts(conflicts = {}) {
@@ -802,6 +807,31 @@ function initSparklineHover() {
   };
 
   let activeWrap = null;
+  const seriesCache = new WeakMap();
+
+  const getCachedSeries = (wrap) => {
+    let entry = seriesCache.get(wrap);
+    if (!entry) {
+      try {
+        const values = JSON.parse(wrap.dataset.values || "[]");
+        if (!Array.isArray(values) || values.length < 2) return null;
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        entry = {
+          values,
+          min,
+          span: max - min || 1,
+          guide: wrap.querySelector(".spark-guide"),
+          dot: wrap.querySelector(".spark-dot"),
+          tip: wrap.querySelector(".spark-tooltip"),
+        };
+        seriesCache.set(wrap, entry);
+      } catch {
+        return null;
+      }
+    }
+    return entry;
+  };
 
   root.addEventListener("pointermove", (e) => {
     const wrap = e.target.closest(".sparkline-wrap");
@@ -817,17 +847,13 @@ function initSparklineHover() {
     }
     activeWrap = wrap;
 
-    let values;
-    try {
-      values = JSON.parse(wrap.dataset.values || "[]");
-    } catch {
-      return;
-    }
-    if (!Array.isArray(values) || values.length < 2) return;
+    const entry = getCachedSeries(wrap);
+    if (!entry) return;
 
     const rect = wrap.getBoundingClientRect();
     if (!rect.width) return;
 
+    const { values, min, span, guide, dot, tip } = entry;
     const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     const idx = Math.round(ratio * (values.length - 1));
     const val = values[idx];
@@ -835,15 +861,9 @@ function initSparklineHover() {
     const w = 120;
     const h = 32;
     const pad = 3;
-    const min = Math.min(...values);
-    const max = Math.max(...values);
-    const span = max - min || 1;
     const ptX = (idx / (values.length - 1)) * w;
     const ptY = h - pad - ((val - min) / span) * (h - pad * 2);
 
-    const guide = wrap.querySelector(".spark-guide");
-    const dot = wrap.querySelector(".spark-dot");
-    const tip = wrap.querySelector(".spark-tooltip");
     if (guide) {
       guide.setAttribute("x1", ptX.toFixed(1));
       guide.setAttribute("x2", ptX.toFixed(1));

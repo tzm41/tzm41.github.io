@@ -113,12 +113,13 @@ async def run_pipeline(
     print(f"[run] Starting Daily Briefing pipeline for {target_date}...")
     prior = _load_prior_briefing(target_date)
     prior_markets = prior.get("markets") if prior else None
+    prior_conflicts = prior.get("conflicts") if prior else None
 
     (raw_news, news_h), (raw_markets, mkt_h), (raw_conflicts, conf_h), (raw_politics, pol_h) = (
         await asyncio.gather(
             fetch_top_news(),
             fetch_markets(prior_markets=prior_markets),
-            fetch_conflicts(),
+            fetch_conflicts(prior_conflicts=prior_conflicts),
             fetch_politics(),
         )
     )
