@@ -162,9 +162,21 @@ a {
   gap: 10px;
 }
 
-.archive-nav {
+.masthead-controls .segmented {
+  height: 32px;
+  align-items: stretch;
+}
+
+.masthead-controls .seg-btn {
   display: inline-flex;
   align-items: center;
+  padding: 0 10px;
+}
+
+.archive-nav {
+  display: inline-flex;
+  align-items: stretch;
+  height: 32px;
   background: var(--surface-subtle);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -172,12 +184,15 @@ a {
 }
 
 .icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: transparent;
   border: 0;
   color: var(--ink);
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1;
-  padding: 6px 10px;
+  padding: 0 10px;
   cursor: pointer;
   transition: background 0.15s ease;
 }
@@ -199,8 +214,9 @@ a {
   border-right: 1px solid var(--border);
   color: var(--ink);
   font-family: var(--font-mono);
-  font-size: 12.5px;
-  padding: 7px 12px;
+  font-size: 12px;
+  height: 100%;
+  padding: 0 12px;
   cursor: pointer;
   outline: none;
 }
