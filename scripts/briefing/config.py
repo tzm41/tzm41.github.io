@@ -20,7 +20,7 @@ HTTP_TIMEOUT_SECONDS = 15.0
 USER_AGENT = "DailyBriefingBot/1.0 (+https://tzm41.github.io/briefing/)"
 
 # Gemini settings
-GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_MODEL = "gemini-3.8-flash"
 
 # Curated free RSS feeds for Top News
 NEWS_FEEDS: list[dict[str, str]] = [

@@ -269,7 +269,7 @@ function renderKpiStrip(briefing) {
 }
 
 function renderExecutiveBrief(briefing) {
-  const mode = briefing.synthesis_mode === "gemini" ? "Gemini 2.5 Flash" : "Extractive Fallback";
+  const mode = briefing.synthesis_mode === "gemini" ? "Gemini 3.8 Flash" : "Extractive Fallback";
   els.synthesisModeTag.textContent = mode;
 
   const bullets = briefing.executive_brief || [];

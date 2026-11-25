@@ -15,7 +15,7 @@ Automated static-first intelligence briefing hosted at `https://tzm41.github.io/
 ```bash
 pip install -r scripts/briefing/requirements.txt
 
-# Optional: enable Gemini 2.5 Flash synthesis locally
+# Optional: enable Gemini 3.8 Flash synthesis locally
 export GEMINI_API_KEY="your-key-here"
 
 # Run the pipeline and write to briefing/data/

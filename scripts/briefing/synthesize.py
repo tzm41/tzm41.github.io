@@ -105,10 +105,11 @@ def _call_gemini(prompt: str, api_key: str) -> GeminiBriefingSynthesis | None:
         return None
 
     client = genai.Client(api_key=api_key)
+    model_name = os.environ.get("GEMINI_MODEL", "").strip() or GEMINI_MODEL
     for attempt in range(1, 4):
         try:
             response = client.models.generate_content(
-                model=GEMINI_MODEL,
+                model=model_name,
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     system_instruction=SYSTEM_INSTRUCTION,
