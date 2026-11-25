@@ -59,8 +59,8 @@
         <a href="#markets">Markets &amp; Sectors</a>
         <a href="#conflicts">Global Conflicts</a>
         <a href="#politics">US Politics</a>
-        <a href="#positive">Positive News</a>
         <a href="#local-news">Local News</a>
+        <a href="#positive">Positive News</a>
       </div>
       <div class="health-strip" id="source-health" aria-label="Data source status"></div>
     </div>
@@ -227,21 +227,7 @@
       </div>
     </section>
 
-    <!-- 6. Positive News -->
-    <section id="positive" class="section positive-section hidden">
-      <div class="section-header">
-        <div>
-          <span class="kicker positive-kicker">Bright Spot</span>
-          <h2>Positive News</h2>
-        </div>
-        <div class="section-actions">
-          <button type="button" class="collapse-btn" id="btn-move-positive" title="Toggle Positive News placement">Move below Brief &uarr;</button>
-        </div>
-      </div>
-      <div id="positive-news-slot"></div>
-    </section>
-
-    <!-- 7. Local News (Collapsible, collapsed by default) -->
+    <!-- 6. Local News (Collapsible, collapsed by default) -->
     <section id="local-news" class="section local-news-section hidden">
       <div class="section-header local-news-header">
         <div>
@@ -264,6 +250,20 @@
         <div class="news-grid" id="local-news-grid"></div>
       </div>
     </section>
+
+    <!-- 7. Positive News -->
+    <section id="positive" class="section positive-section hidden">
+      <div class="section-header">
+        <div>
+          <span class="kicker positive-kicker">Bright Spot</span>
+          <h2>Positive News</h2>
+        </div>
+        <div class="section-actions">
+          <button type="button" class="collapse-btn" id="btn-move-positive" title="Toggle Positive News placement">Move below Brief &uarr;</button>
+        </div>
+      </div>
+      <div id="positive-news-slot"></div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -273,6 +273,6 @@
     </div>
   </footer>
 
-  <script type="module" src="./app.js?v=33"></script>
+  <script type="module" src="./app.js?v=34"></script>
 </body>
 </html>

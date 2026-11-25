@@ -1603,24 +1603,23 @@ function applyPositivePlacement(pos) {
   const placement = pos === "top" ? "top" : "bottom";
   const positiveSec = els.positiveSection;
   const execSec = document.getElementById("executive");
-  const politicsSec = document.getElementById("politics");
-  if (positiveSec && execSec && politicsSec) {
+  const appRoot = document.getElementById("app-root");
+  if (positiveSec && execSec && appRoot) {
     if (placement === "top") {
       execSec.insertAdjacentElement("afterend", positiveSec);
     } else {
-      politicsSec.insertAdjacentElement("afterend", positiveSec);
+      appRoot.appendChild(positiveSec);
     }
   }
 
   const navLinks = document.querySelector(".nav-links");
   const posLink = navLinks?.querySelector('a[href="#positive"]');
   const execLink = navLinks?.querySelector('a[href="#executive"]');
-  const polLink = navLinks?.querySelector('a[href="#politics"]');
-  if (posLink && execLink && polLink) {
+  if (posLink && execLink && navLinks) {
     if (placement === "top") {
       execLink.insertAdjacentElement("afterend", posLink);
     } else {
-      polLink.insertAdjacentElement("afterend", posLink);
+      navLinks.appendChild(posLink);
     }
   }
 
