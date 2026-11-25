@@ -4053,6 +4053,107 @@
           ],
           "continued_from_prior": false
         }
+      ],
+      "stories_en": []
+    },
+    {
+      "id": "china",
+      "name": "China",
+      "stories": [
+        {
+          "id": "cn-us-tariffs-20pct",
+          "category": "Economy",
+          "headline": "美国拟对中国等14个贸易伙伴加征新关税，中国商品面临最高20%税率",
+          "summary": "特朗普政府提议对14个贸易伙伴加征新一轮关税，其中**中国商品面临最高20%的关税税率**。北京方面对此予以反驳，称美方指责的**“产能过剩是伪命题”**。",
+          "why_it_matters": "新一轮关税威胁将进一步加剧**中美经贸摩擦**，并直接影响中国制造业出口与跨国供应链布局。",
+          "sources": [
+            {
+              "name": "Deutsche Welle",
+              "url": "https://news.google.com/rss/articles/CBMi9gJBVV95cUxQRGVtblAtTS1HQzZ6QzhIMGR2TGxiVjZFSEFQTjl6TC1IUFVqVEFBOTFWaHFNaG5pcjBDa2ppRHJWVkxMRXpiUTBnNDQ0aEdkc1pEX25PLUk4NG0tZllnb2JLcTRJZVctQVJrdWxvcl9nNy1YMnh0NlUtUVlnZ0NDd1JOZ3VXdHRCVFM4anViYWNuVGdicEpuVHR3eGEyVVNEQThBWmdfU3NTY2Y3NFdwWmY2MU1tTnhoTFVxVDc5eTJ2UHlkelktblRlMXRZdTB4RlVrSFlYXzNnT1BMckxLYTgwWTZwQTBNTC1TZ2hMWXUtbEI5eGIwVVM4WUlwMnFRX3hHclV3VzNpT3pnd0h6cXE1Nml3Mm5vRmtKWW4xRGtYOUNvWHdvU0dhdElnbU10b2ZnQWRwamRmVVRZS2w5dTVJTElBcDJzWEZoUFdudThWRUEySjhGR1hOekFwOFY2MXl0MHRrTVlEMm9zVmtTZzFLUTdiUdIB9gJBVV95cUxQRGVtblAtTS1HQzZ6QzhIMGR2TGxiVjZFSEFQTjl6TC1IUFVqVEFBOTFWaHFNaG5pcjBDa2ppRHJWVkxMRXpiUTBnNDQ0aEdkc1pEX25PLUk4NG0tZllnb2JLcTRJZVctQVJrdWxvcl9nNy1YMnh0NlUtUVlnZ0NDd1JOZ3VXdHRCVFM4anViYWNuVGdicEpuVHR3eGEyVVNEQThBWmdfU3NTY2Y3NFdwWmY2MU1tTnhoTFVxVDc5eTJ2UHlkelktblRlMXRZdTB4RlVrSFlYXzNnT1BMckxLYTgwWTZwQTBNTC1TZ2hMWXUtbEI5eGIwVVM4WUlwMnFRX3hHclV3VzNpT3pnd0h6cXE1Nml3Mm5vRmtKWW4xRGtYOUNvWHdvU0dhdElnbU10b2ZnQWRwamRmVVRZS2w5dTVJTElBcDJzWEZoUFdudThWRUEySjhGR1hOekFwOFY2MXl0MHRrTVlEMm9zVmtTZzFLUTdiUQ?oc=5"
+            },
+            {
+              "name": "RFI",
+              "url": "https://news.google.com/rss/articles/CBMi7gJBVV95cUxPTGpFbTFCWkxJTXZqWVFsVXVZYmV1LWpib2RScE41bU92ZG9iajlJMWxMZGlzaGZzcWNrVUQ3UFBxbUJTbVZsRS1ybjZYYmo0VlpUTlVaaWxYVEtOalJ5VjVhQmVzQ0RDcTNGVWJPMllfbF93c2o4VldCS2g0WEl6MEhMNDRXamRHNzNxLTFhNGlha09JeXM3MUlfdEt0ZDU5ckxfZDl5bHpkYWFuVWhUOFMtVWQ1Wk00WHBjZUlLOUt4WkhONmk3d0ZHc0JaeDhYRENjV2xIb2JMN0dmdlNXNTV6Mm8tMHh0VGxRT1BZRVdlbE1qUmQ3eVhBYXg0N2NGQy0xRVBjSzc4RmFQUFM5NUVkR195X1ZURUUwSDN4QnBCQ0kxWnZFa3VBdlBmUHVaVnpfQVhsQlpHYjV1QnRidjFBV2xjcEhYM2NqLTJhVVJxd1BCTERwdm00TElzSGZ4YWZmTk9DRUJfWE4waHc?oc=5"
+            }
+          ],
+          "continued_from_prior": false
+        },
+        {
+          "id": "cn-ai-taiwan-election-bbc",
+          "category": "Tech",
+          "headline": "BBC事实查核：与中国有关账号利用AI生成视频攻击台湾选举候选人",
+          "summary": "BBC事实查核调查发现，一批**与中国有关的社交媒体账号利用AI生成视频**，针对台湾执政党关键人物（包括赖清德及台北地方选举候选人沈伯洋）发动抹黑攻击。",
+          "why_it_matters": "随着台湾地方“九合一”选举临近，**生成式AI虚假信息**正成为两岸舆论与选举安全的新焦点。",
+          "sources": [
+            {
+              "name": "BBC 中文",
+              "url": "https://www.bbc.com/zhongwen/articles/c6rmgvkp322xo/trad?at_medium=RSS&at_campaign=rss"
+            }
+          ],
+          "continued_from_prior": false
+        },
+        {
+          "id": "cn-mfa-briefing-nov25",
+          "category": "Policy",
+          "headline": "中国外交部举行11月25日例行记者会，回应近期涉华外交与经贸关切",
+          "summary": "外交部发言人郭嘉昆于**11月25日主持例行记者会**，就近期国际热点与涉华经贸外交议题阐述北京官方立场。",
+          "why_it_matters": "外交部例行表态为外界观察**北京在关税、科技与地区安全问题上的政策基调**提供直接风向标。",
+          "sources": [
+            {
+              "name": "中华人民共和国外交部",
+              "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBSRVJ0ci1iT0VraS1hVWdTbS1wMmx0bGg1WTNpUU1RN0c3VEk4d1FBTExkalVYMnhyaWlSYTRaUk1KaDc3dEFOTEZ0bGJ4RkRyb2wzUzNySFl5X2Nnd3ZVVE5LRnJ0Z0tpb0hpTFYzdjdWQTF0Mmc?oc=5"
+            }
+          ],
+          "continued_from_prior": false
+        }
+      ],
+      "stories_en": [
+        {
+          "id": "cn-us-tariffs-20pct",
+          "category": "Economy",
+          "headline": "US proposes new tariffs on 14 trading partners, with Chinese goods facing up to 20%",
+          "summary": "The Trump administration has proposed a new round of tariffs on 14 trading partners, under which **Chinese goods face rates of up to 20%**. Beijing pushed back, dismissing US claims of **\"overcapacity\" as a false proposition**.",
+          "why_it_matters": "Fresh tariff threats deepen **US-China trade friction** and directly pressure Chinese manufacturing exports and global supply chains.",
+          "sources": [
+            {
+              "name": "Deutsche Welle",
+              "url": "https://news.google.com/rss/articles/CBMi9gJBVV95cUxQRGVtblAtTS1HQzZ6QzhIMGR2TGxiVjZFSEFQTjl6TC1IUFVqVEFBOTFWaHFNaG5pcjBDa2ppRHJWVkxMRXpiUTBnNDQ0aEdkc1pEX25PLUk4NG0tZllnb2JLcTRJZVctQVJrdWxvcl9nNy1YMnh0NlUtUVlnZ0NDd1JOZ3VXdHRCVFM4anViYWNuVGdicEpuVHR3eGEyVVNEQThBWmdfU3NTY2Y3NFdwWmY2MU1tTnhoTFVxVDc5eTJ2UHlkelktblRlMXRZdTB4RlVrSFlYXzNnT1BMckxLYTgwWTZwQTBNTC1TZ2hMWXUtbEI5eGIwVVM4WUlwMnFRX3hHclV3VzNpT3pnd0h6cXE1Nml3Mm5vRmtKWW4xRGtYOUNvWHdvU0dhdElnbU10b2ZnQWRwamRmVVRZS2w5dTVJTElBcDJzWEZoUFdudThWRUEySjhGR1hOekFwOFY2MXl0MHRrTVlEMm9zVmtTZzFLUTdiUdIB9gJBVV95cUxQRGVtblAtTS1HQzZ6QzhIMGR2TGxiVjZFSEFQTjl6TC1IUFVqVEFBOTFWaHFNaG5pcjBDa2ppRHJWVkxMRXpiUTBnNDQ0aEdkc1pEX25PLUk4NG0tZllnb2JLcTRJZVctQVJrdWxvcl9nNy1YMnh0NlUtUVlnZ0NDd1JOZ3VXdHRCVFM4anViYWNuVGdicEpuVHR3eGEyVVNEQThBWmdfU3NTY2Y3NFdwWmY2MU1tTnhoTFVxVDc5eTJ2UHlkelktblRlMXRZdTB4RlVrSFlYXzNnT1BMckxLYTgwWTZwQTBNTC1TZ2hMWXUtbEI5eGIwVVM4WUlwMnFRX3hHclV3VzNpT3pnd0h6cXE1Nml3Mm5vRmtKWW4xRGtYOUNvWHdvU0dhdElnbU10b2ZnQWRwamRmVVRZS2w5dTVJTElBcDJzWEZoUFdudThWRUEySjhGR1hOekFwOFY2MXl0MHRrTVlEMm9zVmtTZzFLUTdiUQ?oc=5"
+            },
+            {
+              "name": "RFI",
+              "url": "https://news.google.com/rss/articles/CBMi7gJBVV95cUxPTGpFbTFCWkxJTXZqWVFsVXVZYmV1LWpib2RScE41bU92ZG9iajlJMWxMZGlzaGZzcWNrVUQ3UFBxbUJTbVZsRS1ybjZYYmo0VlpUTlVaaWxYVEtOalJ5VjVhQmVzQ0RDcTNGVWJPMllfbF93c2o4VldCS2g0WEl6MEhMNDRXamRHNzNxLTFhNGlha09JeXM3MUlfdEt0ZDU5ckxfZDl5bHpkYWFuVWhUOFMtVWQ1Wk00WHBjZUlLOUt4WkhONmk3d0ZHc0JaeDhYRENjV2xIb2JMN0dmdlNXNTV6Mm8tMHh0VGxRT1BZRVdlbE1qUmQ3eVhBYXg0N2NGQy0xRVBjSzc4RmFQUFM5NUVkR195X1ZURUUwSDN4QnBCQ0kxWnZFa3VBdlBmUHVaVnpfQVhsQlpHYjV1QnRidjFBV2xjcEhYM2NqLTJhVVJxd1BCTERwdm00TElzSGZ4YWZmTk9DRUJfWE4waHc?oc=5"
+            }
+          ],
+          "continued_from_prior": false
+        },
+        {
+          "id": "cn-ai-taiwan-election-bbc",
+          "category": "Tech",
+          "headline": "BBC Verify: China-linked accounts use AI-generated videos to target Taiwan election candidates",
+          "summary": "A BBC Verify investigation found a **network of China-linked accounts using AI-generated videos** to smear key figures in Taiwan's ruling party, including President Lai Ching-te and Taipei mayoral candidate Puma Shen.",
+          "why_it_matters": "Ahead of Taiwan's local elections, **generative AI disinformation** has emerged as a major cross-strait election-security concern.",
+          "sources": [
+            {
+              "name": "BBC 中文",
+              "url": "https://www.bbc.com/zhongwen/articles/c6rmgvkp322xo/trad?at_medium=RSS&at_campaign=rss"
+            }
+          ],
+          "continued_from_prior": false
+        },
+        {
+          "id": "cn-mfa-briefing-nov25",
+          "category": "Policy",
+          "headline": "China Foreign Ministry holds Nov. 25 regular press briefing on trade and diplomatic issues",
+          "summary": "Foreign Ministry spokesperson Guo Jiakun **hosted the Nov. 25 regular press conference**, outlining Beijing's official stance on recent international developments and trade-diplomacy issues.",
+          "why_it_matters": "Regular MFA briefings serve as a direct signal of **Beijing's policy posture on tariffs, technology, and regional security**.",
+          "sources": [
+            {
+              "name": "中华人民共和国外交部",
+              "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBSRVJ0ci1iT0VraS1hVWdTbS1wMmx0bGg1WTNpUU1RN0c3VEk4d1FBTExkalVYMnhyaWlSYTRaUk1KaDc3dEFOTEZ0bGJ4RkRyb2wzUzNySFl5X2Nnd3ZVVE5LRnJ0Z0tpb0hpTFYzdjdWQTF0Mmc?oc=5"
+            }
+          ],
+          "continued_from_prior": false
+        }
       ]
     }
   ]

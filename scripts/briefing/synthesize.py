@@ -380,10 +380,18 @@ def merge_synthesis(
         for r in (prior_briefing or {}).get("local_news", [])
         if r.get("id")
     }
+    prior_local_en_by_id = {
+        r.get("id"): r.get("stories_en", [])
+        for r in (prior_briefing or {}).get("local_news", [])
+        if r.get("id")
+    }
     flagged_top = _flag_continued_stories(ai.top_news, prior_top)
     flagged_local = [
         region.model_copy(
-            update={"stories": _flag_continued_stories(region.stories, prior_local_by_id.get(region.id, []))}
+            update={
+                "stories": _flag_continued_stories(region.stories, prior_local_by_id.get(region.id, [])),
+                "stories_en": _flag_continued_stories(region.stories_en, prior_local_en_by_id.get(region.id, [])),
+            }
         )
         for region in ai.local_news
     ]

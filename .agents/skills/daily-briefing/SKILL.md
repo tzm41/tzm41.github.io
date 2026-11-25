@@ -25,7 +25,7 @@ Use this skill whenever the user asks to generate, refresh, or publish their dai
      - `conflicts_overview` & `conflict_theaters` (one per tracked theater `id`)
      - `politics_pulse_summary`, `legislative_and_executive` (3–5 items), and `trending_topics` (3–5 items)
      - `positive_news`: 1 uplifting/constructive story grounded in `positive_news_candidates` (or `raw_news`) with a verbatim source URL
-     - `local_news`: 1 entry per configured region in `local_news_candidates` (e.g. `bay-area` / `Bay Area`) with 3–5 grounded local stories and verbatim URLs
+     - `local_news`: 1 entry per configured region in `local_news_candidates` (`bay-area` / `Bay Area`, `china` / `China`) with 3–5 grounded local stories and verbatim URLs. For `china`, write `stories` in Simplified Chinese (中文) and populate `stories_en` with the matching English translations.
      - **Semantic bolding**: In bullets, summaries, `why_it_matters`, narratives, overviews, and `framing_note`s, wrap the 1–2 highest-signal phrases per sentence (core outcome, decisive action, or key metric — ~15–25% of each sentence) in `**double asterisks**` (never bold whole sentences or headlines).
    - Write the raw JSON (no markdown fences) to `/tmp/synthesis.json`.
 4. **Validate, merge deterministic numbers, and write `briefing/data/`**:

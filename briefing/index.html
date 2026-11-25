@@ -216,6 +216,10 @@
         </div>
         <div class="section-actions">
           <div class="segmented" id="local-location-toggle" role="group" aria-label="Local news location"></div>
+          <div class="segmented hidden" id="local-lang-toggle" role="group" aria-label="Local news language">
+            <button type="button" class="seg-btn active" data-lang="native" aria-pressed="true">中文</button>
+            <button type="button" class="seg-btn" data-lang="en" aria-pressed="false">EN</button>
+          </div>
           <button type="button" class="collapse-btn" id="btn-toggle-local" aria-expanded="false" aria-controls="local-news-body">
             <span class="collapse-label">Expand</span>
             <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
@@ -235,6 +239,6 @@
     </div>
   </footer>
 
-  <script type="module" src="./app.js?v=17"></script>
+  <script type="module" src="./app.js?v=18"></script>
 </body>
 </html>

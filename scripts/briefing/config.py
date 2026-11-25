@@ -56,6 +56,15 @@ LOCAL_NEWS_REGIONS: list[dict[str, object]] = [
             {"name": "Google News Bay Area", "category": "World", "url": "https://news.google.com/rss/search?q=%28%22Bay+Area%22+OR+%22San+Francisco%22+OR+%22Silicon+Valley%22+OR+Oakland+OR+%22San+Jose%22%29+when:2d&hl=en-US&gl=US&ceid=US:en"},
         ],
     },
+    {
+        "id": "china",
+        "name": "China",
+        "language": "zh-CN",
+        "feeds": [
+            {"name": "BBC 中文", "category": "World", "url": "https://feeds.bbci.co.uk/zhongwen/simp/rss.xml"},
+            {"name": "Google News 中国", "category": "World", "url": "https://news.google.com/rss/search?q=%E4%B8%AD%E5%9B%BD+when:2d&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"},
+        ],
+    },
 ]
 
 # Stock market watchlist tickers (Yahoo Finance)

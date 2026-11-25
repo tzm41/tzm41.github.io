@@ -134,6 +134,7 @@ class LocalNewsRegion(BaseModel):
     id: str
     name: str
     stories: list[NewsStory] = Field(default_factory=list)
+    stories_en: list[NewsStory] = Field(default_factory=list)
 
 
 class DailyBriefing(BaseModel):
@@ -190,5 +191,5 @@ class GeminiBriefingSynthesis(BaseModel):
     )
     local_news: list[LocalNewsRegion] = Field(
         default_factory=list,
-        description="Local news grouped by region id/name from local_news_candidates (3 to 5 top local stories per region with 2-3 sentence summaries, why_it_matters, and verbatim source URLs).",
+        description="Local news grouped by region id/name from local_news_candidates (3 to 5 top local stories per region with 2-3 sentence summaries, why_it_matters, and verbatim source URLs). For non-English regions like 'china', write `stories` in Simplified Chinese and provide the matching English translation in `stories_en`.",
     )

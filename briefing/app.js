@@ -13,6 +13,7 @@ const state = {
   newsCategory: "All",
   marketTimeframe: "1d",
   localRegionId: null,
+  localLang: "native",
   localExpanded: false,
 };
 
@@ -53,6 +54,7 @@ const els = {
   positiveNewsSlot: document.getElementById("positive-news-slot"),
   localSection: document.getElementById("local-news"),
   localLocationToggle: document.getElementById("local-location-toggle"),
+  localLangToggle: document.getElementById("local-lang-toggle"),
   btnToggleLocal: document.getElementById("btn-toggle-local"),
   localNewsBody: document.getElementById("local-news-body"),
   localNewsGrid: document.getElementById("local-news-grid"),
@@ -853,9 +855,20 @@ function renderLocalNews(regions = []) {
     .join("");
 
   const activeRegion = regions.find((r) => r.id === state.localRegionId) || regions[0];
-  const stories = activeRegion.stories || [];
+  const hasTranslation = Array.isArray(activeRegion.stories_en) && activeRegion.stories_en.length > 0;
+  if (els.localLangToggle) {
+    els.localLangToggle.classList.toggle("hidden", !hasTranslation);
+    els.localLangToggle.querySelectorAll(".seg-btn").forEach((btn) => {
+      const active = btn.dataset.lang === state.localLang;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", String(active));
+    });
+  }
+
+  const useEn = hasTranslation && state.localLang === "en";
+  const stories = useEn ? activeRegion.stories_en : activeRegion.stories || [];
   const priorRegion = (state.priorBriefing?.local_news || []).find((r) => r.id === activeRegion.id);
-  const priorLocal = priorRegion?.stories || [];
+  const priorLocal = useEn ? priorRegion?.stories_en || [] : priorRegion?.stories || [];
   if (!stories.length) {
     els.localNewsGrid.innerHTML = `<div class="empty-state">No local news stories available for ${escapeHtml(activeRegion.name)} in this edition.</div>`;
   } else {
@@ -1221,6 +1234,14 @@ async function bootstrap() {
     const btn = e.target.closest(".seg-btn");
     if (!btn) return;
     state.localRegionId = btn.dataset.regionId;
+    if (!state.localExpanded) setLocalExpanded(true);
+    if (state.briefing) renderLocalNews(state.briefing.local_news);
+  });
+
+  els.localLangToggle?.addEventListener("click", (e) => {
+    const btn = e.target.closest(".seg-btn");
+    if (!btn) return;
+    state.localLang = btn.dataset.lang || "native";
     if (!state.localExpanded) setLocalExpanded(true);
     if (state.briefing) renderLocalNews(state.briefing.local_news);
   });
