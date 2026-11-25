@@ -124,21 +124,27 @@ function fmtLocalTimestamp(isoStr) {
   });
 }
 
-const SUMMARY_HIGHLIGHT_RE =
-  /\*\*([^*]+)\*\*|(?<![\w.$])([+-]?\$\d[\d,]*(?:\.\d+)?(?:\s?(?:million|billion|trillion|M|B|K))?|[+-]?\d[\d,]*(?:\.\d+)?%|\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b)(?!\w)|(['"][A-Z][^'"]{1,40}['"])|\b([A-Z][A-Za-z0-9.&'-]*(?:\s+(?:of|and|for|the|in|on|to)\s+)?(?:[A-Z][A-Za-z0-9.&'-]*)(?:\s+[A-Z0-9][A-Za-z0-9.&'-]*)*)\b|\b([A-Z]{2,5}(?:\s*&\s*[A-Z]{2,5})?)\b/g;
+const EXPLICIT_BOLD_RE = /\*\*([^*]+)\*\*/g;
+const FALLBACK_HIGHLIGHT_RE =
+  /(?<![\w.$])([+-]?\$\d[\d,]*(?:\.\d+)?(?:\s?(?:million|billion|trillion|M|B|K))?|[+-]?\d[\d,]*(?:\.\d+)?%|\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b)(?!\w)|(['"][A-Z][^'"]{1,40}['"])/g;
 
 function highlightSummaryHtml(text) {
   const raw = String(text ?? "");
   if (!raw) return "";
 
+  EXPLICIT_BOLD_RE.lastIndex = 0;
+  const hasExplicit = EXPLICIT_BOLD_RE.test(raw);
+  const re = hasExplicit ? EXPLICIT_BOLD_RE : FALLBACK_HIGHLIGHT_RE;
+  re.lastIndex = 0;
+
   let out = "";
   let lastIdx = 0;
-  for (const match of raw.matchAll(SUMMARY_HIGHLIGHT_RE)) {
+  for (const match of raw.matchAll(re)) {
     const idx = match.index ?? 0;
     if (idx > lastIdx) {
       out += escapeHtml(raw.slice(lastIdx, idx));
     }
-    const inner = match[1] ?? match[0];
+    const inner = hasExplicit ? match[1] : match[0];
     out += `<strong>${escapeHtml(inner)}</strong>`;
     lastIdx = idx + match[0].length;
   }

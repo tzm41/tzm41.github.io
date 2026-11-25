@@ -9,11 +9,11 @@
     "politics": "ok"
   },
   "executive_brief": [
-    "US equities sold off sharply ahead of the Thanksgiving holiday, with the Nasdaq falling 3.07% and the S&P 500 dropping 2.13% as the VIX spiked 32.59% to 34.95 and CNN Fear & Greed hit 8.8 (Extreme Fear).",
-    "Nvidia shares slid 6.35% as lawmakers pressed the Attorney General on President Trump's role in CEO Jensen Huang's reinstatement, compounding market pressure from new Trump administration tariff proposals on China and the EU and a 0.3% October PCE inflation reading.",
-    "A New York federal court convicted Huawei of stealing US trade secrets while acquitting it of racketeering, and the Solomon Islands ended its security pact with China in favor of a new treaty with Australia.",
-    "Ukraine claimed strikes on five Russian military jets at Savasleyka airfield and confirmed naval drone strikes that sank the Russian corvette Merkury off Libya, as leaked data indicated nearly 500,000 Russian deaths in the war.",
-    "In Washington, officials reported a cyberattack breach on an unclassified CIA system and investigated Iranian ties to hacks on up to 50 commercial vessels, while Salvadoran migrant Kilmar Abrego Garcia voluntarily departed the US for Spain."
+    "Tech and AI shares led a **sharp Nasdaq pullback (-1.48%, XLK -3.26%)** as **Nvidia fell 7%** amid scrutiny over CEO Jensen Huang's reinstatement, while rotational buying lifted the **Dow Jones (+0.85%)** and **Russell 2000 (+0.57%)**.",
+    "A New York federal jury found **Huawei guilty of stealing US trade secrets** while **acquitting the firm of racketeering**, concluding a multi-year legal battle.",
+    "Middle East and Red Sea tensions remain acute, with the **Strait of Hormuz facing severe shipping paralysis**, Houthi strikes hitting Riyadh, and US investigators probing **potential Iranian cyberattacks on up to 50 commercial vessels**.",
+    "Leaked Russian records point to **nearly 500,000 deaths in the Ukraine war** as Ukrainian naval drones struck Russian vessels off Libya and a **Russian drone entered Polish airspace**.",
+    "In Washington, bipartisan lawmakers are pressing for **China chip export restrictions** and investigating White House ties to Nvidia's leadership reversal, while **Rep. Jimmy Gomez announced his resignation effective Dec. 1**."
   ],
   "top_news": [
     {
@@ -31,7 +31,8 @@
           "name": "BBC Business",
           "url": "https://www.bbc.co.uk/news/articles/crpdw1qx7jgxo?at_medium=RSS&at_campaign=rss"
         }
-      ]
+      ],
+      "continued_from_prior": false
     },
     {
       "id": "huawei-verdict",
@@ -48,7 +49,8 @@
           "name": "Al Jazeera",
           "url": "https://www.aljazeera.com/news/2026/11/25/us-court-convicts-huawei-of-theft-a-history-of-chinese-firms-global-woes?traffic_source=rss"
         }
-      ]
+      ],
+      "continued_from_prior": false
     },
     {
       "id": "tariffs-and-pce",
@@ -65,7 +67,8 @@
           "name": "The Hill",
           "url": "https://thehill.com/business/6239346-october-pce-inflation-data/"
         }
-      ]
+      ],
+      "continued_from_prior": false
     },
     {
       "id": "ukraine-strikes-russia-losses",
@@ -86,7 +89,8 @@
           "name": "The Guardian World",
           "url": "https://www.theguardian.com/world/2026/nov/23/ukraine-naval-drones-strike-russian-warship-libya"
         }
-      ]
+      ],
+      "continued_from_prior": false
     },
     {
       "id": "solomon-islands-australia",
@@ -103,14 +107,15 @@
           "name": "Al Jazeera",
           "url": "https://www.aljazeera.com/news/2026/11/25/solomon-islands-signs-security-deal-with-australia?traffic_source=rss"
         }
-      ]
+      ],
+      "continued_from_prior": false
     },
     {
       "id": "abrego-garcia-spain",
       "category": "Policy",
       "headline": "Kilmar Abrego Garcia voluntarily departs US for Spain after two-year legal battle",
-      "summary": "Salvadoran migrant Kilmar Abrego Garcia arrived in Spain after leaving the United States voluntarily, his attorneys and the Department of Homeland Security confirmed. His nearly two-year legal fight had become a prominent flashpoint in the Trump administration's deportation campaign.",
-      "why_it_matters": "His departure closes a high-profile test case over executive deportation authority, court oversight, and asylum protections.",
+      "summary": "Salvadoran migrant Kilmar Abrego Garcia **voluntarily left the United States for Spain** on Tuesday, according to his attorneys and the Department of Homeland Security. His earlier deportation to El Salvador and court-ordered return had become a **central flashpoint in Trump administration immigration policy**.",
+      "why_it_matters": "His departure closes a closely watched legal test of **executive deportation authority and judicial oversight**.",
       "sources": [
         {
           "name": "NPR News",
@@ -120,7 +125,8 @@
           "name": "The Guardian World",
           "url": "https://www.theguardian.com/us-news/2026/nov/24/kilmar-abrego-garcia-leaves-us"
         }
-      ]
+      ],
+      "continued_from_prior": false
     },
     {
       "id": "china-chen-jining",
@@ -133,7 +139,8 @@
           "name": "NPR News",
           "url": "https://www.npr.org/2026/11/25/nx-s1-6053801/china-investigation-politburo-shanghai-party"
         }
-      ]
+      ],
+      "continued_from_prior": false
     },
     {
       "id": "holiday-shopping-trends",
@@ -150,11 +157,12 @@
           "name": "NPR News",
           "url": "https://www.npr.org/2026/11/25/nx-s1-6048524/what-to-know-before-using-ai-agents-for-black-friday-shopping"
         }
-      ]
+      ],
+      "continued_from_prior": false
     }
   ],
   "markets": {
-    "narrative": "US markets suffered a broad risk-off sell-off, with the Nasdaq dropping 3.07% to 23,003.95, the S&P 500 sliding 2.13% to 7,047.89, and the Dow falling 1.44% to 49,299.82 as the VIX surged 32.59% to 34.95 and Fear & Greed sank to 8.8 (Extreme Fear). Technology (-3.53%) and Consumer Discretionary (-2.53%) led the decline—weighed down by Nvidia (-6.35%), Tesla (-5.33%), and Amazon (-4.52%)—after new US tariff proposals on China and the EU and a 0.3% October PCE inflation reading rattled rate and trade expectations. Defensive staples (+0.17%) and energy (+0.25%) eked out slight gains, while Treasury yields fell 1.63% to 4.82% alongside pullbacks in WTI crude (-1.88% to $80.51), gold (-1.21% to $3,518.70), and Bitcoin (-1.28% to $58,980.37).",
+    "narrative": "US markets posted a **sharp sector rotation** on Tuesday, with the **Nasdaq falling 1.48% to 23,733.54** and **Technology (XLK) dropping 3.26%** on Nvidia-led AI selling, while the **Dow Jones (+0.85% to 50,018.70)** and Russell 2000 (+0.57%) advanced alongside Health Care (+2.95%) and Consumer Staples (+1.66%). Treasury yields eased slightly with the **10-year at 4.90% (-0.41%)** and the **VIX held elevated at 26.36** ahead of key inflation data. Commodities and crypto retreated, with **WTI crude at .25 (-0.98%)**, gold at ,517.20 (-1.25%), and **Bitcoin falling 3.21% to ,245.72**.",
     "regime_tag": "Volatility Spike",
     "watchlist": [
       {
@@ -3589,7 +3597,7 @@
     ]
   },
   "conflicts": {
-    "overview": "Global conflict intensity rose over the past 24 hours, driven by major Ukrainian airbase and naval drone strikes, escalating Red Sea exchanges, and deadly drone attacks in Sudan. While Eastern Europe and the Middle East remain the highest-intensity theaters, Horn of Africa spillovers and Sahel instability continue to trend upward.",
+    "overview": "Global conflict intensity remains **elevated across major theaters**, with active escalation in **Eastern Europe, the Middle East, and the Red Sea corridor** compared with earlier in the two-week window. **Maritime chokepoints, cross-border drone operations, and urban airstrikes** continue to drive humanitarian and supply-chain risks.",
     "theaters": [
       {
         "id": "ukraine",
@@ -3974,14 +3982,15 @@
     "id": "brazil-wolbachia-mosquitoes",
     "category": "Science",
     "headline": "Viral infections drop 68% among Brazilian schoolchildren after Wolbachia mosquito release",
-    "summary": "A large-scale public health trial in Brazil found that schoolchildren experienced a 68% lower risk of mosquito-borne viral infections following the release of mosquitoes carrying Wolbachia bacteria. The naturally occurring bacteria inhibits insects from transmitting dangerous viruses to humans.",
-    "why_it_matters": "The population-scale results validate a sustainable, non-chemical approach to curbing dengue and other mosquito-borne diseases in vulnerable communities.",
+    "summary": "A population-scale public health trial in Brazil found that releasing mosquitoes carrying naturally occurring Wolbachia bacteria **reduced the risk of mosquito-borne viral infections among schoolchildren by 68%**. The biological control method **blocks viruses like dengue from replicating inside mosquitoes** without relying on chemical insecticides.",
+    "why_it_matters": "**Scalable, self-sustaining biological interventions** offer a durable way to curb dengue and other tropical viral outbreaks across high-risk urban populations.",
     "sources": [
       {
         "name": "Good News Network",
         "url": "https://www.goodnewsnetwork.org/major-success-sees-viral-infections-fall-68-in-brazil-after-releasing-wolbachia-infected-mosquitoes/"
       }
-    ]
+    ],
+    "continued_from_prior": false
   },
   "local_news": [
     {
@@ -3999,7 +4008,8 @@
               "name": "Google News Bay Area",
               "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNSEFhZ0EtSWNJRmJSY1U4TkU3cjRhbUFyQ1ZSWGNuZ3NiazBZbGlUZ2xTR3ktODlIb045dGYzdGRoRTBFemR0RXp3MDluOFpvQXRua29XOWd2OEtDRGlsSmlPNWs4LXA0ZnRLakFkeU5qbmc2ZE95MzFFeU1ydmZnTVg4NlB4MDk5cGRVbEg4OG4?oc=5"
             }
-          ]
+          ],
+          "continued_from_prior": false
         },
         {
           "id": "bay-area-city-cyberattacks",
@@ -4012,7 +4022,8 @@
               "name": "Google News Bay Area",
               "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNSVFLZV9wNktoVW8zUDMzcTVXUl9rTlV4b1BNMUJuYVBNSFUzRHJ4dDNGWjlLeGVTT1lPdHJaNWk2Wm9DcUh2Sm5ZdS1scnMtWVVhQkliSFFDWWtPT2xFRFVQcGVYV2tzTndfeTJ0MzAyTl9uR2RJa0xqMTMwdjhTNHIwemw3bWt50gGQAUFVX3lxTE9hdmRlMDRMQ1I2MlQ5WksyWXpmV1c3U2ZWTy1oZFRVM2JvaXdhUk9PZGZnTzlVZDQyaU1oUXdISDk2c2xXWl93XzVyWHpZZ25HZHNycFpxYWUxc0JUdXBEV0ZNMDNGT094ZzR1alF3dVF2bWVLSG1YOTF4RE53anFpSU12bWVFa2FHWXRISWc4Sw?oc=5"
             }
-          ]
+          ],
+          "continued_from_prior": false
         },
         {
           "id": "bay-area-shipwreck-oil",
@@ -4025,7 +4036,8 @@
               "name": "Google News Bay Area",
               "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPTm1EYTZyQ1ZqaXIxNE5RSWdtTmJKRFZBb3IwUDhZVHpmWFU4YXpDUldNd1FLbEgxR3UtZVNIQVNFUkJOM0NHUTFPbm91VTl1XzFPTUtkOWdjYnJVRzhRdFBsZjRlNHZUM09nQ0pFUlZmUC11TGEzU25WTmEyekh3ZGZWTzZVdHBRSDZmMTNneXRXVFVMazNOWUpGZkFvM1ppVUpfMTFONA?oc=5"
             }
-          ]
+          ],
+          "continued_from_prior": false
         },
         {
           "id": "bay-area-sf-reparations",
@@ -4038,7 +4050,8 @@
               "name": "Google News Bay Area",
               "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQRXFRSDFWYWd3aEpRUnBzWHg2OVhNeFU5WDRqNjZIYUxyamZBaXN3eklDZjN0bUNadVdEcWxBM05xcW5zdkwtWjZwZ2c5b00yX1B1Uy1RYnN4M3FqSkJaeXFvRERCWGpBcGRqS0M0ejFQZ3JfdkNaWURxWkpWSDVkc2tQaEFJWlZGN0RNWjBtMDRCeUtzSFhJZHdQeGlsdEptUVVPV3RieG1WYkE?oc=5"
             }
-          ]
+          ],
+          "continued_from_prior": false
         }
       ]
     }
