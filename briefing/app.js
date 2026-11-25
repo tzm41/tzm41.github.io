@@ -95,6 +95,44 @@ function fmtReadableDate(dateStr) {
   });
 }
 
+function fmtLocalTimestamp(isoStr) {
+  if (!isoStr) return "";
+  const dt = new Date(isoStr);
+  if (Number.isNaN(dt.getTime())) return isoStr;
+  return dt.toLocaleString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  });
+}
+
+function highlightSummaryHtml(text) {
+  const raw = String(text ?? "");
+  if (!raw) return "";
+
+  const pattern =
+    /\*\*([^*]+)\*\*|(?<![\w.$])([+-]?\$\d[\d,]*(?:\.\d+)?(?:\s?(?:million|billion|trillion|M|B|K))?|[+-]?\d[\d,]*(?:\.\d+)?%|\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b)(?!\w)|(['"][A-Z][^'"]{1,40}['"])|\b([A-Z][A-Za-z0-9.&'-]*(?:\s+(?:of|and|for|the|in|on|to)\s+)?(?:[A-Z][A-Za-z0-9.&'-]*)(?:\s+[A-Z0-9][A-Za-z0-9.&'-]*)*)\b|\b([A-Z]{2,5}(?:\s*&\s*[A-Z]{2,5})?)\b/g;
+
+  let out = "";
+  let lastIdx = 0;
+  for (const match of raw.matchAll(pattern)) {
+    const idx = match.index ?? 0;
+    if (idx > lastIdx) {
+      out += escapeHtml(raw.slice(lastIdx, idx));
+    }
+    const inner = match[1] ?? match[0];
+    out += `<strong>${escapeHtml(inner)}</strong>`;
+    lastIdx = idx + match[0].length;
+  }
+  if (lastIdx < raw.length) {
+    out += escapeHtml(raw.slice(lastIdx));
+  }
+  return out;
+}
+
 function deltaClass(val) {
   const num = Number(val ?? 0);
   if (num > 0.02) return "pos";
@@ -288,7 +326,7 @@ function renderKpiStrip(briefing) {
 }
 
 function renderExecutiveBrief(briefing) {
-  const mode = briefing.synthesis_mode === "gemini" ? "Gemini 3.8 Flash" : "Extractive Fallback";
+  const mode = briefing.synthesis_mode === "gemini" ? "Gemini" : "Extractive Fallback";
   els.synthesisModeTag.textContent = mode;
 
   const bullets = briefing.executive_brief || [];
@@ -296,7 +334,7 @@ function renderExecutiveBrief(briefing) {
     els.executiveList.innerHTML = `<li>No executive summary items available for this edition.</li>`;
     return;
   }
-  els.executiveList.innerHTML = bullets.map((b) => `<li>${escapeHtml(b)}</li>`).join("");
+  els.executiveList.innerHTML = bullets.map((b) => `<li>${highlightSummaryHtml(b)}</li>`).join("");
 }
 
 function renderNews(stories = []) {
@@ -325,8 +363,8 @@ function renderNews(stories = []) {
             <span class="cat-pill">${escapeHtml(story.category)}</span>
           </div>
           <h3>${escapeHtml(story.headline)}</h3>
-          <p class="news-summary">${escapeHtml(story.summary)}</p>
-          <div class="why-box"><strong>Why it matters:</strong> ${escapeHtml(story.why_it_matters)}</div>
+          <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
+          <div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>
           <div class="source-links">${sourcesHtml}</div>
         </article>
       `;
@@ -339,7 +377,7 @@ function renderMarkets(markets = {}) {
   const regimeSlug = regime.toLowerCase().replace(/\s+/g, "-");
   els.marketRegime.textContent = regime;
   els.marketRegime.className = `regime-badge ${regimeSlug}`;
-  els.marketNarrative.textContent = markets.narrative || "";
+  els.marketNarrative.innerHTML = highlightSummaryHtml(markets.narrative || "");
 
   const is5d = state.marketTimeframe === "5d";
   els.heatmapLabel.textContent = is5d
@@ -402,7 +440,7 @@ function renderMarkets(markets = {}) {
 }
 
 function renderConflicts(conflicts = {}) {
-  els.conflictsOverview.textContent = conflicts.overview || "";
+  els.conflictsOverview.innerHTML = highlightSummaryHtml(conflicts.overview || "");
   const theaters = conflicts.theaters || [];
   if (!theaters.length) {
     els.conflictsGrid.innerHTML = `<div class="empty-state">No conflict tracker data available for this edition.</div>`;
@@ -449,7 +487,7 @@ function renderConflicts(conflicts = {}) {
             ${buildSparklineSvg(t.intensity_series_14d, sparkColor, "intensity-spark")}
           </div>
 
-          <p class="conflict-summary">${escapeHtml(t.summary)}</p>
+          <p class="conflict-summary">${highlightSummaryHtml(t.summary)}</p>
 
           ${eventsHtml ? `<ul class="timeline-list">${eventsHtml}</ul>` : ""}
         </article>
@@ -459,7 +497,7 @@ function renderConflicts(conflicts = {}) {
 }
 
 function renderPolitics(politics = {}) {
-  els.politicsPulse.textContent = politics.pulse_summary || "";
+  els.politicsPulse.innerHTML = highlightSummaryHtml(politics.pulse_summary || "");
 
   const markets = politics.prediction_markets || [];
   if (!markets.length) {
@@ -503,7 +541,7 @@ function renderPolitics(politics = {}) {
               <a class="policy-title" href="${safeUrl(p.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(p.title)}</a>
               <span class="branch-tag">${escapeHtml(p.chamber_or_branch)}</span>
             </div>
-            <p class="policy-summary">${escapeHtml(p.summary)}</p>
+            <p class="policy-summary">${highlightSummaryHtml(p.summary)}</p>
           </article>
         `
       )
@@ -522,7 +560,7 @@ function renderPolitics(politics = {}) {
               <span class="topic-name">${escapeHtml(t.topic)}</span>
               <span class="momentum-pill ${escapeHtml(t.momentum)}">${escapeHtml(t.momentum)}</span>
             </div>
-            <p class="topic-note">${escapeHtml(t.framing_note)}</p>
+            <p class="topic-note">${highlightSummaryHtml(t.framing_note)}</p>
           </article>
         `
       )
@@ -533,7 +571,7 @@ function renderPolitics(politics = {}) {
 function renderAll(briefing) {
   state.briefing = briefing;
   els.editionDate.textContent = fmtReadableDate(briefing.date);
-  els.generatedMeta.textContent = `Updated ${briefing.generated_at} · Automated Daily Intelligence Edition`;
+  els.generatedMeta.textContent = `Updated ${fmtLocalTimestamp(briefing.generated_at)} · Automated Daily Intelligence Edition`;
   renderSourceHealth(briefing.source_health);
   renderKpiStrip(briefing);
   renderExecutiveBrief(briefing);
@@ -579,8 +617,67 @@ async function loadBriefingForDate(dateStr) {
   }
 }
 
+function initScrollSpy() {
+  const nav = document.querySelector(".section-nav");
+  const links = [...document.querySelectorAll(".nav-links a[href^='#']")];
+  const pairs = links
+    .map((link) => {
+      const id = link.getAttribute("href").slice(1);
+      const section = document.getElementById(id);
+      return section ? { link, section } : null;
+    })
+    .filter(Boolean);
+
+  if (!pairs.length) return;
+
+  const updateActive = () => {
+    const navH = nav ? nav.getBoundingClientRect().height : 44;
+    const atBottom =
+      window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40;
+
+    let activePair = pairs[0];
+    if (atBottom) {
+      activePair = pairs[pairs.length - 1];
+    } else {
+      const threshold = navH + 36;
+      for (const pair of pairs) {
+        if (pair.section.getBoundingClientRect().top <= threshold) {
+          activePair = pair;
+        }
+      }
+    }
+
+    for (const { link } of pairs) {
+      const isActive = link === activePair.link;
+      link.classList.toggle("active", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "location");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    }
+  };
+
+  let ticking = false;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        updateActive();
+        ticking = false;
+      });
+    },
+    { passive: true }
+  );
+
+  updateActive();
+}
+
 async function bootstrap() {
   initTheme();
+  initScrollSpy();
 
   // News category filters
   els.newsFilters.addEventListener("click", (e) => {
