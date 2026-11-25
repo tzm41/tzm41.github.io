@@ -149,24 +149,65 @@ def _extract_series(df: Any, symbol: str) -> Any:
         return None
 
 
-def _download_timeframes(symbols: list[str], include_intraday: bool = True) -> dict[str, Any]:
-    """Download 30D daily, 5D hourly, and 1D 30-min closes for symbols."""
-    df_30d = _download_df(symbols, "45d", "1d")
+def _merge_daily_closes(prior_30d: list[float], recent_5d: list[float]) -> list[float] | None:
+    """Stitch new daily closes from a 5D fetch onto yesterday's cached 30D series."""
+    if len(prior_30d) < 20 or not recent_5d:
+        return None
+    anchor = prior_30d[-1]
+    # Find the most recent occurrence of yesterday's close in the 5D window
+    for idx in range(len(recent_5d) - 1, -1, -1):
+        if abs(recent_5d[idx] - anchor) <= 0.02:
+            merged = prior_30d + recent_5d[idx + 1 :]
+            return merged[-30:]
+    return None
+
+
+def _download_timeframes(
+    symbols: list[str],
+    include_intraday: bool = True,
+    prior_map: dict[str, dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Download 5D daily (stitching onto cached 30D when possible), 5D hourly, and 1D 30-min closes."""
+    df_5d_daily = _download_df(symbols, "5d", "1d")
+
+    # Determine which symbols can reuse cached 30D history vs needing a full 45D backfill
+    stitched_30d: dict[str, list[float]] = {}
+    need_45d: list[str] = []
+    for sym in symbols:
+        s5_daily = _extract_series(df_5d_daily, sym)
+        recent = [round(float(x), 2) for x in s5_daily.tolist()] if s5_daily is not None else []
+        prior_30d = (prior_map or {}).get(sym, {}).get("sparkline_30d", [])
+        merged = _merge_daily_closes(prior_30d, recent)
+        if merged is not None:
+            stitched_30d[sym] = merged
+        else:
+            need_45d.append(sym)
+
+    df_45d = _download_df(need_45d, "45d", "1d") if need_45d else None
+    if stitched_30d:
+        print(f"[markets] Reused cached 30D history for {len(stitched_30d)}/{len(symbols)} symbols.")
+
     df_5d = _download_df(symbols, "5d", "1h") if include_intraday else None
     df_1d = _download_df(symbols, "2d", "30m") if include_intraday else None
 
     def get_30d(symbol: str) -> list[float]:
-        s = _extract_series(df_30d, symbol)
-        return [round(float(x), 2) for x in s.tolist()[-30:]] if s is not None else []
+        if symbol in stitched_30d:
+            return stitched_30d[symbol]
+        s = _extract_series(df_45d, symbol)
+        if s is not None:
+            return [round(float(x), 2) for x in s.tolist()[-30:]]
+        return (prior_map or {}).get(symbol, {}).get("sparkline_30d", [])
 
     def get_5d(symbol: str) -> list[float]:
         s = _extract_series(df_5d, symbol)
-        return [round(float(x), 2) for x in s.tolist()] if s is not None else []
+        if s is not None:
+            return [round(float(x), 2) for x in s.tolist()]
+        return (prior_map or {}).get(symbol, {}).get("sparkline_5d", [])
 
     def get_1d(symbol: str) -> list[float]:
         s = _extract_series(df_1d, symbol)
         if s is None:
-            return []
+            return (prior_map or {}).get(symbol, {}).get("sparkline_1d", [])
         cutoff = s.index[-1] - pd.Timedelta(hours=24)
         sliced = s[s.index >= cutoff]
         if len(sliced) < 2:
@@ -228,13 +269,19 @@ def _build_quote_list(
     return quotes
 
 
-def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
+def _fetch_markets_sync(prior_markets: dict[str, Any] | None = None) -> tuple[dict[str, Any], str]:
     quote_symbols = [item["symbol"] for item in MARKET_WATCHLIST] + [
         item["symbol"] for item in MARKET_BIG7
     ]
     sector_symbols = [item["symbol"] for item in MARKET_SECTORS]
 
-    tf_quotes = _download_timeframes(quote_symbols, include_intraday=True)
+    prior_map: dict[str, dict[str, Any]] = {}
+    if prior_markets:
+        for q in prior_markets.get("watchlist", []) + prior_markets.get("big7", []):
+            if q.get("symbol"):
+                prior_map[q["symbol"]] = q
+
+    tf_quotes = _download_timeframes(quote_symbols, include_intraday=True, prior_map=prior_map)
     tf_sectors = _download_timeframes(sector_symbols, include_intraday=False)
 
     gf_client: httpx.Client | None = None
@@ -281,12 +328,14 @@ def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
                     }
                 )
 
-    fear_greed = _fetch_fear_greed(get_gf_client())
+    fear_greed = _fetch_fear_greed(get_gf_client()) or (prior_markets or {}).get("fear_greed")
 
     if gf_client is not None:
         gf_client.close()
 
     if not watchlist and not sectors and not big7:
+        if prior_markets:
+            return prior_markets, "partial"
         return {"watchlist": [], "big7": [], "fear_greed": None, "sectors": []}, "failed"
 
     health = "ok" if len(watchlist) >= 5 and len(sectors) >= 8 else "partial"
@@ -307,6 +356,6 @@ def fetch_big7_and_fear_greed() -> tuple[list[dict[str, Any]], dict[str, Any] | 
     return big7, fear_greed
 
 
-async def fetch_markets() -> tuple[dict[str, Any], str]:
-    """Run yfinance download (with Google Finance fallback) in a worker thread."""
-    return await asyncio.to_thread(_fetch_markets_sync)
+async def fetch_markets(prior_markets: dict[str, Any] | None = None) -> tuple[dict[str, Any], str]:
+    """Run yfinance download (with cached 30D reuse & Google Finance fallback) in a worker thread."""
+    return await asyncio.to_thread(_fetch_markets_sync, prior_markets)

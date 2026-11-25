@@ -111,10 +111,13 @@ async def run_pipeline(
     generated_at = now_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
 
     print(f"[run] Starting Daily Briefing pipeline for {target_date}...")
+    prior = _load_prior_briefing(target_date)
+    prior_markets = prior.get("markets") if prior else None
+
     (raw_news, news_h), (raw_markets, mkt_h), (raw_conflicts, conf_h), (raw_politics, pol_h) = (
         await asyncio.gather(
             fetch_top_news(),
-            fetch_markets(),
+            fetch_markets(prior_markets=prior_markets),
             fetch_conflicts(),
             fetch_politics(),
         )
@@ -132,8 +135,6 @@ async def run_pipeline(
         f"conflicts={len(raw_conflicts)} ({health.conflicts}), "
         f"politics={len(raw_politics.get('prediction_markets', []))} mkts / {len(raw_politics.get('articles', []))} arts ({health.politics})"
     )
-
-    prior = _load_prior_briefing(target_date)
 
     if fetch_only_path:
         out_path = Path(fetch_only_path)
