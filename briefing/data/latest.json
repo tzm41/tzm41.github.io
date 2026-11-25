@@ -35,6 +35,36 @@
       "sentiment": "slightly_negative"
     }
   ],
+  "afternoon_brief": {
+    "generated_at": "2026-11-25T22:53:55Z",
+    "bullets": [
+      {
+        "text": "**US equities sold off sharply into the afternoon** as the S&P 500 fell 2.13% to 7,047.89, the Nasdaq dropped 3.07% to 23,003.95, and the Dow slid 1.44% to 49,299.82, while the **VIX surged 32.59% to 34.95** and the Fear & Greed Index slipped to 15.2 (Extreme Fear).",
+        "category": "Economy",
+        "sentiment": "very_negative"
+      },
+      {
+        "text": "**Mega-cap tech led the afternoon decline**, with Nvidia down 6.35% ($145.51), Tesla off 5.33% ($364.17), Amazon down 4.52% ($240.88), and Alphabet down 3.96% ($268.01), while the US 10-year yield eased to 4.82% (-1.63%), WTI crude fell 1.88% to $80.51, Gold dipped 1.21% to $3,518.70, and Bitcoin edged down 1.28% to $58,980.37.",
+        "category": "Tech",
+        "sentiment": "negative"
+      },
+      {
+        "text": "The **US announced new tariffs on major trading partners** including China and the EU, adding fresh trade policy pressure alongside Capitol Hill demands from Republican lawmakers for FBI and CIA answers ahead of questioning Nvidia CEO *Jensen Huang*.",
+        "category": "Policy",
+        "sentiment": "negative"
+      },
+      {
+        "text": "In the Middle East, **Israeli judges recommended dropping the most serious charges** against Prime Minister *Benjamin Netanyahu* in one of his three corruption cases, while an Israeli strike in Gaza City killed senior Hamas internal security official *Mohammed Abu al-Ouf*.",
+        "category": "World",
+        "sentiment": "slightly_negative"
+      },
+      {
+        "text": "Elsewhere globally, **Ukraine reported striking five Russian military jets** at the Savasleyka airfield, and a **highway fuel tanker crash and fire in Cairo** killed 31 people.",
+        "category": "World",
+        "sentiment": "very_negative"
+      }
+    ]
+  },
   "top_news": [
     {
       "id": "nvidia-ag-congress",
