@@ -29,12 +29,13 @@
   --bias-right: #b9382c;
   --bias-state: #b4690e;
 
-  --sent-pos-bg: #f6fbf8;
-  --sent-pos-border: #d5e8dc;
-  --sent-pos-edge: rgba(21, 115, 71, 0.38);
-  --sent-neg-bg: #fdf7f6;
-  --sent-neg-border: #ead8d4;
-  --sent-neg-edge: rgba(185, 56, 44, 0.38);
+  --sent-very-neg: #9e1f1f;
+  --sent-neg: #c84632;
+  --sent-slight-neg: #d97a2b;
+  --sent-neutral: #848d9c;
+  --sent-slight-pos: #5a9e6f;
+  --sent-pos: #1f8454;
+  --sent-very-pos: #0e6b4f;
 
   --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -74,12 +75,13 @@
   --bias-right: #f07468;
   --bias-state: #e6a23c;
 
-  --sent-pos-bg: #1a272a;
-  --sent-pos-border: #284042;
-  --sent-pos-edge: rgba(52, 195, 143, 0.42);
-  --sent-neg-bg: #261f29;
-  --sent-neg-border: #42303d;
-  --sent-neg-edge: rgba(240, 101, 88, 0.42);
+  --sent-very-neg: #ff5252;
+  --sent-neg: #f06f5d;
+  --sent-slight-neg: #e89c4a;
+  --sent-neutral: #8a95a8;
+  --sent-slight-pos: #73c48d;
+  --sent-pos: #34c38f;
+  --sent-very-pos: #20d4a0;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.22);
   --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.32);
@@ -482,15 +484,80 @@ h3 {
 
 .executive-list {
   margin: 0;
-  padding-left: 20px;
+  padding-left: 0;
+  list-style: none;
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .executive-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
   font-size: 15.5px;
   line-height: 1.55;
   color: var(--ink);
+}
+
+.exec-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.exec-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.sentiment-ring {
+  position: relative;
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2.5px solid var(--sent-neutral);
+  background: transparent;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.sentiment-ring[data-sentiment="very_negative"] { border-color: var(--sent-very-neg); }
+.sentiment-ring[data-sentiment="negative"] { border-color: var(--sent-neg); }
+.sentiment-ring[data-sentiment="slightly_negative"] { border-color: var(--sent-slight-neg); }
+.sentiment-ring[data-sentiment="neutral"] { border-color: var(--sent-neutral); }
+.sentiment-ring[data-sentiment="slightly_positive"] { border-color: var(--sent-slight-pos); }
+.sentiment-ring[data-sentiment="positive"] { border-color: var(--sent-pos); }
+.sentiment-ring[data-sentiment="very_positive"] { border-color: var(--sent-very-pos); }
+
+.sentiment-ring[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%) translateY(2px);
+  background: var(--surface);
+  color: var(--ink-secondary);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: var(--shadow-sm);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 20;
+}
+
+.sentiment-ring[data-tooltip]:hover::after,
+.sentiment-ring[data-tooltip]:focus-visible::after {
+  opacity: 0.96;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* ---------- News Grid ---------- */
@@ -545,18 +612,6 @@ h3 {
 .news-card:hover {
   border-color: var(--border-strong);
   box-shadow: var(--shadow-md);
-}
-
-.news-card[data-sentiment="positive"] {
-  background: var(--sent-pos-bg);
-  border-color: var(--sent-pos-border);
-  border-left: 3px solid var(--sent-pos-edge);
-}
-
-.news-card[data-sentiment="negative"] {
-  background: var(--sent-neg-bg);
-  border-color: var(--sent-neg-border);
-  border-left: 3px solid var(--sent-neg-edge);
 }
 
 .news-card.is-collapsed {

@@ -9,11 +9,31 @@
     "politics": "ok"
   },
   "executive_brief": [
-    "Tech and AI shares led a **sharp Nasdaq pullback (-1.48%, XLK -3.26%)** as **Nvidia fell 7%** amid scrutiny over CEO Jensen Huang's reinstatement, while rotational buying lifted the **Dow Jones (+0.85%)** and **Russell 2000 (+0.57%)**.",
-    "A New York federal jury found **Huawei guilty of stealing US trade secrets** while **acquitting the firm of racketeering**, concluding a multi-year legal battle.",
-    "Middle East and Red Sea tensions remain acute, with the **Strait of Hormuz facing severe shipping paralysis**, Houthi strikes hitting Riyadh, and US investigators probing **potential Iranian cyberattacks on up to 50 commercial vessels**.",
-    "Leaked Russian records point to **nearly 500,000 deaths in the Ukraine war** as Ukrainian naval drones struck Russian vessels off Libya and a **Russian drone entered Polish airspace**.",
-    "In Washington, bipartisan lawmakers are pressing for **China chip export restrictions** and investigating White House ties to Nvidia's leadership reversal, while **Rep. Jimmy Gomez announced his resignation effective Dec. 1**."
+    {
+      "text": "Tech and AI shares led a **sharp Nasdaq pullback (-1.48%, XLK -3.26%)** as **Nvidia fell 7%** amid scrutiny over CEO Jensen Huang's reinstatement, while rotational buying lifted the **Dow Jones (+0.85%)** and **Russell 2000 (+0.57%)**.",
+      "category": "Economy",
+      "sentiment": "slightly_negative"
+    },
+    {
+      "text": "A New York federal jury found **Huawei guilty of stealing US trade secrets** while **acquitting the firm of racketeering**, concluding a multi-year legal battle.",
+      "category": "Tech",
+      "sentiment": "negative"
+    },
+    {
+      "text": "Middle East and Red Sea tensions remain acute, with the **Strait of Hormuz facing severe shipping paralysis**, Houthi strikes hitting Riyadh, and US investigators probing **potential Iranian cyberattacks on up to 50 commercial vessels**.",
+      "category": "World",
+      "sentiment": "very_negative"
+    },
+    {
+      "text": "Leaked Russian records point to **nearly 500,000 deaths in the Ukraine war** as Ukrainian naval drones struck Russian vessels off Libya and a **Russian drone entered Polish airspace**.",
+      "category": "World",
+      "sentiment": "very_negative"
+    },
+    {
+      "text": "In Washington, bipartisan lawmakers are pressing for **China chip export restrictions** and investigating White House ties to Nvidia's leadership reversal, while **Rep. Jimmy Gomez announced his resignation effective Dec. 1**.",
+      "category": "Policy",
+      "sentiment": "slightly_negative"
+    }
   ],
   "top_news": [
     {
@@ -32,6 +52,7 @@
           "url": "https://www.bbc.co.uk/news/articles/crpdw1qx7jgxo?at_medium=RSS&at_campaign=rss"
         }
       ],
+      "sentiment": "neutral",
       "continued_from_prior": false
     },
     {
@@ -50,6 +71,7 @@
           "url": "https://www.aljazeera.com/news/2026/11/25/us-court-convicts-huawei-of-theft-a-history-of-chinese-firms-global-woes?traffic_source=rss"
         }
       ],
+      "sentiment": "neutral",
       "continued_from_prior": false
     },
     {
@@ -68,6 +90,7 @@
           "url": "https://thehill.com/business/6239346-october-pce-inflation-data/"
         }
       ],
+      "sentiment": "neutral",
       "continued_from_prior": false
     },
     {
@@ -90,6 +113,7 @@
           "url": "https://www.theguardian.com/world/2026/nov/23/ukraine-naval-drones-strike-russian-warship-libya"
         }
       ],
+      "sentiment": "neutral",
       "continued_from_prior": false
     },
     {
@@ -108,6 +132,7 @@
           "url": "https://www.aljazeera.com/news/2026/11/25/solomon-islands-signs-security-deal-with-australia?traffic_source=rss"
         }
       ],
+      "sentiment": "neutral",
       "continued_from_prior": false
     },
     {
@@ -126,6 +151,7 @@
           "url": "https://www.theguardian.com/us-news/2026/nov/24/kilmar-abrego-garcia-leaves-us"
         }
       ],
+      "sentiment": "neutral",
       "continued_from_prior": false
     },
     {
@@ -140,6 +166,7 @@
           "url": "https://www.npr.org/2026/11/25/nx-s1-6053801/china-investigation-politburo-shanghai-party"
         }
       ],
+      "sentiment": "neutral",
       "continued_from_prior": false
     },
     {
@@ -158,6 +185,7 @@
           "url": "https://www.npr.org/2026/11/25/nx-s1-6048524/what-to-know-before-using-ai-agents-for-black-friday-shopping"
         }
       ],
+      "sentiment": "neutral",
       "continued_from_prior": false
     }
   ],
@@ -3990,6 +4018,7 @@
         "url": "https://www.goodnewsnetwork.org/major-success-sees-viral-infections-fall-68-in-brazil-after-releasing-wolbachia-infected-mosquitoes/"
       }
     ],
+    "sentiment": "very_positive",
     "continued_from_prior": false
   },
   "local_news": [
@@ -4009,6 +4038,7 @@
               "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNSEFhZ0EtSWNJRmJSY1U4TkU3cjRhbUFyQ1ZSWGNuZ3NiazBZbGlUZ2xTR3ktODlIb045dGYzdGRoRTBFemR0RXp3MDluOFpvQXRua29XOWd2OEtDRGlsSmlPNWs4LXA0ZnRLakFkeU5qbmc2ZE95MzFFeU1ydmZnTVg4NlB4MDk5cGRVbEg4OG4?oc=5"
             }
           ],
+          "sentiment": "neutral",
           "continued_from_prior": false
         },
         {
@@ -4023,6 +4053,7 @@
               "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNSVFLZV9wNktoVW8zUDMzcTVXUl9rTlV4b1BNMUJuYVBNSFUzRHJ4dDNGWjlLeGVTT1lPdHJaNWk2Wm9DcUh2Sm5ZdS1scnMtWVVhQkliSFFDWWtPT2xFRFVQcGVYV2tzTndfeTJ0MzAyTl9uR2RJa0xqMTMwdjhTNHIwemw3bWt50gGQAUFVX3lxTE9hdmRlMDRMQ1I2MlQ5WksyWXpmV1c3U2ZWTy1oZFRVM2JvaXdhUk9PZGZnTzlVZDQyaU1oUXdISDk2c2xXWl93XzVyWHpZZ25HZHNycFpxYWUxc0JUdXBEV0ZNMDNGT094ZzR1alF3dVF2bWVLSG1YOTF4RE53anFpSU12bWVFa2FHWXRISWc4Sw?oc=5"
             }
           ],
+          "sentiment": "neutral",
           "continued_from_prior": false
         },
         {
@@ -4037,6 +4068,7 @@
               "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPTm1EYTZyQ1ZqaXIxNE5RSWdtTmJKRFZBb3IwUDhZVHpmWFU4YXpDUldNd1FLbEgxR3UtZVNIQVNFUkJOM0NHUTFPbm91VTl1XzFPTUtkOWdjYnJVRzhRdFBsZjRlNHZUM09nQ0pFUlZmUC11TGEzU25WTmEyekh3ZGZWTzZVdHBRSDZmMTNneXRXVFVMazNOWUpGZkFvM1ppVUpfMTFONA?oc=5"
             }
           ],
+          "sentiment": "neutral",
           "continued_from_prior": false
         },
         {
@@ -4051,6 +4083,7 @@
               "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQRXFRSDFWYWd3aEpRUnBzWHg2OVhNeFU5WDRqNjZIYUxyamZBaXN3eklDZjN0bUNadVdEcWxBM05xcW5zdkwtWjZwZ2c5b00yX1B1Uy1RYnN4M3FqSkJaeXFvRERCWGpBcGRqS0M0ejFQZ3JfdkNaWURxWkpWSDVkc2tQaEFJWlZGN0RNWjBtMDRCeUtzSFhJZHdQeGlsdEptUVVPV3RieG1WYkE?oc=5"
             }
           ],
+          "sentiment": "neutral",
           "continued_from_prior": false
         }
       ],
@@ -4076,6 +4109,7 @@
               "url": "https://news.google.com/rss/articles/CBMi7gJBVV95cUxPTGpFbTFCWkxJTXZqWVFsVXVZYmV1LWpib2RScE41bU92ZG9iajlJMWxMZGlzaGZzcWNrVUQ3UFBxbUJTbVZsRS1ybjZYYmo0VlpUTlVaaWxYVEtOalJ5VjVhQmVzQ0RDcTNGVWJPMllfbF93c2o4VldCS2g0WEl6MEhMNDRXamRHNzNxLTFhNGlha09JeXM3MUlfdEt0ZDU5ckxfZDl5bHpkYWFuVWhUOFMtVWQ1Wk00WHBjZUlLOUt4WkhONmk3d0ZHc0JaeDhYRENjV2xIb2JMN0dmdlNXNTV6Mm8tMHh0VGxRT1BZRVdlbE1qUmQ3eVhBYXg0N2NGQy0xRVBjSzc4RmFQUFM5NUVkR195X1ZURUUwSDN4QnBCQ0kxWnZFa3VBdlBmUHVaVnpfQVhsQlpHYjV1QnRidjFBV2xjcEhYM2NqLTJhVVJxd1BCTERwdm00TElzSGZ4YWZmTk9DRUJfWE4waHc?oc=5"
             }
           ],
+          "sentiment": "negative",
           "continued_from_prior": false
         },
         {
@@ -4090,6 +4124,7 @@
               "url": "https://www.bbc.com/zhongwen/articles/c6rmgvkp322xo/trad?at_medium=RSS&at_campaign=rss"
             }
           ],
+          "sentiment": "negative",
           "continued_from_prior": false
         },
         {
@@ -4104,6 +4139,7 @@
               "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBSRVJ0ci1iT0VraS1hVWdTbS1wMmx0bGg1WTNpUU1RN0c3VEk4d1FBTExkalVYMnhyaWlSYTRaUk1KaDc3dEFOTEZ0bGJ4RkRyb2wzUzNySFl5X2Nnd3ZVVE5LRnJ0Z0tpb0hpTFYzdjdWQTF0Mmc?oc=5"
             }
           ],
+          "sentiment": "neutral",
           "continued_from_prior": false
         }
       ],
@@ -4124,6 +4160,7 @@
               "url": "https://news.google.com/rss/articles/CBMi7gJBVV95cUxPTGpFbTFCWkxJTXZqWVFsVXVZYmV1LWpib2RScE41bU92ZG9iajlJMWxMZGlzaGZzcWNrVUQ3UFBxbUJTbVZsRS1ybjZYYmo0VlpUTlVaaWxYVEtOalJ5VjVhQmVzQ0RDcTNGVWJPMllfbF93c2o4VldCS2g0WEl6MEhMNDRXamRHNzNxLTFhNGlha09JeXM3MUlfdEt0ZDU5ckxfZDl5bHpkYWFuVWhUOFMtVWQ1Wk00WHBjZUlLOUt4WkhONmk3d0ZHc0JaeDhYRENjV2xIb2JMN0dmdlNXNTV6Mm8tMHh0VGxRT1BZRVdlbE1qUmQ3eVhBYXg0N2NGQy0xRVBjSzc4RmFQUFM5NUVkR195X1ZURUUwSDN4QnBCQ0kxWnZFa3VBdlBmUHVaVnpfQVhsQlpHYjV1QnRidjFBV2xjcEhYM2NqLTJhVVJxd1BCTERwdm00TElzSGZ4YWZmTk9DRUJfWE4waHc?oc=5"
             }
           ],
+          "sentiment": "negative",
           "continued_from_prior": false
         },
         {
@@ -4138,6 +4175,7 @@
               "url": "https://www.bbc.com/zhongwen/articles/c6rmgvkp322xo/trad?at_medium=RSS&at_campaign=rss"
             }
           ],
+          "sentiment": "negative",
           "continued_from_prior": false
         },
         {
@@ -4152,6 +4190,7 @@
               "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBSRVJ0ci1iT0VraS1hVWdTbS1wMmx0bGg1WTNpUU1RN0c3VEk4d1FBTExkalVYMnhyaWlSYTRaUk1KaDc3dEFOTEZ0bGJ4RkRyb2wzUzNySFl5X2Nnd3ZVVE5LRnJ0Z0tpb0hpTFYzdjdWQTF0Mmc?oc=5"
             }
           ],
+          "sentiment": "neutral",
           "continued_from_prior": false
         }
       ]

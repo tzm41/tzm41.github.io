@@ -8,7 +8,15 @@ from pydantic import BaseModel, Field
 
 HealthStatus = Literal["ok", "partial", "failed"]
 NewsCategory = Literal["World", "Economy", "Tech", "Policy", "Science"]
-StorySentiment = Literal["positive", "neutral", "negative"]
+StorySentiment = Literal[
+    "very_negative",
+    "negative",
+    "slightly_negative",
+    "neutral",
+    "slightly_positive",
+    "positive",
+    "very_positive",
+]
 MarketRegime = Literal["Risk-On", "Risk-Off", "Mixed", "Volatility Spike"]
 ConflictStatus = Literal["escalating", "elevated", "stable", "de-escalating"]
 TrendDirection = Literal["up", "flat", "down"]
@@ -132,6 +140,12 @@ class SourceHealth(BaseModel):
     politics: HealthStatus = "ok"
 
 
+class ExecutiveBriefItem(BaseModel):
+    text: str
+    category: NewsCategory = "World"
+    sentiment: StorySentiment = "neutral"
+
+
 class LocalNewsRegion(BaseModel):
     id: str
     name: str
@@ -144,7 +158,7 @@ class DailyBriefing(BaseModel):
     generated_at: str
     synthesis_mode: Literal["gemini", "extractive_fallback"] = "gemini"
     source_health: SourceHealth = Field(default_factory=SourceHealth)
-    executive_brief: list[str] = Field(default_factory=list)
+    executive_brief: list[str | ExecutiveBriefItem] = Field(default_factory=list)
     top_news: list[NewsStory] = Field(default_factory=list)
     markets: MarketsSection
     conflicts: ConflictsSection
@@ -163,8 +177,8 @@ class TheaterSynthesis(BaseModel):
 
 
 class GeminiBriefingSynthesis(BaseModel):
-    executive_brief: list[str] = Field(
-        description="3 to 5 concise, high-signal morning bullets synthesizing the day across news, markets, conflicts, and US politics."
+    executive_brief: list[ExecutiveBriefItem] = Field(
+        description="3 to 5 concise, high-signal morning bullets synthesizing the day across news, markets, conflicts, and US politics, each with category and 7-level sentiment."
     )
     top_news: list[NewsStory] = Field(
         description="6 to 10 deduplicated top news stories with factual 2-3 sentence summaries, why_it_matters, and grounded source links from the provided articles."

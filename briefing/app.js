@@ -370,7 +370,28 @@ function renderExecutiveBrief(briefing) {
     els.executiveList.innerHTML = `<li>No executive summary items available for this edition.</li>`;
     return;
   }
-  els.executiveList.innerHTML = bullets.map((b) => `<li>${highlightSummaryHtml(b)}</li>`).join("");
+  els.executiveList.innerHTML = bullets
+    .map((item) => {
+      const text = typeof item === "string" ? item : item?.text || "";
+      const category =
+        typeof item === "object" && item?.category
+          ? item.category
+          : inferCategoryFromText(text);
+      const sentiment =
+        typeof item === "object" && item?.sentiment && SENTIMENT_LABELS[item.sentiment]
+          ? item.sentiment
+          : inferSentimentFromText(text);
+      return `
+        <li>
+          <span class="exec-meta">
+            ${renderSentimentRing(sentiment)}
+            <span class="cat-pill">${escapeHtml(category)}</span>
+          </span>
+          <span class="exec-text">${highlightSummaryHtml(text)}</span>
+        </li>
+      `;
+    })
+    .join("");
 }
 
 const SIMILAR_STOPWORDS = new Set([
@@ -448,22 +469,55 @@ function renderSourceChip(src) {
   return `<a class="source-chip"${biasAttr} href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`;
 }
 
+const SENTIMENT_LABELS = {
+  very_negative: "Very Negative",
+  negative: "Negative",
+  slightly_negative: "Slightly Negative",
+  neutral: "Neutral",
+  slightly_positive: "Slightly Positive",
+  positive: "Positive",
+  very_positive: "Very Positive",
+};
+
 const NEGATIVE_SENTIMENT_RE =
   /\b(guilty|convict\w*|outage|code red|sell-?off|slump|plunge|slide[sd]?|drop(?:s|ped)?|fall(?:s|ing)?|fell|dead|death\w*|kill\w*|strike\w*|attack\w*|cyberattack\w*|hack\w*|war|blockade|paralys\w*|flood\w*|lawsuit|challenge|fakes?|smear|disinformation|scandal|resign\w*|tariff\w*|friction|scrutiny|probe|investigat\w*|deport\w*|crash|crisis|decline|violat\w*|sanction\w*)\b|加征关税|关税|攻击|抹黑|判死刑|窃取|摩擦|虚假信息|危机|冲突/gi;
 
 const POSITIVE_SENTIMENT_RE =
-  /\b(breakthrough|rally|rallies|surge[sd]?|gain\w*|advance[sd]?|recover\w*|success|milestone|celebrat\w*|award\w*|approv\w*|cure[sd]?|boost\w*|growth|record high|peace|ceasefire|accord|treaty|draw(?:s|ing)? crowds|reopen\w*)\b|获批|突破|增长|里程碑|和平|停火|复苏|创新高/gi;
+  /\b(breakthrough|rally|rallies|surge[sd]?|gain\w*|advance[sd]?|recover\w*|success|milestone|celebrat\w*|award\w*|approv\w*|cure[sd]?|boost\w*|growth|record high|peace|ceasefire|accord|treaty|draw(?:s|ing)? crowds|reopen\w*|reduced the risk|durable)\b|获批|突破|增长|里程碑|和平|停火|复苏|创新高/gi;
 
-function resolveStorySentiment(story) {
-  if (story.sentiment === "positive" || story.sentiment === "negative") {
-    return story.sentiment;
-  }
-  const text = `${story.headline || ""} ${story.summary || ""}`;
+function inferSentimentFromText(text) {
   const neg = (text.match(NEGATIVE_SENTIMENT_RE) || []).length;
   const pos = (text.match(POSITIVE_SENTIMENT_RE) || []).length;
-  if (pos > neg) return "positive";
-  if (neg > pos) return "negative";
+  const score = pos - neg;
+  if (score <= -4) return "very_negative";
+  if (score <= -2) return "negative";
+  if (score === -1) return "slightly_negative";
+  if (score === 1) return "slightly_positive";
+  if (score >= 4) return "very_positive";
+  if (score >= 2) return "positive";
   return "neutral";
+}
+
+function resolveStorySentiment(story) {
+  if (story?.sentiment && SENTIMENT_LABELS[story.sentiment] && story.sentiment !== "neutral") {
+    return story.sentiment;
+  }
+  return inferSentimentFromText(`${story?.headline || ""} ${story?.summary || ""}`);
+}
+
+function inferCategoryFromText(text) {
+  const s = String(text || "");
+  if (/\b(nasdaq|s&p|dow|russell|market|stock|tariff|inflation|yield|bitcoin|oil|fed)\b/i.test(s)) return "Economy";
+  if (/\b(nvidia|huawei|microsoft|apple|ai\b|chip|tech|cloud|cyber)\b/i.test(s)) return "Tech";
+  if (/\b(congress|senate|house|lawmaker|white house|trump|rep\.|doj|court|deport)\b/i.test(s)) return "Policy";
+  if (/\b(science|trial|bacteria|virus|climate|space|health)\b/i.test(s)) return "Science";
+  return "World";
+}
+
+function renderSentimentRing(sentiment) {
+  const key = SENTIMENT_LABELS[sentiment] ? sentiment : "neutral";
+  const label = SENTIMENT_LABELS[key];
+  return `<span class="sentiment-ring" tabindex="0" role="img" aria-label="Sentiment: ${escapeHtml(label)}" data-sentiment="${escapeHtml(key)}" data-tooltip="${escapeHtml(label)}" title="${escapeHtml(label)}"></span>`;
 }
 
 function renderNewsCard(story, badgeLabel, continued) {
@@ -478,10 +532,11 @@ function renderNewsCard(story, badgeLabel, continued) {
     : "";
 
   return `
-    <article class="news-card${continued ? " is-collapsed" : ""}" data-sentiment="${escapeHtml(sentiment)}">
+    <article class="news-card${continued ? " is-collapsed" : ""}">
       <div class="news-meta">
         <div class="news-card-badges">
           <span class="cat-pill">${escapeHtml(badgeLabel)}</span>
+          ${renderSentimentRing(sentiment)}
           ${continuedBadge}
         </div>
         ${toggleBtn}
@@ -851,10 +906,17 @@ function renderPositiveNews(story) {
   const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
 
   els.positiveSection.classList.remove("hidden");
+  const posSentiment =
+    story.sentiment && SENTIMENT_LABELS[story.sentiment] && story.sentiment !== "neutral"
+      ? story.sentiment
+      : "very_positive";
   els.positiveNewsSlot.innerHTML = `
     <article class="positive-card">
       <div class="news-meta">
-        <span class="cat-pill">${escapeHtml(story.category || "Progress")}</span>
+        <div class="news-card-badges">
+          <span class="cat-pill">${escapeHtml(story.category || "Progress")}</span>
+          ${renderSentimentRing(posSentiment)}
+        </div>
       </div>
       <h3>${escapeHtml(story.headline)}</h3>
       <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
