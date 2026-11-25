@@ -415,34 +415,36 @@ function isContinuedFromPrior(story, priorStories = []) {
 }
 
 const SOURCE_BIAS_RULES = [
-  [/reuters|ap news|associated press/i, "Center · Wire"],
-  [/bloomberg|cnbc|financial times|ft中文网|wall street journal|wsj|marketplace/i, "Center · Business"],
-  [/bbc/i, "Center-Left · Public"],
-  [/the hill|politico|courthouse news|stars and stripes/i, "Center"],
-  [/deutsche welle|rfi|al jazeera/i, "Center-Left · Int'l public"],
-  [/npr/i, "Lean Left · Public"],
-  [/new york times|纽约时报|washington post|sacramento bee|ktvu|abc news/i, "Lean Left"],
-  [/guardian/i, "Left-Center"],
-  [/fox news|new york post/i, "Lean Right"],
-  [/arstechnica|ars technica|the verge|good news network|solidot/i, "Center · Tech / Specialty"],
-  [/中新网|新华社|人民日报|外交部|cgtn|global times/i, "State-affiliated (CN)"],
-  [/澎湃|thepaper/i, "State-owned (CN) · Urban"],
-  [/财新|caixin|第一财经|yicai|界面|jiemian/i, "Business / Market (CN)"],
-  [/google news/i, "Aggregator"],
+  [/reuters|ap news|associated press/i, "Center · Wire", "center"],
+  [/bloomberg|cnbc|financial times|ft中文网|wall street journal|wsj|marketplace/i, "Center · Business", "center"],
+  [/bbc/i, "Center-Left · Public", "left"],
+  [/the hill|politico|courthouse news|stars and stripes/i, "Center", "center"],
+  [/deutsche welle|rfi|al jazeera/i, "Center-Left · Int'l public", "left"],
+  [/npr/i, "Lean Left · Public", "left"],
+  [/new york times|纽约时报|washington post|sacramento bee|ktvu|abc news/i, "Lean Left", "left"],
+  [/guardian/i, "Left-Center", "left"],
+  [/fox news|new york post/i, "Lean Right", "right"],
+  [/arstechnica|ars technica|the verge|good news network|solidot/i, "Center · Tech / Specialty", "center"],
+  [/中新网|新华社|人民日报|外交部|cgtn|global times/i, "State-affiliated (CN)", "state"],
+  [/澎湃|thepaper/i, "State-owned (CN) · Urban", "state"],
+  [/财新|caixin|第一财经|yicai|界面|jiemian/i, "Business / Market (CN)", "center"],
+  [/google news/i, "Aggregator", "neutral"],
 ];
 
 function lookupSourceBias(name) {
   const s = String(name || "").trim();
-  if (!s) return "";
-  for (const [re, label] of SOURCE_BIAS_RULES) {
-    if (re.test(s)) return `Est. bias: ${label}`;
+  if (!s) return null;
+  for (const [re, label, tone] of SOURCE_BIAS_RULES) {
+    if (re.test(s)) return { text: `Est. bias: ${label}`, tone };
   }
-  return "";
+  return null;
 }
 
 function renderSourceChip(src) {
   const bias = lookupSourceBias(src.name);
-  const biasAttr = bias ? ` data-bias="${escapeHtml(bias)}" title="${escapeHtml(bias)}"` : "";
+  const biasAttr = bias
+    ? ` data-bias="${escapeHtml(bias.text)}" data-bias-tone="${escapeHtml(bias.tone)}" title="${escapeHtml(bias.text)}"`
+    : "";
   return `<a class="source-chip"${biasAttr} href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`;
 }
 
@@ -1265,8 +1267,9 @@ function initSourceBiasPopover() {
 
     activeChip = chip;
     const bias = chip.dataset.bias || "";
+    const tone = chip.dataset.biasTone || "neutral";
     const href = chip.getAttribute("href") || "#";
-    pop.innerHTML = `<span class="source-popover-bias">${escapeHtml(bias)}</span><a class="source-popover-link" href="${safeUrl(href)}" target="_blank" rel="noopener noreferrer">Open &nearr;</a>`;
+    pop.innerHTML = `<span class="source-popover-bias" data-bias-tone="${escapeHtml(tone)}">${escapeHtml(bias)}</span><a class="source-popover-link" href="${safeUrl(href)}" target="_blank" rel="noopener noreferrer">Open &nearr;</a>`;
     pop.classList.remove("hidden");
 
     const rect = chip.getBoundingClientRect();
