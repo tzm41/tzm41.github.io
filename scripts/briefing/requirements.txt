@@ -1,0 +1,6 @@
+google-genai>=1.0.0
+pydantic>=2.7.0
+httpx>=0.27.0
+feedparser>=6.0.11
+yfinance>=0.2.50
+beautifulsoup4>=4.12.3

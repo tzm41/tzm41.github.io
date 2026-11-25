@@ -1,0 +1,159 @@
+"""Pydantic models defining the JSON data contract for the daily briefing."""
+
+from __future__ import annotations
+
+from typing import Literal
+from pydantic import BaseModel, Field
+
+
+HealthStatus = Literal["ok", "partial", "failed"]
+NewsCategory = Literal["World", "Economy", "Tech", "Policy", "Science"]
+MarketRegime = Literal["Risk-On", "Risk-Off", "Mixed", "Volatility Spike"]
+ConflictStatus = Literal["escalating", "elevated", "stable", "de-escalating"]
+TrendDirection = Literal["up", "flat", "down"]
+MomentumTag = Literal["rising", "steady", "cooling"]
+
+
+class SourceLink(BaseModel):
+    name: str
+    url: str
+
+
+class NewsStory(BaseModel):
+    id: str
+    category: NewsCategory
+    headline: str
+    summary: str
+    why_it_matters: str
+    sources: list[SourceLink] = Field(default_factory=list)
+
+
+class MarketQuote(BaseModel):
+    symbol: str
+    name: str
+    group: str
+    price: float
+    change_pct: float
+    change_5d_pct: float = 0.0
+    sparkline_30d: list[float] = Field(default_factory=list)
+
+
+class SectorTile(BaseModel):
+    symbol: str
+    name: str
+    change_pct: float
+    change_5d_pct: float = 0.0
+
+
+class MarketsSection(BaseModel):
+    narrative: str
+    regime_tag: MarketRegime = "Mixed"
+    watchlist: list[MarketQuote] = Field(default_factory=list)
+    sectors: list[SectorTile] = Field(default_factory=list)
+
+
+class TimelineEvent(BaseModel):
+    headline: str
+    source: str
+    url: str
+
+
+class ConflictTheater(BaseModel):
+    id: str
+    name: str
+    region: str
+    status: ConflictStatus = "elevated"
+    trend_7d: TrendDirection = "flat"
+    intensity_score: float = 0.0
+    intensity_series_14d: list[float] = Field(default_factory=list)
+    summary: str
+    timeline_events: list[TimelineEvent] = Field(default_factory=list)
+
+
+class ConflictsSection(BaseModel):
+    overview: str
+    theaters: list[ConflictTheater] = Field(default_factory=list)
+
+
+class PredictionMarket(BaseModel):
+    question: str
+    yes_prob: float
+    delta_24h: float = 0.0
+    volume_usd: float = 0.0
+    url: str = ""
+
+
+class PolicyItem(BaseModel):
+    title: str
+    chamber_or_branch: str
+    summary: str
+    url: str = ""
+
+
+class PoliticalTopic(BaseModel):
+    topic: str
+    momentum: MomentumTag = "steady"
+    framing_note: str
+
+
+class PoliticsSection(BaseModel):
+    pulse_summary: str
+    prediction_markets: list[PredictionMarket] = Field(default_factory=list)
+    legislative_and_executive: list[PolicyItem] = Field(default_factory=list)
+    trending_topics: list[PoliticalTopic] = Field(default_factory=list)
+
+
+class SourceHealth(BaseModel):
+    news: HealthStatus = "ok"
+    markets: HealthStatus = "ok"
+    conflicts: HealthStatus = "ok"
+    politics: HealthStatus = "ok"
+
+
+class DailyBriefing(BaseModel):
+    date: str
+    generated_at: str
+    synthesis_mode: Literal["gemini", "extractive_fallback"] = "gemini"
+    source_health: SourceHealth = Field(default_factory=SourceHealth)
+    executive_brief: list[str] = Field(default_factory=list)
+    top_news: list[NewsStory] = Field(default_factory=list)
+    markets: MarketsSection
+    conflicts: ConflictsSection
+    us_politics: PoliticsSection
+
+
+# --- Gemini structured output schema (LLM generates narratives/summaries only) ---
+
+class TheaterSynthesis(BaseModel):
+    id: str
+    status: ConflictStatus
+    trend_7d: TrendDirection
+    summary: str
+
+
+class GeminiBriefingSynthesis(BaseModel):
+    executive_brief: list[str] = Field(
+        description="3 to 5 concise, high-signal morning bullets synthesizing the day across news, markets, conflicts, and US politics."
+    )
+    top_news: list[NewsStory] = Field(
+        description="6 to 10 deduplicated top news stories with factual 2-3 sentence summaries, why_it_matters, and grounded source links from the provided articles."
+    )
+    market_narrative: str = Field(
+        description="2 to 3 sentence synthesis explaining today's equity, bond, commodity, and sector moves using the provided market numbers and headlines."
+    )
+    market_regime: MarketRegime
+    conflicts_overview: str = Field(
+        description="2 sentence global geopolitical temperature check comparing today against recent days."
+    )
+    conflict_theaters: list[TheaterSynthesis] = Field(
+        description="One entry per tracked theater id with updated status, 7-day trend direction, and 2-3 sentence 24h summary."
+    )
+    politics_pulse_summary: str = Field(
+        description="2 to 3 sentence synthesis of key developments in US politics, policy, and public/media framing."
+    )
+    legislative_and_executive: list[PolicyItem] = Field(
+        description="3 to 5 key bills, executive actions, agency moves, or court developments grounded in the provided items."
+    )
+    trending_topics: list[PoliticalTopic] = Field(
+        description="3 to 5 trending US political topics with momentum and neutral framing notes."
+    )

@@ -1,0 +1,810 @@
+{
+  "date": "2026-11-25",
+  "generated_at": "2026-11-25T05:21:36Z",
+  "synthesis_mode": "extractive_fallback",
+  "source_health": {
+    "news": "ok",
+    "markets": "ok",
+    "conflicts": "ok",
+    "politics": "ok"
+  },
+  "executive_brief": [
+    "Huawei found guilty of stealing trade secrets but acquitted of racketeering",
+    "US attorney general dodges questions about Nvidia investigation",
+    "Microsoft’s historic cloud outage exposed an engineering “fog of war” - Ars Technica"
+  ],
+  "top_news": [
+    {
+      "id": "story-1",
+      "category": "World",
+      "headline": "Huawei found guilty of stealing trade secrets but acquitted of racketeering",
+      "summary": "A jury has found Huawei guilty of stealing US trade secrets, as reported earlier by NBC News and Bloomberg. The verdict, handed down in a federal court in New York, concludes a years-long legal battle that accused the Chinese telecom giant of stealing source code and proprietary technology from several companies,…",
+      "why_it_matters": "Auto-aggregated headline (extractive mode — configure GEMINI_API_KEY for full synthesis).",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/cmy49ngydqzpo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "name": "BBC Business",
+          "url": "https://www.bbc.co.uk/news/articles/cmy49ngydqzpo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "name": "The Verge",
+          "url": "https://www.theverge.com/tech/1041820/huawei-guilty-trade-secrets-trial"
+        }
+      ]
+    },
+    {
+      "id": "story-2",
+      "category": "World",
+      "headline": "US attorney general dodges questions about Nvidia investigation",
+      "summary": "Nvidia's share price have fallen 7% as lawmakers demand answers about President Donald Trump's involvement in Huang's reinstatement.",
+      "why_it_matters": "Auto-aggregated headline (extractive mode — configure GEMINI_API_KEY for full synthesis).",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/crpdw1qx7jgxo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "name": "BBC Business",
+          "url": "https://www.bbc.co.uk/news/articles/crpdw1qx7jgxo?at_medium=RSS&at_campaign=rss"
+        }
+      ]
+    },
+    {
+      "id": "story-3",
+      "category": "Economy",
+      "headline": "Microsoft’s historic cloud outage exposed an engineering “fog of war” - Ars Technica",
+      "summary": "Microsoft’s historic cloud outage exposed an engineering “fog of war” Ars Technica EXCLUSIVE: Microsoft declares 'Code Red' after historic outage, internal memos show Reuters Microsoft declares a code red in the middle of a 'Patchpocalypse' Yahoo Finance Microsoft's Outlook outage came down to a perfect storm Windows…",
+      "why_it_matters": "Auto-aggregated headline (extractive mode — configure GEMINI_API_KEY for full synthesis).",
+      "sources": [
+        {
+          "name": "Google News Business",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQd3N2cjRYc2MyZTh4cGdIbjB4a2dac0h2VG5TN21RdllmQjdhNHg2UWNsRVNpaGUyUmFibjkwT1JEOWx2WE5QTmtXYUk2SXR3Y2VsQ3NBRFYzOUlIOXp3cHZYV0pabktqQlBnaUttQlFZcVlMMU90SGphZjJuREVsSnBLZEJBd0tuY0VFY0lKRU1feUVpMm5pa2FrcnRrMTZrYjlpbjA1aldzRDg?oc=5"
+        },
+        {
+          "name": "Ars Technica",
+          "url": "https://arstechnica.com/gadgets/2026/11/microsofts-historic-cloud-outage-exposed-an-engineering-fog-of-war/"
+        }
+      ]
+    },
+    {
+      "id": "story-4",
+      "category": "World",
+      "headline": "Russia's own figures show almost 500,000 deaths in war in Ukraine",
+      "summary": "Leaked data reveal how the full-scale invasion of Ukraine has fundamentally changed mortality patterns in Russia.",
+      "why_it_matters": "Auto-aggregated headline (extractive mode — configure GEMINI_API_KEY for full synthesis).",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/cmx27g533zwyo?at_medium=RSS&at_campaign=rss"
+        }
+      ]
+    },
+    {
+      "id": "story-5",
+      "category": "World",
+      "headline": "Kilmar Ábrego García leaving US for Spain, ending Trump deportation battle",
+      "summary": "His deportation to El Salvador and return to the US became a flash point in the debate over President Donald Trump's immigration agenda.",
+      "why_it_matters": "Auto-aggregated headline (extractive mode — configure GEMINI_API_KEY for full synthesis).",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/c6808pyy5dl9o?at_medium=RSS&at_campaign=rss"
+        }
+      ]
+    },
+    {
+      "id": "story-6",
+      "category": "World",
+      "headline": "Indian government has 'lost the plot', says 'cockroach' leader barred from UK flight",
+      "summary": "Saurav Das says immigration authorities at Delhi airport told him his passport had been flagged.",
+      "why_it_matters": "Auto-aggregated headline (extractive mode — configure GEMINI_API_KEY for full synthesis).",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/cm5y1ezx2gqyo?at_medium=RSS&at_campaign=rss"
+        }
+      ]
+    },
+    {
+      "id": "story-7",
+      "category": "World",
+      "headline": "Land mine casualties soar in Syria, two years after war",
+      "summary": "Nearly 1,000 children are among those killed or injured by explosives left over from the conflict, figures show.",
+      "why_it_matters": "Auto-aggregated headline (extractive mode — configure GEMINI_API_KEY for full synthesis).",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/c893rl37ywdgo?at_medium=RSS&at_campaign=rss"
+        }
+      ]
+    },
+    {
+      "id": "story-8",
+      "category": "World",
+      "headline": "Thomas Markle indicted in US for possessing child sex abuse images",
+      "summary": "The FBI arrested Markle on 6 November after a search of a storage unit he had allegedly rented in Los Angeles uncovered the abuse material.",
+      "why_it_matters": "Auto-aggregated headline (extractive mode — configure GEMINI_API_KEY for full synthesis).",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/crwy4egxn592o?at_medium=RSS&at_campaign=rss"
+        }
+      ]
+    }
+  ],
+  "markets": {
+    "narrative": "S&P 500 moved -0.50% to 7,201.09.",
+    "regime_tag": "Risk-Off",
+    "watchlist": [
+      {
+        "symbol": "^GSPC",
+        "name": "S&P 500",
+        "group": "Equity",
+        "price": 7201.09,
+        "change_pct": -0.5,
+        "change_5d_pct": -1.9,
+        "sparkline_30d": [
+          7718.94,
+          7744.06,
+          7659.44,
+          7690.73,
+          7712.57,
+          7757.17,
+          7663.43,
+          7623.68,
+          7676.77,
+          7722.6,
+          7743.98,
+          7720.39,
+          7580.07,
+          7541.4,
+          7568.92,
+          7688.62,
+          7353.73,
+          7376.86,
+          7549.94,
+          7520.93,
+          7619.38,
+          7592.4,
+          7561.67,
+          7416.59,
+          7340.53,
+          7323.63,
+          7175.83,
+          6910.39,
+          7237.17,
+          7201.09
+        ]
+      },
+      {
+        "symbol": "^IXIC",
+        "name": "Nasdaq",
+        "group": "Equity",
+        "price": 23733.54,
+        "change_pct": -1.48,
+        "change_5d_pct": -2.45,
+        "sparkline_30d": [
+          26692.87,
+          26713.03,
+          26140.03,
+          26430.89,
+          26424.82,
+          26702.86,
+          26008.86,
+          25955.34,
+          26169.38,
+          26477.81,
+          26549.85,
+          26184.72,
+          25437.0,
+          25164.31,
+          25372.01,
+          25736.51,
+          24315.0,
+          24579.43,
+          25253.14,
+          25065.87,
+          25466.19,
+          25366.09,
+          25136.27,
+          24509.76,
+          24328.38,
+          24429.88,
+          23879.2,
+          22617.73,
+          24089.56,
+          23733.54
+        ]
+      },
+      {
+        "symbol": "^DJI",
+        "name": "Dow Jones",
+        "group": "Equity",
+        "price": 50018.7,
+        "change_pct": 0.85,
+        "change_5d_pct": -1.46,
+        "sparkline_30d": [
+          51621.48,
+          52177.69,
+          52002.41,
+          51966.03,
+          52495.88,
+          52856.09,
+          52867.98,
+          52215.16,
+          52361.58,
+          52377.57,
+          52475.1,
+          52342.56,
+          51770.31,
+          51983.98,
+          51786.72,
+          53356.12,
+          51523.06,
+          51285.73,
+          52389.75,
+          52231.89,
+          52486.49,
+          52297.09,
+          52347.55,
+          51608.17,
+          50759.42,
+          50198.17,
+          49097.06,
+          48147.33,
+          49595.31,
+          50018.7
+        ]
+      },
+      {
+        "symbol": "^RUT",
+        "name": "Russell 2000",
+        "group": "Equity",
+        "price": 2684.94,
+        "change_pct": 0.57,
+        "change_5d_pct": -0.63,
+        "sparkline_30d": [
+          2729.53,
+          2767.27,
+          2721.37,
+          2728.3,
+          2773.42,
+          2781.02,
+          2784.03,
+          2775.9,
+          2786.42,
+          2818.87,
+          2830.51,
+          2859.22,
+          2811.84,
+          2805.88,
+          2812.45,
+          2856.95,
+          2729.89,
+          2754.11,
+          2840.81,
+          2821.38,
+          2846.26,
+          2799.06,
+          2790.49,
+          2742.94,
+          2701.87,
+          2714.31,
+          2655.11,
+          2581.79,
+          2669.66,
+          2684.94
+        ]
+      },
+      {
+        "symbol": "^VIX",
+        "name": "VIX",
+        "group": "Volatility",
+        "price": 26.36,
+        "change_pct": -0.98,
+        "change_5d_pct": 3.53,
+        "sparkline_30d": [
+          16.87,
+          16.46,
+          19.99,
+          18.44,
+          17.31,
+          16.68,
+          19.03,
+          19.45,
+          18.39,
+          17.52,
+          16.91,
+          17.2,
+          19.42,
+          21.15,
+          20.83,
+          16.61,
+          28.18,
+          25.64,
+          19.92,
+          19.46,
+          17.49,
+          18.7,
+          19.3,
+          22.91,
+          25.46,
+          24.56,
+          28.44,
+          35.89,
+          26.62,
+          26.36
+        ]
+      },
+      {
+        "symbol": "^TNX",
+        "name": "US 10Y Yield",
+        "group": "Rates",
+        "price": 4.9,
+        "change_pct": -0.41,
+        "change_5d_pct": -3.92,
+        "sparkline_30d": [
+          5.19,
+          5.09,
+          5.1,
+          5.14,
+          5.12,
+          5.15,
+          4.95,
+          4.99,
+          4.99,
+          4.99,
+          5.05,
+          4.99,
+          4.93,
+          4.89,
+          4.95,
+          4.89,
+          4.84,
+          4.86,
+          4.86,
+          4.98,
+          5.0,
+          5.1,
+          5.15,
+          5.12,
+          5.1,
+          5.07,
+          5.05,
+          4.91,
+          4.92,
+          4.9
+        ]
+      },
+      {
+        "symbol": "CL=F",
+        "name": "WTI Crude",
+        "group": "Commodities",
+        "price": 80.71,
+        "change_pct": -1.63,
+        "change_5d_pct": -3.06,
+        "sparkline_30d": [
+          97.97,
+          101.41,
+          103.66,
+          101.79,
+          97.15,
+          99.47,
+          103.27,
+          101.76,
+          99.9,
+          102.78,
+          102.0,
+          104.12,
+          96.46,
+          96.09,
+          88.12,
+          90.52,
+          90.83,
+          86.85,
+          86.04,
+          86.53,
+          88.74,
+          88.56,
+          85.72,
+          86.01,
+          83.26,
+          83.21,
+          83.98,
+          80.17,
+          82.05,
+          80.71
+        ]
+      },
+      {
+        "symbol": "GC=F",
+        "name": "Gold",
+        "group": "Commodities",
+        "price": 3544.5,
+        "change_pct": -0.49,
+        "change_5d_pct": -5.28,
+        "sparkline_30d": [
+          4170.1,
+          4181.1,
+          4160.1,
+          4142.6,
+          4150.0,
+          4060.4,
+          4007.9,
+          4038.4,
+          4074.6,
+          4051.6,
+          4031.4,
+          3898.9,
+          3969.6,
+          3940.4,
+          4073.0,
+          4113.5,
+          4074.9,
+          4114.5,
+          4030.2,
+          4000.5,
+          3885.3,
+          3886.3,
+          3853.0,
+          3864.2,
+          3741.9,
+          3685.5,
+          3515.4,
+          3651.4,
+          3561.9,
+          3544.5
+        ]
+      },
+      {
+        "symbol": "BTC-USD",
+        "name": "Bitcoin",
+        "group": "Crypto",
+        "price": 59146.18,
+        "change_pct": -3.37,
+        "change_5d_pct": -4.45,
+        "sparkline_30d": [
+          80006.66,
+          80805.08,
+          81267.59,
+          77775.11,
+          77198.21,
+          77434.75,
+          78248.45,
+          76677.3,
+          77345.05,
+          80405.29,
+          75942.12,
+          75746.93,
+          75747.58,
+          74584.65,
+          75223.15,
+          73720.12,
+          73964.47,
+          71342.97,
+          68249.27,
+          64128.05,
+          65305.06,
+          64855.84,
+          64893.95,
+          62987.27,
+          61901.82,
+          58798.98,
+          60094.09,
+          61161.91,
+          61210.98,
+          59146.18
+        ]
+      }
+    ],
+    "sectors": [
+      {
+        "symbol": "XLK",
+        "name": "Technology",
+        "change_pct": -3.26,
+        "change_5d_pct": -3.78
+      },
+      {
+        "symbol": "XLF",
+        "name": "Financials",
+        "change_pct": 0.83,
+        "change_5d_pct": -1.68
+      },
+      {
+        "symbol": "XLV",
+        "name": "Health Care",
+        "change_pct": 2.95,
+        "change_5d_pct": -0.28
+      },
+      {
+        "symbol": "XLE",
+        "name": "Energy",
+        "change_pct": 0.97,
+        "change_5d_pct": -4.59
+      },
+      {
+        "symbol": "XLI",
+        "name": "Industrials",
+        "change_pct": -0.53,
+        "change_5d_pct": -1.91
+      },
+      {
+        "symbol": "XLY",
+        "name": "Cons. Discret.",
+        "change_pct": 0.68,
+        "change_5d_pct": 0.53
+      },
+      {
+        "symbol": "XLP",
+        "name": "Cons. Staples",
+        "change_pct": 1.66,
+        "change_5d_pct": 0.46
+      },
+      {
+        "symbol": "XLU",
+        "name": "Utilities",
+        "change_pct": 0.18,
+        "change_5d_pct": -0.05
+      },
+      {
+        "symbol": "XLRE",
+        "name": "Real Estate",
+        "change_pct": 1.31,
+        "change_5d_pct": -0.3
+      },
+      {
+        "symbol": "XLB",
+        "name": "Materials",
+        "change_pct": 0.54,
+        "change_5d_pct": -1.32
+      },
+      {
+        "symbol": "XLC",
+        "name": "Comm. Services",
+        "change_pct": 0.82,
+        "change_5d_pct": -0.77
+      }
+    ]
+  },
+  "conflicts": {
+    "overview": "Automated conflict tracker metrics updated from GDELT and global news feeds.",
+    "theaters": [
+      {
+        "id": "ukraine",
+        "name": "Eastern Europe / Ukraine",
+        "region": "Europe",
+        "status": "elevated",
+        "trend_7d": "flat",
+        "intensity_score": 60.0,
+        "intensity_series_14d": [],
+        "summary": "Russian Offensive Campaign Assessment, November 23, 2026 - Institute for the Study of War",
+        "timeline_events": [
+          {
+            "headline": "Russian Offensive Campaign Assessment, November 23, 2026 - Institute for the Study of War",
+            "source": "Institute for the Study of War",
+            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQRDMwdjdWRXU2aEVmSVRTMmxFWWxWc2JsUDE5d1pDdlNsSWh6YWpJNHpsb2dHSENvd2Y5Q1JRVmx6T1hJSTlhVzFVYkl6MmdwZVZWZHRIdjNPMURyQ0sxZFlhaGJxRzM4a2dIb1hySlFjcmFQRmNUTEtqcGFYNnotT0N3azJTOVpuQks1NkotSlM0S2hmVURBZlNPX1BnbUUtTk85N0NtTW0wNXQ5?oc=5"
+          },
+          {
+            "headline": "Russia’s war dead: the hidden toll of the Ukraine conflict - The Guardian",
+            "source": "The Guardian",
+            "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQcHEzaFFZSHUwdzN0LS1RbTVLRlF1MFpWblFUV2l1eUtybk9fOHJzNmQzeW8zSi13TEdMWGtYTE9UTFNHbGx4UUZ6Z2UyRlJQUU1kY3hKNmtsV3V1ZkVsWWR3UmxvdDlud0NQa2VRRldnWFQwdV85R0RNZTVKaTJKbko0UV9Qa3FLR0J1S1FNSkZxM01k?oc=5"
+          },
+          {
+            "headline": "More Than 700,000 Russian Soldiers Killed In Ukraine War, New Analysis Finds - Radio Free Europe/Radio Liberty",
+            "source": "Radio Free Europe/Radio Liberty",
+            "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOanVmQXA3NXR4MWsyOEFZM0hWWDRGZVU0TVVDQkZmSWhFUFNqTHlObGJyUGI1QmdWNmNFVklIQ1JzOEdfbUdaWnpmM1lMcUlTckVxeDVxQ24xb0o3TXUzRUNzMEF5ZzRzcUJQMl9hbjMwdDVaZnpRSmxKM19KZG81OE41WVZ1WGl10gGLAUFVX3lxTE5hN1E1REh0bXFwWnZ5TTdJZFFVaGMwcEl5UkU0eWZtN1R1aUdfVzBBVWpuMUxjR3c5UHpwNWUyMDkydWxwQlFpby04VWJ2VlpETWdrSWxGYS10LXRVN3BrWGVFYVFiNHA3QkY3RzN6QldwcTRZRVRDTzJFT2FwRW1kbS1ZT0gzdWVZWWs?oc=5"
+          },
+          {
+            "headline": "Russian drone flies into Poland during overnight strikes on Ukraine, Warsaw says - ABC News - Breaking News, Latest News and Videos",
+            "source": "ABC News - Breaking News, Latest News and Videos",
+            "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPeUIxeHFScUhhcU90TUF6dTgxVkN2TUJEWTU0SnNuMjR1Wk5LQkRueXd1azNuVW9iS3QzbjJVazB5MDBieFNEQUhVcEJGcjFYVkhuMDhGckREMWxoVC0wMDV6TXBjN3hqYlJiYVRJbHdRMHZncEQ3NGRUMFFYN1N2VXRYUkVZTjdSLUVtZEhfcUk0aWp1RTcyN0ZpOHg2al9aWnFLUEF0NWtxWXktWmR4ZlpB0gG3AUFVX3lxTE45dDBKR2VtY0ZMRU5UVDFrUE5iaFdkb0xET1h3ZFRRTEpLOWZ6S3ZXalJldE52WkF2cndyQlZRWVQyNjVYTHNWdFZheHJWNTJ0aU5tSjZZT3d2ZjNwbkhURWx4MHFNYUJPbGNhay1DN2xERkg5a1hXN2ZnYjM2LXVCVmhaaGNPTmNaMy1GNFZMUlV6Y1RJbmx2OElKbldXWmNPM0hqeEtqWlV1Y1hOblRQV0Z2a1R6aw?oc=5"
+          }
+        ]
+      },
+      {
+        "id": "middle-east",
+        "name": "Middle East & Levant",
+        "region": "Middle East",
+        "status": "elevated",
+        "trend_7d": "flat",
+        "intensity_score": 60.0,
+        "intensity_series_14d": [],
+        "summary": "Realist Politics and Human Rights in the Middle East - Carnegie Endowment for International Peace",
+        "timeline_events": [
+          {
+            "headline": "Realist Politics and Human Rights in the Middle East - Carnegie Endowment for International Peace",
+            "source": "Carnegie Endowment for International Peace",
+            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPdWY5SUpHRkZSOHBicU5scXFYc21GLWowQUJIV2s1aDdWckdjVE4tZEtxa18yMk9hRFFxOVl5S2NGRWVaakhLY3pqX0JTZy11LXpsd2t5M0RseGpkZDlHRFZRY2lsRGN2T29oYW9GYm9JTjhiMXg2bmtjdV9tRzlIcjBtYkJwck5VUlVUYklrUVhMNEFndi1KalVPRkYtT0tsRDRfSUEzS0kyaENO?oc=5"
+          },
+          {
+            "headline": "Israel’s Elections and the Future of the Middle East - CSIS | Center for Strategic and International Studies",
+            "source": "CSIS | Center for Strategic and International Studies",
+            "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFBLcl9PN01Nc25wUDluZGJEd1FOckFRdlJSSk40Q2hlZGFjdFU2YklKUThSSlpPUUVVdDR0LTBBbU5lSTFPMWpYczZ4d2RELTFHdUFDZlcyem9mcXRfcHprWWhXcC1FUk13WUpLakpvWE9OS3F6YU1XeklB?oc=5"
+          },
+          {
+            "headline": "Israel's Security Doctrine Collapsed. What Comes Next? - TV7 Israel News",
+            "source": "TV7 Israel News",
+            "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9Qdkg3Q0tiSDRxSUJLX1VBMGh2blRhM1c5eHoydTItSDIxOFBRZERRbEp4RjNHQjZjaVYyLW5zdUJoNDFFbEF0SjJYZ1F0NXdwWlZYaVF1OWF3S3VQODZFWmFqRHhHdXFKNzJZZGo3MHhLc1FuSVR3?oc=5"
+          },
+          {
+            "headline": "Latest news on the war in the Middle East. Iran: Strait of Hormuz virtually paralysed, 400 ships waiting. Houthis strike skyscraper in Riyadh - Il Sole 24 ORE",
+            "source": "Il Sole 24 ORE",
+            "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQQnV0LVNFbXRtX0hEZWdlSUtwSlRxVy1MOE5SMzJYVVRVYkRzQkZidklrcDRFQWt4TXlPeTgwWS1Ub0F3Mkl0R2VVQW9zbkY4blgxb2xiaWZXaWxRWGJna3lMR3QyOUQydWhQUVlub0dyOHpLUDIxUmpfT2F0MWphMzFhZXFDdDRhS0xzcXdsS1htbThlNnREV0hyaFVwM191cGpJR0NrcTFLZXR3T1ZpRmFSWGpsSEZEZVBnVW5ycw?oc=5"
+          }
+        ]
+      },
+      {
+        "id": "indo-pacific",
+        "name": "Indo-Pacific / Taiwan Strait",
+        "region": "Asia-Pacific",
+        "status": "elevated",
+        "trend_7d": "flat",
+        "intensity_score": 60.0,
+        "intensity_series_14d": [],
+        "summary": "US, Philippines plan improvements to airport near Taiwan - Stars and Stripes",
+        "timeline_events": [
+          {
+            "headline": "US, Philippines plan improvements to airport near Taiwan - Stars and Stripes",
+            "source": "Stars and Stripes",
+            "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNb0Nqd1ZqYjRwUFVmMUw0MGMwdzc2TVlJQXVFa0ozV1N1QTJkWnV5OFFFVXRELUJNZjRldWpMSTVGd08zekpRaXR4UThZdTAzV1h4czdaT1pWNmh4OUdUQjlITldEaVpKWmlrNFlVcFZMbTNNc1FsaWg0NU5uTGxHVXo1SFQtS0RrOEJ4N3YzOVBvVXJ1X19Ja1RtdU03ZlpWbkt5RWRBRjEweEk?oc=5"
+          },
+          {
+            "headline": "Dispatch from 2032: After Chinese salvos fail to defeat Taiwan, Beijing is trapped in a war of attrition - Atlantic Council",
+            "source": "Atlantic Council",
+            "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOeVIxVVo4WXloNTFpQnpPSzJHcHFQYi1tbGIwc2ZJS2lfbl90TVhVTmZFVlByY3lDQkJTLVpVRFdhbEZBRlVZWXRHV1FrNlhhODFpb3dqX1VEeFZsQ29rSVZFMmE2RFFJeC1lSUpKT3BQdG1zMXNSUjZ6SmtZVEk4Z0ZLR1JueUd4ZHV1ZHVpM1lGM3RhSWQweGtJR25pejhmX3JCZEFxdGpIOVpVTEpGZTdqbU5pYWt5T2VMVHNqZVN2dXJtdHQ5Wmh5OXpLNFJ4VG9NcG5Dbk1UUnU5ZWM0?oc=5"
+          },
+          {
+            "headline": "U.S.-China power gap hits record low as Asia weighs nuclear subs - upi",
+            "source": "upi",
+            "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQSmJybnpQYmNmMmFqamZpNEJGSVpDTERNX0JKd2NTQzRXdXlUQWtVT2M3Y00xVHUyeVZ2NkU0eC0xOW42WHlxRGJPSnVid3Zra2Z5ckduVWtERDVkcTkxT2lheDlteHBFTDEyQnpTUmt5YjVyVTYxam1yMW5qaTRBaW10Umg5OEdraWdNV3UtVFBRUlZNZGJ0V2hEcFBxOTNtclVXYWpfQ3VwaGtpekhqYnJscGpLUDJZTHFUNdIBwgFBVV95cUxNbnh6UENOMDV0QnFRdFVJc3BJb3prY2RNYzR5OHh0UzNwTUg2bGg1NEtMbmUwbDZ5MTNaSGlvR29Pd0pfNzd6emtlaWIwcnBwWHVqQXpsdHFfT05aa1N1NUMtSzduOW5WZ3RSTTAxNUxqRzRJNnd3THVaYlJjWWFRSVBuSjJnVHJPOTk4T3UyYTl5VWpNSlB6TVJ2TTRFc3ctbXVld2dQNFpKanlPTkRDam12UTB4S0NCVjdZOEJscUtRdw?oc=5"
+          },
+          {
+            "headline": "Why China Is Watching Taiwan’s Local Elections - The Diplomat – Asia-Pacific Current Affairs Magazine",
+            "source": "The Diplomat – Asia-Pacific Current Affairs Magazine",
+            "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQR0k3RUFxWFVRZjBUZmpaUFhVTkR3MUNCRlFfcDJYcXNqb1RVMFR0Q28tQWV3VzFudXpyVC16Y1dkNGpZazFsazVidXA0QnBEQnI4RVhGTjFOQlhqMmRrVW9RWTJSZ1BwbzhTVFNSc1JUTU9SODFXUTd5YUtKRGl0a19tcmQ?oc=5"
+          }
+        ]
+      },
+      {
+        "id": "sudan-horn",
+        "name": "Sudan & Horn of Africa",
+        "region": "Africa",
+        "status": "elevated",
+        "trend_7d": "flat",
+        "intensity_score": 60.0,
+        "intensity_series_14d": [],
+        "summary": "Drone Strikes Hit Khartoum Homes and UN Facility as Civilian Toll Rises in Sudan - Latin Times",
+        "timeline_events": [
+          {
+            "headline": "Drone Strikes Hit Khartoum Homes and UN Facility as Civilian Toll Rises in Sudan - Latin Times",
+            "source": "Latin Times",
+            "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE13WUhqUkxqajBWVjdzZEs3M3RTZGlhTDBCR1BTRm9LWlQ0M2pVRkpEbVFkTWl5T1BmMlJnd09UMFNWMGlGNnlScnRoTHMwQjBycDV5b0hBTE9BUDM1X2M5YUlPcEtxVkZqNDZSNHNBRWZBMjZyR3NZU3d5T0hVV1E?oc=5"
+          },
+          {
+            "headline": "Hodeidah port evacuation ordered as 11 hurt in Riyadh attack - DNE Africa",
+            "source": "DNE Africa",
+            "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5oeERYdWNFcnlDbVMyTlZfQzdDSkh1TGJpQmtZalpZaVJ2RDFYdFU2RG1qLXJsX2RrLWMzNC1QQzdlVkFZcWNIdmtBajVva3hZSnBxVlFXSHlCUFZjTlhtblVfWkl6SDlXSG40?oc=5"
+          },
+          {
+            "headline": "Two Indians Among 11 Injured in Houthi Attack on Riyadh Tower as US Condemns Strike - Open Magazine",
+            "source": "Open Magazine",
+            "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNVHE4WE9JM2JBWk52Rzg1WEFzU3NEYnp2RjMyMEd1YjNGaC0zRV9MQ3ZQNnNyLUh2OEItV0hCM0Jza0RCT3hXR0NzNDNBbnlCMk9JbzU0ZjloWlYzVS1PUHh0aEJ3dVZjdTcya2t5LTJHbko1QTdJN3ZBOXczR0UyYXJsSnlCYWNqLVZFUk9ETVF1YlI4V0RQZ0w4TFNiem1GMXJiMkF0ZDR1dDUxTFREclE3VkQ?oc=5"
+          },
+          {
+            "headline": "Why Egypt’s tribal gold pact matters to Nile and Red Sea security - Arab News",
+            "source": "Arab News",
+            "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQeVRtVXRpbDljM0M5akdLUENDbm0tVExibkRsNlNtNF80UGpiLUhtVHkzcUl3cDBXTklPWjJRSGpMSFpjWEVjZ1BhREdZS0twQkxrUF9LZ2tnaWYzRWxiRGp4VHl6Q1pBZEFBdEtVS2Z3ZE5vUGRTRWdWRzFKcTVMVDZiS3RnaEdheEpZTnRRRFFILWpiUkRKMHlpNGxfdFBGMXZ1cHRRVTExT3E0cmc?oc=5"
+          }
+        ]
+      },
+      {
+        "id": "sahel-global",
+        "name": "Sahel & Myanmar",
+        "region": "Global Flashpoints",
+        "status": "escalating",
+        "trend_7d": "up",
+        "intensity_score": 14.0,
+        "intensity_series_14d": [
+          9.0,
+          3.0,
+          1.0,
+          1.0,
+          3.0,
+          1.0,
+          12.0,
+          17.0,
+          6.0,
+          11.0,
+          4.0,
+          23.0,
+          14.0
+        ],
+        "summary": "No major breaking updates captured in the last 24 hours.",
+        "timeline_events": []
+      }
+    ]
+  },
+  "us_politics": {
+    "pulse_summary": "Latest US political headlines and prediction market probabilities.",
+    "prediction_markets": [
+      {
+        "question": "Will David Lisnard win the 2027 French presidential election?",
+        "yes_prob": 0.2505,
+        "delta_24h": 0.014,
+        "volume_usd": 183685188.89,
+        "url": "https://polymarket.com/event/next-french-presidential-election"
+      },
+      {
+        "question": "Will Benjamin Netanyahu be the next Prime Minister of Israel?",
+        "yes_prob": 0.2225,
+        "delta_24h": -0.0195,
+        "volume_usd": 94341982.41,
+        "url": "https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election"
+      },
+      {
+        "question": "Will Puma Shen win the next Taipei Mayor election?",
+        "yes_prob": 0.3635,
+        "delta_24h": 0.042,
+        "volume_usd": 7864897.26,
+        "url": "https://polymarket.com/event/taipei-mayor-election-winner-20260813125857100"
+      },
+      {
+        "question": "Will Raphael Warnock win the 2028 Democratic presidential nomination?",
+        "yes_prob": 0.0385,
+        "delta_24h": 0.0,
+        "volume_usd": 1332198460.56,
+        "url": "https://polymarket.com/event/democratic-presidential-nominee-2028"
+      },
+      {
+        "question": "US announces end of Iranian blockade by December 31, 2026?",
+        "yes_prob": 0.1315,
+        "delta_24h": -0.011,
+        "volume_usd": 55221142.16,
+        "url": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080"
+      },
+      {
+        "question": "Will Josh Hawley win the 2028 Republican presidential nomination?",
+        "yes_prob": 0.0115,
+        "delta_24h": 0.0,
+        "volume_usd": 744946853.69,
+        "url": "https://polymarket.com/event/republican-presidential-nominee-2028"
+      }
+    ],
+    "legislative_and_executive": [
+      {
+        "title": "Moving to Florida may become a choice of some Republicans after midterms",
+        "chamber_or_branch": "Federal",
+        "summary": "In Florida, Republicans kept power of state government after the midterms. It's now the largest state where the GOP is still in charge.",
+        "url": "https://www.npr.org/2026/11/24/nx-s1-6050930/moving-to-florida-may-become-a-choice-of-some-republicans-after-midterms"
+      },
+      {
+        "title": "The U.S. government is investigating Iranian ties to as many as 50 hacked commercial vessels",
+        "chamber_or_branch": "Federal",
+        "summary": "The attacks, if officials who spoke to NPR are correct, may be the latest example of Iranian cyberattacks against global critical infrastructure during the war with the U.S.",
+        "url": "https://www.npr.org/2026/11/24/nx-s1-6052994/hack-commercial-vessels-iran"
+      },
+      {
+        "title": "Jensen Huang returns to Nvidia. And, Rep. Gomez resigns amid alleged sexual misconduct",
+        "chamber_or_branch": "Federal",
+        "summary": "President Trump took credit for negotiating Jensen Huang's return as CEO of Nvidia. And, Rep. Jimmy Gomez, D-Calif., says his resignation will be effective Dec. 1.",
+        "url": "https://www.npr.org/2026/11/24/g-s1-155227/up-first-newsletter-nvidia-jensen-huang-trump-ukraine-russia-jimmy-gomez"
+      },
+      {
+        "title": "Trump takes credit for Jensen Huang returns to Nvidia, says its good for the economy",
+        "chamber_or_branch": "Federal",
+        "summary": "President Trump touted the return of Jensen Huang to Nvidia's C-suite as good for the company -- and good for the United States economy.",
+        "url": "https://www.npr.org/2026/11/24/nx-s1-6051045/trump-takes-credit-for-jensen-huang-returns-to-nvidia-says-its-good-for-the-economy"
+      }
+    ],
+    "trending_topics": [
+      {
+        "topic": "Washington Headlines",
+        "momentum": "steady",
+        "framing_note": "Enable GEMINI_API_KEY in GitHub Secrets for AI framing analysis."
+      }
+    ]
+  }
+}

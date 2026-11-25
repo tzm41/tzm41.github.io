@@ -1,0 +1,329 @@
+"""Gemini 2.5 Flash synthesis engine with Pydantic validation and extractive fallback."""
+
+from __future__ import annotations
+
+import json
+import os
+import time
+from typing import Any
+
+from .config import GEMINI_MODEL
+from .schema import (
+    ConflictTheater,
+    ConflictsSection,
+    DailyBriefing,
+    GeminiBriefingSynthesis,
+    MarketQuote,
+    MarketsSection,
+    NewsStory,
+    PolicyItem,
+    PoliticalTopic,
+    PoliticsSection,
+    PredictionMarket,
+    SectorTile,
+    SourceHealth,
+    SourceLink,
+    TimelineEvent,
+)
+
+
+SYSTEM_INSTRUCTION = """You are a senior intelligence and financial briefing editor.
+Your job is to synthesize raw daily news headlines, market data, global conflict signals, and US politics feeds into a concise, neutral, high-signal morning briefing.
+
+Strict rules:
+1. Ground every claim strictly in the provided input data. Never invent facts, prices, percentages, or URLs.
+2. Only cite URLs that appear verbatim in the input data.
+3. Keep summaries crisp, objective, and analytical (avoid sensationalism or partisan framing).
+4. When prior-day context is provided, explicitly highlight what changed or escalated/cooled since yesterday.
+5. Produce valid JSON matching the requested schema exactly."""
+
+
+def _build_prompt(
+    date_str: str,
+    raw_news: list[dict[str, Any]],
+    raw_markets: dict[str, Any],
+    raw_conflicts: list[dict[str, Any]],
+    raw_politics: dict[str, Any],
+    prior_briefing: dict[str, Any] | None,
+) -> str:
+    payload = {
+        "briefing_date": date_str,
+        "prior_day_context": (
+            {
+                "date": prior_briefing.get("date"),
+                "executive_brief": prior_briefing.get("executive_brief", []),
+                "conflict_statuses": {
+                    t.get("id"): t.get("status")
+                    for t in prior_briefing.get("conflicts", {}).get("theaters", [])
+                },
+            }
+            if prior_briefing
+            else None
+        ),
+        "news_candidates": raw_news[:30],
+        "market_snapshot": {
+            "watchlist": [
+                {
+                    "symbol": q["symbol"],
+                    "name": q["name"],
+                    "price": q["price"],
+                    "change_pct": q["change_pct"],
+                    "change_5d_pct": q["change_5d_pct"],
+                }
+                for q in raw_markets.get("watchlist", [])
+            ],
+            "sectors": raw_markets.get("sectors", []),
+        },
+        "conflict_theaters": [
+            {
+                "id": t["id"],
+                "name": t["name"],
+                "trend_7d": t["trend_7d"],
+                "intensity_score": t["intensity_score"],
+                "headlines": t["timeline_events"][:5],
+            }
+            for t in raw_conflicts
+        ],
+        "us_politics": {
+            "prediction_markets": raw_politics.get("prediction_markets", [])[:6],
+            "articles": raw_politics.get("articles", [])[:25],
+        },
+    }
+    return (
+        "Synthesize today's Daily News & Trends Briefing from the following verified raw inputs.\n"
+        "Return structured JSON only.\n\n"
+        + json.dumps(payload, ensure_ascii=False)
+    )
+
+
+def _call_gemini(prompt: str, api_key: str) -> GeminiBriefingSynthesis | None:
+    try:
+        from google import genai
+        from google.genai import types
+    except ImportError as exc:
+        print(f"[synthesize] google-genai not installed: {exc}")
+        return None
+
+    client = genai.Client(api_key=api_key)
+    for attempt in range(1, 4):
+        try:
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    system_instruction=SYSTEM_INSTRUCTION,
+                    response_mime_type="application/json",
+                    response_schema=GeminiBriefingSynthesis,
+                    temperature=0.25,
+                ),
+            )
+            if response.parsed is not None and isinstance(response.parsed, GeminiBriefingSynthesis):
+                return response.parsed
+            if response.text:
+                return GeminiBriefingSynthesis.model_validate_json(response.text)
+        except Exception as exc:
+            print(f"[synthesize] Gemini attempt {attempt}/3 failed: {exc}")
+            if attempt < 3:
+                time.sleep(2 ** attempt)
+    return None
+
+
+def _build_extractive_fallback(
+    date_str: str,
+    generated_at: str,
+    health: SourceHealth,
+    raw_news: list[dict[str, Any]],
+    raw_markets: dict[str, Any],
+    raw_conflicts: list[dict[str, Any]],
+    raw_politics: dict[str, Any],
+) -> DailyBriefing:
+    """Deterministic fallback when GEMINI_API_KEY is missing or the API fails."""
+    stories: list[NewsStory] = []
+    for idx, item in enumerate(raw_news[:8], start=1):
+        cat = item.get("category", "World")
+        if cat not in ("World", "Economy", "Tech", "Policy", "Science"):
+            cat = "World"
+        stories.append(
+            NewsStory(
+                id=f"story-{idx}",
+                category=cat,
+                headline=item["title"],
+                summary=item.get("summary") or "Summary unavailable; see linked source reporting.",
+                why_it_matters="Auto-aggregated headline (extractive mode — configure GEMINI_API_KEY for full synthesis).",
+                sources=[SourceLink(**s) for s in item.get("sources", [])[:3]],
+            )
+        )
+
+    watchlist = [MarketQuote(**q) for q in raw_markets.get("watchlist", [])]
+    sectors = [SectorTile(**s) for s in raw_markets.get("sectors", [])]
+
+    sp500 = next((q for q in watchlist if q.symbol == "^GSPC"), None)
+    vix = next((q for q in watchlist if q.symbol == "^VIX"), None)
+    if sp500 and sp500.change_pct >= 0.4:
+        regime = "Risk-On"
+    elif sp500 and sp500.change_pct <= -0.4:
+        regime = "Risk-Off"
+    elif vix and vix.change_pct >= 8.0:
+        regime = "Volatility Spike"
+    else:
+        regime = "Mixed"
+
+    market_narrative = (
+        f"S&P 500 moved {sp500.change_pct:+.2f}% to {sp500.price:,.2f}."
+        if sp500
+        else "Market quotes were unavailable in this run."
+    )
+
+    theaters: list[ConflictTheater] = []
+    for t in raw_conflicts:
+        events = [TimelineEvent(**e) for e in t.get("timeline_events", [])[:4]]
+        status = "escalating" if t.get("trend_7d") == "up" else "elevated"
+        summary = (
+            events[0].headline
+            if events
+            else "No major breaking updates captured in the last 24 hours."
+        )
+        theaters.append(
+            ConflictTheater(
+                id=t["id"],
+                name=t["name"],
+                region=t["region"],
+                status=status,
+                trend_7d=t.get("trend_7d", "flat"),
+                intensity_score=t.get("intensity_score", 0.0),
+                intensity_series_14d=t.get("intensity_series_14d", []),
+                summary=summary,
+                timeline_events=events,
+            )
+        )
+
+    pred_markets = [
+        PredictionMarket(**m) for m in raw_politics.get("prediction_markets", [])[:6]
+    ]
+    pol_articles = raw_politics.get("articles", [])[:4]
+    policy_items = [
+        PolicyItem(
+            title=a["title"],
+            chamber_or_branch="Federal",
+            summary=a.get("summary") or a["title"],
+            url=a.get("url", ""),
+        )
+        for a in pol_articles
+    ]
+
+    exec_bullets = [s.headline for s in stories[:3]] or [
+        f"Daily briefing generated on {date_str} in extractive fallback mode."
+    ]
+
+    return DailyBriefing(
+        date=date_str,
+        generated_at=generated_at,
+        synthesis_mode="extractive_fallback",
+        source_health=health,
+        executive_brief=exec_bullets,
+        top_news=stories,
+        markets=MarketsSection(
+            narrative=market_narrative,
+            regime_tag=regime,
+            watchlist=watchlist,
+            sectors=sectors,
+        ),
+        conflicts=ConflictsSection(
+            overview="Automated conflict tracker metrics updated from GDELT and global news feeds.",
+            theaters=theaters,
+        ),
+        us_politics=PoliticsSection(
+            pulse_summary="Latest US political headlines and prediction market probabilities.",
+            prediction_markets=pred_markets,
+            legislative_and_executive=policy_items,
+            trending_topics=[
+                PoliticalTopic(
+                    topic="Washington Headlines",
+                    momentum="steady",
+                    framing_note="Enable GEMINI_API_KEY in GitHub Secrets for AI framing analysis.",
+                )
+            ],
+        ),
+    )
+
+
+def synthesize_briefing(
+    date_str: str,
+    generated_at: str,
+    health: SourceHealth,
+    raw_news: list[dict[str, Any]],
+    raw_markets: dict[str, Any],
+    raw_conflicts: list[dict[str, Any]],
+    raw_politics: dict[str, Any],
+    prior_briefing: dict[str, Any] | None = None,
+) -> DailyBriefing:
+    """Synthesize a validated DailyBriefing using Gemini 2.5 Flash or extractive fallback."""
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    if not api_key:
+        print("[synthesize] GEMINI_API_KEY not set — using extractive fallback.")
+        return _build_extractive_fallback(
+            date_str, generated_at, health, raw_news, raw_markets, raw_conflicts, raw_politics
+        )
+
+    prompt = _build_prompt(
+        date_str, raw_news, raw_markets, raw_conflicts, raw_politics, prior_briefing
+    )
+    ai = _call_gemini(prompt, api_key)
+    if ai is None:
+        print("[synthesize] Falling back to extractive briefing.")
+        return _build_extractive_fallback(
+            date_str, generated_at, health, raw_news, raw_markets, raw_conflicts, raw_politics
+        )
+
+    # Merge deterministic numerical series with Gemini narratives
+    ai_theater_map = {t.id: t for t in ai.conflict_theaters}
+    merged_theaters: list[ConflictTheater] = []
+    for raw_t in raw_conflicts:
+        ai_t = ai_theater_map.get(raw_t["id"])
+        merged_theaters.append(
+            ConflictTheater(
+                id=raw_t["id"],
+                name=raw_t["name"],
+                region=raw_t["region"],
+                status=ai_t.status if ai_t else "elevated",
+                trend_7d=ai_t.trend_7d if ai_t else raw_t.get("trend_7d", "flat"),
+                intensity_score=raw_t.get("intensity_score", 0.0),
+                intensity_series_14d=raw_t.get("intensity_series_14d", []),
+                summary=(
+                    ai_t.summary
+                    if ai_t
+                    else "Monitoring ongoing developments across the region."
+                ),
+                timeline_events=[
+                    TimelineEvent(**e) for e in raw_t.get("timeline_events", [])[:4]
+                ],
+            )
+        )
+
+    return DailyBriefing(
+        date=date_str,
+        generated_at=generated_at,
+        synthesis_mode="gemini",
+        source_health=health,
+        executive_brief=ai.executive_brief,
+        top_news=ai.top_news,
+        markets=MarketsSection(
+            narrative=ai.market_narrative,
+            regime_tag=ai.market_regime,
+            watchlist=[MarketQuote(**q) for q in raw_markets.get("watchlist", [])],
+            sectors=[SectorTile(**s) for s in raw_markets.get("sectors", [])],
+        ),
+        conflicts=ConflictsSection(
+            overview=ai.conflicts_overview,
+            theaters=merged_theaters,
+        ),
+        us_politics=PoliticsSection(
+            pulse_summary=ai.politics_pulse_summary,
+            prediction_markets=[
+                PredictionMarket(**m)
+                for m in raw_politics.get("prediction_markets", [])[:6]
+            ],
+            legislative_and_executive=ai.legislative_and_executive,
+            trending_topics=ai.trending_topics,
+        ),
+    )

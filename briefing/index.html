@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Briefing — News, Markets, Conflicts &amp; US Politics</title>
+  <meta name="description" content="Automated daily intelligence briefing aggregating top world news, stock market &amp; sector trends, global conflict trackers, and US politics signals.">
+  <link rel="shortcut icon" type="image/png" href="../favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="masthead" id="top">
+    <div class="container masthead-inner">
+      <div class="masthead-brand">
+        <a href="../index.html" class="back-home" title="Back to main site">&larr; tzm41</a>
+        <div class="title-row">
+          <h1>Daily Briefing</h1>
+          <span class="edition-label" id="edition-date">Loading…</span>
+        </div>
+        <p class="masthead-sub" id="generated-meta">Fetching latest automated intelligence edition…</p>
+      </div>
+
+      <div class="masthead-controls">
+        <div class="archive-nav" aria-label="Archive date navigation">
+          <button type="button" id="btn-prev-day" class="icon-btn" title="Previous day" aria-label="Previous day">&lsaquo;</button>
+          <select id="date-select" class="date-select" aria-label="Select briefing date">
+            <option value="">Latest</option>
+          </select>
+          <button type="button" id="btn-next-day" class="icon-btn" title="Next day" aria-label="Next day">&rsaquo;</button>
+        </div>
+
+        <button type="button" id="btn-theme" class="theme-btn" aria-label="Toggle dark mode" title="Toggle theme">
+          <span id="theme-label">Dark</span>
+        </button>
+      </div>
+    </div>
+
+    <nav class="section-nav" aria-label="Briefing sections">
+      <div class="container section-nav-inner">
+        <div class="nav-links">
+          <a href="#executive">Overview</a>
+          <a href="#news">Top News</a>
+          <a href="#markets">Markets &amp; Sectors</a>
+          <a href="#conflicts">Global Conflicts</a>
+          <a href="#politics">US Politics</a>
+        </div>
+        <div class="health-strip" id="source-health" aria-label="Data source status"></div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container main-content" id="app-root">
+    <!-- Loading / Error Banner -->
+    <div id="status-banner" class="status-banner hidden" role="status"></div>
+
+    <!-- 1. Executive Brief & KPI Strip -->
+    <section id="executive" class="section executive-section">
+      <div class="kpi-strip" id="kpi-strip"></div>
+
+      <article class="brief-panel">
+        <div class="panel-header">
+          <div>
+            <span class="kicker">Morning Synthesis</span>
+            <h2>Executive Brief</h2>
+          </div>
+          <span class="mode-tag" id="synthesis-mode-tag"></span>
+        </div>
+        <ul class="executive-list" id="executive-list">
+          <li class="skeleton-line"></li>
+          <li class="skeleton-line"></li>
+          <li class="skeleton-line"></li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- 2. Top News -->
+    <section id="news" class="section">
+      <div class="section-header">
+        <div>
+          <span class="kicker">Curated &amp; Deduplicated</span>
+          <h2>Top News</h2>
+        </div>
+        <div class="filter-group" id="news-filters" role="tablist" aria-label="Filter news by category">
+          <button type="button" class="filter-btn active" data-category="All" role="tab" aria-selected="true">All</button>
+          <button type="button" class="filter-btn" data-category="World" role="tab" aria-selected="false">World</button>
+          <button type="button" class="filter-btn" data-category="Economy" role="tab" aria-selected="false">Economy</button>
+          <button type="button" class="filter-btn" data-category="Tech" role="tab" aria-selected="false">Tech</button>
+          <button type="button" class="filter-btn" data-category="Policy" role="tab" aria-selected="false">Policy</button>
+          <button type="button" class="filter-btn" data-category="Science" role="tab" aria-selected="false">Science</button>
+        </div>
+      </div>
+      <div class="news-grid" id="news-grid"></div>
+    </section>
+
+    <!-- 3. Markets & Sector Heatmap -->
+    <section id="markets" class="section">
+      <div class="section-header">
+        <div>
+          <span class="kicker">Equities, Rates &amp; Commodities</span>
+          <h2>Stock Market Trends</h2>
+        </div>
+        <div class="section-actions">
+          <span class="regime-badge" id="market-regime">Mixed</span>
+          <div class="segmented" role="group" aria-label="Performance timeframe">
+            <button type="button" class="seg-btn active" id="btn-tf-1d" data-tf="1d">1D</button>
+            <button type="button" class="seg-btn" id="btn-tf-5d" data-tf="5d">5D</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="section-narrative" id="market-narrative"></p>
+
+      <div class="watchlist-grid" id="watchlist-grid"></div>
+
+      <div class="sub-block">
+        <div class="sub-header">
+          <h3>S&amp;P 500 GICS Sector Heatmap</h3>
+          <span class="sub-note" id="heatmap-label">Daily ETF performance (SPDR Select Sectors)</span>
+        </div>
+        <div class="sector-heatmap" id="sector-heatmap"></div>
+      </div>
+    </section>
+
+    <!-- 4. Global Conflict Tracker -->
+    <section id="conflicts" class="section">
+      <div class="section-header">
+        <div>
+          <span class="kicker">GDELT Media Intensity &amp; Regional Developments</span>
+          <h2>Global Conflict Tracker</h2>
+        </div>
+      </div>
+      <p class="section-narrative" id="conflicts-overview"></p>
+      <div class="conflicts-grid" id="conflicts-grid"></div>
+    </section>
+
+    <!-- 5. US Politics Dashboard -->
+    <section id="politics" class="section">
+      <div class="section-header">
+        <div>
+          <span class="kicker">Prediction Markets, Policy &amp; Sentiment</span>
+          <h2>US Politics Pulse</h2>
+        </div>
+      </div>
+      <p class="section-narrative" id="politics-pulse"></p>
+
+      <div class="politics-layout">
+        <div class="politics-col">
+          <div class="sub-header">
+            <h3>Prediction Markets (Polymarket)</h3>
+            <span class="sub-note">Implied YES probability &amp; 24h shift</span>
+          </div>
+          <div class="polymarket-list" id="polymarket-list"></div>
+        </div>
+
+        <div class="politics-col">
+          <div class="sub-header">
+            <h3>Legislative &amp; Executive Tracker</h3>
+            <span class="sub-note">Congress, White House &amp; Courts</span>
+          </div>
+          <div class="policy-list" id="policy-list"></div>
+
+          <div class="sub-header topics-header">
+            <h3>Trending Topics &amp; Framing Shifts</h3>
+          </div>
+          <div class="topics-list" id="topics-list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>Automated daily via GitHub Actions &amp; Gemini 2.5 Flash. Data from public RSS, Yahoo Finance, GDELT 2.0, and Polymarket.</p>
+      <a href="#top">Back to top &uarr;</a>
+    </div>
+  </footer>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
