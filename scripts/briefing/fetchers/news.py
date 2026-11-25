@@ -97,19 +97,34 @@ def deduplicate_articles(articles: list[dict[str, Any]], max_items: int = 45) ->
     return clusters[:max_items]
 
 
+GOOGLE_NEWS_FALLBACK_FEEDS: list[dict[str, str]] = [
+    {"name": "Google News Top", "category": "World", "url": "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en"},
+    {"name": "Google News World", "category": "World", "url": "https://news.google.com/rss/headlines/section/topic/WORLD?hl=en-US&gl=US&ceid=US:en"},
+    {"name": "Google News Tech", "category": "Tech", "url": "https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=en-US&gl=US&ceid=US:en"},
+]
+
+
 async def fetch_top_news() -> tuple[list[dict[str, Any]], str]:
-    """Fetch and deduplicate top news from configured RSS feeds."""
+    """Fetch and deduplicate top news from configured RSS feeds with Google News fallback."""
     async with httpx.AsyncClient(
         timeout=HTTP_TIMEOUT_SECONDS,
         headers={"User-Agent": USER_AGENT},
     ) as client:
         results = await asyncio.gather(*[_fetch_feed(client, cfg) for cfg in NEWS_FEEDS])
+        succeeded = sum(1 for r in results if r)
+        all_articles = [item for batch in results for item in batch]
 
-    succeeded = sum(1 for r in results if r)
-    all_articles = [item for batch in results for item in batch]
+        if succeeded < len(NEWS_FEEDS) // 2:
+            print("[news] Primary feeds degraded — supplementing with Google News public RSS.")
+            fb_results = await asyncio.gather(
+                *[_fetch_feed(client, cfg) for cfg in GOOGLE_NEWS_FALLBACK_FEEDS]
+            )
+            all_articles.extend(item for batch in fb_results for item in batch)
+            succeeded += sum(1 for r in fb_results if r)
+
     deduped = deduplicate_articles(all_articles)
 
-    if succeeded == 0:
+    if not deduped:
         return [], "failed"
     health = "ok" if succeeded >= len(NEWS_FEEDS) // 2 else "partial"
     return deduped, health

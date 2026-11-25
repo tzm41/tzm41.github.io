@@ -148,8 +148,20 @@ async def _fetch_politics_feed(client: httpx.AsyncClient, cfg: dict[str, str]) -
         return []
 
 
+GOOGLE_POLITICS_FALLBACK_FEEDS: list[dict[str, str]] = [
+    {
+        "name": "Google News Congress & White House",
+        "url": "https://news.google.com/rss/search?q=%28Congress+OR+%22White+House%22+OR+%22Supreme+Court%22%29+when:2d&hl=en-US&gl=US&ceid=US:en",
+    },
+    {
+        "name": "Google News US Polls & Odds",
+        "url": "https://news.google.com/rss/search?q=%28%22US+politics%22+OR+poll+OR+tariffs+OR+legislation%29+when:2d&hl=en-US&gl=US&ceid=US:en",
+    },
+]
+
+
 async def fetch_politics() -> tuple[dict[str, Any], str]:
-    """Fetch US politics prediction markets and legislative/political headlines."""
+    """Fetch US politics prediction markets and legislative/political headlines with Google News fallback."""
     async with httpx.AsyncClient(
         timeout=HTTP_TIMEOUT_SECONDS,
         headers={"User-Agent": USER_AGENT},
@@ -158,9 +170,18 @@ async def fetch_politics() -> tuple[dict[str, Any], str]:
         feed_tasks = [_fetch_politics_feed(client, cfg) for cfg in POLITICS_FEEDS]
         poly_markets, *feed_results = await asyncio.gather(poly_task, *feed_tasks)
 
-    articles = [item for batch in feed_results for item in batch][:35]
-    feeds_ok = sum(1 for r in feed_results if r)
+        articles = [item for batch in feed_results for item in batch]
+        feeds_ok = sum(1 for r in feed_results if r)
 
+        if not poly_markets or feeds_ok < 2:
+            print("[politics] Supplementing with Google News public politics RSS.")
+            fb_results = await asyncio.gather(
+                *[_fetch_politics_feed(client, cfg) for cfg in GOOGLE_POLITICS_FALLBACK_FEEDS]
+            )
+            articles.extend(item for batch in fb_results for item in batch)
+            feeds_ok += sum(1 for r in fb_results if r)
+
+    articles = articles[:35]
     if not poly_markets and not articles:
         return {"prediction_markets": [], "articles": []}, "failed"
 

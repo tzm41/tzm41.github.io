@@ -108,8 +108,35 @@ def _build_theater_record(
     }
 
 
+async def _fetch_google_news_intensity_fallback(
+    client: httpx.AsyncClient, rss_query: str
+) -> list[float]:
+    """Build a 14-day daily article volume series from Google News public RSS."""
+    url = (
+        f"https://news.google.com/rss/search?q={quote_plus(rss_query + ' when:14d')}"
+        "&hl=en-US&gl=US&ceid=US:en"
+    )
+    try:
+        resp = await client.get(url, follow_redirects=True)
+        resp.raise_for_status()
+        parsed = feedparser.parse(resp.text)
+        daily_counts: dict[str, int] = {}
+        for entry in parsed.entries:
+            pub = entry.get("published_parsed") or entry.get("updated_parsed")
+            if not pub:
+                continue
+            day_key = f"{pub.tm_year:04d}{pub.tm_mon:02d}{pub.tm_mday:02d}"
+            daily_counts[day_key] = daily_counts.get(day_key, 0) + 1
+        if not daily_counts:
+            return []
+        return [float(daily_counts[k]) for k in sorted(daily_counts.keys())[-14:]]
+    except Exception as exc:
+        print(f"[conflicts] Google News 14d intensity fallback failed for '{rss_query}': {exc}")
+        return []
+
+
 async def fetch_conflicts() -> tuple[list[dict[str, Any]], str]:
-    """Fetch conflict intensity metrics (rate-limited GDELT) and RSS headlines."""
+    """Fetch conflict intensity metrics (GDELT with Google News RSS fallback) and RSS headlines."""
     async with httpx.AsyncClient(
         timeout=HTTP_TIMEOUT_SECONDS,
         headers={"User-Agent": USER_AGENT},
@@ -118,12 +145,16 @@ async def fetch_conflicts() -> tuple[list[dict[str, Any]], str]:
         rss_task = asyncio.gather(
             *[_fetch_theater_rss(client, cfg["rss_query"]) for cfg in CONFLICT_THEATERS]
         )
-        # Fetch GDELT sequentially with polite 5.5s spacing to respect API rate limits
+        # Fetch GDELT sequentially with polite 5.5s spacing; fall back to Google News RSS on 429/empty
         gdelt_series_list: list[list[float]] = []
         for idx, cfg in enumerate(CONFLICT_THEATERS):
             if idx > 0:
                 await asyncio.sleep(5.5)
-            gdelt_series_list.append(await _fetch_gdelt_intensity(client, cfg["gdelt_query"]))
+            series = await _fetch_gdelt_intensity(client, cfg["gdelt_query"])
+            if not series:
+                print(f"[conflicts] Falling back to Google News RSS intensity for {cfg['id']}.")
+                series = await _fetch_google_news_intensity_fallback(client, cfg["rss_query"])
+            gdelt_series_list.append(series)
 
         rss_results = await rss_task
 

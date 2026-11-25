@@ -14,8 +14,23 @@ from .fetchers.conflicts import fetch_conflicts
 from .fetchers.markets import fetch_markets
 from .fetchers.news import fetch_top_news
 from .fetchers.politics import fetch_politics
-from .schema import DailyBriefing, SourceHealth
-from .synthesize import synthesize_briefing
+from .schema import DailyBriefing, GeminiBriefingSynthesis, SourceHealth
+from .synthesize import _build_prompt, merge_synthesis, synthesize_briefing
+
+
+def _write_briefing_files(briefing: DailyBriefing) -> Path:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
+
+    serialized = briefing.model_dump_json(indent=2) + "\n"
+    archive_file = ARCHIVE_DIR / f"{briefing.date}.json"
+    archive_file.write_text(serialized, encoding="utf-8")
+    LATEST_PATH.write_text(serialized, encoding="utf-8")
+
+    _prune_archive()
+    rebuild_index()
+    print(f"[run] Wrote {archive_file.relative_to(Path.cwd()) if archive_file.is_relative_to(Path.cwd()) else archive_file}")
+    return archive_file
 
 
 def _load_prior_briefing(current_date: str) -> dict[str, Any] | None:
@@ -86,7 +101,11 @@ def rebuild_index() -> dict[str, Any]:
     return index_payload
 
 
-async def run_pipeline(date_str: str | None = None, dry_run: bool = False) -> DailyBriefing:
+async def run_pipeline(
+    date_str: str | None = None,
+    dry_run: bool = False,
+    fetch_only_path: str | None = None,
+) -> DailyBriefing | None:
     now_utc = datetime.now(timezone.utc)
     target_date = date_str or now_utc.strftime("%Y-%m-%d")
     generated_at = now_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -115,6 +134,27 @@ async def run_pipeline(date_str: str | None = None, dry_run: bool = False) -> Da
     )
 
     prior = _load_prior_briefing(target_date)
+
+    if fetch_only_path:
+        out_path = Path(fetch_only_path)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        bundle = {
+            "date": target_date,
+            "generated_at": generated_at,
+            "source_health": health.model_dump(),
+            "raw_news": raw_news,
+            "raw_markets": raw_markets,
+            "raw_conflicts": raw_conflicts,
+            "raw_politics": raw_politics,
+            "prompt": _build_prompt(
+                target_date, raw_news, raw_markets, raw_conflicts, raw_politics, prior
+            ),
+            "synthesis_schema": GeminiBriefingSynthesis.model_json_schema(),
+        }
+        out_path.write_text(json.dumps(bundle, indent=2) + "\n", encoding="utf-8")
+        print(f"[run] Wrote raw fetch bundle to {out_path}")
+        return None
+
     briefing = synthesize_briefing(
         date_str=target_date,
         generated_at=generated_at,
@@ -130,17 +170,30 @@ async def run_pipeline(date_str: str | None = None, dry_run: bool = False) -> Da
         print("[run] Dry run enabled — skipping disk writes.")
         return briefing
 
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
+    _write_briefing_files(briefing)
+    return briefing
 
-    serialized = briefing.model_dump_json(indent=2) + "\n"
-    archive_file = ARCHIVE_DIR / f"{target_date}.json"
-    archive_file.write_text(serialized, encoding="utf-8")
-    LATEST_PATH.write_text(serialized, encoding="utf-8")
 
-    _prune_archive()
-    rebuild_index()
-    print(f"[run] Wrote {archive_file.relative_to(Path.cwd()) if archive_file.is_relative_to(Path.cwd()) else archive_file}")
+def apply_external_synthesis(raw_bundle_path: str, synthesis_json_path: str) -> DailyBriefing:
+    """Validate an externally generated GeminiBriefingSynthesis JSON and publish briefing files."""
+    bundle = json.loads(Path(raw_bundle_path).read_text(encoding="utf-8"))
+    raw_text = Path(synthesis_json_path).read_text(encoding="utf-8").strip()
+    # Strip optional markdown code fences if produced by a CLI or agent
+    if raw_text.startswith("```"):
+        lines = raw_text.splitlines()
+        raw_text = "\n".join(lines[1:-1] if lines[-1].strip() == "```" else lines[1:]).strip()
+
+    ai = GeminiBriefingSynthesis.model_validate_json(raw_text)
+    briefing = merge_synthesis(
+        ai=ai,
+        date_str=bundle["date"],
+        generated_at=bundle["generated_at"],
+        health=SourceHealth(**bundle["source_health"]),
+        raw_markets=bundle["raw_markets"],
+        raw_conflicts=bundle["raw_conflicts"],
+        raw_politics=bundle["raw_politics"],
+    )
+    _write_briefing_files(briefing)
     return briefing
 
 
@@ -148,8 +201,30 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate the daily news & trends briefing.")
     parser.add_argument("--date", help="Override briefing date (YYYY-MM-DD)", default=None)
     parser.add_argument("--dry-run", action="store_true", help="Fetch and synthesize without writing files")
+    parser.add_argument(
+        "--fetch-only",
+        metavar="RAW_JSON",
+        help="Fetch all sources and write raw bundle + prompt to RAW_JSON without calling Gemini API",
+    )
+    parser.add_argument(
+        "--apply-synthesis",
+        nargs=2,
+        metavar=("RAW_JSON", "SYNTHESIS_JSON"),
+        help="Validate SYNTHESIS_JSON against schema, merge with RAW_JSON, and write briefing/data/",
+    )
     args = parser.parse_args()
-    asyncio.run(run_pipeline(date_str=args.date, dry_run=args.dry_run))
+
+    if args.apply_synthesis:
+        apply_external_synthesis(args.apply_synthesis[0], args.apply_synthesis[1])
+        return
+
+    asyncio.run(
+        run_pipeline(
+            date_str=args.date,
+            dry_run=args.dry_run,
+            fetch_only_path=args.fetch_only,
+        )
+    )
 
 
 if __name__ == "__main__":

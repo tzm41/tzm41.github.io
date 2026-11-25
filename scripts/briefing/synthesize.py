@@ -260,35 +260,16 @@ def _build_extractive_fallback(
     )
 
 
-def synthesize_briefing(
+def merge_synthesis(
+    ai: GeminiBriefingSynthesis,
     date_str: str,
     generated_at: str,
     health: SourceHealth,
-    raw_news: list[dict[str, Any]],
     raw_markets: dict[str, Any],
     raw_conflicts: list[dict[str, Any]],
     raw_politics: dict[str, Any],
-    prior_briefing: dict[str, Any] | None = None,
 ) -> DailyBriefing:
-    """Synthesize a validated DailyBriefing using Gemini 2.5 Flash or extractive fallback."""
-    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
-    if not api_key:
-        print("[synthesize] GEMINI_API_KEY not set — using extractive fallback.")
-        return _build_extractive_fallback(
-            date_str, generated_at, health, raw_news, raw_markets, raw_conflicts, raw_politics
-        )
-
-    prompt = _build_prompt(
-        date_str, raw_news, raw_markets, raw_conflicts, raw_politics, prior_briefing
-    )
-    ai = _call_gemini(prompt, api_key)
-    if ai is None:
-        print("[synthesize] Falling back to extractive briefing.")
-        return _build_extractive_fallback(
-            date_str, generated_at, health, raw_news, raw_markets, raw_conflicts, raw_politics
-        )
-
-    # Merge deterministic numerical series with Gemini narratives
+    """Merge validated AI synthesis with deterministic numeric market, conflict, and politics data."""
     ai_theater_map = {t.id: t for t in ai.conflict_theaters}
     merged_theaters: list[ConflictTheater] = []
     for raw_t in raw_conflicts:
@@ -339,4 +320,43 @@ def synthesize_briefing(
             legislative_and_executive=ai.legislative_and_executive,
             trending_topics=ai.trending_topics,
         ),
+    )
+
+
+def synthesize_briefing(
+    date_str: str,
+    generated_at: str,
+    health: SourceHealth,
+    raw_news: list[dict[str, Any]],
+    raw_markets: dict[str, Any],
+    raw_conflicts: list[dict[str, Any]],
+    raw_politics: dict[str, Any],
+    prior_briefing: dict[str, Any] | None = None,
+) -> DailyBriefing:
+    """Synthesize a validated DailyBriefing using Gemini or extractive fallback."""
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    if not api_key:
+        print("[synthesize] GEMINI_API_KEY not set — using extractive fallback.")
+        return _build_extractive_fallback(
+            date_str, generated_at, health, raw_news, raw_markets, raw_conflicts, raw_politics
+        )
+
+    prompt = _build_prompt(
+        date_str, raw_news, raw_markets, raw_conflicts, raw_politics, prior_briefing
+    )
+    ai = _call_gemini(prompt, api_key)
+    if ai is None:
+        print("[synthesize] Falling back to extractive briefing.")
+        return _build_extractive_fallback(
+            date_str, generated_at, health, raw_news, raw_markets, raw_conflicts, raw_politics
+        )
+
+    return merge_synthesis(
+        ai=ai,
+        date_str=date_str,
+        generated_at=generated_at,
+        health=health,
+        raw_markets=raw_markets,
+        raw_conflicts=raw_conflicts,
+        raw_politics=raw_politics,
     )
