@@ -449,7 +449,6 @@ function renderKpiStrip(briefing) {
   const topTheater = theaters.length
     ? [...theaters].sort((a, b) => (b.intensity_score || 0) - (a.intensity_score || 0))[0]
     : null;
-  const topPoly = (briefing.us_politics?.prediction_markets || [])[0];
 
   const cards = [];
   if (sp) {
@@ -500,23 +499,10 @@ function renderKpiStrip(briefing) {
       </div>
     `);
   }
-  if (topPoly) {
-    cards.push(`
-      <div class="kpi-card">
-        <div class="kpi-label">Top Politics Market</div>
-        <div class="kpi-value-row">
-          <span class="kpi-value">${Math.round((topPoly.yes_prob || 0) * 100)}%</span>
-          <span class="delta-pill ${deltaClass(topPoly.delta_24h)}">${fmtPct((topPoly.delta_24h || 0) * 100)}</span>
-        </div>
-        <div class="kpi-sub" title="${escapeHtml(topPoly.question)}">${escapeHtml(topPoly.question)}</div>
-      </div>
-    `);
-  }
-
   els.kpiStrip.innerHTML = cards.join("");
   if (els.kpiToggleSummary) {
     els.kpiToggleSummary.textContent = sp
-      ? `S&P 500 ${fmtPrice(sp.price, sp.symbol)} (${fmtPct(sp.change_pct)}) · 5 Signals`
+      ? `S&P 500 ${fmtPrice(sp.price, sp.symbol)} (${fmtPct(sp.change_pct)}) · ${cards.length} Signals`
       : "Market & Signal Snapshot";
   }
 }
