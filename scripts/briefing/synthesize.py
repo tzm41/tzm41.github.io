@@ -40,7 +40,7 @@ Strict rules:
 2. Only cite URLs that appear verbatim in the input data.
 3. Keep summaries crisp, objective, and analytical (avoid sensationalism or partisan framing).
 4. When prior-day context is provided, explicitly highlight what changed or escalated/cooled since yesterday.
-5. In executive_brief bullets, summaries, why_it_matters, narratives, overviews, and framing_notes, wrap the 1–2 highest-signal phrases per sentence (the core outcome, decisive action, or key metric — roughly 15–25% of the sentence) in **double asterisks** for scannable bold highlighting. Never bold entire sentences or headlines.
+5. In executive_brief bullets, summaries, why_it_matters, narratives, overviews, and framing_notes, wrap the 1–2 highest-signal phrases per sentence (the core outcome, decisive action, or key metric — roughly 15–25% of the sentence) in **double asterisks** for scannable bold highlighting, and wrap human person names and geographic location names in *single asterisks* for italics. Never bold entire sentences or headlines.
 6. Produce valid JSON matching the requested schema exactly."""
 
 

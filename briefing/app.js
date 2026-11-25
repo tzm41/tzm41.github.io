@@ -231,8 +231,44 @@ function formatTickerTip(info) {
   return `${cleanSym} · ${info.name} (1D: ${pct})`;
 }
 
+const EXPLICIT_ITALIC_RE = /(?<!\*)\*([^*\n]+)\*(?!\*)/g;
+
+const PERSON_AND_PLACE_RE =
+  /((?:President|Prime Minister|Attorney General|Secretary|Chairman|Sen\.-elect|Sen\.|Rep\.|Gov\.|CEO|Dr\.)\s+[A-Z][a-zA-ZÀ-ÿ'-]+(?:\s+[A-Z][a-zA-ZÀ-ÿ'-]+){0,2}|\b(?:Jensen Huang|Donald Trump Jr\.|Donald Trump|Jimmy Gomez|Jamie Raskin|Ilhan Omar|Kilmar [ÁA]brego Garc[íi]a|Abdul El-Sayed|Scott Colom|Puma Shen|Lai Ching-te|Guo Jiakun|Xi Jinping|United States|San Francisco County|San Francisco|Silicon Valley|Bay Area|New York|Washington|Oakland|San Jose|California|Florida|El Salvador|Strait of Hormuz|Eastern Europe|Middle East|West Africa|South Korea|North Korea|Indo-Pacific|Red Sea|Mediterranean|Spain|China|Beijing|Shanghai|Taiwan|Taipei|Russia|Moscow|Ukraine|Poland|Warsaw|Libya|Iran|Tehran|Israel|Gaza|Yemen|Aden|Hodeidah|Riyadh|Sudan|Khartoum|Sahel|Mali|Philippines|Brazil|Cuba|India|Japan|Europe|Asia)\b|赖清德|沈伯洋|郭嘉昆|黄仁勋|特朗普|中国|北京|上海|台湾|台北|美国|伊朗|俄罗斯|乌克兰|巴西)/g;
+
+function formatEntitiesInPlain(segment) {
+  if (!segment) return "";
+  EXPLICIT_ITALIC_RE.lastIndex = 0;
+  if (EXPLICIT_ITALIC_RE.test(segment)) {
+    EXPLICIT_ITALIC_RE.lastIndex = 0;
+    let out = "";
+    let last = 0;
+    for (const m of segment.matchAll(EXPLICIT_ITALIC_RE)) {
+      const idx = m.index ?? 0;
+      if (idx > last) out += escapeHtml(segment.slice(last, idx));
+      out += `<em>${escapeHtml(m[1])}</em>`;
+      last = idx + m[0].length;
+    }
+    if (last < segment.length) out += escapeHtml(segment.slice(last));
+    return out;
+  }
+
+  PERSON_AND_PLACE_RE.lastIndex = 0;
+  let out = "";
+  let last = 0;
+  for (const m of segment.matchAll(PERSON_AND_PLACE_RE)) {
+    const idx = m.index ?? 0;
+    if (idx > last) out += escapeHtml(segment.slice(last, idx));
+    out += `<em>${escapeHtml(m[0])}</em>`;
+    last = idx + m[0].length;
+  }
+  if (last < segment.length) out += escapeHtml(segment.slice(last));
+  return out;
+}
+
 function escapeWithTickers(segment) {
-  if (!segment || !state.tickerMap.size || !state.inlineTickerRe) return escapeHtml(segment);
+  if (!segment) return "";
+  if (!state.tickerMap.size || !state.inlineTickerRe) return formatEntitiesInPlain(segment);
   state.inlineTickerRe.lastIndex = 0;
   let out = "";
   let lastIdx = 0;
@@ -241,13 +277,13 @@ function escapeWithTickers(segment) {
     const info = state.tickerMap.get(token);
     if (!info) continue;
     const idx = match.index ?? 0;
-    if (idx > lastIdx) out += escapeHtml(segment.slice(lastIdx, idx));
+    if (idx > lastIdx) out += formatEntitiesInPlain(segment.slice(lastIdx, idx));
     const cls = deltaClass(info.change_pct);
     const tip = formatTickerTip(info);
     out += `<span class="ticker-tag ${cls}" tabindex="0" data-ticker-sym="${escapeHtml(info.symbol)}" data-ticker-tip="${escapeHtml(tip)}" title="${escapeHtml(tip)}">${escapeHtml(token)}</span>`;
     lastIdx = idx + token.length;
   }
-  if (lastIdx < segment.length) out += escapeHtml(segment.slice(lastIdx));
+  if (lastIdx < segment.length) out += formatEntitiesInPlain(segment.slice(lastIdx));
   return out;
 }
 
