@@ -435,7 +435,7 @@ function lookupSourceBias(name) {
   const s = String(name || "").trim();
   if (!s) return null;
   for (const [re, label, tone] of SOURCE_BIAS_RULES) {
-    if (re.test(s)) return { text: `Est. bias: ${label}`, tone };
+    if (re.test(s)) return { text: label, tone };
   }
   return null;
 }
