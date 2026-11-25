@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-25T06:17:15Z",
+  "updated_at": "2026-11-25T15:03:28Z",
   "latest_date": "2026-11-25",
   "dates": [
     "2026-11-25"
@@ -7,11 +7,11 @@
   "kpi_history_30d": [
     {
       "date": "2026-11-25",
-      "regime": "Mixed",
-      "sp500_price": 7201.09,
-      "sp500_pct": -0.5,
-      "vix": 26.36,
-      "us10y": 4.9,
+      "regime": "Volatility Spike",
+      "sp500_price": 7047.89,
+      "sp500_pct": -2.13,
+      "vix": 34.95,
+      "us10y": 4.82,
       "top_theater": "Eastern Europe / Ukraine",
       "conflict_index": 1167.0
     }
