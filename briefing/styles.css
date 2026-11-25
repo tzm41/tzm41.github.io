@@ -880,6 +880,12 @@ h3 {
   z-index: 10;
 }
 
+.spark-tip-time {
+  font-weight: 400;
+  opacity: 0.72;
+  margin-right: 4px;
+}
+
 .sub-block {
   margin-top: 8px;
 }

@@ -37,8 +37,11 @@ class MarketQuote(BaseModel):
     change_5d_pct: float = 0.0
     change_30d_pct: float = 0.0
     sparkline_1d: list[float] = Field(default_factory=list)
+    sparkline_1d_times: list[str] = Field(default_factory=list)
     sparkline_5d: list[float] = Field(default_factory=list)
+    sparkline_5d_times: list[str] = Field(default_factory=list)
     sparkline_30d: list[float] = Field(default_factory=list)
+    sparkline_30d_times: list[str] = Field(default_factory=list)
 
 
 class SectorTile(BaseModel):
@@ -81,6 +84,7 @@ class ConflictTheater(BaseModel):
     trend_7d: TrendDirection = "flat"
     intensity_score: float = 0.0
     intensity_series_14d: list[float] = Field(default_factory=list)
+    intensity_dates_14d: list[str] = Field(default_factory=list)
     summary: str
     timeline_events: list[TimelineEvent] = Field(default_factory=list)
 

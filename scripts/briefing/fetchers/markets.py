@@ -150,16 +150,38 @@ def _extract_series(df: Any, symbol: str) -> Any:
         return None
 
 
-def _merge_daily_closes(prior_30d: list[float], recent_5d: list[float]) -> list[float] | None:
-    """Stitch new daily closes from a 5D fetch onto yesterday's cached 30D series."""
-    if len(prior_30d) < 20 or not recent_5d:
+def _fmt_iso_utc(ts: Any) -> str:
+    try:
+        if getattr(ts, "tzinfo", None) is not None:
+            return ts.tz_convert("UTC").strftime("%Y-%m-%dT%H:%M:%SZ")
+        return ts.strftime("%Y-%m-%dT%H:%M:%SZ")
+    except Exception:
+        return str(ts)
+
+
+def _fmt_date(ts: Any) -> str:
+    try:
+        return ts.strftime("%Y-%m-%d")
+    except Exception:
+        return str(ts)[:10]
+
+
+def _merge_daily_closes(
+    prior_30d: list[float],
+    prior_30d_times: list[str],
+    recent_5d: list[float],
+    recent_5d_times: list[str],
+) -> tuple[list[float], list[str]] | None:
+    """Stitch new daily closes & dates from a 5D fetch onto yesterday's cached 30D series."""
+    if len(prior_30d) < 20 or len(prior_30d_times) != len(prior_30d) or not recent_5d:
         return None
-    anchor = prior_30d[-1]
-    # Find the most recent occurrence of yesterday's close in the 5D window
+    anchor_val = prior_30d[-1]
+    anchor_date = prior_30d_times[-1]
     for idx in range(len(recent_5d) - 1, -1, -1):
-        if abs(recent_5d[idx] - anchor) <= 0.02:
-            merged = prior_30d + recent_5d[idx + 1 :]
-            return merged[-30:]
+        if recent_5d_times[idx] == anchor_date or abs(recent_5d[idx] - anchor_val) <= 0.02:
+            merged_vals = (prior_30d + recent_5d[idx + 1 :])[-30:]
+            merged_times = (prior_30d_times + recent_5d_times[idx + 1 :])[-30:]
+            return merged_vals, merged_times
     return None
 
 
@@ -180,13 +202,19 @@ def _download_timeframes(
         df_5d_daily = fut_5d_daily.result()
 
         # Determine which symbols can reuse cached 30D history vs needing a 45D backfill
-        stitched_30d: dict[str, list[float]] = {}
+        stitched_30d: dict[str, tuple[list[float], list[str]]] = {}
         need_45d: list[str] = []
         for sym in all_daily_symbols:
             s5_daily = _extract_series(df_5d_daily, sym)
-            recent = [round(float(x), 2) for x in s5_daily.tolist()] if s5_daily is not None else []
-            prior_30d = (prior_map or {}).get(sym, {}).get("sparkline_30d", [])
-            merged = _merge_daily_closes(prior_30d, recent)
+            recent_vals = [round(float(x), 2) for x in s5_daily.tolist()] if s5_daily is not None else []
+            recent_times = [_fmt_date(ts) for ts in s5_daily.index] if s5_daily is not None else []
+            prior_q = (prior_map or {}).get(sym, {})
+            merged = _merge_daily_closes(
+                prior_q.get("sparkline_30d", []),
+                prior_q.get("sparkline_30d_times", []),
+                recent_vals,
+                recent_times,
+            )
             if merged is not None:
                 stitched_30d[sym] = merged
             else:
@@ -199,29 +227,33 @@ def _download_timeframes(
     if stitched_30d:
         print(f"[markets] Reused cached 30D history for {len(stitched_30d)}/{len(all_daily_symbols)} symbols.")
 
-    def get_30d(symbol: str) -> list[float]:
+    def get_30d(symbol: str) -> tuple[list[float], list[str]]:
         if symbol in stitched_30d:
             return stitched_30d[symbol]
         s = _extract_series(df_45d, symbol)
         if s is not None:
-            return [round(float(x), 2) for x in s.tolist()[-30:]]
-        return (prior_map or {}).get(symbol, {}).get("sparkline_30d", [])
+            tail = s.iloc[-30:]
+            return [round(float(x), 2) for x in tail.tolist()], [_fmt_date(ts) for ts in tail.index]
+        prior_q = (prior_map or {}).get(symbol, {})
+        return prior_q.get("sparkline_30d", []), prior_q.get("sparkline_30d_times", [])
 
-    def get_5d(symbol: str) -> list[float]:
+    def get_5d(symbol: str) -> tuple[list[float], list[str]]:
         s = _extract_series(df_5d, symbol)
         if s is not None:
-            return [round(float(x), 2) for x in s.tolist()]
-        return (prior_map or {}).get(symbol, {}).get("sparkline_5d", [])
+            return [round(float(x), 2) for x in s.tolist()], [_fmt_iso_utc(ts) for ts in s.index]
+        prior_q = (prior_map or {}).get(symbol, {})
+        return prior_q.get("sparkline_5d", []), prior_q.get("sparkline_5d_times", [])
 
-    def get_1d(symbol: str) -> list[float]:
+    def get_1d(symbol: str) -> tuple[list[float], list[str]]:
         s = _extract_series(df_1d, symbol)
         if s is None:
-            return (prior_map or {}).get(symbol, {}).get("sparkline_1d", [])
+            prior_q = (prior_map or {}).get(symbol, {})
+            return prior_q.get("sparkline_1d", []), prior_q.get("sparkline_1d_times", [])
         cutoff = s.index[-1] - pd.Timedelta(hours=24)
         sliced = s[s.index >= cutoff]
         if len(sliced) < 2:
             sliced = s.iloc[-14:]
-        return [round(float(x), 2) for x in sliced.tolist()]
+        return [round(float(x), 2) for x in sliced.tolist()], [_fmt_iso_utc(ts) for ts in sliced.index]
 
     return {"1d": get_1d, "5d": get_5d, "30d": get_30d}
 
@@ -235,14 +267,14 @@ def _build_quote_list(
     quotes: list[dict[str, Any]] = []
     for cfg in configs:
         sym = cfg["symbol"]
-        closes = tf_extractors["30d"](sym)
+        closes, closes_times = tf_extractors["30d"](sym)
         if len(closes) >= 2:
             latest = closes[-1]
             prev_1d = closes[-2]
             prev_5d = closes[-6] if len(closes) >= 6 else closes[0]
             prev_30d = closes[0]
-            s1d = tf_extractors["1d"](sym)
-            s5d = tf_extractors["5d"](sym)
+            s1d, t1d = tf_extractors["1d"](sym)
+            s5d, t5d = tf_extractors["5d"](sym)
             quotes.append(
                 {
                     "symbol": sym,
@@ -253,8 +285,11 @@ def _build_quote_list(
                     "change_5d_pct": _pct_change(latest, prev_5d),
                     "change_30d_pct": _pct_change(latest, prev_30d),
                     "sparkline_1d": s1d if len(s1d) >= 2 else closes[-2:],
+                    "sparkline_1d_times": t1d if len(s1d) >= 2 else closes_times[-2:],
                     "sparkline_5d": s5d if len(s5d) >= 2 else closes[-6:],
+                    "sparkline_5d_times": t5d if len(s5d) >= 2 else closes_times[-6:],
                     "sparkline_30d": closes,
+                    "sparkline_30d_times": closes_times,
                 }
             )
         else:
@@ -271,8 +306,11 @@ def _build_quote_list(
                         "change_5d_pct": chg,
                         "change_30d_pct": chg,
                         "sparkline_1d": [price],
+                        "sparkline_1d_times": [],
                         "sparkline_5d": [price],
+                        "sparkline_5d_times": [],
                         "sparkline_30d": [price],
+                        "sparkline_30d_times": [],
                     }
                 )
     return quotes
@@ -313,7 +351,7 @@ def _fetch_markets_sync(prior_markets: dict[str, Any] | None = None) -> tuple[di
 
     sectors: list[dict[str, Any]] = []
     for cfg in MARKET_SECTORS:
-        closes = tf_all["30d"](cfg["symbol"])
+        closes, _ = tf_all["30d"](cfg["symbol"])
         if len(closes) >= 2:
             latest = closes[-1]
             prev_1d = closes[-2]

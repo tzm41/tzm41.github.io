@@ -219,6 +219,7 @@ def _build_extractive_fallback(
                 trend_7d=t.get("trend_7d", "flat"),
                 intensity_score=t.get("intensity_score", 0.0),
                 intensity_series_14d=t.get("intensity_series_14d", []),
+                intensity_dates_14d=t.get("intensity_dates_14d", []),
                 summary=summary,
                 timeline_events=events,
             )
@@ -299,6 +300,7 @@ def merge_synthesis(
                 trend_7d=ai_t.trend_7d if ai_t else raw_t.get("trend_7d", "flat"),
                 intensity_score=raw_t.get("intensity_score", 0.0),
                 intensity_series_14d=raw_t.get("intensity_series_14d", []),
+                intensity_dates_14d=raw_t.get("intensity_dates_14d", []),
                 summary=(
                     ai_t.summary
                     if ai_t

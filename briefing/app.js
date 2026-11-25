@@ -396,16 +396,44 @@ function getTimeframeValue(item, tf) {
   return item.change_pct;
 }
 
-function getSparklineSeries(q, tf) {
+function getSparklineData(q, tf) {
   if (tf === "1d") {
-    if (Array.isArray(q.sparkline_1d) && q.sparkline_1d.length >= 2) return q.sparkline_1d;
-    return Array.isArray(q.sparkline_30d) ? q.sparkline_30d : [];
+    if (Array.isArray(q.sparkline_1d) && q.sparkline_1d.length >= 2) {
+      return { values: q.sparkline_1d, times: q.sparkline_1d_times || [] };
+    }
+    return { values: Array.isArray(q.sparkline_30d) ? q.sparkline_30d : [], times: q.sparkline_30d_times || [] };
   }
   if (tf === "5d") {
-    if (Array.isArray(q.sparkline_5d) && q.sparkline_5d.length >= 2) return q.sparkline_5d;
-    return Array.isArray(q.sparkline_30d) ? q.sparkline_30d.slice(-6) : [];
+    if (Array.isArray(q.sparkline_5d) && q.sparkline_5d.length >= 2) {
+      return { values: q.sparkline_5d, times: q.sparkline_5d_times || [] };
+    }
+    return {
+      values: Array.isArray(q.sparkline_30d) ? q.sparkline_30d.slice(-6) : [],
+      times: Array.isArray(q.sparkline_30d_times) ? q.sparkline_30d_times.slice(-6) : [],
+    };
   }
-  return Array.isArray(q.sparkline_30d) ? q.sparkline_30d : [];
+  return {
+    values: Array.isArray(q.sparkline_30d) ? q.sparkline_30d : [],
+    times: q.sparkline_30d_times || [],
+  };
+}
+
+function fmtSparkTime(raw, kind) {
+  if (!raw) return "";
+  if (raw.length === 10 && raw[4] === "-") {
+    const [y, m, d] = raw.split("-").map(Number);
+    const dt = new Date(Date.UTC(y, m - 1, d));
+    return dt.toLocaleDateString(undefined, { month: "short", day: "numeric", timeZone: "UTC" });
+  }
+  const dt = new Date(raw);
+  if (Number.isNaN(dt.getTime())) return raw;
+  if (kind === "1d") {
+    return dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  }
+  if (kind === "5d") {
+    return dt.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric" });
+  }
+  return dt.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
 function renderQuoteGrid(container, quotes, tf, emptyMsg) {
@@ -423,7 +451,7 @@ function renderQuoteGrid(container, quotes, tf, emptyMsg) {
           : cls === "neg"
           ? "var(--neg)"
           : "var(--ink-muted)";
-      const series = getSparklineSeries(q, tf);
+      const { values: series, times } = getSparklineData(q, tf);
       return `
         <div class="quote-card">
           <div class="quote-top">
@@ -434,7 +462,7 @@ function renderQuoteGrid(container, quotes, tf, emptyMsg) {
             <span class="quote-price">${fmtPrice(q.price, q.symbol)}</span>
             <span class="delta-pill ${cls}">${fmtPct(pct)}</span>
           </div>
-          <div class="sparkline-wrap" data-symbol="${escapeHtml(q.symbol)}" data-values="${escapeHtml(JSON.stringify(series))}">
+          <div class="sparkline-wrap" data-kind="${escapeHtml(tf)}" data-symbol="${escapeHtml(q.symbol)}" data-values="${escapeHtml(JSON.stringify(series))}" data-times="${escapeHtml(JSON.stringify(times))}">
             <div class="spark-tooltip hidden"></div>
             ${buildSparklineSvg(series, stroke, "sparkline", true)}
           </div>
@@ -603,7 +631,7 @@ function renderConflicts(conflicts = {}) {
               14D GDELT Intensity: <strong>${Number(t.intensity_score || 0).toFixed(0)}</strong>
               &middot; 7D: <strong>${trendArrow[t.trend_7d] || "→ Steady"}</strong>
             </div>
-            <div class="sparkline-wrap intensity-spark-wrap" data-kind="gdelt" data-values="${escapeHtml(JSON.stringify(t.intensity_series_14d || []))}">
+            <div class="sparkline-wrap intensity-spark-wrap" data-kind="gdelt" data-values="${escapeHtml(JSON.stringify(t.intensity_series_14d || []))}" data-times="${escapeHtml(JSON.stringify(t.intensity_dates_14d || []))}">
               <div class="spark-tooltip hidden"></div>
               ${buildSparklineSvg(t.intensity_series_14d, sparkColor, "intensity-spark", true)}
             </div>
@@ -770,6 +798,7 @@ async function loadBriefingForDate(dateStr) {
 
 function initScrollSpy() {
   const nav = document.querySelector(".section-nav");
+  const navInner = document.querySelector(".section-nav-inner");
   const syncNavHeight = () => {
     if (nav) {
       document.documentElement.style.setProperty("--nav-height", `${Math.round(nav.getBoundingClientRect().height)}px`);
@@ -788,6 +817,8 @@ function initScrollSpy() {
     .filter(Boolean);
 
   if (!pairs.length) return;
+
+  let lastActiveLink = null;
 
   const updateActive = () => {
     const navH = nav ? nav.getBoundingClientRect().height : 44;
@@ -813,6 +844,17 @@ function initScrollSpy() {
         link.setAttribute("aria-current", "location");
       } else {
         link.removeAttribute("aria-current");
+      }
+    }
+
+    if (activePair.link !== lastActiveLink) {
+      lastActiveLink = activePair.link;
+      if (navInner && navInner.scrollWidth > navInner.clientWidth) {
+        const linkRect = activePair.link.getBoundingClientRect();
+        const navRect = navInner.getBoundingClientRect();
+        const targetLeft =
+          navInner.scrollLeft + (linkRect.left - navRect.left) - (navRect.width - linkRect.width) / 2;
+        navInner.scrollTo({ left: Math.max(0, targetLeft), behavior: "smooth" });
       }
     }
   };
@@ -854,10 +896,18 @@ function initSparklineHover() {
       try {
         const values = JSON.parse(wrap.dataset.values || "[]");
         if (!Array.isArray(values) || values.length < 2) return null;
+        let times = [];
+        try {
+          const parsed = JSON.parse(wrap.dataset.times || "[]");
+          if (Array.isArray(parsed)) times = parsed;
+        } catch {
+          times = [];
+        }
         const min = Math.min(...values);
         const max = Math.max(...values);
         entry = {
           values,
+          times,
           min,
           span: max - min || 1,
           guide: wrap.querySelector(".spark-guide"),
@@ -892,7 +942,7 @@ function initSparklineHover() {
     const rect = wrap.getBoundingClientRect();
     if (!rect.width) return;
 
-    const { values, min, span, guide, dot, tip } = entry;
+    const { values, times, min, span, guide, dot, tip } = entry;
     const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     const idx = Math.round(ratio * (values.length - 1));
     const val = values[idx];
@@ -912,11 +962,16 @@ function initSparklineHover() {
       dot.setAttribute("cy", ptY.toFixed(1));
     }
     if (tip) {
-      tip.textContent =
-        wrap.dataset.kind === "gdelt"
+      const kind = wrap.dataset.kind || "";
+      const valText =
+        kind === "gdelt"
           ? `${Number(val).toFixed(0)}`
           : fmtPrice(val, wrap.dataset.symbol);
-      const pctLeft = Math.max(14, Math.min(86, (ptX / w) * 100));
+      const timeText = times[idx] ? fmtSparkTime(times[idx], kind) : "";
+      tip.innerHTML = timeText
+        ? `<span class="spark-tip-time">${escapeHtml(timeText)}</span> ${escapeHtml(valText)}`
+        : escapeHtml(valText);
+      const pctLeft = Math.max(18, Math.min(82, (ptX / w) * 100));
       tip.style.left = `${pctLeft.toFixed(1)}%`;
       tip.classList.remove("hidden");
     }
