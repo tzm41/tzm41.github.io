@@ -61,7 +61,11 @@ LOCAL_NEWS_REGIONS: list[dict[str, object]] = [
         "name": "China",
         "language": "zh-CN",
         "feeds": [
+            {"name": "中新网", "category": "World", "url": "https://www.chinanews.com.cn/rss/scroll-news.xml"},
+            {"name": "澎湃/财新/一财/界面", "category": "Economy", "url": "https://news.google.com/rss/search?q=site:thepaper.cn+OR+site:caixin.com+OR+site:yicai.com+OR+site:jiemian.com+when:3d&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"},
+            {"name": "FT中文网", "category": "Economy", "url": "https://www.ftchinese.com/rss/feed"},
             {"name": "BBC 中文", "category": "World", "url": "https://feeds.bbci.co.uk/zhongwen/simp/rss.xml"},
+            {"name": "纽约时报中文网", "category": "World", "url": "https://cn.nytimes.com/rss/"},
             {"name": "Google News 中国", "category": "World", "url": "https://news.google.com/rss/search?q=%E4%B8%AD%E5%9B%BD+when:2d&hl=zh-CN&gl=CN&ceid=CN:zh-Hans"},
         ],
     },

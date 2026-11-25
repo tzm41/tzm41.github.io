@@ -414,13 +414,40 @@ function isContinuedFromPrior(story, priorStories = []) {
   return false;
 }
 
+const SOURCE_BIAS_RULES = [
+  [/reuters|ap news|associated press/i, "Center · Wire"],
+  [/bloomberg|cnbc|financial times|ft中文网|wall street journal|wsj|marketplace/i, "Center · Business"],
+  [/bbc/i, "Center-Left · Public"],
+  [/the hill|politico|courthouse news|stars and stripes/i, "Center"],
+  [/deutsche welle|rfi|al jazeera/i, "Center-Left · Int'l public"],
+  [/npr/i, "Lean Left · Public"],
+  [/new york times|纽约时报|washington post|sacramento bee|ktvu|abc news/i, "Lean Left"],
+  [/guardian/i, "Left-Center"],
+  [/fox news|new york post/i, "Lean Right"],
+  [/arstechnica|ars technica|the verge|good news network|solidot/i, "Center · Tech / Specialty"],
+  [/中新网|新华社|人民日报|外交部|cgtn|global times/i, "State-affiliated (CN)"],
+  [/澎湃|thepaper/i, "State-owned (CN) · Urban"],
+  [/财新|caixin|第一财经|yicai|界面|jiemian/i, "Business / Market (CN)"],
+  [/google news/i, "Aggregator"],
+];
+
+function lookupSourceBias(name) {
+  const s = String(name || "").trim();
+  if (!s) return "";
+  for (const [re, label] of SOURCE_BIAS_RULES) {
+    if (re.test(s)) return `Est. bias: ${label}`;
+  }
+  return "";
+}
+
+function renderSourceChip(src) {
+  const bias = lookupSourceBias(src.name);
+  const biasAttr = bias ? ` data-bias="${escapeHtml(bias)}" title="${escapeHtml(bias)}"` : "";
+  return `<a class="source-chip"${biasAttr} href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`;
+}
+
 function renderNewsCard(story, badgeLabel, continued) {
-  const sourcesHtml = (story.sources || [])
-    .map(
-      (src) =>
-        `<a class="source-chip" href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`
-    )
-    .join("");
+  const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
 
   const toggleBtn = continued
     ? `<button type="button" class="card-toggle-btn" aria-expanded="false">Expand &#9662;</button>`
@@ -800,12 +827,7 @@ function renderPositiveNews(story) {
     els.positiveNewsSlot.innerHTML = "";
     return;
   }
-  const sourcesHtml = (story.sources || [])
-    .map(
-      (src) =>
-        `<a class="source-chip" href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`
-    )
-    .join("");
+  const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
 
   els.positiveSection.classList.remove("hidden");
   els.positiveNewsSlot.innerHTML = `

@@ -627,6 +627,7 @@ h3 {
 }
 
 .source-chip {
+  position: relative;
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--ink-muted);
@@ -639,6 +640,34 @@ h3 {
 .source-chip:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.source-chip[data-bias]::after {
+  content: attr(data-bias);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 5px);
+  transform: translateX(-50%) translateY(2px);
+  background: var(--surface);
+  color: var(--ink-muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: var(--shadow-sm);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  z-index: 15;
+}
+
+.source-chip[data-bias]:hover::after,
+.source-chip[data-bias]:focus-visible::after {
+  opacity: 0.9;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* ---------- Markets & Sector Heatmap ---------- */
