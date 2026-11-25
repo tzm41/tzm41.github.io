@@ -1,7 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#181a1f"/>
-  <rect x="6" y="6" width="20" height="3" rx="1.5" fill="#a63a2b"/>
-  <rect x="6" y="13" width="14" height="2.5" rx="1.25" fill="#faf8f5"/>
-  <rect x="6" y="18.5" width="20" height="2" rx="1" fill="#848d9c"/>
-  <rect x="6" y="23" width="16" height="2" rx="1" fill="#848d9c"/>
+  <style>
+    .bg { fill: #faf8f5; }
+    .acc { fill: #a63a2b; }
+    .hi { fill: #181a1f; }
+    .mu { fill: #6f7684; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #1d2430; }
+      .acc { fill: #e06d53; }
+      .hi { fill: #eef0f4; }
+      .mu { fill: #8a95a8; }
+    }
+  </style>
+  <rect class="bg" width="32" height="32" rx="6"/>
+  <rect class="acc" x="6" y="6" width="20" height="3" rx="1.5"/>
+  <rect class="hi" x="6" y="13" width="14" height="2.5" rx="1.25"/>
+  <rect class="mu" x="6" y="18.5" width="20" height="2" rx="1"/>
+  <rect class="mu" x="6" y="23" width="16" height="2" rx="1"/>
 </svg>
