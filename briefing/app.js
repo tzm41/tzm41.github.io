@@ -10,6 +10,8 @@ const state = {
   briefing: null,
   newsCategory: "All",
   marketTimeframe: "1d",
+  localRegionId: null,
+  localExpanded: false,
 };
 
 const els = {
@@ -46,6 +48,11 @@ const els = {
   topicsList: document.getElementById("topics-list"),
   positiveSection: document.getElementById("positive"),
   positiveNewsSlot: document.getElementById("positive-news-slot"),
+  localSection: document.getElementById("local-news"),
+  localLocationToggle: document.getElementById("local-location-toggle"),
+  btnToggleLocal: document.getElementById("btn-toggle-local"),
+  localNewsBody: document.getElementById("local-news-body"),
+  localNewsGrid: document.getElementById("local-news-grid"),
 };
 
 /* ---------- Utilities ---------- */
@@ -746,6 +753,70 @@ function renderPositiveNews(story) {
   `;
 }
 
+function setLocalExpanded(expanded) {
+  state.localExpanded = Boolean(expanded);
+  if (els.localNewsBody) {
+    els.localNewsBody.classList.toggle("hidden", !state.localExpanded);
+  }
+  if (els.btnToggleLocal) {
+    els.btnToggleLocal.setAttribute("aria-expanded", String(state.localExpanded));
+    const lbl = els.btnToggleLocal.querySelector(".collapse-label");
+    if (lbl) lbl.textContent = state.localExpanded ? "Collapse" : "Expand";
+  }
+}
+
+function renderLocalNews(regions = []) {
+  if (!els.localSection || !els.localLocationToggle || !els.localNewsGrid) return;
+  if (!Array.isArray(regions) || !regions.length) {
+    els.localSection.classList.add("hidden");
+    els.localLocationToggle.innerHTML = "";
+    els.localNewsGrid.innerHTML = "";
+    return;
+  }
+
+  els.localSection.classList.remove("hidden");
+  if (!state.localRegionId || !regions.some((r) => r.id === state.localRegionId)) {
+    state.localRegionId = regions[0].id;
+  }
+
+  els.localLocationToggle.innerHTML = regions
+    .map((r) => {
+      const active = r.id === state.localRegionId;
+      return `<button type="button" class="seg-btn${active ? " active" : ""}" data-region-id="${escapeHtml(r.id)}" aria-pressed="${active}">${escapeHtml(r.name)}</button>`;
+    })
+    .join("");
+
+  const activeRegion = regions.find((r) => r.id === state.localRegionId) || regions[0];
+  const stories = activeRegion.stories || [];
+  if (!stories.length) {
+    els.localNewsGrid.innerHTML = `<div class="empty-state">No local news stories available for ${escapeHtml(activeRegion.name)} in this edition.</div>`;
+  } else {
+    els.localNewsGrid.innerHTML = stories
+      .map((story) => {
+        const sourcesHtml = (story.sources || [])
+          .map(
+            (src) =>
+              `<a class="source-chip" href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`
+          )
+          .join("");
+        return `
+          <article class="news-card">
+            <div class="news-meta">
+              <span class="cat-pill">${escapeHtml(activeRegion.name)}</span>
+            </div>
+            <h3>${escapeHtml(story.headline)}</h3>
+            <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
+            <div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>
+            <div class="source-links">${sourcesHtml}</div>
+          </article>
+        `;
+      })
+      .join("");
+  }
+
+  setLocalExpanded(state.localExpanded);
+}
+
 function renderAll(briefing) {
   state.briefing = briefing;
   els.editionDate.textContent = fmtReadableDate(briefing.date);
@@ -758,6 +829,7 @@ function renderAll(briefing) {
   renderConflicts(briefing.conflicts);
   renderPolitics(briefing.us_politics);
   renderPositiveNews(briefing.positive_news);
+  renderLocalNews(briefing.local_news);
 }
 
 /* ---------- Archive Navigation & Data Loading ---------- */
@@ -1014,6 +1086,19 @@ async function bootstrap() {
       tfBtns.forEach((b) => b.classList.toggle("active", b === btn));
       if (state.briefing) renderMarkets(state.briefing.markets);
     });
+  });
+
+  // Local news expand/collapse & location toggle
+  els.btnToggleLocal?.addEventListener("click", () => {
+    setLocalExpanded(!state.localExpanded);
+  });
+
+  els.localLocationToggle?.addEventListener("click", (e) => {
+    const btn = e.target.closest(".seg-btn");
+    if (!btn) return;
+    state.localRegionId = btn.dataset.regionId;
+    if (!state.localExpanded) setLocalExpanded(true);
+    if (state.briefing) renderLocalNews(state.briefing.local_news);
   });
 
   // Archive navigation controls

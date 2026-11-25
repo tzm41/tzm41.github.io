@@ -4082,5 +4082,65 @@
         "url": "https://www.goodnewsnetwork.org/major-success-sees-viral-infections-fall-68-in-brazil-after-releasing-wolbachia-infected-mosquitoes/"
       }
     ]
-  }
+  },
+  "local_news": [
+    {
+      "id": "bay-area",
+      "name": "Bay Area",
+      "stories": [
+        {
+          "id": "sf-flood-advisory",
+          "category": "World",
+          "headline": "Flood advisory issued for San Francisco County amid coastal weather",
+          "summary": "Weather officials issued a flood advisory for San Francisco County scheduled to expire at 2 a.m. following heavy rainfall and coastal weather impacts across the Bay Area.",
+          "why_it_matters": "Localized street flooding and drainage backups can disrupt early-morning commutes and low-lying neighborhoods across San Francisco.",
+          "sources": [
+            {
+              "name": "Sacramento Bee",
+              "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFAxNm9LWXpMTTNqUTVJR2lDcmhJaUdNZDBTNG5jYmdyTHJDWmlmWXZvNmw4bjh1bXBoazVDVy1OM3A0Q3drcEVjdWlheHlDRXZSZm9BQjNQVTVUZTJHWGZoR2VHWkZKUnJSUWw3ZU9jNA?oc=5"
+            }
+          ]
+        },
+        {
+          "id": "sf-reparations-fund-lawsuit",
+          "category": "Policy",
+          "headline": "Taxpayer rights group continues legal challenge against San Francisco reparations fund",
+          "summary": "A taxpayer advocacy organization is pressing forward with its court challenge against San Francisco's reparations fund proposal, keeping the city initiative tied up in litigation.",
+          "why_it_matters": "The legal fight tests municipal authority over race-conscious funding programs and could shape local budget priorities in San Francisco.",
+          "sources": [
+            {
+              "name": "Courthouse News",
+              "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQRXFRSDFWYWd3aEpRUnBzWHg2OVhNeFU5WDRqNjZIYUxyamZBaXN3eklDZjN0bUNadVdEcWxBM05xcW5zdkwtWjZwZ2c5b00yX1B1Uy1RYnN4M3FqSkJaeXFvRERCWGpBcGRqS0M0ejFQZ3JfdkNaWURxWkpWSDVkc2tQaEFJWlZGN0RNWjBtMDRCeUtzSFhJZHdQeGlsdEptUVVPV3RieG1WYkE?oc=5"
+            }
+          ]
+        },
+        {
+          "id": "silicon-valley-superstar-ceos",
+          "category": "Tech",
+          "headline": "Silicon Valley's reliance on founder and superstar CEOs draws fresh scrutiny",
+          "summary": "Following high-profile executive reversals in the chip and AI sector, analysts and Bay Area tech observers are examining why Silicon Valley boards remain deeply reliant on marquee CEOs.",
+          "why_it_matters": "Concentration of leadership power in individual executives heightens governance and valuation volatility across the Bay Area tech economy.",
+          "sources": [
+            {
+              "name": "Marketplace.org",
+              "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOcURpMjJ2ZUdXZzZncUFxTHF5YVYtdFh1Sl9vQzc3blJ2WTlVN3JiejFVS0JZRE1fallsVUhsVXNyTDVtdzFKVXhwaTZRdkRWWk5aZENwdzZGczlFMU5ndlgxbFNWQkJFb2NzbjJIYkYxdlppRXZDUWF6WUp0UEJ2amYyUUd1NDN0OHYzLXBuZ2Rxajl3WHIzY1U5WnBHQVdT?oc=5"
+            }
+          ]
+        },
+        {
+          "id": "oakland-black-panther-park",
+          "category": "World",
+          "headline": "Giant Black Panther mask installation draws crowds to Oakland park",
+          "summary": "A large Black Panther mask sculpture has appeared in an Oakland park, attracting local residents and Marvel fans to the site.",
+          "why_it_matters": "The pop-up installation highlights Oakland's enduring cultural ties to the Black Panther franchise and draws foot traffic to local parks.",
+          "sources": [
+            {
+              "name": "KTVU",
+              "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQeldraVRUb2VzRDdZRS1USXhNTF9nanNBME1GNEVIaFU2LVpSaXhvbl9wdUZMeDVvSEViY1NwbHdqNGg5MVA5a3EtcHY2dUUxV3pVT2IzaVd3UXNoT21MWVFTVDJUbGdUZktJRC1nUXQtSUw3NlIycDZNVl93cGhFX29mWFh2OW5UNzRrVEpFVGs5Z1RES2RRMWVvMVktNkZaQ19Md2gzdEZjSXk4WEc1T0N3bG9DMUhj?oc=5"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

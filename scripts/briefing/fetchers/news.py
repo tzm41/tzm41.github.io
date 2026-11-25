@@ -12,7 +12,7 @@ import feedparser
 import httpx
 from bs4 import BeautifulSoup
 
-from ..config import HTTP_TIMEOUT_SECONDS, NEWS_FEEDS, POSITIVE_NEWS_FEEDS, USER_AGENT
+from ..config import HTTP_TIMEOUT_SECONDS, LOCAL_NEWS_REGIONS, NEWS_FEEDS, POSITIVE_NEWS_FEEDS, USER_AGENT
 
 
 _WS_RE = re.compile(r"\s+")
@@ -151,3 +151,24 @@ async def fetch_positive_news() -> list[dict[str, Any]]:
         results = await asyncio.gather(*[_fetch_feed(client, cfg) for cfg in POSITIVE_NEWS_FEEDS])
     all_items = [item for batch in results for item in batch]
     return deduplicate_articles(all_items, max_items=8)
+
+
+async def fetch_local_news() -> list[dict[str, Any]]:
+    """Fetch local news candidates for each configured region."""
+    async with httpx.AsyncClient(
+        timeout=HTTP_TIMEOUT_SECONDS,
+        headers={"User-Agent": USER_AGENT},
+    ) as client:
+        regions_out: list[dict[str, Any]] = []
+        for region in LOCAL_NEWS_REGIONS:
+            feeds = region.get("feeds", [])
+            results = await asyncio.gather(*[_fetch_feed(client, cfg) for cfg in feeds])
+            all_items = [item for batch in results for item in batch]
+            regions_out.append(
+                {
+                    "id": region["id"],
+                    "name": region["name"],
+                    "articles": deduplicate_articles(all_items, max_items=12),
+                }
+            )
+    return regions_out

@@ -129,6 +129,12 @@ class SourceHealth(BaseModel):
     politics: HealthStatus = "ok"
 
 
+class LocalNewsRegion(BaseModel):
+    id: str
+    name: str
+    stories: list[NewsStory] = Field(default_factory=list)
+
+
 class DailyBriefing(BaseModel):
     date: str
     generated_at: str
@@ -140,6 +146,7 @@ class DailyBriefing(BaseModel):
     conflicts: ConflictsSection
     us_politics: PoliticsSection
     positive_news: NewsStory | None = None
+    local_news: list[LocalNewsRegion] = Field(default_factory=list)
 
 
 # --- Gemini structured output schema (LLM generates narratives/summaries only) ---
@@ -179,4 +186,8 @@ class GeminiBriefingSynthesis(BaseModel):
     )
     positive_news: NewsStory = Field(
         description="One uplifting, constructive, or breakthrough positive news story (science, health, conservation, or human progress) with a 2-3 sentence summary, why_it_matters, and grounded verbatim source URL."
+    )
+    local_news: list[LocalNewsRegion] = Field(
+        default_factory=list,
+        description="Local news grouped by region id/name from local_news_candidates (3 to 5 top local stories per region with 2-3 sentence summaries, why_it_matters, and verbatim source URLs).",
     )

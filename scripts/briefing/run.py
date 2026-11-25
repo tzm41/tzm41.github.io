@@ -12,7 +12,7 @@ from typing import Any
 from .config import ARCHIVE_DIR, DATA_DIR, INDEX_HISTORY_DAYS, INDEX_PATH, LATEST_PATH, MAX_ARCHIVE_DAYS
 from .fetchers.conflicts import fetch_conflicts
 from .fetchers.markets import fetch_markets
-from .fetchers.news import fetch_positive_news, fetch_top_news
+from .fetchers.news import fetch_local_news, fetch_positive_news, fetch_top_news
 from .fetchers.politics import fetch_politics
 from .schema import DailyBriefing, GeminiBriefingSynthesis, SourceHealth
 from .synthesize import _build_prompt, merge_synthesis, synthesize_briefing
@@ -124,7 +124,7 @@ async def run_pipeline(
     prior_conflicts = prior.get("conflicts") if prior else None
     same_day_conflicts = same_day.get("conflicts") if same_day else None
 
-    (raw_news, news_h), (raw_markets, mkt_h), (raw_conflicts, conf_h), (raw_politics, pol_h), raw_positive = (
+    (raw_news, news_h), (raw_markets, mkt_h), (raw_conflicts, conf_h), (raw_politics, pol_h), raw_positive, raw_local = (
         await asyncio.gather(
             fetch_top_news(),
             fetch_markets(prior_markets=prior_markets),
@@ -134,6 +134,7 @@ async def run_pipeline(
             ),
             fetch_politics(),
             fetch_positive_news(),
+            fetch_local_news(),
         )
     )
 
@@ -162,8 +163,9 @@ async def run_pipeline(
             "raw_conflicts": raw_conflicts,
             "raw_politics": raw_politics,
             "raw_positive": raw_positive,
+            "raw_local": raw_local,
             "prompt": _build_prompt(
-                target_date, raw_news, raw_markets, raw_conflicts, raw_politics, prior, raw_positive
+                target_date, raw_news, raw_markets, raw_conflicts, raw_politics, prior, raw_positive, raw_local
             ),
             "synthesis_schema": GeminiBriefingSynthesis.model_json_schema(),
         }
@@ -181,6 +183,7 @@ async def run_pipeline(
         raw_politics=raw_politics,
         prior_briefing=prior,
         raw_positive=raw_positive,
+        raw_local=raw_local,
     )
 
     if dry_run:

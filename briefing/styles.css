@@ -1289,6 +1289,43 @@ h3 {
   color: var(--ink);
 }
 
+/* ---------- Local News (Collapsible) ---------- */
+
+.collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--ink-secondary);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.collapse-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+
+.collapse-chevron {
+  display: inline-block;
+  font-size: 11px;
+  transition: transform 0.18s ease;
+}
+
+.collapse-btn[aria-expanded="true"] .collapse-chevron {
+  transform: rotate(180deg);
+}
+
+.local-news-body {
+  padding-top: 4px;
+}
+
 /* ---------- Footer & Skeletons ---------- */
 
 .site-footer {

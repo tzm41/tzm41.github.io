@@ -46,6 +46,17 @@ POSITIVE_NEWS_FEEDS: list[dict[str, str]] = [
     {"name": "Google News Positive Science", "category": "Science", "url": "https://news.google.com/rss/search?q=%28breakthrough+OR+conservation+OR+recovery+OR+milestone%29+when:3d&hl=en-US&gl=US&ceid=US:en"},
 ]
 
+# Configurable local news regions (add more regions here as needed)
+LOCAL_NEWS_REGIONS: list[dict[str, object]] = [
+    {
+        "id": "bay-area",
+        "name": "Bay Area",
+        "feeds": [
+            {"name": "Google News Bay Area", "category": "World", "url": "https://news.google.com/rss/search?q=%28%22Bay+Area%22+OR+%22San+Francisco%22+OR+%22Silicon+Valley%22+OR+Oakland+OR+%22San+Jose%22%29+when:2d&hl=en-US&gl=US&ceid=US:en"},
+        ],
+    },
+]
+
 # Stock market watchlist tickers (Yahoo Finance)
 MARKET_WATCHLIST: list[dict[str, str]] = [
     {"symbol": "^GSPC", "name": "S&P 500", "group": "Equity"},
