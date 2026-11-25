@@ -1,0 +1,39 @@
+---
+name: daily-briefing
+description: Fetch live news, stock market, global conflict, and US politics data for tzm41.github.io/briefing/, synthesize the daily intelligence briefing directly using the active Antigravity model, validate the JSON schema, and publish to GitHub Pages.
+---
+# Daily Briefing Automation Skill
+
+Use this skill whenever the user asks to generate, refresh, or publish their daily news & trends briefing for `tzm41/tzm41.github.io`.
+
+## Workflow
+
+1. **Sync repository** (run from the `tzm41.github.io` repo root):
+   ```bash
+   git pull --rebase origin master
+   ```
+2. **Fetch live raw data** (uses RSS, yfinance, GDELT, Polymarket, with automatic Google News & Google Finance public fallbacks):
+   ```bash
+   python3 -m scripts.briefing.run --fetch-only /tmp/raw_briefing.json
+   ```
+3. **Synthesize with Antigravity's active model** (no `GEMINI_API_KEY` needed):
+   - Read `/tmp/raw_briefing.json` (specifically `prompt` and `synthesis_schema`).
+   - Produce a strictly grounded, neutral JSON object matching `synthesis_schema` (`GeminiBriefingSynthesis`):
+     - `executive_brief`: 3–5 crisp cross-domain morning bullets
+     - `top_news`: 6–10 deduplicated stories with 2–3 sentence summaries, `why_it_matters`, and verbatim URLs from `raw_news`
+     - `market_narrative` & `market_regime` (`Risk-On` | `Risk-Off` | `Mixed` | `Volatility Spike`)
+     - `conflicts_overview` & `conflict_theaters` (one per tracked theater `id`)
+     - `politics_pulse_summary`, `legislative_and_executive` (3–5 items), and `trending_topics` (3–5 items)
+   - Write the raw JSON (no markdown fences) to `/tmp/synthesis.json`.
+4. **Validate, merge deterministic numbers, and write `briefing/data/`**:
+   ```bash
+   python3 -m scripts.briefing.run --apply-synthesis /tmp/raw_briefing.json /tmp/synthesis.json
+   rm -f /tmp/raw_briefing.json /tmp/synthesis.json
+   ```
+5. **Commit and push** to GitHub Pages:
+   ```bash
+   git add briefing/data/
+   git commit -m "chore(briefing): update daily briefing ($(date -u +%Y-%m-%d))"
+   git push origin master
+   ```
+6. Report a concise summary of the published edition and link to `https://tzm41.github.io/briefing/`.
