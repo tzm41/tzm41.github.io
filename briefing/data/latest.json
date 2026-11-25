@@ -1,6 +1,6 @@
 {
   "date": "2026-11-25",
-  "generated_at": "2026-11-25T05:35:07Z",
+  "generated_at": "2026-11-25T05:41:07Z",
   "synthesis_mode": "extractive_fallback",
   "source_health": {
     "news": "ok",
@@ -383,9 +383,9 @@
         "symbol": "CL=F",
         "name": "WTI Crude",
         "group": "Commodities",
-        "price": 80.55,
-        "change_pct": -1.83,
-        "change_5d_pct": -3.25,
+        "price": 80.66,
+        "change_pct": -1.69,
+        "change_5d_pct": -3.12,
         "sparkline_30d": [
           97.97,
           101.41,
@@ -416,16 +416,16 @@
           83.98,
           80.17,
           82.05,
-          80.55
+          80.66
         ]
       },
       {
         "symbol": "GC=F",
         "name": "Gold",
         "group": "Commodities",
-        "price": 3544.6,
-        "change_pct": -0.49,
-        "change_5d_pct": -5.27,
+        "price": 3534.2,
+        "change_pct": -0.78,
+        "change_5d_pct": -5.55,
         "sparkline_30d": [
           4170.1,
           4181.1,
@@ -456,16 +456,16 @@
           3515.4,
           3651.4,
           3561.9,
-          3544.6
+          3534.2
         ]
       },
       {
         "symbol": "BTC-USD",
         "name": "Bitcoin",
         "group": "Crypto",
-        "price": 59033.07,
-        "change_pct": -3.56,
-        "change_5d_pct": -4.63,
+        "price": 58945.79,
+        "change_pct": -3.7,
+        "change_5d_pct": -4.78,
         "sparkline_30d": [
           80006.66,
           80805.08,
@@ -496,7 +496,7 @@
           60094.09,
           61161.91,
           61210.98,
-          59033.07
+          58945.79
         ]
       }
     ],
@@ -598,9 +598,9 @@
             "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOanVmQXA3NXR4MWsyOEFZM0hWWDRGZVU0TVVDQkZmSWhFUFNqTHlObGJyUGI1QmdWNmNFVklIQ1JzOEdfbUdaWnpmM1lMcUlTckVxeDVxQ24xb0o3TXUzRUNzMEF5ZzRzcUJQMl9hbjMwdDVaZnpRSmxKM19KZG81OE41WVZ1WGl10gGLAUFVX3lxTE5hN1E1REh0bXFwWnZ5TTdJZFFVaGMwcEl5UkU0eWZtN1R1aUdfVzBBVWpuMUxjR3c5UHpwNWUyMDkydWxwQlFpby04VWJ2VlpETWdrSWxGYS10LXRVN3BrWGVFYVFiNHA3QkY3RzN6QldwcTRZRVRDTzJFT2FwRW1kbS1ZT0gzdWVZWWs?oc=5"
           },
           {
-            "headline": "Russian drone flies into Poland during overnight strikes on Ukraine, Warsaw says - ABC News - Breaking News, Latest News and Videos",
-            "source": "ABC News - Breaking News, Latest News and Videos",
-            "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxPeUIxeHFScUhhcU90TUF6dTgxVkN2TUJEWTU0SnNuMjR1Wk5LQkRueXd1azNuVW9iS3QzbjJVazB5MDBieFNEQUhVcEJGcjFYVkhuMDhGckREMWxoVC0wMDV6TXBjN3hqYlJiYVRJbHdRMHZncEQ3NGRUMFFYN1N2VXRYUkVZTjdSLUVtZEhfcUk0aWp1RTcyN0ZpOHg2al9aWnFLUEF0NWtxWXktWmR4ZlpB0gG3AUFVX3lxTE45dDBKR2VtY0ZMRU5UVDFrUE5iaFdkb0xET1h3ZFRRTEpLOWZ6S3ZXalJldE52WkF2cndyQlZRWVQyNjVYTHNWdFZheHJWNTJ0aU5tSjZZT3d2ZjNwbkhURWx4MHFNYUJPbGNhay1DN2xERkg5a1hXN2ZnYjM2LXVCVmhaaGNPTmNaMy1GNFZMUlV6Y1RJbmx2OElKbldXWmNPM0hqeEtqWlV1Y1hOblRQV0Z2a1R6aw?oc=5"
+            "headline": "Radio Offers Russian Troops Classic Rock, Nostalgia — and Pleas to Surrender - The New York Times",
+            "source": "The New York Times",
+            "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNaFhSMWNKOHQyYm5UamVCemJkVFRTN18zam5HOHEwVmdoUkF1elBZLTNqWElfMVJxdVl3cHZmeC1XZmRxeEFfb3h2bzBOOTdKQ3lrcjExTlJBYnZodnlaM3pUQnRsYWZxaDN5Zm1NcVd0UHU0VlpsbjV3UXpCdGJ3NWRzM0RMbkV5TEQ4UGFSYw?oc=5"
           }
         ]
       },
@@ -630,9 +630,9 @@
             "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9Qdkg3Q0tiSDRxSUJLX1VBMGh2blRhM1c5eHoydTItSDIxOFBRZERRbEp4RjNHQjZjaVYyLW5zdUJoNDFFbEF0SjJYZ1F0NXdwWlZYaVF1OWF3S3VQODZFWmFqRHhHdXFKNzJZZGo3MHhLc1FuSVR3?oc=5"
           },
           {
-            "headline": "Houthi rebels close in on the city of Aden as Yemeni forces dig in behind a fortified line - AP News",
-            "source": "AP News",
-            "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOLVEzelRwd2pzaWFoRmhiVTIwb2JRem9VRFgyTkFlUVRNOHh1bVJLRnNoTm90SnhscmpVcW56STVUaTBZS3ZsSUJZZUpDSTBidHp1Wl9DbEt4WlhuZjV1RFZGUnRkTFAwMVpEcGdJZDZXYkNncGFwZUp6SEpGRjZ1bXN2aHJmNTZaazJRdDhPdHFZUHltbXVySjIxMTlocDVSc1FVNmEyNXZNbnhGLTN5Zlhwc0RRUQ?oc=5"
+            "headline": "Latest news on the war in the Middle East. Iran: Strait of Hormuz virtually paralysed, 400 ships waiting. Houthis strike skyscraper in Riyadh - Il Sole 24 ORE",
+            "source": "Il Sole 24 ORE",
+            "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQQnV0LVNFbXRtX0hEZWdlSUtwSlRxVy1MOE5SMzJYVVRVYkRzQkZidklrcDRFQWt4TXlPeTgwWS1Ub0F3Mkl0R2VVQW9zbkY4blgxb2xiaWZXaWxRWGJna3lMR3QyOUQydWhQUVlub0dyOHpLUDIxUmpfT2F0MWphMzFhZXFDdDRhS0xzcXdsS1htbThlNnREV0hyaFVwM191cGpJR0NrcTFLZXR3T1ZpRmFSWGpsSEZEZVBnVW5ycw?oc=5"
           }
         ]
       },
@@ -640,24 +640,10 @@
         "id": "indo-pacific",
         "name": "Indo-Pacific / Taiwan Strait",
         "region": "Asia-Pacific",
-        "status": "escalating",
-        "trend_7d": "up",
-        "intensity_score": 33.0,
-        "intensity_series_14d": [
-          42.0,
-          3.0,
-          12.0,
-          3.0,
-          5.0,
-          4.0,
-          6.0,
-          39.0,
-          8.0,
-          29.0,
-          13.0,
-          90.0,
-          33.0
-        ],
+        "status": "elevated",
+        "trend_7d": "flat",
+        "intensity_score": 60.0,
+        "intensity_series_14d": [],
         "summary": "US, Philippines plan improvements to airport near Taiwan - Stars and Stripes",
         "timeline_events": [
           {
@@ -676,9 +662,9 @@
             "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQSmJybnpQYmNmMmFqamZpNEJGSVpDTERNX0JKd2NTQzRXdXlUQWtVT2M3Y00xVHUyeVZ2NkU0eC0xOW42WHlxRGJPSnVid3Zra2Z5ckduVWtERDVkcTkxT2lheDlteHBFTDEyQnpTUmt5YjVyVTYxam1yMW5qaTRBaW10Umg5OEdraWdNV3UtVFBRUlZNZGJ0V2hEcFBxOTNtclVXYWpfQ3VwaGtpekhqYnJscGpLUDJZTHFUNdIBwgFBVV95cUxNbnh6UENOMDV0QnFRdFVJc3BJb3prY2RNYzR5OHh0UzNwTUg2bGg1NEtMbmUwbDZ5MTNaSGlvR29Pd0pfNzd6emtlaWIwcnBwWHVqQXpsdHFfT05aa1N1NUMtSzduOW5WZ3RSTTAxNUxqRzRJNnd3THVaYlJjWWFRSVBuSjJnVHJPOTk4T3UyYTl5VWpNSlB6TVJ2TTRFc3ctbXVld2dQNFpKanlPTkRDam12UTB4S0NCVjdZOEJscUtRdw?oc=5"
           },
           {
-            "headline": "Why China Is Watching Taiwan’s Local Elections - The Diplomat – Asia-Pacific Current Affairs Magazine",
+            "headline": "With Qianfan, China Has Its Answer to Starlink - The Diplomat – Asia-Pacific Current Affairs Magazine",
             "source": "The Diplomat – Asia-Pacific Current Affairs Magazine",
-            "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQR0k3RUFxWFVRZjBUZmpaUFhVTkR3MUNCRlFfcDJYcXNqb1RVMFR0Q28tQWV3VzFudXpyVC16Y1dkNGpZazFsazVidXA0QnBEQnI4RVhGTjFOQlhqMmRrVW9RWTJSZ1BwbzhTVFNSc1JUTU9SODFXUTd5YUtKRGl0a19tcmQ?oc=5"
+            "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPT1VwbnRsZ1F6NmVkX2pxXzVMYkJFX0R3SEZqdm5iaVRhSWVkck9DVGZSOW02T2p2WFBEVnNIWWFOaVdIcWtOSnprTUY1bE1DbG1SeTZoWDFobTBSajRLZ3RtVnNqdkVKcnpndHZxZ2U0dzhwYlhSUDJFdGdYb0Jud2VPUm8?oc=5"
           }
         ]
       },
@@ -748,14 +734,14 @@
         "question": "Will David Lisnard win the 2027 French presidential election?",
         "yes_prob": 0.2505,
         "delta_24h": 0.0145,
-        "volume_usd": 183686316.45,
+        "volume_usd": 183687740.84,
         "url": "https://polymarket.com/event/next-french-presidential-election"
       },
       {
         "question": "Will Benjamin Netanyahu be the next Prime Minister of Israel?",
         "yes_prob": 0.2225,
         "delta_24h": -0.0115,
-        "volume_usd": 94343775.16,
+        "volume_usd": 94343879.12,
         "url": "https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election"
       },
       {
@@ -776,7 +762,7 @@
         "question": "US announces end of Iranian blockade by December 31, 2026?",
         "yes_prob": 0.1315,
         "delta_24h": -0.026,
-        "volume_usd": 55224815.53,
+        "volume_usd": 55227764.07,
         "url": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080"
       },
       {
