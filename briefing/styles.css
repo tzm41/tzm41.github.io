@@ -512,27 +512,33 @@ h3 {
   min-width: 0;
 }
 
-.sentiment-ring {
+.sentiment-gauge {
   position: relative;
-  display: inline-block;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  border: 2.5px solid var(--sent-neutral);
-  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 14px;
   flex-shrink: 0;
   cursor: default;
 }
 
-.sentiment-ring[data-sentiment="very_negative"] { border-color: var(--sent-very-neg); }
-.sentiment-ring[data-sentiment="negative"] { border-color: var(--sent-neg); }
-.sentiment-ring[data-sentiment="slightly_negative"] { border-color: var(--sent-slight-neg); }
-.sentiment-ring[data-sentiment="neutral"] { border-color: var(--sent-neutral); }
-.sentiment-ring[data-sentiment="slightly_positive"] { border-color: var(--sent-slight-pos); }
-.sentiment-ring[data-sentiment="positive"] { border-color: var(--sent-pos); }
-.sentiment-ring[data-sentiment="very_positive"] { border-color: var(--sent-very-pos); }
+.half-ring-svg {
+  width: 22px;
+  height: 13px;
+  display: block;
+  overflow: visible;
+}
 
-.sentiment-ring[data-tooltip]::after {
+.half-ring-track {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.7;
+}
+
+.sentiment-gauge[data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
   left: 50%;
@@ -554,8 +560,8 @@ h3 {
   z-index: 20;
 }
 
-.sentiment-ring[data-tooltip]:hover::after,
-.sentiment-ring[data-tooltip]:focus-visible::after {
+.sentiment-gauge[data-tooltip]:hover::after,
+.sentiment-gauge[data-tooltip]:focus-visible::after {
   opacity: 0.96;
   transform: translateX(-50%) translateY(0);
 }
@@ -733,58 +739,31 @@ h3 {
   color: var(--accent);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .source-chip[data-bias]::after {
-    content: attr(data-bias);
-    position: absolute;
-    left: 50%;
-    bottom: calc(100% + 5px);
-    transform: translateX(-50%) translateY(2px);
-    background: var(--surface);
-    color: var(--ink-muted);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 2px 7px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 400;
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    box-shadow: var(--shadow-sm);
-    transition: opacity 0.16s ease, transform 0.16s ease;
-    z-index: 15;
-  }
-
-  .source-chip[data-bias]:hover::after,
-  .source-chip[data-bias]:focus-visible::after {
-    opacity: 0.94;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  .source-chip[data-bias-tone="center"]::after { color: var(--bias-center); }
-  .source-chip[data-bias-tone="left"]::after { color: var(--bias-left); }
-  .source-chip[data-bias-tone="right"]::after { color: var(--bias-right); }
-  .source-chip[data-bias-tone="state"]::after { color: var(--bias-state); }
-}
-
 .source-popover {
   position: fixed;
   z-index: 60;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background: var(--surface);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
-  padding: 6px 10px;
+  padding: 5px 9px;
   box-shadow: var(--shadow-md);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10.5px;
   max-width: calc(100vw - 24px);
 }
 
+.source-popover.is-hover {
+  pointer-events: none;
+  opacity: 0.94;
+}
+
 .source-popover-bias {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: var(--ink-muted);
   font-weight: 500;
 }
@@ -798,6 +777,8 @@ h3 {
   color: var(--accent);
   font-weight: 600;
   white-space: nowrap;
+  padding-left: 6px;
+  border-left: 1px solid var(--border);
 }
 
 /* ---------- Markets & Sector Heatmap ---------- */

@@ -435,28 +435,50 @@ function isContinuedFromPrior(story, priorStories = []) {
   return false;
 }
 
+function buildHalfRingSvg(pos, dotColor) {
+  // pos in [0, 1]: 0 = far left, 0.5 = top center, 1 = far right
+  const t = Math.max(0.05, Math.min(0.95, Number(pos ?? 0.5)));
+  const angle = Math.PI * (1 - t);
+  const cx = 12 + 9 * Math.cos(angle);
+  const cy = 12 - 9 * Math.sin(angle);
+  return `
+    <svg class="half-ring-svg" viewBox="0 0 24 15" aria-hidden="true">
+      <path class="half-ring-track" d="M 3 12 A 9 9 0 0 1 21 12"></path>
+      <circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="2.8" fill="${dotColor}" stroke="var(--surface)" stroke-width="1.1"></circle>
+    </svg>
+  `;
+}
+
 const SOURCE_BIAS_RULES = [
-  [/reuters|ap news|associated press/i, "Center · Wire", "center"],
-  [/bloomberg|cnbc|financial times|ft中文网|wall street journal|wsj|marketplace/i, "Center · Business", "center"],
-  [/bbc/i, "Center-Left · Public", "left"],
-  [/the hill|politico|courthouse news|stars and stripes/i, "Center", "center"],
-  [/deutsche welle|rfi|al jazeera/i, "Center-Left · Int'l public", "left"],
-  [/npr/i, "Lean Left · Public", "left"],
-  [/new york times|纽约时报|washington post|sacramento bee|ktvu|abc news/i, "Lean Left", "left"],
-  [/guardian/i, "Left-Center", "left"],
-  [/fox news|new york post/i, "Lean Right", "right"],
-  [/arstechnica|ars technica|the verge|good news network|solidot/i, "Center · Tech / Specialty", "center"],
-  [/中新网|新华社|人民日报|外交部|cgtn|global times/i, "State-affiliated (CN)", "state"],
-  [/澎湃|thepaper/i, "State-owned (CN) · Urban", "state"],
-  [/财新|caixin|第一财经|yicai|界面|jiemian/i, "Business / Market (CN)", "center"],
-  [/google news/i, "Aggregator", "neutral"],
+  [/reuters|ap news|associated press/i, "Center · Wire", "center", 0.5],
+  [/bloomberg|cnbc|financial times|ft中文网|wall street journal|wsj|marketplace/i, "Center · Business", "center", 0.5],
+  [/bbc/i, "Center-Left · Public", "left", 0.36],
+  [/the hill|politico|courthouse news|stars and stripes/i, "Center", "center", 0.5],
+  [/deutsche welle|rfi|al jazeera/i, "Center-Left · Int'l public", "left", 0.36],
+  [/npr/i, "Lean Left · Public", "left", 0.24],
+  [/new york times|纽约时报|washington post|sacramento bee|ktvu|abc news/i, "Lean Left", "left", 0.24],
+  [/guardian/i, "Left-Center", "left", 0.28],
+  [/fox news|new york post/i, "Lean Right", "right", 0.78],
+  [/arstechnica|ars technica|the verge|good news network|solidot/i, "Center · Tech / Specialty", "center", 0.5],
+  [/中新网|新华社|人民日报|外交部|cgtn|global times/i, "State-affiliated (CN)", "state", 0.5],
+  [/澎湃|thepaper/i, "State-owned (CN) · Urban", "state", 0.5],
+  [/财新|caixin|第一财经|yicai|界面|jiemian/i, "Business / Market (CN)", "center", 0.5],
+  [/google news/i, "Aggregator", "neutral", 0.5],
 ];
+
+const BIAS_TONE_COLOR = {
+  center: "var(--bias-center)",
+  left: "var(--bias-left)",
+  right: "var(--bias-right)",
+  state: "var(--bias-state)",
+  neutral: "var(--ink-muted)",
+};
 
 function lookupSourceBias(name) {
   const s = String(name || "").trim();
   if (!s) return null;
-  for (const [re, label, tone] of SOURCE_BIAS_RULES) {
-    if (re.test(s)) return { text: label, tone };
+  for (const [re, label, tone, pos] of SOURCE_BIAS_RULES) {
+    if (re.test(s)) return { text: label, tone, pos };
   }
   return null;
 }
@@ -464,20 +486,24 @@ function lookupSourceBias(name) {
 function renderSourceChip(src) {
   const bias = lookupSourceBias(src.name);
   const biasAttr = bias
-    ? ` data-bias="${escapeHtml(bias.text)}" data-bias-tone="${escapeHtml(bias.tone)}" title="${escapeHtml(bias.text)}"`
+    ? ` data-bias="${escapeHtml(bias.text)}" data-bias-tone="${escapeHtml(bias.tone)}" data-bias-pos="${bias.pos}"`
     : "";
   return `<a class="source-chip"${biasAttr} href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`;
 }
 
-const SENTIMENT_LABELS = {
-  very_negative: "Very Negative",
-  negative: "Negative",
-  slightly_negative: "Slightly Negative",
-  neutral: "Neutral",
-  slightly_positive: "Slightly Positive",
-  positive: "Positive",
-  very_positive: "Very Positive",
+const SENTIMENT_META = {
+  very_negative: { label: "Very Negative", pos: 0.06, color: "var(--sent-very-neg)" },
+  negative: { label: "Negative", pos: 0.2, color: "var(--sent-neg)" },
+  slightly_negative: { label: "Slightly Negative", pos: 0.35, color: "var(--sent-slight-neg)" },
+  neutral: { label: "Neutral", pos: 0.5, color: "var(--sent-neutral)" },
+  slightly_positive: { label: "Slightly Positive", pos: 0.65, color: "var(--sent-slight-pos)" },
+  positive: { label: "Positive", pos: 0.8, color: "var(--sent-pos)" },
+  very_positive: { label: "Very Positive", pos: 0.94, color: "var(--sent-very-pos)" },
 };
+
+const SENTIMENT_LABELS = Object.fromEntries(
+  Object.entries(SENTIMENT_META).map(([k, v]) => [k, v.label])
+);
 
 const NEGATIVE_SENTIMENT_RE =
   /\b(guilty|convict\w*|outage|code red|sell-?off|slump|plunge|slide[sd]?|drop(?:s|ped)?|fall(?:s|ing)?|fell|dead|death\w*|kill\w*|strike\w*|attack\w*|cyberattack\w*|hack\w*|war|blockade|paralys\w*|flood\w*|lawsuit|challenge|fakes?|smear|disinformation|scandal|resign\w*|tariff\w*|friction|scrutiny|probe|investigat\w*|deport\w*|crash|crisis|decline|violat\w*|sanction\w*)\b|加征关税|关税|攻击|抹黑|判死刑|窃取|摩擦|虚假信息|危机|冲突/gi;
@@ -515,9 +541,9 @@ function inferCategoryFromText(text) {
 }
 
 function renderSentimentRing(sentiment) {
-  const key = SENTIMENT_LABELS[sentiment] ? sentiment : "neutral";
-  const label = SENTIMENT_LABELS[key];
-  return `<span class="sentiment-ring" tabindex="0" role="img" aria-label="Sentiment: ${escapeHtml(label)}" data-sentiment="${escapeHtml(key)}" data-tooltip="${escapeHtml(label)}" title="${escapeHtml(label)}"></span>`;
+  const key = SENTIMENT_META[sentiment] ? sentiment : "neutral";
+  const { label, pos, color } = SENTIMENT_META[key];
+  return `<span class="sentiment-gauge" tabindex="0" role="img" aria-label="Sentiment: ${escapeHtml(label)}" data-sentiment="${escapeHtml(key)}" data-tooltip="${escapeHtml(label)}" title="${escapeHtml(label)}">${buildHalfRingSvg(pos, color)}</span>`;
 }
 
 function renderNewsCard(story, badgeLabel, continued) {
@@ -1318,8 +1344,51 @@ function initSourceBiasPopover() {
 
   const hide = () => {
     pop.classList.add("hidden");
+    pop.classList.remove("is-hover");
     activeChip = null;
   };
+
+  const showForChip = (chip, includeOpenLink) => {
+    activeChip = chip;
+    const bias = chip.dataset.bias || "";
+    const tone = chip.dataset.biasTone || "neutral";
+    const pos = Number(chip.dataset.biasPos ?? 0.5);
+    const color = BIAS_TONE_COLOR[tone] || BIAS_TONE_COLOR.neutral;
+    const href = chip.getAttribute("href") || "#";
+    const gauge = buildHalfRingSvg(pos, color);
+    const openLink = includeOpenLink
+      ? `<a class="source-popover-link" href="${safeUrl(href)}" target="_blank" rel="noopener noreferrer">Open &nearr;</a>`
+      : "";
+    pop.classList.toggle("is-hover", !includeOpenLink);
+    pop.innerHTML = `<span class="source-popover-bias" data-bias-tone="${escapeHtml(tone)}">${gauge}<span>${escapeHtml(bias)}</span></span>${openLink}`;
+    pop.classList.remove("hidden");
+
+    const rect = chip.getBoundingClientRect();
+    const popRect = pop.getBoundingClientRect();
+    const left = Math.max(
+      12,
+      Math.min(window.innerWidth - popRect.width - 12, rect.left + rect.width / 2 - popRect.width / 2)
+    );
+    const top = Math.max(12, rect.top - popRect.height - 8);
+    pop.style.left = `${left.toFixed(1)}px`;
+    pop.style.top = `${top.toFixed(1)}px`;
+  };
+
+  // Desktop mouse hover
+  document.addEventListener("pointerover", (e) => {
+    if (e.pointerType === "touch") return;
+    const chip = e.target.closest(".source-chip[data-bias]");
+    if (!chip) return;
+    showForChip(chip, false);
+  });
+
+  document.addEventListener("pointerout", (e) => {
+    if (e.pointerType === "touch") return;
+    const chip = e.target.closest(".source-chip[data-bias]");
+    if (chip && chip === activeChip && pop.classList.contains("is-hover")) {
+      hide();
+    }
+  });
 
   document.addEventListener(
     "pointerdown",
@@ -1332,6 +1401,7 @@ function initSourceBiasPopover() {
     { passive: true }
   );
 
+  // Touch tap
   document.addEventListener("click", (e) => {
     const chip = e.target.closest(".source-chip[data-bias]");
     if (!chip) return;
@@ -1341,27 +1411,11 @@ function initSourceBiasPopover() {
     if (!isTouch) return;
 
     e.preventDefault();
-    if (activeChip === chip && !pop.classList.contains("hidden")) {
+    if (activeChip === chip && !pop.classList.contains("hidden") && !pop.classList.contains("is-hover")) {
       hide();
       return;
     }
-
-    activeChip = chip;
-    const bias = chip.dataset.bias || "";
-    const tone = chip.dataset.biasTone || "neutral";
-    const href = chip.getAttribute("href") || "#";
-    pop.innerHTML = `<span class="source-popover-bias" data-bias-tone="${escapeHtml(tone)}">${escapeHtml(bias)}</span><a class="source-popover-link" href="${safeUrl(href)}" target="_blank" rel="noopener noreferrer">Open &nearr;</a>`;
-    pop.classList.remove("hidden");
-
-    const rect = chip.getBoundingClientRect();
-    const popRect = pop.getBoundingClientRect();
-    const left = Math.max(
-      12,
-      Math.min(window.innerWidth - popRect.width - 12, rect.left + rect.width / 2 - popRect.width / 2)
-    );
-    const top = Math.max(12, rect.top - popRect.height - 8);
-    pop.style.left = `${left.toFixed(1)}px`;
-    pop.style.top = `${top.toFixed(1)}px`;
+    showForChip(chip, true);
   });
 
   window.addEventListener("scroll", hide, { passive: true });
