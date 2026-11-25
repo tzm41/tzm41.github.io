@@ -1,6 +1,6 @@
 {
   "date": "2026-11-25",
-  "generated_at": "2026-11-25T05:41:07Z",
+  "generated_at": "2026-11-25T05:45:16Z",
   "synthesis_mode": "extractive_fallback",
   "source_health": {
     "news": "ok",
@@ -11,7 +11,7 @@
   "executive_brief": [
     "Huawei found guilty of stealing trade secrets but acquitted of racketeering",
     "US attorney general dodges questions about Nvidia investigation",
-    "Microsoft’s historic cloud outage exposed an engineering “fog of war” - Ars Technica"
+    "Stock futures slip as traders await key inflation report, assess tech sell-off: Live updates - CNBC"
   ],
   "top_news": [
     {
@@ -55,6 +55,23 @@
     {
       "id": "story-3",
       "category": "Economy",
+      "headline": "Stock futures slip as traders await key inflation report, assess tech sell-off: Live updates - CNBC",
+      "summary": "Stock futures slip as traders await key inflation report, assess tech sell-off: Live updates CNBC Nvidia live updates: Nvidia stock falls as exuberance fades after Jensen Huang's return as CEO Yahoo Finance Stock Markets Slip as Nvidia and A.I. Stocks Erase Some of Monday’s Rally The New York Times Stock Market News,…",
+      "why_it_matters": "Auto-aggregated headline (extractive mode — configure GEMINI_API_KEY for full synthesis).",
+      "sources": [
+        {
+          "name": "Google News Business",
+          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5Jd2QwOVppNGtIY3I5ZXgyVmZKQzJ3SzZvVnVydTJHQnliRXBCR2RiQTBMeXExQU16TnpPQzkwWVl2Q0FKV055NzJBNE4tMGQ0UmlFMFdnQ3o1OG9tR2JNd1Z6Ymk5cGtDVFBxZjJPT19jblIxZ2lwRdIBfkFVX3lxTE5qZGNISDFwMjNGQUoxc3ZlT1JFR1A5Zk1oTmJSX1kxWVFOWUZscTZGTWh2cHdfMW92SzVCbXdBR2o3YWJUVzN2TXhfOUdhSUZpdFNyNXBaUjdseWpuQklwaVgzaUlGdkJqNm54TWEyVTluWVFYVTZVMVptNV9xQQ?oc=5"
+        },
+        {
+          "name": "CNBC Top News",
+          "url": "https://www.cnbc.com/2026/11/24/stock-market-today-live-updates-.html"
+        }
+      ]
+    },
+    {
+      "id": "story-4",
+      "category": "Economy",
       "headline": "Microsoft’s historic cloud outage exposed an engineering “fog of war” - Ars Technica",
       "summary": "Microsoft’s historic cloud outage exposed an engineering “fog of war” Ars Technica EXCLUSIVE: Microsoft declares 'Code Red' after historic outage, internal memos show Reuters Microsoft declares a code red in the middle of a 'Patchpocalypse' Yahoo Finance Microsoft's Outlook outage came down to a perfect storm Windows…",
       "why_it_matters": "Auto-aggregated headline (extractive mode — configure GEMINI_API_KEY for full synthesis).",
@@ -70,7 +87,7 @@
       ]
     },
     {
-      "id": "story-4",
+      "id": "story-5",
       "category": "World",
       "headline": "Russia's own figures show almost 500,000 deaths in war in Ukraine",
       "summary": "Leaked data reveal how the full-scale invasion of Ukraine has fundamentally changed mortality patterns in Russia.",
@@ -83,7 +100,7 @@
       ]
     },
     {
-      "id": "story-5",
+      "id": "story-6",
       "category": "World",
       "headline": "Kilmar Ábrego García leaving US for Spain, ending Trump deportation battle",
       "summary": "His deportation to El Salvador and return to the US became a flash point in the debate over President Donald Trump's immigration agenda.",
@@ -96,7 +113,7 @@
       ]
     },
     {
-      "id": "story-6",
+      "id": "story-7",
       "category": "World",
       "headline": "Indian government has 'lost the plot', says 'cockroach' leader barred from UK flight",
       "summary": "Saurav Das says immigration authorities at Delhi airport told him his passport had been flagged.",
@@ -109,7 +126,7 @@
       ]
     },
     {
-      "id": "story-7",
+      "id": "story-8",
       "category": "World",
       "headline": "Land mine casualties soar in Syria, two years after war",
       "summary": "Nearly 1,000 children are among those killed or injured by explosives left over from the conflict, figures show.",
@@ -118,19 +135,6 @@
         {
           "name": "BBC World",
           "url": "https://www.bbc.co.uk/news/articles/c893rl37ywdgo?at_medium=RSS&at_campaign=rss"
-        }
-      ]
-    },
-    {
-      "id": "story-8",
-      "category": "World",
-      "headline": "Thomas Markle indicted in US for possessing child sex abuse images",
-      "summary": "The FBI arrested Markle on 6 November after a search of a storage unit he had allegedly rented in Los Angeles uncovered the abuse material.",
-      "why_it_matters": "Auto-aggregated headline (extractive mode — configure GEMINI_API_KEY for full synthesis).",
-      "sources": [
-        {
-          "name": "BBC World",
-          "url": "https://www.bbc.co.uk/news/articles/crwy4egxn592o?at_medium=RSS&at_campaign=rss"
         }
       ]
     }
@@ -383,9 +387,9 @@
         "symbol": "CL=F",
         "name": "WTI Crude",
         "group": "Commodities",
-        "price": 80.66,
-        "change_pct": -1.69,
-        "change_5d_pct": -3.12,
+        "price": 80.59,
+        "change_pct": -1.78,
+        "change_5d_pct": -3.21,
         "sparkline_30d": [
           97.97,
           101.41,
@@ -416,16 +420,16 @@
           83.98,
           80.17,
           82.05,
-          80.66
+          80.59
         ]
       },
       {
         "symbol": "GC=F",
         "name": "Gold",
         "group": "Commodities",
-        "price": 3534.2,
-        "change_pct": -0.78,
-        "change_5d_pct": -5.55,
+        "price": 3537.3,
+        "change_pct": -0.69,
+        "change_5d_pct": -5.47,
         "sparkline_30d": [
           4170.1,
           4181.1,
@@ -456,16 +460,16 @@
           3515.4,
           3651.4,
           3561.9,
-          3534.2
+          3537.3
         ]
       },
       {
         "symbol": "BTC-USD",
         "name": "Bitcoin",
         "group": "Crypto",
-        "price": 58945.79,
-        "change_pct": -3.7,
-        "change_5d_pct": -4.78,
+        "price": 58933.67,
+        "change_pct": -3.72,
+        "change_5d_pct": -4.79,
         "sparkline_30d": [
           80006.66,
           80805.08,
@@ -496,7 +500,7 @@
           60094.09,
           61161.91,
           61210.98,
-          58945.79
+          58933.67
         ]
       }
     ],
@@ -580,17 +584,17 @@
         "trend_7d": "flat",
         "intensity_score": 60.0,
         "intensity_series_14d": [],
-        "summary": "Russian Offensive Campaign Assessment, November 23, 2026 - Institute for the Study of War",
+        "summary": "Russia’s war dead: the hidden toll of the Ukraine conflict - The Guardian",
         "timeline_events": [
-          {
-            "headline": "Russian Offensive Campaign Assessment, November 23, 2026 - Institute for the Study of War",
-            "source": "Institute for the Study of War",
-            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQRDMwdjdWRXU2aEVmSVRTMmxFWWxWc2JsUDE5d1pDdlNsSWh6YWpJNHpsb2dHSENvd2Y5Q1JRVmx6T1hJSTlhVzFVYkl6MmdwZVZWZHRIdjNPMURyQ0sxZFlhaGJxRzM4a2dIb1hySlFjcmFQRmNUTEtqcGFYNnotT0N3azJTOVpuQks1NkotSlM0S2hmVURBZlNPX1BnbUUtTk85N0NtTW0wNXQ5?oc=5"
-          },
           {
             "headline": "Russia’s war dead: the hidden toll of the Ukraine conflict - The Guardian",
             "source": "The Guardian",
             "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQcHEzaFFZSHUwdzN0LS1RbTVLRlF1MFpWblFUV2l1eUtybk9fOHJzNmQzeW8zSi13TEdMWGtYTE9UTFNHbGx4UUZ6Z2UyRlJQUU1kY3hKNmtsV3V1ZkVsWWR3UmxvdDlud0NQa2VRRldnWFQwdV85R0RNZTVKaTJKbko0UV9Qa3FLR0J1S1FNSkZxM01k?oc=5"
+          },
+          {
+            "headline": "Russian Offensive Campaign Assessment, November 23, 2026 - Institute for the Study of War",
+            "source": "Institute for the Study of War",
+            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQRDMwdjdWRXU2aEVmSVRTMmxFWWxWc2JsUDE5d1pDdlNsSWh6YWpJNHpsb2dHSENvd2Y5Q1JRVmx6T1hJSTlhVzFVYkl6MmdwZVZWZHRIdjNPMURyQ0sxZFlhaGJxRzM4a2dIb1hySlFjcmFQRmNUTEtqcGFYNnotT0N3azJTOVpuQks1NkotSlM0S2hmVURBZlNPX1BnbUUtTk85N0NtTW0wNXQ5?oc=5"
           },
           {
             "headline": "More Than 700,000 Russian Soldiers Killed In Ukraine War, New Analysis Finds - Radio Free Europe/Radio Liberty",
@@ -640,10 +644,24 @@
         "id": "indo-pacific",
         "name": "Indo-Pacific / Taiwan Strait",
         "region": "Asia-Pacific",
-        "status": "elevated",
-        "trend_7d": "flat",
-        "intensity_score": 60.0,
-        "intensity_series_14d": [],
+        "status": "escalating",
+        "trend_7d": "up",
+        "intensity_score": 33.0,
+        "intensity_series_14d": [
+          42.0,
+          3.0,
+          12.0,
+          3.0,
+          5.0,
+          4.0,
+          6.0,
+          39.0,
+          8.0,
+          29.0,
+          13.0,
+          90.0,
+          33.0
+        ],
         "summary": "US, Philippines plan improvements to airport near Taiwan - Stars and Stripes",
         "timeline_events": [
           {
@@ -662,9 +680,9 @@
             "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQSmJybnpQYmNmMmFqamZpNEJGSVpDTERNX0JKd2NTQzRXdXlUQWtVT2M3Y00xVHUyeVZ2NkU0eC0xOW42WHlxRGJPSnVid3Zra2Z5ckduVWtERDVkcTkxT2lheDlteHBFTDEyQnpTUmt5YjVyVTYxam1yMW5qaTRBaW10Umg5OEdraWdNV3UtVFBRUlZNZGJ0V2hEcFBxOTNtclVXYWpfQ3VwaGtpekhqYnJscGpLUDJZTHFUNdIBwgFBVV95cUxNbnh6UENOMDV0QnFRdFVJc3BJb3prY2RNYzR5OHh0UzNwTUg2bGg1NEtMbmUwbDZ5MTNaSGlvR29Pd0pfNzd6emtlaWIwcnBwWHVqQXpsdHFfT05aa1N1NUMtSzduOW5WZ3RSTTAxNUxqRzRJNnd3THVaYlJjWWFRSVBuSjJnVHJPOTk4T3UyYTl5VWpNSlB6TVJ2TTRFc3ctbXVld2dQNFpKanlPTkRDam12UTB4S0NCVjdZOEJscUtRdw?oc=5"
           },
           {
-            "headline": "With Qianfan, China Has Its Answer to Starlink - The Diplomat – Asia-Pacific Current Affairs Magazine",
+            "headline": "Why China Is Watching Taiwan’s Local Elections - The Diplomat – Asia-Pacific Current Affairs Magazine",
             "source": "The Diplomat – Asia-Pacific Current Affairs Magazine",
-            "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPT1VwbnRsZ1F6NmVkX2pxXzVMYkJFX0R3SEZqdm5iaVRhSWVkck9DVGZSOW02T2p2WFBEVnNIWWFOaVdIcWtOSnprTUY1bE1DbG1SeTZoWDFobTBSajRLZ3RtVnNqdkVKcnpndHZxZ2U0dzhwYlhSUDJFdGdYb0Jud2VPUm8?oc=5"
+            "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQR0k3RUFxWFVRZjBUZmpaUFhVTkR3MUNCRlFfcDJYcXNqb1RVMFR0Q28tQWV3VzFudXpyVC16Y1dkNGpZazFsazVidXA0QnBEQnI4RVhGTjFOQlhqMmRrVW9RWTJSZ1BwbzhTVFNSc1JUTU9SODFXUTd5YUtKRGl0a19tcmQ?oc=5"
           }
         ]
       },
@@ -672,10 +690,24 @@
         "id": "sudan-horn",
         "name": "Sudan & Horn of Africa",
         "region": "Africa",
-        "status": "elevated",
-        "trend_7d": "flat",
-        "intensity_score": 60.0,
-        "intensity_series_14d": [],
+        "status": "escalating",
+        "trend_7d": "up",
+        "intensity_score": 113.0,
+        "intensity_series_14d": [
+          49.0,
+          13.0,
+          4.0,
+          3.0,
+          4.0,
+          16.0,
+          14.0,
+          65.0,
+          26.0,
+          48.0,
+          19.0,
+          123.0,
+          113.0
+        ],
         "summary": "Drone Strikes Hit Khartoum Homes and UN Facility as Civilian Toll Rises in Sudan - Latin Times",
         "timeline_events": [
           {
@@ -704,24 +736,10 @@
         "id": "sahel-global",
         "name": "Sahel & Myanmar",
         "region": "Global Flashpoints",
-        "status": "escalating",
-        "trend_7d": "up",
-        "intensity_score": 15.0,
-        "intensity_series_14d": [
-          9.0,
-          3.0,
-          1.0,
-          1.0,
-          3.0,
-          1.0,
-          12.0,
-          17.0,
-          6.0,
-          11.0,
-          4.0,
-          23.0,
-          15.0
-        ],
+        "status": "elevated",
+        "trend_7d": "flat",
+        "intensity_score": 0.0,
+        "intensity_series_14d": [],
         "summary": "No major breaking updates captured in the last 24 hours.",
         "timeline_events": []
       }
