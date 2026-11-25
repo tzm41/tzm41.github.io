@@ -26,6 +26,9 @@ const els = {
   themeSwitcher: document.getElementById("theme-switcher"),
   sourceHealth: document.getElementById("source-health"),
   statusBanner: document.getElementById("status-banner"),
+  kpiWrapper: document.getElementById("kpi-wrapper"),
+  btnToggleKpi: document.getElementById("btn-toggle-kpi"),
+  kpiToggleSummary: document.getElementById("kpi-toggle-summary"),
   kpiStrip: document.getElementById("kpi-strip"),
   synthesisModeTag: document.getElementById("synthesis-mode-tag"),
   executiveList: document.getElementById("executive-list"),
@@ -52,6 +55,7 @@ const els = {
   topicsList: document.getElementById("topics-list"),
   positiveSection: document.getElementById("positive"),
   positiveNewsSlot: document.getElementById("positive-news-slot"),
+  btnMovePositive: document.getElementById("btn-move-positive"),
   localSection: document.getElementById("local-news"),
   localLocationToggle: document.getElementById("local-location-toggle"),
   localLangToggle: document.getElementById("local-lang-toggle"),
@@ -359,6 +363,11 @@ function renderKpiStrip(briefing) {
   }
 
   els.kpiStrip.innerHTML = cards.join("");
+  if (els.kpiToggleSummary) {
+    els.kpiToggleSummary.textContent = sp
+      ? `S&P 500 ${fmtPrice(sp.price, sp.symbol)} (${fmtPct(sp.change_pct)}) · 5 Signals`
+      : "Market & Signal Snapshot";
+  }
 }
 
 function renderExecutiveBrief(briefing) {
@@ -1148,7 +1157,9 @@ function initScrollSpy() {
   let lastActiveLink = null;
 
   const updateActive = () => {
-    const visiblePairs = pairs.filter(({ section }) => !section.classList.contains("hidden"));
+    const visiblePairs = pairs
+      .filter(({ section }) => !section.classList.contains("hidden"))
+      .sort((a, b) => a.section.getBoundingClientRect().top - b.section.getBoundingClientRect().top);
     if (!visiblePairs.length) return;
 
     const navH = nav ? nav.getBoundingClientRect().height : 44;
@@ -1421,11 +1432,60 @@ function initSourceBiasPopover() {
   window.addEventListener("scroll", hide, { passive: true });
 }
 
+function applyPositivePlacement(pos) {
+  const placement = pos === "top" ? "top" : "bottom";
+  const positiveSec = els.positiveSection;
+  const execSec = document.getElementById("executive");
+  const politicsSec = document.getElementById("politics");
+  if (positiveSec && execSec && politicsSec) {
+    if (placement === "top") {
+      execSec.insertAdjacentElement("afterend", positiveSec);
+    } else {
+      politicsSec.insertAdjacentElement("afterend", positiveSec);
+    }
+  }
+
+  const navLinks = document.querySelector(".nav-links");
+  const posLink = navLinks?.querySelector('a[href="#positive"]');
+  const execLink = navLinks?.querySelector('a[href="#executive"]');
+  const polLink = navLinks?.querySelector('a[href="#politics"]');
+  if (posLink && execLink && polLink) {
+    if (placement === "top") {
+      execLink.insertAdjacentElement("afterend", posLink);
+    } else {
+      polLink.insertAdjacentElement("afterend", posLink);
+    }
+  }
+
+  if (els.btnMovePositive) {
+    els.btnMovePositive.innerHTML =
+      placement === "top" ? "Move to bottom &darr;" : "Move below Brief &uarr;";
+  }
+}
+
 async function bootstrap() {
   initTheme();
+  applyPositivePlacement(localStorage.getItem("briefing-positive-pos") || "bottom");
   initScrollSpy();
   initSparklineHover();
   initSourceBiasPopover();
+
+  // Mobile KPI strip collapse toggle (collapsed by default on narrow screens)
+  els.btnToggleKpi?.addEventListener("click", () => {
+    const expanded = els.kpiWrapper?.classList.toggle("is-expanded");
+    els.btnToggleKpi.setAttribute("aria-expanded", String(Boolean(expanded)));
+    const lbl = els.btnToggleKpi.querySelector(".collapse-label");
+    if (lbl) lbl.textContent = expanded ? "Collapse" : "Expand";
+  });
+
+  // Positive News placement toggle (above Top News vs bottom)
+  els.btnMovePositive?.addEventListener("click", () => {
+    const cur = localStorage.getItem("briefing-positive-pos") || "bottom";
+    const next = cur === "top" ? "bottom" : "top";
+    localStorage.setItem("briefing-positive-pos", next);
+    applyPositivePlacement(next);
+    els.positiveSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 
   // Delegated expand/collapse for continued-from-yesterday news cards
   document.getElementById("app-root")?.addEventListener("click", (e) => {

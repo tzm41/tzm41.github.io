@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=20">
+  <link rel="stylesheet" href="./styles.css?v=21">
 </head>
 <body>
   <header class="masthead" id="top">
@@ -72,7 +72,16 @@
 
     <!-- 1. Executive Brief & KPI Strip -->
     <section id="executive" class="section executive-section">
-      <div class="kpi-strip" id="kpi-strip"></div>
+      <div class="kpi-wrapper" id="kpi-wrapper">
+        <button type="button" class="kpi-mobile-toggle" id="btn-toggle-kpi" aria-expanded="false" aria-controls="kpi-strip">
+          <span class="kpi-toggle-title" id="kpi-toggle-summary">Snapshot &amp; Signals</span>
+          <span class="kpi-toggle-action">
+            <span class="collapse-label">Expand</span>
+            <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+          </span>
+        </button>
+        <div class="kpi-strip" id="kpi-strip"></div>
+      </div>
 
       <article class="brief-panel">
         <div class="panel-header">
@@ -203,6 +212,9 @@
           <span class="kicker positive-kicker">Bright Spot</span>
           <h2>Positive News</h2>
         </div>
+        <div class="section-actions">
+          <button type="button" class="collapse-btn" id="btn-move-positive" title="Toggle Positive News placement">Move below Brief &uarr;</button>
+        </div>
       </div>
       <div id="positive-news-slot"></div>
     </section>
@@ -239,6 +251,6 @@
     </div>
   </footer>
 
-  <script type="module" src="./app.js?v=26"></script>
+  <script type="module" src="./app.js?v=27"></script>
 </body>
 </html>

@@ -408,11 +408,45 @@ h3 {
 
 /* ---------- KPI Strip & Executive Brief ---------- */
 
+.kpi-wrapper {
+  margin-bottom: 18px;
+}
+
+.kpi-mobile-toggle {
+  display: none;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.kpi-toggle-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.kpi-mobile-toggle[aria-expanded="true"] .collapse-chevron {
+  transform: rotate(180deg);
+}
+
 .kpi-strip {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
   gap: 12px;
-  margin-bottom: 18px;
 }
 
 .kpi-card {
@@ -1601,5 +1635,19 @@ h3 {
 
   .brief-panel {
     padding: 18px;
+  }
+}
+
+@media (max-width: 680px) {
+  .kpi-mobile-toggle {
+    display: flex;
+  }
+
+  .kpi-wrapper:not(.is-expanded) .kpi-strip {
+    display: none;
+  }
+
+  .kpi-wrapper.is-expanded .kpi-strip {
+    margin-top: 10px;
   }
 }
