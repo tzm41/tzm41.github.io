@@ -29,6 +29,13 @@
   --bias-right: #b9382c;
   --bias-state: #b4690e;
 
+  --sent-pos-bg: #f6fbf8;
+  --sent-pos-border: #d5e8dc;
+  --sent-pos-edge: rgba(21, 115, 71, 0.38);
+  --sent-neg-bg: #fdf7f6;
+  --sent-neg-border: #ead8d4;
+  --sent-neg-edge: rgba(185, 56, 44, 0.38);
+
   --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -66,6 +73,13 @@
   --bias-left: #6eaef5;
   --bias-right: #f07468;
   --bias-state: #e6a23c;
+
+  --sent-pos-bg: #1a272a;
+  --sent-pos-border: #284042;
+  --sent-pos-edge: rgba(52, 195, 143, 0.42);
+  --sent-neg-bg: #261f29;
+  --sent-neg-border: #42303d;
+  --sent-neg-edge: rgba(240, 101, 88, 0.42);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.22);
   --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.32);
@@ -531,6 +545,18 @@ h3 {
 .news-card:hover {
   border-color: var(--border-strong);
   box-shadow: var(--shadow-md);
+}
+
+.news-card[data-sentiment="positive"] {
+  background: var(--sent-pos-bg);
+  border-color: var(--sent-pos-border);
+  border-left: 3px solid var(--sent-pos-edge);
+}
+
+.news-card[data-sentiment="negative"] {
+  background: var(--sent-neg-bg);
+  border-color: var(--sent-neg-border);
+  border-left: 3px solid var(--sent-neg-edge);
 }
 
 .news-card.is-collapsed {

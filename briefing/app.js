@@ -448,8 +448,27 @@ function renderSourceChip(src) {
   return `<a class="source-chip"${biasAttr} href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`;
 }
 
+const NEGATIVE_SENTIMENT_RE =
+  /\b(guilty|convict\w*|outage|code red|sell-?off|slump|plunge|slide[sd]?|drop(?:s|ped)?|fall(?:s|ing)?|fell|dead|death\w*|kill\w*|strike\w*|attack\w*|cyberattack\w*|hack\w*|war|blockade|paralys\w*|flood\w*|lawsuit|challenge|fakes?|smear|disinformation|scandal|resign\w*|tariff\w*|friction|scrutiny|probe|investigat\w*|deport\w*|crash|crisis|decline|violat\w*|sanction\w*)\b|加征关税|关税|攻击|抹黑|判死刑|窃取|摩擦|虚假信息|危机|冲突/gi;
+
+const POSITIVE_SENTIMENT_RE =
+  /\b(breakthrough|rally|rallies|surge[sd]?|gain\w*|advance[sd]?|recover\w*|success|milestone|celebrat\w*|award\w*|approv\w*|cure[sd]?|boost\w*|growth|record high|peace|ceasefire|accord|treaty|draw(?:s|ing)? crowds|reopen\w*)\b|获批|突破|增长|里程碑|和平|停火|复苏|创新高/gi;
+
+function resolveStorySentiment(story) {
+  if (story.sentiment === "positive" || story.sentiment === "negative") {
+    return story.sentiment;
+  }
+  const text = `${story.headline || ""} ${story.summary || ""}`;
+  const neg = (text.match(NEGATIVE_SENTIMENT_RE) || []).length;
+  const pos = (text.match(POSITIVE_SENTIMENT_RE) || []).length;
+  if (pos > neg) return "positive";
+  if (neg > pos) return "negative";
+  return "neutral";
+}
+
 function renderNewsCard(story, badgeLabel, continued) {
   const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
+  const sentiment = resolveStorySentiment(story);
 
   const toggleBtn = continued
     ? `<button type="button" class="card-toggle-btn" aria-expanded="false">Expand &#9662;</button>`
@@ -459,7 +478,7 @@ function renderNewsCard(story, badgeLabel, continued) {
     : "";
 
   return `
-    <article class="news-card${continued ? " is-collapsed" : ""}">
+    <article class="news-card${continued ? " is-collapsed" : ""}" data-sentiment="${escapeHtml(sentiment)}">
       <div class="news-meta">
         <div class="news-card-badges">
           <span class="cat-pill">${escapeHtml(badgeLabel)}</span>

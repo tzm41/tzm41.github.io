@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 HealthStatus = Literal["ok", "partial", "failed"]
 NewsCategory = Literal["World", "Economy", "Tech", "Policy", "Science"]
+StorySentiment = Literal["positive", "neutral", "negative"]
 MarketRegime = Literal["Risk-On", "Risk-Off", "Mixed", "Volatility Spike"]
 ConflictStatus = Literal["escalating", "elevated", "stable", "de-escalating"]
 TrendDirection = Literal["up", "flat", "down"]
@@ -26,6 +27,7 @@ class NewsStory(BaseModel):
     summary: str
     why_it_matters: str
     sources: list[SourceLink] = Field(default_factory=list)
+    sentiment: StorySentiment = "neutral"
     continued_from_prior: bool = False
 
 

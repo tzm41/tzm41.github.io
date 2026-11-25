@@ -20,7 +20,7 @@ Use this skill whenever the user asks to generate, refresh, or publish their dai
    - Read `/tmp/raw_briefing.json` (specifically `prompt` and `synthesis_schema`).
    - Produce a strictly grounded, neutral JSON object matching `synthesis_schema` (`GeminiBriefingSynthesis`):
      - `executive_brief`: 3–5 crisp cross-domain morning bullets
-     - `top_news`: 6–10 deduplicated stories with 2–3 sentence summaries, `why_it_matters`, and verbatim URLs from `raw_news`
+     - `top_news`: 6–10 deduplicated stories with 2–3 sentence summaries, `why_it_matters`, `sentiment` (`positive` | `neutral` | `negative`), and verbatim URLs from `raw_news`
      - `market_narrative` & `market_regime` (`Risk-On` | `Risk-Off` | `Mixed` | `Volatility Spike`)
      - `conflicts_overview` & `conflict_theaters` (one per tracked theater `id`)
      - `politics_pulse_summary`, `legislative_and_executive` (3–5 items), and `trending_topics` (3–5 items)
