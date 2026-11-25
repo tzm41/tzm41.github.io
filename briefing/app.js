@@ -1563,12 +1563,95 @@ function applyPositivePlacement(pos) {
   }
 }
 
+function initFloatingTooltips() {
+  const tip = document.createElement("div");
+  tip.className = "floating-tip hidden";
+  tip.setAttribute("role", "tooltip");
+  document.body.appendChild(tip);
+
+  const SEL = ".ticker-tag[data-ticker-tip], .sentiment-gauge[data-tooltip]";
+  let activeEl = null;
+
+  const hide = () => {
+    tip.classList.add("hidden");
+    activeEl = null;
+  };
+
+  const show = (el) => {
+    const isTicker = el.classList.contains("ticker-tag");
+    const text = isTicker ? el.dataset.tickerTip : el.dataset.tooltip;
+    if (!text) return;
+    activeEl = el;
+    tip.textContent = text;
+    tip.classList.toggle("is-subtle", !isTicker);
+    tip.classList.remove("hidden");
+
+    const rect = el.getBoundingClientRect();
+    const tipRect = tip.getBoundingClientRect();
+    const pad = 12;
+    const left = Math.max(
+      pad,
+      Math.min(window.innerWidth - tipRect.width - pad, rect.left + rect.width / 2 - tipRect.width / 2)
+    );
+    let top = rect.top - tipRect.height - 8;
+    if (top < pad) {
+      top = Math.min(window.innerHeight - tipRect.height - pad, rect.bottom + 8);
+    }
+    tip.style.left = `${left.toFixed(1)}px`;
+    tip.style.top = `${top.toFixed(1)}px`;
+  };
+
+  document.addEventListener("pointerover", (e) => {
+    if (e.pointerType === "touch") return;
+    const el = e.target.closest(SEL);
+    if (el) show(el);
+  });
+
+  document.addEventListener("pointerout", (e) => {
+    if (e.pointerType === "touch") return;
+    const el = e.target.closest(SEL);
+    if (el && el === activeEl) hide();
+  });
+
+  document.addEventListener("focusin", (e) => {
+    const el = e.target.closest?.(SEL);
+    if (el) show(el);
+  });
+
+  document.addEventListener("focusout", (e) => {
+    const el = e.target.closest?.(SEL);
+    if (el && el === activeEl) hide();
+  });
+
+  document.addEventListener(
+    "pointerdown",
+    (e) => {
+      const el = e.target.closest(SEL);
+      if (!el) {
+        if (activeEl) hide();
+        return;
+      }
+      if (e.pointerType === "touch") {
+        if (activeEl === el && !tip.classList.contains("hidden")) {
+          hide();
+        } else {
+          show(el);
+        }
+      }
+    },
+    { passive: true }
+  );
+
+  window.addEventListener("scroll", hide, { passive: true });
+}
+
 async function bootstrap() {
   initTheme();
   applyPositivePlacement(localStorage.getItem("briefing-positive-pos") || "bottom");
   initScrollSpy();
   initSparklineHover();
   initSourceBiasPopover();
+  initFloatingTooltips();
 
   // Mobile KPI strip collapse toggle (collapsed by default on narrow screens)
   els.btnToggleKpi?.addEventListener("click", () => {
