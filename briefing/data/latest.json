@@ -1,6 +1,6 @@
 {
   "date": "2026-11-25",
-  "generated_at": "2026-11-25T06:01:04Z",
+  "generated_at": "2026-11-25T06:12:59Z",
   "synthesis_mode": "gemini",
   "source_health": {
     "news": "ok",
@@ -9,36 +9,40 @@
     "politics": "ok"
   },
   "executive_brief": [
-    "Tech-led AI sell-off drives a sharp market rotation: Technology (XLK -3.26%) and the Nasdaq (-1.48%) fell alongside Asian equities as doubts swirl over the AI boom, while Health Care (+2.95%) and Staples (+1.66%) lifted the Dow (+0.85%) above 50,000.",
-    "Middle East maritime and regional escalation intensifies: The Strait of Hormuz faces severe disruption with roughly 400 ships waiting, Houthis struck Riyadh for the second time in a week injuring 11, and US officials are probing Iranian links to up to 50 hacked commercial vessels.",
-    "Ukraine extends maritime reach as Russian casualties mount: Kyiv confirmed naval drone strikes on two Russian ships off Libya while leaked Russian data points to nearly 500,000 war deaths and a Russian drone entered Polish airspace.",
-    "Nvidia CEO Jensen Huang's Trump-brokered reinstatement sparks bipartisan backlash in Washington, accelerating congressional momentum for tougher China chip export controls in the year-end defense bill.",
-    "Post-midterm Washington realigns: Democrats prepare to take the House after flipping 47+ seats, Rep. Jimmy Gomez (D-Calif.) announced his resignation following an ethics report, and Kilmar Ábrego García self-deported to Spain."
+    "Tech and AI shares led a sharp Nasdaq pullback (-1.48%, XLK -3.26%) as Nvidia fell 7% amid scrutiny over CEO Jensen Huang's reinstatement, while rotational buying lifted the Dow Jones (+0.85%) and Russell 2000 (+0.57%).",
+    "A New York federal jury found Huawei guilty of stealing US trade secrets while acquitting the Chinese telecom firm of racketeering, concluding a multi-year legal battle.",
+    "Middle East and Red Sea tensions remain acute, with the Strait of Hormuz reportedly facing severe shipping paralysis, Houthi strikes hitting Riyadh, and US investigators probing potential Iranian cyberattacks on up to 50 commercial vessels.",
+    "Leaked Russian records point to nearly 500,000 deaths in the Ukraine war as Ukrainian naval drones struck Russian vessels off Libya and a Russian drone entered Polish airspace.",
+    "In Washington, bipartisan lawmakers are pressing for China chip export restrictions and investigating White House ties to Nvidia's leadership reversal, while Rep. Jimmy Gomez announced his resignation effective Dec. 1."
   ],
   "top_news": [
     {
-      "id": "story-1",
-      "category": "Economy",
-      "headline": "Global Tech and Asian Markets Slide as AI Boom Doubts Deepen",
-      "summary": "Equities across Japan, South Korea, and Taiwan fell sharply in a tech-led sell-off, mirroring a 3.26% drop in US Technology (XLK) and a 1.48% decline in the Nasdaq. Investors rotated heavily into defensive sectors as elevated volatility (VIX 26.36) and high Treasury yields (4.90%) pressured growth valuations.",
-      "why_it_matters": "Sustained skepticism around AI capital expenditure returns is shifting leadership away from mega-cap tech toward defensive and value sectors.",
+      "id": "huawei-trade-secrets",
+      "category": "Tech",
+      "headline": "Huawei found guilty of stealing US trade secrets, acquitted of racketeering",
+      "summary": "A federal jury in New York found Huawei guilty of stealing trade secrets from several US companies, concluding a years-long prosecution. The jury acquitted the Chinese telecom giant of racketeering charges in the same verdict.",
+      "why_it_matters": "The conviction reinforces US intellectual-property enforcement against Chinese tech firms at a moment of heightened bilateral friction over semiconductors and critical technology.",
       "sources": [
         {
-          "name": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/11/25/asias-stock-markets-dive-as-doubts-to-swirl-over-ai-boom?traffic_source=rss"
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/cmy49ngydqzpo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "name": "The Verge",
+          "url": "https://www.theverge.com/tech/1041820/huawei-guilty-trade-secrets-trial"
         }
       ]
     },
     {
-      "id": "story-2",
+      "id": "nvidia-huang-investigation",
       "category": "Policy",
-      "headline": "Jensen Huang's Return to Nvidia Fuels Bipartisan Push on China Chip Curbs",
-      "summary": "President Trump took credit for pressuring Nvidia's board to reinstate Jensen Huang as CEO, prompting bipartisan criticism and investigations on Capitol Hill. Lawmakers from both parties are now rallying to attach stricter chip export restrictions to China onto the year-end defense bill.",
-      "why_it_matters": "The intersection of executive influence over a flagship AI chipmaker and national security export rules is becoming a defining tech-policy flashpoint.",
+      "headline": "Lawmakers press AG over Nvidia investigation as Huang's return sparks bipartisan scrutiny",
+      "summary": "The US Attorney General sidestepped congressional questions regarding an investigation into Nvidia and President Donald Trump's role in CEO Jensen Huang's reinstatement. Nvidia shares dropped 7% as lawmakers in both parties vowed to pursue oversight and tighten chip export controls.",
+      "why_it_matters": "The dispute sits at the intersection of corporate governance, executive influence over major tech firms, and national security policy toward China.",
       "sources": [
         {
-          "name": "NPR News",
-          "url": "https://www.npr.org/2026/11/24/g-s1-155227/up-first-newsletter-nvidia-jensen-huang-trump-ukraine-russia-jimmy-gomez"
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/crpdw1qx7jgxo?at_medium=RSS&at_campaign=rss"
         },
         {
           "name": "The Hill",
@@ -47,24 +51,41 @@
       ]
     },
     {
-      "id": "story-3",
-      "category": "World",
-      "headline": "US Probes Iranian Links to Up to 50 Hacked Commercial Vessels",
-      "summary": "US officials are investigating potential Iranian involvement in cyberattacks targeting as many as 50 commercial ships. The probe comes amid severe disruption in the Strait of Hormuz and heightened US-Iran hostilities affecting global maritime infrastructure.",
-      "why_it_matters": "Cyber operations against commercial shipping compound physical chokepoint risks, threatening global energy and freight supply chains.",
+      "id": "tech-selloff-markets",
+      "category": "Economy",
+      "headline": "Nasdaq slides 1.48% on AI tech pullback while Dow and small caps advance",
+      "summary": "US equities diverged sharply as selling in Nvidia and AI-linked names pulled the Nasdaq down 1.48% and the S&P 500 down 0.5%, ahead of a key inflation report. Meanwhile, the Dow Jones Industrial Average gained 0.85% to 50,018.70 and the Russell 2000 rose 0.57%, with Asian markets also falling on AI valuation concerns.",
+      "why_it_matters": "The rotation out of mega-cap tech into defensive and cyclical sectors highlights investor sensitivity to AI valuations and policy risk.",
       "sources": [
         {
-          "name": "NPR News",
-          "url": "https://www.npr.org/2026/11/24/nx-s1-6052994/hack-commercial-vessels-iran"
+          "name": "CNBC Top News",
+          "url": "https://www.cnbc.com/2026/11/24/stock-market-today-live-updates-.html"
+        },
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.aljazeera.com/news/2026/11/25/asias-stock-markets-dive-as-doubts-to-swirl-over-ai-boom?traffic_source=rss"
         }
       ]
     },
     {
-      "id": "story-4",
+      "id": "microsoft-cloud-outage",
+      "category": "Tech",
+      "headline": "Microsoft declares 'Code Red' following historic cloud and Outlook outage",
+      "summary": "Internal memos reveal Microsoft declared a 'Code Red' response after a widespread cloud and Outlook outage disrupted services globally. Reporting indicates the incident stemmed from compounding engineering and patching failures.",
+      "why_it_matters": "Major enterprise cloud disruptions underscore operational concentration risk across government and corporate IT infrastructure.",
+      "sources": [
+        {
+          "name": "Ars Technica",
+          "url": "https://arstechnica.com/gadgets/2026/11/microsofts-historic-cloud-outage-exposed-an-engineering-fog-of-war/"
+        }
+      ]
+    },
+    {
+      "id": "russia-ukraine-toll",
       "category": "World",
-      "headline": "Leaked Russian Data Points to Nearly 500,000 War Deaths as Ukraine Strikes Ships Off Libya",
-      "summary": "Leaked mortality records indicate Russia has suffered almost 500,000 deaths from its full-scale invasion of Ukraine, reshaping domestic demographic patterns. Separately, Ukraine's security service confirmed launching seven naval drones from a mothership to strike two Russian vessels off Libya, sinking the warship Merkury.",
-      "why_it_matters": "Ukraine's ability to project maritime drone operations into the Mediterranean underscores the expanding geographic scope of the war despite heavy attrition on land.",
+      "headline": "Leaked data show nearly 500,000 Russian war dead as Ukraine hits warships off Libya",
+      "summary": "Leaked Russian figures indicate almost 500,000 deaths in the war in Ukraine, highlighting significant demographic shifts inside Russia. Separately, Ukraine confirmed it used naval drones launched from a mothership to strike two Russian vessels off Libya, sinking the corvette Merkury.",
+      "why_it_matters": "Both the mounting human toll and Ukraine's ability to project maritime drone strikes into the Mediterranean illustrate the war's expanding geographic and strategic reach.",
       "sources": [
         {
           "name": "BBC World",
@@ -77,68 +98,51 @@
       ]
     },
     {
-      "id": "story-5",
+      "id": "iran-shipping-cyber",
       "category": "World",
-      "headline": "China Investigates Politburo Member Chen Jining in Latest Xi Jinping Purge",
-      "summary": "Chinese authorities placed Politburo star Chen Jining—previously viewed as a contender for higher leadership—under investigation, making him the fourth Politburo member targeted since 2025. Meanwhile, BBC Verify uncovered a China-linked network using AI-generated fakes to smear Taiwan election candidates.",
-      "why_it_matters": "Ongoing elite purges in Beijing alongside AI-enabled influence operations in Taiwan highlight tightening political control at home and gray-zone pressure abroad.",
+      "headline": "US probes suspected Iranian cyberattacks on up to 50 commercial vessels",
+      "summary": "US officials are investigating potential Iranian links to cyberattacks targeting as many as 50 commercial ships amid ongoing hostilities between Washington and Tehran. The probe comes as shipping in the Strait of Hormuz faces severe disruption and regional strikes continue.",
+      "why_it_matters": "Cyber operations against commercial maritime traffic compound physical blockade risks to global energy and trade routes.",
       "sources": [
         {
-          "name": "The Guardian World",
-          "url": "https://www.theguardian.com/world/2026/nov/25/china-investigates-politburo-chen-jining-xi-jinping-purge"
-        },
-        {
-          "name": "BBC World",
-          "url": "https://www.bbc.co.uk/news/articles/cv702rw7dzx5o?at_medium=RSS&at_campaign=rss"
+          "name": "NPR News",
+          "url": "https://www.npr.org/2026/11/24/nx-s1-6052994/hack-commercial-vessels-iran"
         }
       ]
     },
     {
-      "id": "story-6",
+      "id": "abrego-garcia-spain",
       "category": "Policy",
-      "headline": "Kilmar Ábrego García Self-Deports to Spain, Ending High-Profile US Legal Battle",
-      "summary": "Salvadoran migrant Kilmar Ábrego García, whose 2025 deportation and subsequent Supreme Court-ordered return became a central flashpoint over the Trump administration's immigration crackdown, voluntarily departed the United States for Spain.",
-      "why_it_matters": "His departure closes a landmark legal test of executive deportation authority and judicial oversight, though broader immigration enforcement disputes remain active.",
+      "headline": "Kilmar Abrego Garcia departs US for Spain, ending high-profile deportation battle",
+      "summary": "Salvadoran migrant Kilmar Abrego Garcia voluntarily left the United States for Spain on Tuesday, according to his attorneys and the Department of Homeland Security. His earlier deportation to El Salvador and court-ordered return had become a central flashpoint in the debate over Trump administration immigration policy.",
+      "why_it_matters": "His departure closes a closely watched legal test of executive deportation authority and judicial oversight.",
       "sources": [
         {
           "name": "BBC World",
           "url": "https://www.bbc.co.uk/news/articles/c6808pyy5dl9o?at_medium=RSS&at_campaign=rss"
         },
         {
-          "name": "The Hill",
-          "url": "https://thehill.com/policy/international/6241572-kilmar-abrego-garcia-self-deports/"
+          "name": "The Guardian World",
+          "url": "https://www.theguardian.com/us-news/2026/nov/24/kilmar-abrego-garcia-leaves-us"
         }
       ]
     },
     {
-      "id": "story-7",
+      "id": "china-ai-taiwan-fakes",
       "category": "World",
-      "headline": "UK Warns Private Companies of Potential Russian Sabotage Threat",
-      "summary": "Britain's Defence Ministry and security services issued an unusual public warning alerting businesses to the risk of Russian sabotage operations. The advisory follows escalating hybrid threats across Europe, including a Russian drone entering Polish airspace during overnight strikes on Ukraine.",
-      "why_it_matters": "European governments are increasingly treating commercial infrastructure as a frontline target in Moscow's hybrid confrontation with NATO.",
+      "headline": "China-linked network used AI fakes to target Taiwan election candidates",
+      "summary": "An investigation by BBC Verify found a China-linked disinformation network deploying AI-generated fakes to smear figures in Taiwan's ruling Democratic Progressive Party, including President Lai and mayoral candidate Puma Shen. The campaign surfaced ahead of Taiwan's local elections.",
+      "why_it_matters": "The operation demonstrates the growing use of synthetic media in cross-strait influence efforts targeting democratic elections.",
       "sources": [
         {
-          "name": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/11/25/uk-warns-companies-of-potential-russian-sabotage-threat?traffic_source=rss"
-        }
-      ]
-    },
-    {
-      "id": "story-8",
-      "category": "Economy",
-      "headline": "Tariffs, Fuel, and Fertilizer Costs Squeeze US Apple Growers",
-      "summary": "Washington state's $9 billion apple industry—producing over 70% of US fresh apples—faces mounting margin pressure from tariffs, elevated fuel and fertilizer expenses, and a strong US dollar curbing export demand.",
-      "why_it_matters": "Agricultural margin compression illustrates how trade policy and input inflation are filtering into core US export sectors.",
-      "sources": [
-        {
-          "name": "NPR News",
-          "url": "https://www.npr.org/sections/the-picture-show/2026/11/24/g-s1-154620/how-high-costs-are-squeezing-apple-producers"
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/cv702rw7dzx5o?at_medium=RSS&at_campaign=rss"
         }
       ]
     }
   ],
   "markets": {
-    "narrative": "US equities diverged sharply as a heavy Technology sell-off (XLK -3.26%, Nasdaq -1.48%) dragged the S&P 500 down 0.50% to 7,201.09, echoing Asian market declines over AI valuation doubts. Defensive and cyclical rotation lifted Health Care (+2.95%), Consumer Staples (+1.66%), and Real Estate (+1.31%), pushing the Dow (+0.85%) past 50,018 while VIX remained elevated at 26.36, 10Y yields held near 4.90%, and Bitcoin dropped 3.58%.",
+    "narrative": "US markets posted a sharp sector rotation on Tuesday, with the Nasdaq falling 1.48% to 23,733.54 and Technology (XLK) dropping 3.26% on Nvidia-led AI selling, while the Dow Jones (+0.85% to 50,018.70) and Russell 2000 (+0.57%) advanced alongside Health Care (+2.95%) and Consumer Staples (+1.66%). Treasury yields eased slightly with the 10-year at 4.90% (-0.41%) and the VIX held elevated at 26.36 (-0.98%) ahead of key inflation data. Commodities and crypto retreated, with WTI crude down 0.98% to $81.25, gold down 1.25% to $3,517.20, and Bitcoin falling 3.21% to $59,245.72.",
     "regime_tag": "Mixed",
     "watchlist": [
       {
@@ -385,9 +389,9 @@
         "symbol": "CL=F",
         "name": "WTI Crude",
         "group": "Commodities",
-        "price": 80.71,
-        "change_pct": -1.63,
-        "change_5d_pct": -3.06,
+        "price": 81.25,
+        "change_pct": -0.98,
+        "change_5d_pct": -2.41,
         "sparkline_30d": [
           97.97,
           101.41,
@@ -418,16 +422,16 @@
           83.98,
           80.17,
           82.05,
-          80.71
+          81.25
         ]
       },
       {
         "symbol": "GC=F",
         "name": "Gold",
         "group": "Commodities",
-        "price": 3526.0,
-        "change_pct": -1.01,
-        "change_5d_pct": -5.77,
+        "price": 3517.2,
+        "change_pct": -1.25,
+        "change_5d_pct": -6.0,
         "sparkline_30d": [
           4170.1,
           4181.1,
@@ -458,16 +462,16 @@
           3515.4,
           3651.4,
           3561.9,
-          3526.0
+          3517.2
         ]
       },
       {
         "symbol": "BTC-USD",
         "name": "Bitcoin",
         "group": "Crypto",
-        "price": 59020.64,
-        "change_pct": -3.58,
-        "change_5d_pct": -4.65,
+        "price": 59245.72,
+        "change_pct": -3.21,
+        "change_5d_pct": -4.29,
         "sparkline_30d": [
           80006.66,
           80805.08,
@@ -498,7 +502,7 @@
           60094.09,
           61161.91,
           61210.98,
-          59020.64
+          59245.72
         ]
       }
     ],
@@ -572,32 +576,31 @@
     ]
   },
   "conflicts": {
-    "overview": "Global conflict risk remains elevated to escalating across the Middle East and Eastern Europe, with maritime chokepoint disruption in the Strait of Hormuz, repeated Houthi strikes on Riyadh, and Ukrainian naval drone operations reaching the Mediterranean.",
+    "overview": "Global conflict intensity remains elevated across major theaters, with active escalation in Eastern Europe, the Middle East, and the Red Sea corridor compared with earlier in the two-week window. Maritime chokepoints, cross-border drone operations, and urban airstrikes continue to drive humanitarian and supply-chain risks.",
     "theaters": [
       {
         "id": "ukraine",
         "name": "Eastern Europe / Ukraine",
         "region": "Europe",
-        "status": "escalating",
+        "status": "elevated",
         "trend_7d": "up",
-        "intensity_score": 7.0,
+        "intensity_score": 639.0,
         "intensity_series_14d": [
-          6.0,
-          4.0,
-          5.0,
-          6.0,
-          3.0,
-          8.0,
-          4.0,
-          6.0,
-          4.0,
-          4.0,
-          5.0,
-          1.0,
-          3.0,
-          7.0
+          450.0,
+          141.0,
+          117.0,
+          52.0,
+          68.0,
+          62.0,
+          355.0,
+          881.0,
+          552.0,
+          670.0,
+          215.0,
+          1221.0,
+          639.0
         ],
-        "summary": "Ukraine confirmed striking two Russian vessels off Libya with naval drones launched from a mothership, sinking the warship Merkury, while a Russian drone entered Polish airspace during overnight strikes. Leaked Russian mortality figures point to nearly 500,000 war deaths as European intelligence agencies warn businesses of Russian sabotage threats.",
+        "summary": "Intensity remains high (639.0) with a rising 7-day trend as leaked data put Russian war deaths near 500,000. Ukraine confirmed naval drone strikes that sank the Russian corvette Merkury off Libya, while Warsaw reported a Russian drone entered Polish airspace during overnight strikes.",
         "timeline_events": [
           {
             "headline": "Russian Offensive Campaign Assessment, November 23, 2026 - Institute for the Study of War",
@@ -610,14 +613,14 @@
             "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQcHEzaFFZSHUwdzN0LS1RbTVLRlF1MFpWblFUV2l1eUtybk9fOHJzNmQzeW8zSi13TEdMWGtYTE9UTFNHbGx4UUZ6Z2UyRlJQUU1kY3hKNmtsV3V1ZkVsWWR3UmxvdDlud0NQa2VRRldnWFQwdV85R0RNZTVKaTJKbko0UV9Qa3FLR0J1S1FNSkZxM01k?oc=5"
           },
           {
-            "headline": "Is Ukraine running out of soldiers to fight Russia? - DW.com",
-            "source": "DW.com",
-            "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPNG14U1RtSFIzdVd5U3IyMlppYUJxWnpUekJxaHJLVm9NWG1NN2gxWmJST1NvSVVfY0ZxLUk0blRVRmo5MTAzSkhHRy1wNDM3LXRVTWViSEhlRmtoZzVGR29UNUp2MUw4QzhPYkF2ZnAxc2FDOGhNQUhmWGVuby04TEpzV0c0bWxsaGNv?oc=5"
-          },
-          {
             "headline": "More Than 700,000 Russian Soldiers Killed In Ukraine War, New Analysis Finds - Radio Free Europe/Radio Liberty",
             "source": "Radio Free Europe/Radio Liberty",
             "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOanVmQXA3NXR4MWsyOEFZM0hWWDRGZVU0TVVDQkZmSWhFUFNqTHlObGJyUGI1QmdWNmNFVklIQ1JzOEdfbUdaWnpmM1lMcUlTckVxeDVxQ24xb0o3TXUzRUNzMEF5ZzRzcUJQMl9hbjMwdDVaZnpRSmxKM19KZG81OE41WVZ1WGl10gGLAUFVX3lxTE5hN1E1REh0bXFwWnZ5TTdJZFFVaGMwcEl5UkU0eWZtN1R1aUdfVzBBVWpuMUxjR3c5UHpwNWUyMDkydWxwQlFpby04VWJ2VlpETWdrSWxGYS10LXRVN3BrWGVFYVFiNHA3QkY3RzN6QldwcTRZRVRDTzJFT2FwRW1kbS1ZT0gzdWVZWWs?oc=5"
+          },
+          {
+            "headline": "Radio Offers Russian Troops Classic Rock, Nostalgia — and Pleas to Surrender - The New York Times",
+            "source": "The New York Times",
+            "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNaFhSMWNKOHQyYm5UamVCemJkVFRTN18zam5HOHEwVmdoUkF1elBZLTNqWElfMVJxdVl3cHZmeC1XZmRxeEFfb3h2bzBOOTdKQ3lrcjExTlJBYnZodnlaM3pUQnRsYWZxaDN5Zm1NcVd0UHU0VlpsbjV3UXpCdGJ3NWRzM0RMbkV5TEQ4UGFSYw?oc=5"
           }
         ]
       },
@@ -627,20 +630,23 @@
         "region": "Middle East",
         "status": "escalating",
         "trend_7d": "up",
-        "intensity_score": 7.0,
+        "intensity_score": 508.0,
         "intensity_series_14d": [
-          2.0,
-          1.0,
-          2.0,
-          2.0,
-          1.0,
-          1.0,
-          2.0,
-          4.0,
-          3.0,
-          7.0
+          524.0,
+          95.0,
+          84.0,
+          59.0,
+          43.0,
+          70.0,
+          174.0,
+          529.0,
+          309.0,
+          338.0,
+          144.0,
+          840.0,
+          508.0
         ],
-        "summary": "The Strait of Hormuz is reportedly paralyzed with around 400 ships waiting as Iran insists on seven preconditions before any talks with the US, while Washington investigates Iranian links to up to 50 hacked commercial vessels. Houthis struck a skyscraper in Riyadh for the second time in a week injuring 11, and an Israeli strike in Gaza killed Hamas's internal security chief.",
+        "summary": "Regional hostilities are escalating (intensity 508.0, 7-day trend up) as Iran reiterated seven preconditions for US talks amid reports of severe shipping paralysis in the Strait of Hormuz. In Gaza, Israeli airstrikes killed Hamas's internal security chief and other Palestinians, while Houthi forces advanced toward Aden and struck Riyadh.",
         "timeline_events": [
           {
             "headline": "Realist Politics and Human Rights in the Middle East - Carnegie Endowment for International Peace",
@@ -658,9 +664,9 @@
             "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9Qdkg3Q0tiSDRxSUJLX1VBMGh2blRhM1c5eHoydTItSDIxOFBRZERRbEp4RjNHQjZjaVYyLW5zdUJoNDFFbEF0SjJYZ1F0NXdwWlZYaVF1OWF3S3VQODZFWmFqRHhHdXFKNzJZZGo3MHhLc1FuSVR3?oc=5"
           },
           {
-            "headline": "Latest news on the war in the Middle East. Iran: Strait of Hormuz virtually paralysed, 400 ships waiting. Houthis strike skyscraper in Riyadh - Il Sole 24 ORE",
-            "source": "Il Sole 24 ORE",
-            "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQQnV0LVNFbXRtX0hEZWdlSUtwSlRxVy1MOE5SMzJYVVRVYkRzQkZidklrcDRFQWt4TXlPeTgwWS1Ub0F3Mkl0R2VVQW9zbkY4blgxb2xiaWZXaWxRWGJna3lMR3QyOUQydWhQUVlub0dyOHpLUDIxUmpfT2F0MWphMzFhZXFDdDRhS0xzcXdsS1htbThlNnREV0hyaFVwM191cGpJR0NrcTFLZXR3T1ZpRmFSWGpsSEZEZVBnVW5ycw?oc=5"
+            "headline": "Houthi rebels close in on the city of Aden as Yemeni forces dig in behind a fortified line - AP News",
+            "source": "AP News",
+            "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOLVEzelRwd2pzaWFoRmhiVTIwb2JRem9VRFgyTkFlUVRNOHh1bVJLRnNoTm90SnhscmpVcW56STVUaTBZS3ZsSUJZZUpDSTBidHp1Wl9DbEt4WlhuZjV1RFZGUnRkTFAwMVpEcGdJZDZXYkNncGFwZUp6SEpGRjZ1bXN2aHJmNTZaazJRdDhPdHFZUHltbXVySjIxMTlocDVSc1FVNmEyNXZNbnhGLTN5Zlhwc0RRUQ?oc=5"
           }
         ]
       },
@@ -668,7 +674,7 @@
         "id": "indo-pacific",
         "name": "Indo-Pacific / Taiwan Strait",
         "region": "Asia-Pacific",
-        "status": "elevated",
+        "status": "stable",
         "trend_7d": "down",
         "intensity_score": 1.0,
         "intensity_series_14d": [
@@ -680,14 +686,35 @@
           3.0,
           1.0,
           3.0,
-          1.0,
+          2.0,
           2.0,
           2.0,
           1.0,
           1.0
         ],
-        "summary": "Kinetic military headlines cooled over the past 24 hours, but gray-zone pressure persisted as BBC Verify exposed a China-linked network using AI-generated fakes to smear Taiwan's ruling DPP candidates. Inside Beijing, Politburo member Chen Jining was placed under investigation in Xi Jinping's latest leadership purge.",
-        "timeline_events": []
+        "summary": "Measured conflict intensity in the Indo-Pacific remains low (1.0, 7-day trend down), though strategic competition persists. The US and the Philippines are planning upgrades to an airport near Taiwan, while South Korea briefly evacuated areas after mistaking Russian aircraft for North Korean planes.",
+        "timeline_events": [
+          {
+            "headline": "US, Philippines plan improvements to airport near Taiwan - Stars and Stripes",
+            "source": "Stars and Stripes",
+            "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNb0Nqd1ZqYjRwUFVmMUw0MGMwdzc2TVlJQXVFa0ozV1N1QTJkWnV5OFFFVXRELUJNZjRldWpMSTVGd08zekpRaXR4UThZdTAzV1h4czdaT1pWNmh4OUdUQjlITldEaVpKWmlrNFlVcFZMbTNNc1FsaWg0NU5uTGxHVXo1SFQtS0RrOEJ4N3YzOVBvVXJ1X19Ja1RtdU03ZlpWbkt5RWRBRjEweEk?oc=5"
+          },
+          {
+            "headline": "Dispatch from 2032: After Chinese salvos fail to defeat Taiwan, Beijing is trapped in a war of attrition - Atlantic Council",
+            "source": "Atlantic Council",
+            "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxOeVIxVVo4WXloNTFpQnpPSzJHcHFQYi1tbGIwc2ZJS2lfbl90TVhVTmZFVlByY3lDQkJTLVpVRFdhbEZBRlVZWXRHV1FrNlhhODFpb3dqX1VEeFZsQ29rSVZFMmE2RFFJeC1lSUpKT3BQdG1zMXNSUjZ6SmtZVEk4Z0ZLR1JueUd4ZHV1ZHVpM1lGM3RhSWQweGtJR25pejhmX3JCZEFxdGpIOVpVTEpGZTdqbU5pYWt5T2VMVHNqZVN2dXJtdHQ5Wmh5OXpLNFJ4VG9NcG5Dbk1UUnU5ZWM0?oc=5"
+          },
+          {
+            "headline": "U.S.-China power gap hits record low as Asia weighs nuclear subs - upi",
+            "source": "upi",
+            "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQSmJybnpQYmNmMmFqamZpNEJGSVpDTERNX0JKd2NTQzRXdXlUQWtVT2M3Y00xVHUyeVZ2NkU0eC0xOW42WHlxRGJPSnVid3Zra2Z5ckduVWtERDVkcTkxT2lheDlteHBFTDEyQnpTUmt5YjVyVTYxam1yMW5qaTRBaW10Umg5OEdraWdNV3UtVFBRUlZNZGJ0V2hEcFBxOTNtclVXYWpfQ3VwaGtpekhqYnJscGpLUDJZTHFUNdIBwgFBVV95cUxNbnh6UENOMDV0QnFRdFVJc3BJb3prY2RNYzR5OHh0UzNwTUg2bGg1NEtMbmUwbDZ5MTNaSGlvR29Pd0pfNzd6emtlaWIwcnBwWHVqQXpsdHFfT05aa1N1NUMtSzduOW5WZ3RSTTAxNUxqRzRJNnd3THVaYlJjWWFRSVBuSjJnVHJPOTk4T3UyYTl5VWpNSlB6TVJ2TTRFc3ctbXVld2dQNFpKanlPTkRDam12UTB4S0NCVjdZOEJscUtRdw?oc=5"
+          },
+          {
+            "headline": "With Qianfan, China Has Its Answer to Starlink - The Diplomat – Asia-Pacific Current Affairs Magazine",
+            "source": "The Diplomat – Asia-Pacific Current Affairs Magazine",
+            "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxPT1VwbnRsZ1F6NmVkX2pxXzVMYkJFX0R3SEZqdm5iaVRhSWVkck9DVGZSOW02T2p2WFBEVnNIWWFOaVdIcWtOSnprTUY1bE1DbG1SeTZoWDFobTBSajRLZ3RtVnNqdkVKcnpndHZxZ2U0dzhwYlhSUDJFdGdYb0Jud2VPUm8?oc=5"
+          }
+        ]
       },
       {
         "id": "sudan-horn",
@@ -701,7 +728,7 @@
           1.0,
           4.0,
           2.0,
-          4.0,
+          3.0,
           7.0,
           4.0,
           7.0,
@@ -710,7 +737,7 @@
           3.0,
           2.0
         ],
-        "summary": "Drone strikes hit residential areas and a UN facility in Khartoum as civilian casualties climb in Sudan's civil war. Across the Red Sea, Hodeidah port faced evacuation orders following Houthi attacks on Riyadh, prompting high-level US-Saudi security consultations.",
+        "summary": "Conditions remain volatile with an upward 7-day trend as drone strikes hit homes and a UN facility in Khartoum. Cross-Red Sea spillovers intensified, with Saudi-led coalition strikes hitting Yemen's Hodeidah port following a Houthi attack on Riyadh that injured 11 people.",
         "timeline_events": [
           {
             "headline": "Drone Strikes Hit Khartoum Homes and UN Facility as Civilian Toll Rises in Sudan - Latin Times",
@@ -728,9 +755,9 @@
             "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNVHE4WE9JM2JBWk52Rzg1WEFzU3NEYnp2RjMyMEd1YjNGaC0zRV9MQ3ZQNnNyLUh2OEItV0hCM0Jza0RCT3hXR0NzNDNBbnlCMk9JbzU0ZjloWlYzVS1PUHh0aEJ3dVZjdTcya2t5LTJHbko1QTdJN3ZBOXczR0UyYXJsSnlCYWNqLVZFUk9ETVF1YlI4V0RQZ0w4TFNiem1GMXJiMkF0ZDR1dDUxTFREclE3VkQ?oc=5"
           },
           {
-            "headline": "Why Egypt’s tribal gold pact matters to Nile and Red Sea security - Arab News",
-            "source": "Arab News",
-            "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQeVRtVXRpbDljM0M5akdLUENDbm0tVExibkRsNlNtNF80UGpiLUhtVHkzcUl3cDBXTklPWjJRSGpMSFpjWEVjZ1BhREdZS0twQkxrUF9LZ2tnaWYzRWxiRGp4VHl6Q1pBZEFBdEtVS2Z3ZE5vUGRTRWdWRzFKcTVMVDZiS3RnaEdheEpZTnRRRFFILWpiUkRKMHlpNGxfdFBGMXZ1cHRRVTExT3E0cmc?oc=5"
+            "headline": "Daily_Brief: #Saudi-led coalition strikes #Yemen’s #Hodeidah port, targets in north; Houthis threaten Saudi #Red_Sea ports - Addis Standard",
+            "source": "Addis Standard",
+            "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE5CLXRTTGdLVUprUzFBc3pCcXl2Y0ZsSkE3STV6dUp0Y3RLTmN1eERYc0xIV0pNV1VXTlZHQmF4N1hndWJDLXc1QVlqZDB6Y2ttWmc?oc=5"
           }
         ]
       },
@@ -740,7 +767,7 @@
         "region": "Global Flashpoints",
         "status": "elevated",
         "trend_7d": "up",
-        "intensity_score": 15.0,
+        "intensity_score": 17.0,
         "intensity_series_14d": [
           9.0,
           3.0,
@@ -754,111 +781,105 @@
           11.0,
           4.0,
           23.0,
-          15.0
+          17.0
         ],
-        "summary": "Leaked records revealed that 349 Russian fighters have been killed over three years propping up Mali's military junta, underscoring Moscow's costly footprint across the Sahel. In the Democratic Republic of Congo, residents filed a landmark lawsuit against a Chinese-owned copper and cobalt mine over alleged community contamination.",
+        "summary": "Sahel and global flashpoint intensity ticked up over the past week (17.0, 7-day trend up) amid renewed scrutiny of Moscow's military footprint in West Africa. Leaked records cited by The Guardian documented more than 300 Russian fighter deaths in Mali over three years.",
         "timeline_events": []
       }
     ]
   },
   "us_politics": {
-    "pulse_summary": "Washington is navigating rapid post-midterm realignment after Democrats flipped at least 47 House seats, even as bipartisan anger over President Trump's role in reinstating Nvidia CEO Jensen Huang accelerates a push for China chip export curbs. Meanwhile, early 2028 positioning, unexpected healthcare overtures between Trump and incoming Democrats, and low public confidence in the FAA dominate domestic coverage.",
+    "pulse_summary": "Post-midterm Washington is dominated by bipartisan pushback over the White House's role in Jensen Huang's return to Nvidia, alongside renewed legislative momentum for China chip export restrictions. Meanwhile, Rep. Jimmy Gomez announced his resignation effective Dec. 1 following a House Ethics report, and House Democrats opened a probe into Trump Jr.-linked investment firm 1789 Capital.",
     "prediction_markets": [
       {
         "question": "Will David Lisnard win the 2027 French presidential election?",
         "yes_prob": 0.251,
         "delta_24h": 0.015,
-        "volume_usd": 183689759.43,
+        "volume_usd": 183693658.46,
         "url": "https://polymarket.com/event/next-french-presidential-election"
       },
       {
         "question": "Will Benjamin Netanyahu be the next Prime Minister of Israel?",
-        "yes_prob": 0.222,
-        "delta_24h": -0.012,
-        "volume_usd": 94344204.04,
+        "yes_prob": 0.207,
+        "delta_24h": -0.0315,
+        "volume_usd": 94360392.5,
         "url": "https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election"
       },
       {
         "question": "Will Puma Shen win the next Taipei Mayor election?",
-        "yes_prob": 0.362,
-        "delta_24h": 0.0405,
-        "volume_usd": 7886961.36,
+        "yes_prob": 0.359,
+        "delta_24h": 0.0345,
+        "volume_usd": 7886969.18,
         "url": "https://polymarket.com/event/taipei-mayor-election-winner-20260813125857100"
       },
       {
         "question": "Will Raphael Warnock win the 2028 Democratic presidential nomination?",
         "yes_prob": 0.0385,
         "delta_24h": 0.0,
-        "volume_usd": 1332198467.83,
+        "volume_usd": 1332198669.03,
         "url": "https://polymarket.com/event/democratic-presidential-nominee-2028"
       },
       {
         "question": "Will Josh Hawley win the 2028 Republican presidential nomination?",
         "yes_prob": 0.0115,
         "delta_24h": 0.0,
-        "volume_usd": 744975318.87,
+        "volume_usd": 744975322.07,
         "url": "https://polymarket.com/event/republican-presidential-nominee-2028"
       },
       {
         "question": "US announces end of Iranian blockade by December 31, 2026?",
-        "yes_prob": 0.1315,
-        "delta_24h": -0.026,
+        "yes_prob": 0.1325,
+        "delta_24h": -0.025,
         "volume_usd": 55227849.54,
         "url": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080"
       }
     ],
     "legislative_and_executive": [
       {
-        "title": "Bipartisan Push for China Chip Export Controls in Year-End Defense Bill",
+        "title": "Bipartisan push for China chip export restrictions in defense bill",
         "chamber_or_branch": "Congress",
-        "summary": "Lawmakers from both parties are rallying to include stricter chip export restrictions to China in the annual defense bill following Trump's intervention to reinstate Jensen Huang as Nvidia CEO.",
+        "summary": "Lawmakers in both parties are rallying behind efforts to include tighter restrictions on semiconductor sales to China in a year-end defense package following Jensen Huang's reinstatement at Nvidia.",
         "url": "https://thehill.com/newsletters/technology/6241465-chip-restrictions-in-the-spotlight-after-huangs-return/"
       },
       {
-        "title": "Rep. Jimmy Gomez Announces Resignation Following House Ethics Report",
-        "chamber_or_branch": "House",
-        "summary": "California Democrat Rep. Jimmy Gomez announced he will resign effective Dec. 1 after a House Ethics Committee report concluded he violated House rules.",
+        "title": "Rep. Jimmy Gomez resigns effective Dec. 1 after House Ethics report",
+        "chamber_or_branch": "House of Representatives",
+        "summary": "California Democrat Rep. Jimmy Gomez announced his resignation after a House Ethics Committee report concluded he violated House rules regarding unwelcome sexual advances.",
         "url": "https://www.npr.org/2026/11/23/g-s1-155142/california-democrat-rep-gomez-resigns-following-ethics-report-on-sexual-misconduct-allegations"
       },
       {
-        "title": "Trump Signals Healthcare Talks on 'TrumpCare' With Sen.-Elect El-Sayed",
-        "chamber_or_branch": "White House",
-        "summary": "President Trump said he will meet incoming Michigan Sen. Abdul El-Sayed (D) to discuss rebranding a single-payer healthcare proposal as 'TrumpCare,' alongside cooperative signals from Sen.-elect Scott Colom (D-Miss.).",
-        "url": "https://thehill.com/homenews/administration/6241682-trump-el-sayed-trumpcare-healthcare/"
-      },
-      {
-        "title": "Democrats Probe Trump Jr.-Aligned 1789 Capital Over Government Access",
-        "chamber_or_branch": "House",
-        "summary": "House Democratic investigators led by Rep. Jamie Raskin are examining whether companies tied to Donald Trump Jr.'s investment firm 1789 Capital benefited from government access.",
+        "title": "House Democrats probe 1789 Capital over potential government-access benefits",
+        "chamber_or_branch": "House of Representatives",
+        "summary": "Democratic investigators led by Rep. Jamie Raskin are examining whether companies tied to Donald Trump Jr.'s investment firm, 1789 Capital, profited from federal government access.",
         "url": "https://www.npr.org/2026/11/24/nx-s1-6051028/jamie-raskin-donald-trump-jr-1789-capital-democrats-investigation"
       },
       {
-        "title": "FAA Issues Second O'Hare Ground Stop in Two Days Amid Low Public Trust",
-        "chamber_or_branch": "Executive Agency",
-        "summary": "An equipment outage triggered a brief FAA ground stop at Chicago O'Hare as a new Economist/YouGov poll found 28% of Americans have 'very little' confidence in the agency.",
-        "url": "https://thehill.com/homenews/administration/6241322-faa-ohare-ground-stop/"
+        "title": "DOJ apologizes to House counsel over Omar home-search dispute",
+        "chamber_or_branch": "Department of Justice",
+        "summary": "The Justice Department issued an apology to the House's top lawyer after misconstruing the counsel's position in a court filing related to the search of Rep. Ilhan Omar's home.",
+        "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNT3QyeUJFYUtSWGUzM19jcUpvZTBTVzFOd3dYQ1dXcDE3OTh2VnZoR1V5cUE2UFRha1otdHlXcHM1dXhjVDRxMWxyT0g0cFpDa09zZ2huUDRoaFdmc0RNbEYzRXZ4S205YWp4MjM3SE9uR214eEVkMkpYd3B4d2ZhOTZqbF8zaWlLOXJMUlhhRmfSAZYBQVVfeXFMT3NYdmZiZWtvNWNKWEFWM0J1QVRzdnNGRXhwYUlzNlA1RnFjakdENExKc3lsODFaTGNDZ094SndrWEl4SlN6SjJwVUhsUG93eWR0RUNuYWIyVlB2U2hONm9SME4yb1hyeUFkNjladHpPd05NSFFVSkFRSENpWVpjREVvTjJJN2RUZDJKODFxcWgxcW5wSFZ3?oc=5"
       }
     ],
     "trending_topics": [
       {
-        "topic": "Nvidia CEO Return & China Chip Controls",
+        "topic": "Nvidia CEO reinstatement & chip export controls",
         "momentum": "rising",
-        "framing_note": "Bipartisan national-security hawks are emphasizing export-control loopholes, while 2028 Democratic contenders frame Trump's intervention as a corporate-influence and anti-corruption issue."
+        "framing_note": "Both parties are criticizing executive involvement in Nvidia's leadership, with Democrats framing it as governance corruption and hawks pushing stricter China chip curbs."
       },
       {
-        "topic": "Post-Midterm Party Realignment & 2028 Positioning",
-        "momentum": "rising",
-        "framing_note": "Following Democrats' 47+ seat House flip, GOP chairs debate Trump's 2028 role while newly elected Democratic governors focus on cost-of-living relief in housing, energy, and healthcare."
-      },
-      {
-        "topic": "Iran Blockade & Maritime Security",
-        "momentum": "rising",
-        "framing_note": "Polymarket odds of the US announcing an end to the Iranian blockade by Dec. 31 slipped to 13% (-2.6 pts in 24h) amid Strait of Hormuz disruptions and reported vessel cyberattacks."
-      },
-      {
-        "topic": "Aviation Safety & FAA Confidence",
+        "topic": "Post-midterm House & party realignment",
         "momentum": "steady",
-        "framing_note": "Repeated ground stops at major hubs like O'Hare are keeping infrastructure reliability and federal agency capacity in focus ahead of holiday travel."
+        "framing_note": "With Democrats expanding House gains, coverage centers on incoming Democratic governors' cost-of-living agendas and Republican debates over the party's post-2026 direction."
+      },
+      {
+        "topic": "US-Iran conflict & Strait of Hormuz blockade",
+        "momentum": "rising",
+        "framing_note": "Prediction markets assign a 13.25% probability to the US ending the Iranian blockade by Dec. 31 as maritime shipping and cyber risks dominate security coverage."
+      },
+      {
+        "topic": "Healthcare & bipartisan 'TrumpCare' outreach",
+        "momentum": "rising",
+        "framing_note": "President Trump's planned meeting with Sen.-elect Abdul El-Sayed on single-payer rebranding and Sen.-elect Scott Colom's remarks signal early cross-party messaging on healthcare."
       }
     ]
   }
