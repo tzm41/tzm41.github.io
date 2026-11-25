@@ -300,15 +300,20 @@ a {
 
 .section {
   margin-bottom: 44px;
-  scroll-margin-top: 64px;
+  scroll-margin-top: calc(var(--nav-height, 43px) + 8px);
 }
 
 .section-header {
+  position: sticky;
+  top: var(--nav-height, 43px);
+  z-index: 25;
+  background: var(--bg);
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
+  padding-top: 10px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 18px;

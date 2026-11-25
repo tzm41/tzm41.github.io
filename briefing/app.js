@@ -770,6 +770,14 @@ async function loadBriefingForDate(dateStr) {
 
 function initScrollSpy() {
   const nav = document.querySelector(".section-nav");
+  const syncNavHeight = () => {
+    if (nav) {
+      document.documentElement.style.setProperty("--nav-height", `${Math.round(nav.getBoundingClientRect().height)}px`);
+    }
+  };
+  syncNavHeight();
+  window.addEventListener("resize", syncNavHeight, { passive: true });
+
   const links = [...document.querySelectorAll(".nav-links a[href^='#']")];
   const pairs = links
     .map((link) => {
