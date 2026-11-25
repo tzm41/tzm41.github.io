@@ -121,7 +121,7 @@ def _fetch_fear_greed(client: httpx.Client) -> dict[str, Any] | None:
         return None
 
 
-def _download_df(symbols: list[str], period: str, interval: str) -> Any:
+def _download_df(symbols: list[str], period: str, interval: str, prepost: bool = False) -> Any:
     try:
         return yf.download(
             tickers=symbols,
@@ -129,6 +129,7 @@ def _download_df(symbols: list[str], period: str, interval: str) -> Any:
             interval=interval,
             group_by="ticker",
             auto_adjust=True,
+            prepost=prepost,
             progress=False,
             threads=True,
         )
@@ -179,8 +180,14 @@ def _merge_daily_closes(
         return None
     anchor_val = prior_30d[-1]
     anchor_date = prior_30d_times[-1]
+    # Exact date match: overwrite anchor_date so intraday/closing updates replace stale morning values
     for idx in range(len(recent_5d) - 1, -1, -1):
-        if recent_5d_times[idx] == anchor_date or abs(recent_5d[idx] - anchor_val) <= 0.02:
+        if recent_5d_times[idx] == anchor_date:
+            merged_vals = (prior_30d[:-1] + recent_5d[idx:])[-30:]
+            merged_times = (prior_30d_times[:-1] + recent_5d_times[idx:])[-30:]
+            return merged_vals, merged_times
+    for idx in range(len(recent_5d) - 1, -1, -1):
+        if abs(recent_5d[idx] - anchor_val) <= 0.02:
             merged_vals = (prior_30d + recent_5d[idx + 1 :])[-30:]
             merged_times = (prior_30d_times + recent_5d_times[idx + 1 :])[-30:]
             return merged_vals, merged_times
@@ -199,7 +206,7 @@ def _download_timeframes(
     with ThreadPoolExecutor(max_workers=3) as pool:
         fut_5d_daily = pool.submit(_download_df, all_daily_symbols, "5d", "1d")
         fut_5d_1h = pool.submit(_download_df, quote_symbols, "5d", "1h") if include_intraday else None
-        fut_1d_30m = pool.submit(_download_df, quote_symbols, "2d", "30m") if include_intraday else None
+        fut_1d_30m = pool.submit(_download_df, quote_symbols, "2d", "30m", True) if include_intraday else None
 
         df_5d_daily = fut_5d_daily.result()
 
@@ -291,6 +298,16 @@ def _build_quote_list(
             prev_30d = closes[0]
             s1d, t1d = tf_extractors["1d"](sym)
             s5d, t5d = tf_extractors["5d"](sym)
+            if s1d and t1d and closes_times:
+                try:
+                    last_1d_ny = pd.Timestamp(t1d[-1]).tz_convert("America/New_York").strftime("%Y-%m-%d")
+                except Exception:
+                    last_1d_ny = t1d[-1][:10]
+                if last_1d_ny > closes_times[-1]:
+                    prev_1d = closes[-1]
+                    latest = s1d[-1]
+                elif last_1d_ny == closes_times[-1]:
+                    latest = s1d[-1]
             quotes.append(
                 {
                     "symbol": sym,

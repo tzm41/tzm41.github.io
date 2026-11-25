@@ -36,17 +36,17 @@
     }
   ],
   "afternoon_brief": {
-    "generated_at": "2026-11-25T22:53:55Z",
+    "generated_at": "2026-11-25T23:11:14Z",
     "bullets": [
       {
-        "text": "**US equities sold off sharply into the afternoon** as the S&P 500 fell 2.13% to 7,047.89, the Nasdaq dropped 3.07% to 23,003.95, and the Dow slid 1.44% to 49,299.82, while the **VIX surged 32.59% to 34.95** and the Fear & Greed Index slipped to 15.2 (Extreme Fear).",
+        "text": "**US equities staged a sharp afternoon rebound** off early lows, with the Dow climbing 0.33% to 50,182.95 and the Russell 2000 gaining 0.71% to 2,704.06, while the S&P 500 trimmed losses to -0.25% (7,182.78), the Nasdaq finished down 0.62% (23,585.80), and the **VIX cooled to 28.29** (+7.32%).",
         "category": "Economy",
-        "sentiment": "very_negative"
+        "sentiment": "slightly_positive"
       },
       {
-        "text": "**Mega-cap tech led the afternoon decline**, with Nvidia down 6.35% ($145.51), Tesla off 5.33% ($364.17), Amazon down 4.52% ($240.88), and Alphabet down 3.96% ($268.01), while the US 10-year yield eased to 4.82% (-1.63%), WTI crude fell 1.88% to $80.51, Gold dipped 1.21% to $3,518.70, and Bitcoin edged down 1.28% to $58,980.37.",
+        "text": "**Big Tech closed mixed in extended trading** as Meta rallied 2.97% ($607.34) and Apple edged up 0.34% ($355.28), offsetting declines in Nvidia (-3.62%, $149.76), Amazon (-2.75%, $245.35), and Alphabet (-1.99%, $273.49), while **WTI crude jumped 2.43% to $84.04**, Gold rose 1.48% to $3,614.60, and Bitcoin climbed 0.58% to $60,095.46.",
         "category": "Tech",
-        "sentiment": "negative"
+        "sentiment": "neutral"
       },
       {
         "text": "The **US announced new tariffs on major trading partners** including China and the EU, adding fresh trade policy pressure alongside Capitol Hill demands from Republican lawmakers for FBI and CIA answers ahead of questioning Nvidia CEO *Jensen Huang*.",
