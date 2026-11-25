@@ -216,6 +216,32 @@ a {
   transform: rotate(180deg);
 }
 
+.masthead-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--ink-secondary);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.masthead-icon-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--ink);
+}
+
+.masthead-icon-btn svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
+
 .masthead-controls .segmented {
   height: 32px;
   align-items: stretch;

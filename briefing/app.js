@@ -26,7 +26,7 @@ const els = {
   btnPrevDay: document.getElementById("btn-prev-day"),
   btnNextDay: document.getElementById("btn-next-day"),
   btnExpandAll: document.getElementById("btn-expand-all"),
-  themeSwitcher: document.getElementById("theme-switcher"),
+  themeToggle: document.getElementById("theme-toggle"),
   sourceHealth: document.getElementById("source-health"),
   statusBanner: document.getElementById("status-banner"),
   kpiWrapper: document.getElementById("kpi-wrapper"),
@@ -387,6 +387,11 @@ function sectorTileStyle(pct) {
 
 /* ---------- Theme ---------- */
 
+const THEME_ICONS = {
+  light: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2M12 19.5v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2.5 12h2M19.5 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>`,
+  dark: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`,
+};
+
 function resolveTheme(pref) {
   if (pref === "light" || pref === "dark") return pref;
   return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -397,11 +402,13 @@ function applyThemePreference(pref) {
   const resolved = resolveTheme(validPref);
   document.documentElement.setAttribute("data-theme", resolved);
 
-  els.themeSwitcher?.querySelectorAll(".seg-btn").forEach((btn) => {
-    const active = btn.dataset.themePref === validPref;
-    btn.classList.toggle("active", active);
-    btn.setAttribute("aria-pressed", String(active));
-  });
+  if (els.themeToggle) {
+    els.themeToggle.innerHTML = THEME_ICONS[resolved];
+    const nextLabel = resolved === "dark" ? "Switch to light mode" : "Switch to dark mode";
+    els.themeToggle.setAttribute("aria-label", nextLabel);
+    els.themeToggle.setAttribute("title", nextLabel);
+    els.themeToggle.setAttribute("aria-pressed", String(resolved === "dark"));
+  }
 
   if (state.briefing) renderSectorHeatmap(state.briefing.markets);
 }
@@ -411,10 +418,9 @@ function initTheme() {
   const saved = localStorage.getItem("briefing-theme") || "system";
   applyThemePreference(saved);
 
-  els.themeSwitcher?.addEventListener("click", (e) => {
-    const btn = e.target.closest(".seg-btn");
-    if (!btn) return;
-    const nextPref = btn.dataset.themePref || "system";
+  els.themeToggle?.addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme") || resolveTheme("system");
+    const nextPref = current === "dark" ? "light" : "dark";
     localStorage.setItem("briefing-theme", nextPref);
     applyThemePreference(nextPref);
   });
