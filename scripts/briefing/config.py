@@ -21,6 +21,11 @@ USER_AGENT = "DailyBriefingBot/1.0 (+https://tzm41.github.io/briefing/)"
 
 # Gemini settings
 GEMINI_MODEL = "gemini-3.8-flash"
+GEMINI_FALLBACK_MODELS: list[str] = [
+    "gemini-3.8-flash",
+    "gemini-3.8-flash-lite",
+    "gemini-2.5-flash-lite",
+]
 
 # Curated free RSS feeds for Top News
 NEWS_FEEDS: list[dict[str, str]] = [

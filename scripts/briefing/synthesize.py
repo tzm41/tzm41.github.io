@@ -7,7 +7,7 @@ import os
 import time
 from typing import Any
 
-from .config import GEMINI_MODEL
+from .config import GEMINI_FALLBACK_MODELS, GEMINI_MODEL
 from .schema import (
     ConflictTheater,
     ConflictsSection,
@@ -105,27 +105,39 @@ def _call_gemini(prompt: str, api_key: str) -> GeminiBriefingSynthesis | None:
         return None
 
     client = genai.Client(api_key=api_key)
-    model_name = os.environ.get("GEMINI_MODEL", "").strip() or GEMINI_MODEL
-    for attempt in range(1, 4):
-        try:
-            response = client.models.generate_content(
-                model=model_name,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    system_instruction=SYSTEM_INSTRUCTION,
-                    response_mime_type="application/json",
-                    response_schema=GeminiBriefingSynthesis,
-                    temperature=0.25,
-                ),
-            )
-            if response.parsed is not None and isinstance(response.parsed, GeminiBriefingSynthesis):
-                return response.parsed
-            if response.text:
-                return GeminiBriefingSynthesis.model_validate_json(response.text)
-        except Exception as exc:
-            print(f"[synthesize] Gemini attempt {attempt}/3 failed: {exc}")
-            if attempt < 3:
-                time.sleep(2 ** attempt)
+    env_model = os.environ.get("GEMINI_MODEL", "").strip()
+    candidates = [env_model] if env_model else []
+    for m in [GEMINI_MODEL, *GEMINI_FALLBACK_MODELS]:
+        if m and m not in candidates:
+            candidates.append(m)
+
+    for model_name in candidates:
+        for attempt in range(1, 3):
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        system_instruction=SYSTEM_INSTRUCTION,
+                        response_mime_type="application/json",
+                        response_schema=GeminiBriefingSynthesis,
+                        temperature=0.25,
+                    ),
+                )
+                if response.parsed is not None and isinstance(response.parsed, GeminiBriefingSynthesis):
+                    print(f"[synthesize] Synthesized successfully with {model_name}.")
+                    return response.parsed
+                if response.text:
+                    print(f"[synthesize] Synthesized successfully with {model_name}.")
+                    return GeminiBriefingSynthesis.model_validate_json(response.text)
+            except Exception as exc:
+                err_str = str(exc)
+                print(f"[synthesize] {model_name} attempt {attempt}/2 failed: {err_str}")
+                if "404" in err_str or "NOT_FOUND" in err_str:
+                    break  # Skip unavailable model immediately
+                if attempt < 2:
+                    sleep_s = 12 if "503" in err_str or "UNAVAILABLE" in err_str else 4
+                    time.sleep(sleep_s)
     return None
 
 
