@@ -596,7 +596,10 @@ function renderConflicts(conflicts = {}) {
               14D GDELT Intensity: <strong>${Number(t.intensity_score || 0).toFixed(0)}</strong>
               &middot; 7D: <strong>${trendArrow[t.trend_7d] || "→ Steady"}</strong>
             </div>
-            ${buildSparklineSvg(t.intensity_series_14d, sparkColor, "intensity-spark")}
+            <div class="sparkline-wrap intensity-spark-wrap" data-kind="gdelt" data-values="${escapeHtml(JSON.stringify(t.intensity_series_14d || []))}">
+              <div class="spark-tooltip hidden"></div>
+              ${buildSparklineSvg(t.intensity_series_14d, sparkColor, "intensity-spark", true)}
+            </div>
           </div>
 
           <p class="conflict-summary">${highlightSummaryHtml(t.summary)}</p>
@@ -788,8 +791,8 @@ function initScrollSpy() {
 }
 
 function initSparklineHover() {
-  const marketsSection = document.getElementById("markets");
-  if (!marketsSection) return;
+  const root = document.getElementById("app-root");
+  if (!root) return;
 
   const clearHover = (wrap) => {
     if (!wrap) return;
@@ -800,7 +803,7 @@ function initSparklineHover() {
 
   let activeWrap = null;
 
-  marketsSection.addEventListener("pointermove", (e) => {
+  root.addEventListener("pointermove", (e) => {
     const wrap = e.target.closest(".sparkline-wrap");
     if (!wrap) {
       if (activeWrap) {
@@ -850,7 +853,10 @@ function initSparklineHover() {
       dot.setAttribute("cy", ptY.toFixed(1));
     }
     if (tip) {
-      tip.textContent = fmtPrice(val, wrap.dataset.symbol);
+      tip.textContent =
+        wrap.dataset.kind === "gdelt"
+          ? `${Number(val).toFixed(0)}`
+          : fmtPrice(val, wrap.dataset.symbol);
       const pctLeft = Math.max(14, Math.min(86, (ptX / w) * 100));
       tip.style.left = `${pctLeft.toFixed(1)}%`;
       tip.classList.remove("hidden");
@@ -858,7 +864,7 @@ function initSparklineHover() {
     wrap.classList.add("hovering");
   });
 
-  marketsSection.addEventListener("pointerleave", () => {
+  root.addEventListener("pointerleave", () => {
     if (activeWrap) {
       clearHover(activeWrap);
       activeWrap = null;

@@ -1042,10 +1042,16 @@ h3 {
   color: var(--ink);
 }
 
-.intensity-spark {
+.intensity-spark-wrap {
   width: 110px;
-  height: 28px;
   flex-shrink: 0;
+}
+
+.intensity-spark {
+  width: 100%;
+  height: 28px;
+  display: block;
+  overflow: visible;
 }
 
 .conflict-summary {
