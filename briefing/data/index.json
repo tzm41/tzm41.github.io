@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-25T05:52:49Z",
+  "updated_at": "2026-11-25T06:06:10Z",
   "latest_date": "2026-11-25",
   "dates": [
     "2026-11-25"
@@ -7,13 +7,13 @@
   "kpi_history_30d": [
     {
       "date": "2026-11-25",
-      "regime": "Risk-Off",
+      "regime": "Mixed",
       "sp500_price": 7201.09,
       "sp500_pct": -0.5,
       "vix": 26.36,
       "us10y": 4.9,
-      "top_theater": "Sudan & Horn of Africa",
-      "conflict_index": 266.0
+      "top_theater": "Sahel & Myanmar",
+      "conflict_index": 32.0
     }
   ]
 }

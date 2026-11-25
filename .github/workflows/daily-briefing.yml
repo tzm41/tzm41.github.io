@@ -1,9 +1,10 @@
 name: Daily News & Trends Briefing
 
 on:
-  schedule:
-    # Runs daily at 12:30 UTC (5:30 AM PT / 8:30 AM ET during standard time)
-    - cron: "30 12 * * *"
+  # Scheduled GitHub Actions cron disabled in favor of Antigravity / local automation.
+  # Uncomment below to re-enable daily cloud runs:
+  # schedule:
+  #   - cron: "30 12 * * *"
   workflow_dispatch:
     inputs:
       date:
