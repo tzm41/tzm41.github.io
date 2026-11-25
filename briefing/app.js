@@ -391,6 +391,11 @@ function renderQuoteGrid(container, quotes, is5d, emptyMsg) {
           : cls === "neg"
           ? "var(--neg)"
           : "var(--ink-muted)";
+      const series = Array.isArray(q.sparkline_30d)
+        ? is5d && q.sparkline_30d.length >= 6
+          ? q.sparkline_30d.slice(-6)
+          : q.sparkline_30d
+        : [];
       return `
         <div class="quote-card">
           <div class="quote-top">
@@ -401,7 +406,7 @@ function renderQuoteGrid(container, quotes, is5d, emptyMsg) {
             <span class="quote-price">${fmtPrice(q.price, q.symbol)}</span>
             <span class="delta-pill ${cls}">${fmtPct(pct)}</span>
           </div>
-          ${buildSparklineSvg(q.sparkline_30d, stroke)}
+          ${buildSparklineSvg(series, stroke)}
         </div>
       `;
     })
@@ -482,7 +487,7 @@ function renderMarkets(markets = {}) {
       els.big7Block.classList.remove("hidden");
       if (els.big7Label) {
         els.big7Label.textContent = is5d
-          ? "Mega-cap tech leaders (5D change & 30D trend)"
+          ? "Mega-cap tech leaders (5D change & 5D trend)"
           : "Mega-cap tech leaders (1D change & 30D trend)";
       }
       renderQuoteGrid(els.big7Grid, big7, is5d, "");
