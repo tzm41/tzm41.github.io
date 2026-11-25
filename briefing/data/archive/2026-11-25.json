@@ -2338,5 +2338,18 @@
         "framing_note": "President Trump's planned meeting with Sen.-elect Abdul El-Sayed on single-payer rebranding and Sen.-elect Scott Colom's remarks signal early cross-party messaging on healthcare."
       }
     ]
+  },
+  "positive_news": {
+    "id": "brazil-wolbachia-mosquito-breakthrough",
+    "category": "Science",
+    "headline": "Mosquito-borne viral infections drop 68% in Brazil trial using Wolbachia bacteria",
+    "summary": "A population-scale public health trial in Brazil found that releasing mosquitoes carrying naturally occurring Wolbachia bacteria reduced the risk of mosquito-borne viral infections among schoolchildren by 68%. The biological control method blocks viruses like dengue from replicating inside mosquitoes without relying on chemical insecticides.",
+    "why_it_matters": "Scalable, self-sustaining biological interventions offer a durable way to curb dengue and other tropical viral outbreaks across high-risk urban populations.",
+    "sources": [
+      {
+        "name": "Good News Network",
+        "url": "https://www.goodnewsnetwork.org/major-success-sees-viral-infections-fall-68-in-brazil-after-releasing-wolbachia-infected-mosquitoes/"
+      }
+    ]
   }
 }

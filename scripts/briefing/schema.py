@@ -135,6 +135,7 @@ class DailyBriefing(BaseModel):
     markets: MarketsSection
     conflicts: ConflictsSection
     us_politics: PoliticsSection
+    positive_news: NewsStory | None = None
 
 
 # --- Gemini structured output schema (LLM generates narratives/summaries only) ---
@@ -171,4 +172,7 @@ class GeminiBriefingSynthesis(BaseModel):
     )
     trending_topics: list[PoliticalTopic] = Field(
         description="3 to 5 trending US political topics with momentum and neutral framing notes."
+    )
+    positive_news: NewsStory = Field(
+        description="One uplifting, constructive, or breakthrough positive news story (science, health, conservation, or human progress) with a 2-3 sentence summary, why_it_matters, and grounded verbatim source URL."
     )

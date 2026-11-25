@@ -12,7 +12,7 @@ import feedparser
 import httpx
 from bs4 import BeautifulSoup
 
-from ..config import HTTP_TIMEOUT_SECONDS, NEWS_FEEDS, USER_AGENT
+from ..config import HTTP_TIMEOUT_SECONDS, NEWS_FEEDS, POSITIVE_NEWS_FEEDS, USER_AGENT
 
 
 _WS_RE = re.compile(r"\s+")
@@ -140,3 +140,14 @@ async def fetch_top_news() -> tuple[list[dict[str, Any]], str]:
         return [], "failed"
     health = "ok" if succeeded >= len(NEWS_FEEDS) // 2 else "partial"
     return deduped, health
+
+
+async def fetch_positive_news() -> list[dict[str, Any]]:
+    """Fetch uplifting / constructive news candidates for the daily Positive News highlight."""
+    async with httpx.AsyncClient(
+        timeout=HTTP_TIMEOUT_SECONDS,
+        headers={"User-Agent": USER_AGENT},
+    ) as client:
+        results = await asyncio.gather(*[_fetch_feed(client, cfg) for cfg in POSITIVE_NEWS_FEEDS])
+    all_items = [item for batch in results for item in batch]
+    return deduplicate_articles(all_items, max_items=8)

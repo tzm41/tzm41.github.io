@@ -46,6 +46,7 @@ def _build_prompt(
     raw_conflicts: list[dict[str, Any]],
     raw_politics: dict[str, Any],
     prior_briefing: dict[str, Any] | None,
+    raw_positive: list[dict[str, Any]] | None = None,
 ) -> str:
     payload = {
         "briefing_date": date_str,
@@ -100,6 +101,7 @@ def _build_prompt(
             "prediction_markets": raw_politics.get("prediction_markets", [])[:6],
             "articles": raw_politics.get("articles", [])[:25],
         },
+        "positive_news_candidates": (raw_positive or [])[:8],
     }
     return (
         "Synthesize today's Daily News & Trends Briefing from the following verified raw inputs.\n"
@@ -336,6 +338,7 @@ def merge_synthesis(
             legislative_and_executive=ai.legislative_and_executive,
             trending_topics=ai.trending_topics,
         ),
+        positive_news=ai.positive_news,
     )
 
 
@@ -348,6 +351,7 @@ def synthesize_briefing(
     raw_conflicts: list[dict[str, Any]],
     raw_politics: dict[str, Any],
     prior_briefing: dict[str, Any] | None = None,
+    raw_positive: list[dict[str, Any]] | None = None,
 ) -> DailyBriefing:
     """Synthesize a validated DailyBriefing using Gemini or extractive fallback."""
     api_key = os.environ.get("GEMINI_API_KEY", "").strip()
@@ -358,7 +362,7 @@ def synthesize_briefing(
         )
 
     prompt = _build_prompt(
-        date_str, raw_news, raw_markets, raw_conflicts, raw_politics, prior_briefing
+        date_str, raw_news, raw_markets, raw_conflicts, raw_politics, prior_briefing, raw_positive
     )
     ai = _call_gemini(prompt, api_key)
     if ai is None:

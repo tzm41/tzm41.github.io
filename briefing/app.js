@@ -44,6 +44,8 @@ const els = {
   polymarketList: document.getElementById("polymarket-list"),
   policyList: document.getElementById("policy-list"),
   topicsList: document.getElementById("topics-list"),
+  positiveSection: document.getElementById("positive"),
+  positiveNewsSlot: document.getElementById("positive-news-slot"),
 };
 
 /* ---------- Utilities ---------- */
@@ -688,6 +690,34 @@ function renderPolitics(politics = {}) {
   }
 }
 
+function renderPositiveNews(story) {
+  if (!els.positiveSection || !els.positiveNewsSlot) return;
+  if (!story || !story.headline) {
+    els.positiveSection.classList.add("hidden");
+    els.positiveNewsSlot.innerHTML = "";
+    return;
+  }
+  const sourcesHtml = (story.sources || [])
+    .map(
+      (src) =>
+        `<a class="source-chip" href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`
+    )
+    .join("");
+
+  els.positiveSection.classList.remove("hidden");
+  els.positiveNewsSlot.innerHTML = `
+    <article class="positive-card">
+      <div class="news-meta">
+        <span class="cat-pill">${escapeHtml(story.category || "Progress")}</span>
+      </div>
+      <h3>${escapeHtml(story.headline)}</h3>
+      <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
+      <div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>
+      <div class="source-links">${sourcesHtml}</div>
+    </article>
+  `;
+}
+
 function renderAll(briefing) {
   state.briefing = briefing;
   els.editionDate.textContent = fmtReadableDate(briefing.date);
@@ -699,6 +729,7 @@ function renderAll(briefing) {
   renderMarkets(briefing.markets);
   renderConflicts(briefing.conflicts);
   renderPolitics(briefing.us_politics);
+  renderPositiveNews(briefing.positive_news);
 }
 
 /* ---------- Archive Navigation & Data Loading ---------- */

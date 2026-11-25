@@ -1247,6 +1247,37 @@ h3 {
   color: var(--ink-secondary);
 }
 
+/* ---------- Positive News ---------- */
+
+.positive-kicker {
+  color: var(--pos);
+}
+
+.positive-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--pos);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+}
+
+.positive-card .cat-pill {
+  background: var(--pos-soft);
+  color: var(--pos);
+}
+
+.positive-card h3 {
+  font-family: var(--font-serif);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
 /* ---------- Footer & Skeletons ---------- */
 
 .site-footer {

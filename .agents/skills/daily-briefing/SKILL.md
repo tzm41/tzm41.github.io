@@ -24,6 +24,7 @@ Use this skill whenever the user asks to generate, refresh, or publish their dai
      - `market_narrative` & `market_regime` (`Risk-On` | `Risk-Off` | `Mixed` | `Volatility Spike`)
      - `conflicts_overview` & `conflict_theaters` (one per tracked theater `id`)
      - `politics_pulse_summary`, `legislative_and_executive` (3–5 items), and `trending_topics` (3–5 items)
+     - `positive_news`: 1 uplifting/constructive story grounded in `positive_news_candidates` (or `raw_news`) with a verbatim source URL
    - Write the raw JSON (no markdown fences) to `/tmp/synthesis.json`.
 4. **Validate, merge deterministic numbers, and write `briefing/data/`**:
    ```bash

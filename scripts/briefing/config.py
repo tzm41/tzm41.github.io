@@ -40,6 +40,12 @@ NEWS_FEEDS: list[dict[str, str]] = [
     {"name": "Google News Science", "category": "Science", "url": "https://news.google.com/rss/headlines/section/topic/SCIENCE?hl=en-US&gl=US&ceid=US:en"},
 ]
 
+# Curated feeds for the daily Positive News highlight
+POSITIVE_NEWS_FEEDS: list[dict[str, str]] = [
+    {"name": "Good News Network", "category": "Science", "url": "https://www.goodnewsnetwork.org/feed/"},
+    {"name": "Google News Positive Science", "category": "Science", "url": "https://news.google.com/rss/search?q=%28breakthrough+OR+conservation+OR+recovery+OR+milestone%29+when:3d&hl=en-US&gl=US&ceid=US:en"},
+]
+
 # Stock market watchlist tickers (Yahoo Finance)
 MARKET_WATCHLIST: list[dict[str, str]] = [
     {"symbol": "^GSPC", "name": "S&P 500", "group": "Equity"},
