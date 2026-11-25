@@ -35,6 +35,9 @@ class MarketQuote(BaseModel):
     price: float
     change_pct: float
     change_5d_pct: float = 0.0
+    change_30d_pct: float = 0.0
+    sparkline_1d: list[float] = Field(default_factory=list)
+    sparkline_5d: list[float] = Field(default_factory=list)
     sparkline_30d: list[float] = Field(default_factory=list)
 
 
@@ -43,6 +46,7 @@ class SectorTile(BaseModel):
     name: str
     change_pct: float
     change_5d_pct: float = 0.0
+    change_30d_pct: float = 0.0
 
 
 class FearGreedIndex(BaseModel):

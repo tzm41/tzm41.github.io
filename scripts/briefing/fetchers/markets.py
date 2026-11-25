@@ -6,6 +6,7 @@ import asyncio
 from typing import Any
 
 import httpx
+import pandas as pd
 from bs4 import BeautifulSoup
 import yfinance as yf
 
@@ -117,75 +118,110 @@ def _fetch_fear_greed(client: httpx.Client) -> dict[str, Any] | None:
         return None
 
 
-def _download_closes_map(symbols: list[str]):
-    """Download 45d daily closes for a list of Yahoo Finance symbols."""
-    df = None
+def _download_df(symbols: list[str], period: str, interval: str) -> Any:
     try:
-        df = yf.download(
+        return yf.download(
             tickers=symbols,
-            period="45d",
-            interval="1d",
+            period=period,
+            interval=interval,
             group_by="ticker",
             auto_adjust=True,
             progress=False,
             threads=True,
         )
     except Exception as exc:
-        print(f"[markets] yfinance download failed: {exc}")
+        print(f"[markets] yfinance download failed ({period}/{interval}): {exc}")
+        return None
 
-    def extract_closes(symbol: str) -> list[float]:
-        if df is None or df.empty:
-            return []
-        try:
-            if hasattr(df.columns, "get_level_values") and symbol in df.columns.get_level_values(0):
-                series = df[symbol]["Close"].dropna()
-            elif "Close" in df.columns:
-                series = df["Close"].dropna()
-            else:
-                return []
-            return [round(float(x), 2) for x in series.tolist()[-30:]]
-        except Exception:
-            return []
 
-    return extract_closes
+def _extract_series(df: Any, symbol: str) -> Any:
+    if df is None or df.empty:
+        return None
+    try:
+        if hasattr(df.columns, "get_level_values") and symbol in df.columns.get_level_values(0):
+            series = df[symbol]["Close"].dropna()
+        elif "Close" in df.columns:
+            series = df["Close"].dropna()
+        else:
+            return None
+        return series if not series.empty else None
+    except Exception:
+        return None
+
+
+def _download_timeframes(symbols: list[str], include_intraday: bool = True) -> dict[str, Any]:
+    """Download 30D daily, 5D hourly, and 1D 30-min closes for symbols."""
+    df_30d = _download_df(symbols, "45d", "1d")
+    df_5d = _download_df(symbols, "5d", "1h") if include_intraday else None
+    df_1d = _download_df(symbols, "2d", "30m") if include_intraday else None
+
+    def get_30d(symbol: str) -> list[float]:
+        s = _extract_series(df_30d, symbol)
+        return [round(float(x), 2) for x in s.tolist()[-30:]] if s is not None else []
+
+    def get_5d(symbol: str) -> list[float]:
+        s = _extract_series(df_5d, symbol)
+        return [round(float(x), 2) for x in s.tolist()] if s is not None else []
+
+    def get_1d(symbol: str) -> list[float]:
+        s = _extract_series(df_1d, symbol)
+        if s is None:
+            return []
+        cutoff = s.index[-1] - pd.Timedelta(hours=24)
+        sliced = s[s.index >= cutoff]
+        if len(sliced) < 2:
+            sliced = s.iloc[-14:]
+        return [round(float(x), 2) for x in sliced.tolist()]
+
+    return {"1d": get_1d, "5d": get_5d, "30d": get_30d}
 
 
 def _build_quote_list(
     configs: list[dict[str, str]],
-    extract_closes: Any,
+    tf_extractors: dict[str, Any],
     get_gf_client: Any,
 ) -> list[dict[str, Any]]:
     """Build MarketQuote dicts from yfinance closes with Google Finance fallback."""
     quotes: list[dict[str, Any]] = []
     for cfg in configs:
-        closes = extract_closes(cfg["symbol"])
+        sym = cfg["symbol"]
+        closes = tf_extractors["30d"](sym)
         if len(closes) >= 2:
             latest = closes[-1]
             prev_1d = closes[-2]
             prev_5d = closes[-6] if len(closes) >= 6 else closes[0]
+            prev_30d = closes[0]
+            s1d = tf_extractors["1d"](sym)
+            s5d = tf_extractors["5d"](sym)
             quotes.append(
                 {
-                    "symbol": cfg["symbol"],
+                    "symbol": sym,
                     "name": cfg["name"],
                     "group": cfg["group"],
                     "price": _safe_float(latest, 2),
                     "change_pct": _pct_change(latest, prev_1d),
                     "change_5d_pct": _pct_change(latest, prev_5d),
+                    "change_30d_pct": _pct_change(latest, prev_30d),
+                    "sparkline_1d": s1d if len(s1d) >= 2 else closes[-2:],
+                    "sparkline_5d": s5d if len(s5d) >= 2 else closes[-6:],
                     "sparkline_30d": closes,
                 }
             )
         else:
-            gf = _fetch_google_finance_quote(get_gf_client(), cfg["symbol"])
+            gf = _fetch_google_finance_quote(get_gf_client(), sym)
             if gf:
                 price, chg = gf
                 quotes.append(
                     {
-                        "symbol": cfg["symbol"],
+                        "symbol": sym,
                         "name": cfg["name"],
                         "group": cfg["group"],
                         "price": price,
                         "change_pct": chg,
                         "change_5d_pct": chg,
+                        "change_30d_pct": chg,
+                        "sparkline_1d": [price],
+                        "sparkline_5d": [price],
                         "sparkline_30d": [price],
                     }
                 )
@@ -193,12 +229,13 @@ def _build_quote_list(
 
 
 def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
-    all_symbols = (
-        [item["symbol"] for item in MARKET_WATCHLIST]
-        + [item["symbol"] for item in MARKET_BIG7]
-        + [item["symbol"] for item in MARKET_SECTORS]
-    )
-    extract_closes = _download_closes_map(all_symbols)
+    quote_symbols = [item["symbol"] for item in MARKET_WATCHLIST] + [
+        item["symbol"] for item in MARKET_BIG7
+    ]
+    sector_symbols = [item["symbol"] for item in MARKET_SECTORS]
+
+    tf_quotes = _download_timeframes(quote_symbols, include_intraday=True)
+    tf_sectors = _download_timeframes(sector_symbols, include_intraday=False)
 
     gf_client: httpx.Client | None = None
 
@@ -211,12 +248,12 @@ def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
             )
         return gf_client
 
-    watchlist = _build_quote_list(MARKET_WATCHLIST, extract_closes, get_gf_client)
-    big7 = _build_quote_list(MARKET_BIG7, extract_closes, get_gf_client)
+    watchlist = _build_quote_list(MARKET_WATCHLIST, tf_quotes, get_gf_client)
+    big7 = _build_quote_list(MARKET_BIG7, tf_quotes, get_gf_client)
 
     sectors: list[dict[str, Any]] = []
     for cfg in MARKET_SECTORS:
-        closes = extract_closes(cfg["symbol"])
+        closes = tf_sectors["30d"](cfg["symbol"])
         if len(closes) >= 2:
             latest = closes[-1]
             prev_1d = closes[-2]
@@ -227,6 +264,7 @@ def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
                     "name": cfg["name"],
                     "change_pct": _pct_change(latest, prev_1d),
                     "change_5d_pct": _pct_change(latest, prev_5d),
+                    "change_30d_pct": _pct_change(latest, closes[0]),
                 }
             )
         else:
@@ -239,6 +277,7 @@ def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
                         "name": cfg["name"],
                         "change_pct": chg,
                         "change_5d_pct": chg,
+                        "change_30d_pct": chg,
                     }
                 )
 
@@ -261,9 +300,9 @@ def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
 
 def fetch_big7_and_fear_greed() -> tuple[list[dict[str, Any]], dict[str, Any] | None]:
     """Fetch only Big 7 tickers and Fear & Greed Index (for incremental enrichment)."""
-    extract_closes = _download_closes_map([item["symbol"] for item in MARKET_BIG7])
+    tf_extractors = _download_timeframes([item["symbol"] for item in MARKET_BIG7], include_intraday=True)
     with httpx.Client(timeout=HTTP_TIMEOUT_SECONDS, headers={"User-Agent": USER_AGENT}) as client:
-        big7 = _build_quote_list(MARKET_BIG7, extract_closes, lambda: client)
+        big7 = _build_quote_list(MARKET_BIG7, tf_extractors, lambda: client)
         fear_greed = _fetch_fear_greed(client)
     return big7, fear_greed
 

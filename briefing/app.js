@@ -37,6 +37,7 @@ const els = {
   heatmapLabel: document.getElementById("heatmap-label"),
   btnTf1d: document.getElementById("btn-tf-1d"),
   btnTf5d: document.getElementById("btn-tf-5d"),
+  btnTf30d: document.getElementById("btn-tf-30d"),
   conflictsOverview: document.getElementById("conflicts-overview"),
   conflictsGrid: document.getElementById("conflicts-grid"),
   politicsPulse: document.getElementById("politics-pulse"),
@@ -376,14 +377,32 @@ function renderNews(stories = []) {
     .join("");
 }
 
-function renderQuoteGrid(container, quotes, is5d, emptyMsg) {
+function getTimeframeValue(item, tf) {
+  if (tf === "30d") return item.change_30d_pct ?? item.change_5d_pct ?? item.change_pct;
+  if (tf === "5d") return item.change_5d_pct ?? item.change_pct;
+  return item.change_pct;
+}
+
+function getSparklineSeries(q, tf) {
+  if (tf === "1d") {
+    if (Array.isArray(q.sparkline_1d) && q.sparkline_1d.length >= 2) return q.sparkline_1d;
+    return Array.isArray(q.sparkline_30d) ? q.sparkline_30d : [];
+  }
+  if (tf === "5d") {
+    if (Array.isArray(q.sparkline_5d) && q.sparkline_5d.length >= 2) return q.sparkline_5d;
+    return Array.isArray(q.sparkline_30d) ? q.sparkline_30d.slice(-6) : [];
+  }
+  return Array.isArray(q.sparkline_30d) ? q.sparkline_30d : [];
+}
+
+function renderQuoteGrid(container, quotes, tf, emptyMsg) {
   if (!quotes.length) {
     container.innerHTML = `<div class="empty-state">${escapeHtml(emptyMsg)}</div>`;
     return;
   }
   container.innerHTML = quotes
     .map((q) => {
-      const pct = is5d ? q.change_5d_pct : q.change_pct;
+      const pct = getTimeframeValue(q, tf);
       const cls = deltaClass(pct);
       const stroke =
         cls === "pos"
@@ -391,11 +410,7 @@ function renderQuoteGrid(container, quotes, is5d, emptyMsg) {
           : cls === "neg"
           ? "var(--neg)"
           : "var(--ink-muted)";
-      const series = Array.isArray(q.sparkline_30d)
-        ? is5d && q.sparkline_30d.length >= 6
-          ? q.sparkline_30d.slice(-6)
-          : q.sparkline_30d
-        : [];
+      const series = getSparklineSeries(q, tf);
       return `
         <div class="quote-card">
           <div class="quote-top">
@@ -464,17 +479,20 @@ function renderMarkets(markets = {}) {
   els.marketRegime.className = `regime-badge ${regimeSlug}`;
   els.marketNarrative.innerHTML = highlightSummaryHtml(markets.narrative || "");
 
-  const is5d = state.marketTimeframe === "5d";
-  els.heatmapLabel.textContent = is5d
-    ? "5-day rolling ETF performance (SPDR Select Sectors)"
-    : "Daily ETF performance (SPDR Select Sectors)";
+  const tf = state.marketTimeframe;
+  const tfLabels = {
+    "1d": "Daily ETF performance (SPDR Select Sectors)",
+    "5d": "5-day rolling ETF performance (SPDR Select Sectors)",
+    "30d": "30-day rolling ETF performance (SPDR Select Sectors)",
+  };
+  els.heatmapLabel.textContent = tfLabels[tf] || tfLabels["1d"];
 
   renderFearGreed(markets.fear_greed);
 
   renderQuoteGrid(
     els.watchlistGrid,
     markets.watchlist || [],
-    is5d,
+    tf,
     "Market watchlist data unavailable for this date."
   );
 
@@ -486,26 +504,27 @@ function renderMarkets(markets = {}) {
     } else {
       els.big7Block.classList.remove("hidden");
       if (els.big7Label) {
-        els.big7Label.textContent = is5d
-          ? "Mega-cap tech leaders (5D change & 5D trend)"
-          : "Mega-cap tech leaders (1D change & 30D trend)";
+        const big7Sub = {
+          "1d": "Mega-cap tech leaders (1D change · 30m chart)",
+          "5d": "Mega-cap tech leaders (5D change · 1h chart)",
+          "30d": "Mega-cap tech leaders (30D change · daily chart)",
+        };
+        els.big7Label.textContent = big7Sub[tf] || big7Sub["1d"];
       }
-      renderQuoteGrid(els.big7Grid, big7, is5d, "");
+      renderQuoteGrid(els.big7Grid, big7, tf, "");
     }
   }
 
-  const sectors = [...(markets.sectors || [])].sort((a, b) => {
-    const av = is5d ? a.change_5d_pct : a.change_pct;
-    const bv = is5d ? b.change_5d_pct : b.change_pct;
-    return bv - av;
-  });
+  const sectors = [...(markets.sectors || [])].sort(
+    (a, b) => getTimeframeValue(b, tf) - getTimeframeValue(a, tf)
+  );
 
   if (!sectors.length) {
     els.sectorHeatmap.innerHTML = `<div class="empty-state">Sector heatmap unavailable for this date.</div>`;
   } else {
     els.sectorHeatmap.innerHTML = sectors
       .map((s) => {
-        const pct = is5d ? s.change_5d_pct : s.change_pct;
+        const pct = getTimeframeValue(s, tf);
         return `
           <div class="sector-tile" style="${sectorTileStyle(pct)}">
             <span class="sector-sym">${escapeHtml(s.symbol)}</span>
@@ -771,12 +790,12 @@ async function bootstrap() {
     if (state.briefing) renderNews(state.briefing.top_news);
   });
 
-  // Market timeframe toggle (1D / 5D)
-  [els.btnTf1d, els.btnTf5d].forEach((btn) => {
+  // Market timeframe toggle (1D / 5D / 30D)
+  const tfBtns = [els.btnTf1d, els.btnTf5d, els.btnTf30d].filter(Boolean);
+  tfBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
       state.marketTimeframe = btn.dataset.tf;
-      els.btnTf1d.classList.toggle("active", state.marketTimeframe === "1d");
-      els.btnTf5d.classList.toggle("active", state.marketTimeframe === "5d");
+      tfBtns.forEach((b) => b.classList.toggle("active", b === btn));
       if (state.briefing) renderMarkets(state.briefing.markets);
     });
   });
