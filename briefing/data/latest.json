@@ -190,7 +190,7 @@
     }
   ],
   "markets": {
-    "narrative": "US markets posted a **sharp sector rotation** on Tuesday, with the **Nasdaq falling 1.48% to 23,733.54** and **Technology (XLK) dropping 3.26%** on Nvidia-led AI selling, while the **Dow Jones (+0.85% to 50,018.70)** and Russell 2000 (+0.57%) advanced alongside Health Care (+2.95%) and Consumer Staples (+1.66%). Treasury yields eased slightly with the **10-year at 4.90% (-0.41%)** and the **VIX held elevated at 26.36** ahead of key inflation data. Commodities and crypto retreated, with **WTI crude at .25 (-0.98%)**, gold at ,517.20 (-1.25%), and **Bitcoin falling 3.21% to ,245.72**.",
+    "narrative": "US markets posted a **sharp sector rotation** on Tuesday, with the **Nasdaq falling 1.48% to 23,733.54** and **Technology (XLK) dropping 3.26%** on Nvidia-led AI selling, while the **Dow Jones (+0.85% to 50,018.70)** and Russell 2000 (+0.57%) advanced alongside Health Care (+2.95%) and Consumer Staples (+1.66%). Treasury yields eased slightly with the **10-year at 4.90% (-0.41%)** and the **VIX held elevated at 26.36** ahead of key inflation data. Commodities and crypto retreated, with **WTI crude at $81.25 (-0.98%)**, gold at **$3,517.20 (-1.25%)**, and **Bitcoin falling 3.21% to $59,245.72**.",
     "regime_tag": "Volatility Spike",
     "watchlist": [
       {
@@ -3622,7 +3622,8 @@
         "change_5d_pct": -2.53,
         "change_30d_pct": -8.48
       }
-    ]
+    ],
+    "mentioned_quotes": []
   },
   "conflicts": {
     "overview": "Global conflict intensity remains **elevated across major theaters**, with active escalation in **Eastern Europe, the Middle East, and the Red Sea corridor** compared with earlier in the two-week window. **Maritime chokepoints, cross-border drone operations, and urban airstrikes** continue to drive humanitarian and supply-chain risks.",

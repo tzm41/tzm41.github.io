@@ -133,29 +133,35 @@
             <button type="button" class="seg-btn" id="btn-tf-5d" data-tf="5d">5D</button>
             <button type="button" class="seg-btn" id="btn-tf-30d" data-tf="30d">30D</button>
           </div>
+          <button type="button" class="collapse-btn" id="btn-toggle-markets" aria-expanded="false" aria-controls="markets-body">
+            <span class="collapse-label">Expand</span>
+            <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+          </button>
         </div>
       </div>
 
-      <p class="section-narrative" id="market-narrative"></p>
+      <div id="markets-body" class="hidden">
+        <p class="section-narrative" id="market-narrative"></p>
 
-      <div class="fear-greed-card hidden" id="fear-greed-card"></div>
+        <div class="fear-greed-card hidden" id="fear-greed-card"></div>
 
-      <div class="watchlist-grid" id="watchlist-grid"></div>
+        <div class="watchlist-grid" id="watchlist-grid"></div>
 
-      <div class="sub-block hidden" id="big7-block">
-        <div class="sub-header">
-          <h3>Magnificent 7</h3>
-          <span class="sub-note" id="big7-label">Mega-cap tech leaders (30D trend)</span>
+        <div class="sub-block hidden" id="big7-block">
+          <div class="sub-header">
+            <h3>Magnificent 7</h3>
+            <span class="sub-note" id="big7-label">Mega-cap tech leaders (30D trend)</span>
+          </div>
+          <div class="watchlist-grid" id="big7-grid"></div>
         </div>
-        <div class="watchlist-grid" id="big7-grid"></div>
-      </div>
 
-      <div class="sub-block">
-        <div class="sub-header">
-          <h3>S&amp;P 500 GICS Sector Heatmap</h3>
-          <span class="sub-note" id="heatmap-label">Daily ETF performance (SPDR Select Sectors)</span>
+        <div class="sub-block">
+          <div class="sub-header">
+            <h3>S&amp;P 500 GICS Sector Heatmap</h3>
+            <span class="sub-note" id="heatmap-label">Daily ETF performance (SPDR Select Sectors)</span>
+          </div>
+          <div class="sector-heatmap" id="sector-heatmap"></div>
         </div>
-        <div class="sector-heatmap" id="sector-heatmap"></div>
       </div>
     </section>
 
@@ -267,6 +273,6 @@
     </div>
   </footer>
 
-  <script type="module" src="./app.js?v=31"></script>
+  <script type="module" src="./app.js?v=32"></script>
 </body>
 </html>

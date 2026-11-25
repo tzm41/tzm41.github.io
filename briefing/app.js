@@ -1711,7 +1711,9 @@ async function bootstrap() {
         if (body.classList.contains("hidden")) setOpen(true);
       });
     }
+    return setOpen;
   };
+  const setMarketsOpen = wireCollapsible("btn-toggle-markets", "markets-body", "#markets");
   wireCollapsible("btn-toggle-conflicts", "conflicts-body", "#conflicts");
   wireCollapsible("btn-toggle-politics", "politics-body", "#politics");
 
@@ -1754,6 +1756,7 @@ async function bootstrap() {
     btn.addEventListener("click", () => {
       state.marketTimeframe = btn.dataset.tf;
       tfBtns.forEach((b) => b.classList.toggle("active", b === btn));
+      setMarketsOpen?.(true);
       if (state.briefing) renderMarkets(state.briefing.markets);
     });
   });
