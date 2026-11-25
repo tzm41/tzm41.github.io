@@ -772,20 +772,22 @@ function updateArchiveButtons() {
 
 async function loadBriefingForDate(dateStr) {
   els.statusBanner.classList.add("hidden");
-  const url = dateStr
-    ? `${DATA_BASE}/archive/${encodeURIComponent(dateStr)}.json`
-    : `${DATA_BASE}/latest.json`;
+  const isLatest = !dateStr || dateStr === "latest";
+  const url = isLatest
+    ? `${DATA_BASE}/latest.json`
+    : `${DATA_BASE}/archive/${encodeURIComponent(dateStr)}.json`;
 
   try {
     const resp = await fetch(url, { cache: "no-store" });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
     state.currentDate = data.date;
-    if (els.dateSelect.value !== data.date) {
-      els.dateSelect.value = data.date;
+    const selectVal = isLatest ? "latest" : data.date;
+    if (els.dateSelect.value !== selectVal) {
+      els.dateSelect.value = selectVal;
     }
     const qs = new URLSearchParams(window.location.search);
-    qs.set("date", data.date);
+    qs.set("date", isLatest ? "latest" : data.date);
     window.history.replaceState(null, "", `?${qs.toString()}`);
 
     updateArchiveButtons();
@@ -1031,7 +1033,7 @@ async function bootstrap() {
     const dates = state.index?.dates || [];
     const idx = dates.indexOf(state.currentDate);
     if (idx > 0) {
-      loadBriefingForDate(dates[idx - 1]);
+      loadBriefingForDate(idx - 1 === 0 ? "latest" : dates[idx - 1]);
     }
   });
 
@@ -1042,9 +1044,9 @@ async function bootstrap() {
       state.index = await idxResp.json();
       const dates = state.index.dates || [];
       if (dates.length) {
-        els.dateSelect.innerHTML = dates
-          .map((d) => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`)
-          .join("");
+        els.dateSelect.innerHTML =
+          `<option value="latest">Latest</option>` +
+          dates.map((d) => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join("");
       }
     }
   } catch {
@@ -1053,9 +1055,9 @@ async function bootstrap() {
 
   const requested = new URLSearchParams(window.location.search).get("date");
   const initialDate =
-    requested && state.index?.dates?.includes(requested)
+    requested && requested !== "latest" && state.index?.dates?.includes(requested)
       ? requested
-      : state.index?.latest_date || null;
+      : "latest";
 
   await loadBriefingForDate(initialDate);
 }
