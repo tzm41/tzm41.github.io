@@ -1004,16 +1004,20 @@ function initScrollSpy() {
   let lastActiveLink = null;
 
   const updateActive = () => {
+    const visiblePairs = pairs.filter(({ section }) => !section.classList.contains("hidden"));
+    if (!visiblePairs.length) return;
+
     const navH = nav ? nav.getBoundingClientRect().height : 44;
     const atBottom =
+      window.scrollY > 40 &&
       window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40;
 
-    let activePair = pairs[0];
+    let activePair = visiblePairs[0];
     if (atBottom) {
-      activePair = pairs[pairs.length - 1];
-    } else {
+      activePair = visiblePairs[visiblePairs.length - 1];
+    } else if (window.scrollY > 40) {
       const threshold = navH + 36;
-      for (const pair of pairs) {
+      for (const pair of visiblePairs) {
         if (pair.section.getBoundingClientRect().top <= threshold) {
           activePair = pair;
         }
