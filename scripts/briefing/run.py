@@ -112,14 +112,26 @@ async def run_pipeline(
 
     print(f"[run] Starting Daily Briefing pipeline for {target_date}...")
     prior = _load_prior_briefing(target_date)
-    prior_markets = prior.get("markets") if prior else None
+    same_day_path = ARCHIVE_DIR / f"{target_date}.json"
+    same_day: dict[str, Any] | None = None
+    if same_day_path.exists():
+        try:
+            same_day = json.loads(same_day_path.read_text(encoding="utf-8"))
+        except Exception:
+            same_day = None
+
+    prior_markets = (same_day or prior or {}).get("markets")
     prior_conflicts = prior.get("conflicts") if prior else None
+    same_day_conflicts = same_day.get("conflicts") if same_day else None
 
     (raw_news, news_h), (raw_markets, mkt_h), (raw_conflicts, conf_h), (raw_politics, pol_h) = (
         await asyncio.gather(
             fetch_top_news(),
             fetch_markets(prior_markets=prior_markets),
-            fetch_conflicts(prior_conflicts=prior_conflicts),
+            fetch_conflicts(
+                prior_conflicts=prior_conflicts,
+                same_day_conflicts=same_day_conflicts,
+            ),
             fetch_politics(),
         )
     )

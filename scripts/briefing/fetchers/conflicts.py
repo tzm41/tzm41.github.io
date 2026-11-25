@@ -137,11 +137,17 @@ async def _fetch_google_news_intensity_fallback(
 
 async def fetch_conflicts(
     prior_conflicts: dict[str, Any] | None = None,
+    same_day_conflicts: dict[str, Any] | None = None,
 ) -> tuple[list[dict[str, Any]], str]:
-    """Fetch conflict intensity metrics (GDELT with cached-prior & RSS fallbacks) and RSS headlines."""
+    """Fetch conflict intensity metrics (GDELT with same-day reuse, 429 prior cache & RSS fallback)."""
     prior_by_id: dict[str, list[float]] = {
         t["id"]: t.get("intensity_series_14d", [])
         for t in (prior_conflicts or {}).get("theaters", [])
+        if t.get("id") and t.get("intensity_series_14d")
+    }
+    same_day_by_id: dict[str, list[float]] = {
+        t["id"]: t.get("intensity_series_14d", [])
+        for t in (same_day_conflicts or {}).get("theaters", [])
         if t.get("id") and t.get("intensity_series_14d")
     }
 
@@ -153,11 +159,20 @@ async def fetch_conflicts(
         rss_task = asyncio.gather(
             *[_fetch_theater_rss(client, cfg["rss_query"]) for cfg in CONFLICT_THEATERS]
         )
-        # Fetch GDELT sequentially with polite 5.5s spacing; preserve scale on 429 via prior cache
+        # Fetch GDELT sequentially with polite 5.5s spacing; skip network calls on same-day cache hit
         gdelt_series_list: list[list[float]] = []
-        for idx, cfg in enumerate(CONFLICT_THEATERS):
-            if idx > 0:
+        gdelt_calls = 0
+        reused_today = 0
+        for cfg in CONFLICT_THEATERS:
+            same_day_series = same_day_by_id.get(cfg["id"], [])
+            if same_day_series:
+                gdelt_series_list.append(same_day_series)
+                reused_today += 1
+                continue
+
+            if gdelt_calls > 0:
                 await asyncio.sleep(5.5)
+            gdelt_calls += 1
             series = await _fetch_gdelt_intensity(client, cfg["gdelt_query"])
             if not series:
                 cached = prior_by_id.get(cfg["id"], [])
@@ -168,6 +183,9 @@ async def fetch_conflicts(
                     print(f"[conflicts] Falling back to Google News RSS intensity for {cfg['id']}.")
                     series = await _fetch_google_news_intensity_fallback(client, cfg["rss_query"])
             gdelt_series_list.append(series)
+
+        if reused_today:
+            print(f"[conflicts] Reused same-day cached GDELT series for {reused_today}/{len(CONFLICT_THEATERS)} theaters.")
 
         rss_results = await rss_task
 
