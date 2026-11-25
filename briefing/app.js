@@ -25,6 +25,7 @@ const els = {
   dateSelect: document.getElementById("date-select"),
   btnPrevDay: document.getElementById("btn-prev-day"),
   btnNextDay: document.getElementById("btn-next-day"),
+  btnExpandAll: document.getElementById("btn-expand-all"),
   themeSwitcher: document.getElementById("theme-switcher"),
   sourceHealth: document.getElementById("source-health"),
   statusBanner: document.getElementById("status-banner"),
@@ -1131,6 +1132,8 @@ function renderPositiveNews(story) {
   `;
 }
 
+let syncExpandAllButton = () => {};
+
 function setLocalExpanded(expanded) {
   state.localExpanded = Boolean(expanded);
   if (els.localNewsBody) {
@@ -1141,6 +1144,7 @@ function setLocalExpanded(expanded) {
     const lbl = els.btnToggleLocal.querySelector(".collapse-label");
     if (lbl) lbl.textContent = state.localExpanded ? "Collapse" : "Expand";
   }
+  syncExpandAllButton();
 }
 
 function renderLocalNews(regions = []) {
@@ -1739,14 +1743,20 @@ async function bootstrap() {
   initFloatingTooltips();
 
   // Mobile KPI strip collapse toggle (collapsed by default on narrow screens)
-  els.btnToggleKpi?.addEventListener("click", () => {
-    const expanded = els.kpiWrapper?.classList.toggle("is-expanded");
-    els.btnToggleKpi.setAttribute("aria-expanded", String(Boolean(expanded)));
+  const setKpiOpen = (open) => {
+    if (!els.kpiWrapper || !els.btnToggleKpi) return;
+    els.kpiWrapper.classList.toggle("is-expanded", open);
+    els.btnToggleKpi.setAttribute("aria-expanded", String(open));
     const lbl = els.btnToggleKpi.querySelector(".collapse-label");
-    if (lbl) lbl.textContent = expanded ? "Collapse" : "Expand";
+    if (lbl) lbl.textContent = open ? "Collapse" : "Expand";
+  };
+  els.btnToggleKpi?.addEventListener("click", () => {
+    const next = !els.kpiWrapper?.classList.contains("is-expanded");
+    setKpiOpen(next);
   });
 
-  // Collapsible sections (collapsed by default on load): Global Conflicts & US Politics
+  // Collapsible sections (collapsed by default on load): Markets, Global Conflicts, US Politics
+  const collapsibleControllers = [];
   const wireCollapsible = (btnId, bodyId, navHash) => {
     const btn = document.getElementById(btnId);
     const body = document.getElementById(bodyId);
@@ -1756,7 +1766,10 @@ async function bootstrap() {
       btn.setAttribute("aria-expanded", String(open));
       const lbl = btn.querySelector(".collapse-label");
       if (lbl) lbl.textContent = open ? "Collapse" : "Expand";
+      syncExpandAllButton();
     };
+    const isOpen = () => !body.classList.contains("hidden");
+    collapsibleControllers.push({ setOpen, isOpen });
     btn.addEventListener("click", () => {
       setOpen(body.classList.contains("hidden"));
     });
@@ -1770,6 +1783,31 @@ async function bootstrap() {
   const setMarketsOpen = wireCollapsible("btn-toggle-markets", "markets-body", "#markets");
   wireCollapsible("btn-toggle-conflicts", "conflicts-body", "#conflicts");
   wireCollapsible("btn-toggle-politics", "politics-body", "#politics");
+
+  const areAllSectionsExpanded = () => {
+    const coreOpen = collapsibleControllers.every((c) => c.isOpen());
+    const localVisible = els.localSection && !els.localSection.classList.contains("hidden");
+    return coreOpen && (!localVisible || state.localExpanded);
+  };
+
+  syncExpandAllButton = () => {
+    if (!els.btnExpandAll) return;
+    const allOpen = areAllSectionsExpanded();
+    els.btnExpandAll.setAttribute("aria-expanded", String(allOpen));
+    const lbl = els.btnExpandAll.querySelector(".collapse-label");
+    if (lbl) lbl.textContent = allOpen ? "Collapse All" : "Expand All";
+  };
+
+  els.btnExpandAll?.addEventListener("click", () => {
+    const open = !areAllSectionsExpanded();
+    setKpiOpen(open);
+    collapsibleControllers.forEach((c) => c.setOpen(open));
+    if (els.localSection && !els.localSection.classList.contains("hidden")) {
+      setLocalExpanded(open);
+    }
+    syncExpandAllButton();
+  });
+  syncExpandAllButton();
 
   // Positive News placement toggle (above Top News vs bottom)
   els.btnMovePositive?.addEventListener("click", () => {
