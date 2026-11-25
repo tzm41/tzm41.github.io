@@ -32,9 +32,11 @@
           <button type="button" id="btn-next-day" class="icon-btn" title="Next day" aria-label="Next day">&rsaquo;</button>
         </div>
 
-        <button type="button" id="btn-theme" class="theme-btn" aria-label="Toggle dark mode" title="Toggle theme">
-          <span id="theme-label">Dark</span>
-        </button>
+        <div class="segmented" id="theme-switcher" role="group" aria-label="Color theme">
+          <button type="button" class="seg-btn active" data-theme-pref="system" title="Follow system appearance">Auto</button>
+          <button type="button" class="seg-btn" data-theme-pref="light" title="Light theme">Light</button>
+          <button type="button" class="seg-btn" data-theme-pref="dark" title="Dark theme">Dark</button>
+        </div>
       </div>
     </div>
 

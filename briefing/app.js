@@ -18,8 +18,7 @@ const els = {
   dateSelect: document.getElementById("date-select"),
   btnPrevDay: document.getElementById("btn-prev-day"),
   btnNextDay: document.getElementById("btn-next-day"),
-  btnTheme: document.getElementById("btn-theme"),
-  themeLabel: document.getElementById("theme-label"),
+  themeSwitcher: document.getElementById("theme-switcher"),
   sourceHealth: document.getElementById("source-health"),
   statusBanner: document.getElementById("status-banner"),
   kpiStrip: document.getElementById("kpi-strip"),
@@ -155,23 +154,43 @@ function sectorTileStyle(pct) {
 
 /* ---------- Theme ---------- */
 
-function initTheme() {
-  const saved = localStorage.getItem("briefing-theme");
-  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
-  const initial = saved || (prefersDark ? "dark" : "light");
-  applyTheme(initial);
-
-  els.btnTheme.addEventListener("click", () => {
-    const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    applyTheme(next);
-    localStorage.setItem("briefing-theme", next);
-    if (state.briefing) renderMarkets(state.briefing.markets);
-  });
+function resolveTheme(pref) {
+  if (pref === "light" || pref === "dark") return pref;
+  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
-function applyTheme(theme) {
-  document.documentElement.setAttribute("data-theme", theme);
-  els.themeLabel.textContent = theme === "dark" ? "Light" : "Dark";
+function applyThemePreference(pref) {
+  const validPref = ["system", "light", "dark"].includes(pref) ? pref : "system";
+  const resolved = resolveTheme(validPref);
+  document.documentElement.setAttribute("data-theme", resolved);
+
+  els.themeSwitcher?.querySelectorAll(".seg-btn").forEach((btn) => {
+    const active = btn.dataset.themePref === validPref;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-pressed", String(active));
+  });
+
+  if (state.briefing) renderMarkets(state.briefing.markets);
+}
+
+function initTheme() {
+  const media = window.matchMedia?.("(prefers-color-scheme: dark)");
+  const saved = localStorage.getItem("briefing-theme") || "system";
+  applyThemePreference(saved);
+
+  els.themeSwitcher?.addEventListener("click", (e) => {
+    const btn = e.target.closest(".seg-btn");
+    if (!btn) return;
+    const nextPref = btn.dataset.themePref || "system";
+    localStorage.setItem("briefing-theme", nextPref);
+    applyThemePreference(nextPref);
+  });
+
+  media?.addEventListener?.("change", () => {
+    if ((localStorage.getItem("briefing-theme") || "system") === "system") {
+      applyThemePreference("system");
+    }
+  });
 }
 
 /* ---------- Rendering ---------- */
