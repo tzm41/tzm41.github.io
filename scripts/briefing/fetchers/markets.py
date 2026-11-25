@@ -9,7 +9,14 @@ import httpx
 from bs4 import BeautifulSoup
 import yfinance as yf
 
-from ..config import HTTP_TIMEOUT_SECONDS, MARKET_SECTORS, MARKET_WATCHLIST, USER_AGENT
+from ..config import (
+    FEAR_GREED_URL,
+    HTTP_TIMEOUT_SECONDS,
+    MARKET_BIG7,
+    MARKET_SECTORS,
+    MARKET_WATCHLIST,
+    USER_AGENT,
+)
 
 # Mapping from Yahoo Finance tickers to Google Finance public quote slugs
 GOOGLE_FINANCE_SLUGS: dict[str, str] = {
@@ -20,6 +27,13 @@ GOOGLE_FINANCE_SLUGS: dict[str, str] = {
     "^VIX": "VIX:INDEXCBOE",
     "^TNX": "TNX:INDEXCBOE",
     "BTC-USD": "BTC-USD",
+    "AAPL": "AAPL:NASDAQ",
+    "MSFT": "MSFT:NASDAQ",
+    "GOOGL": "GOOGL:NASDAQ",
+    "AMZN": "AMZN:NASDAQ",
+    "NVDA": "NVDA:NASDAQ",
+    "META": "META:NASDAQ",
+    "TSLA": "TSLA:NASDAQ",
     "XLK": "XLK:NYSEARCA",
     "XLF": "XLF:NYSEARCA",
     "XLV": "XLV:NYSEARCA",
@@ -73,15 +87,42 @@ def _fetch_google_finance_quote(client: httpx.Client, symbol: str) -> tuple[floa
         return None
 
 
-def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
-    all_symbols = [item["symbol"] for item in MARKET_WATCHLIST] + [
-        item["symbol"] for item in MARKET_SECTORS
-    ]
+def _fetch_fear_greed(client: httpx.Client) -> dict[str, Any] | None:
+    """Fetch CNN Market Fear & Greed Index score, rating, and historical benchmarks."""
+    try:
+        resp = client.get(
+            FEAR_GREED_URL,
+            headers={
+                "User-Agent": (
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+                )
+            },
+            follow_redirects=True,
+        )
+        resp.raise_for_status()
+        fg = resp.json().get("fear_and_greed") or {}
+        if fg.get("score") is None:
+            return None
+        return {
+            "score": _safe_float(fg.get("score"), 1),
+            "rating": str(fg.get("rating") or "neutral").title(),
+            "previous_close": _safe_float(fg.get("previous_close"), 1) if fg.get("previous_close") is not None else None,
+            "previous_1_week": _safe_float(fg.get("previous_1_week"), 1) if fg.get("previous_1_week") is not None else None,
+            "previous_1_month": _safe_float(fg.get("previous_1_month"), 1) if fg.get("previous_1_month") is not None else None,
+            "previous_1_year": _safe_float(fg.get("previous_1_year"), 1) if fg.get("previous_1_year") is not None else None,
+        }
+    except Exception as exc:
+        print(f"[markets] Fear & Greed fetch failed: {exc}")
+        return None
 
+
+def _download_closes_map(symbols: list[str]):
+    """Download 45d daily closes for a list of Yahoo Finance symbols."""
     df = None
     try:
         df = yf.download(
-            tickers=all_symbols,
+            tickers=symbols,
             period="45d",
             interval="1d",
             group_by="ticker",
@@ -106,25 +147,23 @@ def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
         except Exception:
             return []
 
-    gf_client: httpx.Client | None = None
+    return extract_closes
 
-    def get_gf_client() -> httpx.Client:
-        nonlocal gf_client
-        if gf_client is None:
-            gf_client = httpx.Client(
-                timeout=HTTP_TIMEOUT_SECONDS,
-                headers={"User-Agent": USER_AGENT},
-            )
-        return gf_client
 
-    watchlist: list[dict[str, Any]] = []
-    for cfg in MARKET_WATCHLIST:
+def _build_quote_list(
+    configs: list[dict[str, str]],
+    extract_closes: Any,
+    get_gf_client: Any,
+) -> list[dict[str, Any]]:
+    """Build MarketQuote dicts from yfinance closes with Google Finance fallback."""
+    quotes: list[dict[str, Any]] = []
+    for cfg in configs:
         closes = extract_closes(cfg["symbol"])
         if len(closes) >= 2:
             latest = closes[-1]
             prev_1d = closes[-2]
             prev_5d = closes[-6] if len(closes) >= 6 else closes[0]
-            watchlist.append(
+            quotes.append(
                 {
                     "symbol": cfg["symbol"],
                     "name": cfg["name"],
@@ -139,7 +178,7 @@ def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
             gf = _fetch_google_finance_quote(get_gf_client(), cfg["symbol"])
             if gf:
                 price, chg = gf
-                watchlist.append(
+                quotes.append(
                     {
                         "symbol": cfg["symbol"],
                         "name": cfg["name"],
@@ -150,6 +189,30 @@ def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
                         "sparkline_30d": [price],
                     }
                 )
+    return quotes
+
+
+def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
+    all_symbols = (
+        [item["symbol"] for item in MARKET_WATCHLIST]
+        + [item["symbol"] for item in MARKET_BIG7]
+        + [item["symbol"] for item in MARKET_SECTORS]
+    )
+    extract_closes = _download_closes_map(all_symbols)
+
+    gf_client: httpx.Client | None = None
+
+    def get_gf_client() -> httpx.Client:
+        nonlocal gf_client
+        if gf_client is None:
+            gf_client = httpx.Client(
+                timeout=HTTP_TIMEOUT_SECONDS,
+                headers={"User-Agent": USER_AGENT},
+            )
+        return gf_client
+
+    watchlist = _build_quote_list(MARKET_WATCHLIST, extract_closes, get_gf_client)
+    big7 = _build_quote_list(MARKET_BIG7, extract_closes, get_gf_client)
 
     sectors: list[dict[str, Any]] = []
     for cfg in MARKET_SECTORS:
@@ -179,14 +242,30 @@ def _fetch_markets_sync() -> tuple[dict[str, Any], str]:
                     }
                 )
 
+    fear_greed = _fetch_fear_greed(get_gf_client())
+
     if gf_client is not None:
         gf_client.close()
 
-    if not watchlist and not sectors:
-        return {"watchlist": [], "sectors": []}, "failed"
+    if not watchlist and not sectors and not big7:
+        return {"watchlist": [], "big7": [], "fear_greed": None, "sectors": []}, "failed"
 
     health = "ok" if len(watchlist) >= 5 and len(sectors) >= 8 else "partial"
-    return {"watchlist": watchlist, "sectors": sectors}, health
+    return {
+        "watchlist": watchlist,
+        "big7": big7,
+        "fear_greed": fear_greed,
+        "sectors": sectors,
+    }, health
+
+
+def fetch_big7_and_fear_greed() -> tuple[list[dict[str, Any]], dict[str, Any] | None]:
+    """Fetch only Big 7 tickers and Fear & Greed Index (for incremental enrichment)."""
+    extract_closes = _download_closes_map([item["symbol"] for item in MARKET_BIG7])
+    with httpx.Client(timeout=HTTP_TIMEOUT_SECONDS, headers={"User-Agent": USER_AGENT}) as client:
+        big7 = _build_quote_list(MARKET_BIG7, extract_closes, lambda: client)
+        fear_greed = _fetch_fear_greed(client)
+    return big7, fear_greed
 
 
 async def fetch_markets() -> tuple[dict[str, Any], str]:

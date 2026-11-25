@@ -28,7 +28,11 @@ const els = {
   newsGrid: document.getElementById("news-grid"),
   marketRegime: document.getElementById("market-regime"),
   marketNarrative: document.getElementById("market-narrative"),
+  fearGreedCard: document.getElementById("fear-greed-card"),
   watchlistGrid: document.getElementById("watchlist-grid"),
+  big7Block: document.getElementById("big7-block"),
+  big7Grid: document.getElementById("big7-grid"),
+  big7Label: document.getElementById("big7-label"),
   sectorHeatmap: document.getElementById("sector-heatmap"),
   heatmapLabel: document.getElementById("heatmap-label"),
   btnTf1d: document.getElementById("btn-tf-1d"),
@@ -372,6 +376,82 @@ function renderNews(stories = []) {
     .join("");
 }
 
+function renderQuoteGrid(container, quotes, is5d, emptyMsg) {
+  if (!quotes.length) {
+    container.innerHTML = `<div class="empty-state">${escapeHtml(emptyMsg)}</div>`;
+    return;
+  }
+  container.innerHTML = quotes
+    .map((q) => {
+      const pct = is5d ? q.change_5d_pct : q.change_pct;
+      const cls = deltaClass(pct);
+      const stroke =
+        cls === "pos"
+          ? "var(--pos)"
+          : cls === "neg"
+          ? "var(--neg)"
+          : "var(--ink-muted)";
+      return `
+        <div class="quote-card">
+          <div class="quote-top">
+            <span class="quote-name">${escapeHtml(q.name)}</span>
+            <span class="quote-sym">${escapeHtml(q.symbol)}</span>
+          </div>
+          <div class="quote-mid">
+            <span class="quote-price">${fmtPrice(q.price, q.symbol)}</span>
+            <span class="delta-pill ${cls}">${fmtPct(pct)}</span>
+          </div>
+          ${buildSparklineSvg(q.sparkline_30d, stroke)}
+        </div>
+      `;
+    })
+    .join("");
+}
+
+function renderFearGreed(fg) {
+  if (!els.fearGreedCard) return;
+  if (!fg || fg.score == null) {
+    els.fearGreedCard.classList.add("hidden");
+    els.fearGreedCard.innerHTML = "";
+    return;
+  }
+  const score = Math.max(0, Math.min(100, Number(fg.score)));
+  const rating = String(fg.rating || "Neutral");
+  const slug = rating.toLowerCase().replace(/\s+/g, "-");
+  const hist = [
+    ["Prev Close", fg.previous_close],
+    ["1W Ago", fg.previous_1_week],
+    ["1M Ago", fg.previous_1_month],
+    ["1Y Ago", fg.previous_1_year],
+  ]
+    .filter(([, val]) => val != null)
+    .map(([label, val]) => `<span>${label}: <strong>${Number(val).toFixed(1)}</strong></span>`)
+    .join("");
+
+  els.fearGreedCard.classList.remove("hidden");
+  els.fearGreedCard.innerHTML = `
+    <div class="fg-top">
+      <div class="fg-title-group">
+        <span class="fg-label">Market Fear &amp; Greed Index</span>
+        <span class="fg-score">${score.toFixed(1)}</span>
+        <span class="fg-scale">/ 100</span>
+        <span class="fg-rating ${escapeHtml(slug)}">${escapeHtml(rating)}</span>
+      </div>
+      ${hist ? `<div class="fg-history">${hist}</div>` : ""}
+    </div>
+    <div class="fg-bar-wrap" aria-label="Fear and Greed score ${score.toFixed(1)} out of 100">
+      <div class="fg-marker" style="left:${score.toFixed(1)}%"></div>
+    </div>
+    <div class="fg-zones">
+      <span>Extreme Fear</span>
+      <span>Fear</span>
+      <span>Neutral</span>
+      <span>Greed</span>
+      <span>Extreme Greed</span>
+    </div>
+  `;
+}
+
 function renderMarkets(markets = {}) {
   const regime = markets.regime_tag || "Mixed";
   const regimeSlug = regime.toLowerCase().replace(/\s+/g, "-");
@@ -384,35 +464,29 @@ function renderMarkets(markets = {}) {
     ? "5-day rolling ETF performance (SPDR Select Sectors)"
     : "Daily ETF performance (SPDR Select Sectors)";
 
-  const watchlist = markets.watchlist || [];
-  if (!watchlist.length) {
-    els.watchlistGrid.innerHTML = `<div class="empty-state">Market watchlist data unavailable for this date.</div>`;
-  } else {
-    els.watchlistGrid.innerHTML = watchlist
-      .map((q) => {
-        const pct = is5d ? q.change_5d_pct : q.change_pct;
-        const cls = deltaClass(pct);
-        const stroke =
-          cls === "pos"
-            ? "var(--pos)"
-            : cls === "neg"
-            ? "var(--neg)"
-            : "var(--ink-muted)";
-        return `
-          <div class="quote-card">
-            <div class="quote-top">
-              <span class="quote-name">${escapeHtml(q.name)}</span>
-              <span class="quote-sym">${escapeHtml(q.symbol)}</span>
-            </div>
-            <div class="quote-mid">
-              <span class="quote-price">${fmtPrice(q.price, q.symbol)}</span>
-              <span class="delta-pill ${cls}">${fmtPct(pct)}</span>
-            </div>
-            ${buildSparklineSvg(q.sparkline_30d, stroke)}
-          </div>
-        `;
-      })
-      .join("");
+  renderFearGreed(markets.fear_greed);
+
+  renderQuoteGrid(
+    els.watchlistGrid,
+    markets.watchlist || [],
+    is5d,
+    "Market watchlist data unavailable for this date."
+  );
+
+  const big7 = markets.big7 || [];
+  if (els.big7Block && els.big7Grid) {
+    if (!big7.length) {
+      els.big7Block.classList.add("hidden");
+      els.big7Grid.innerHTML = "";
+    } else {
+      els.big7Block.classList.remove("hidden");
+      if (els.big7Label) {
+        els.big7Label.textContent = is5d
+          ? "Mega-cap tech leaders (5D change & 30D trend)"
+          : "Mega-cap tech leaders (1D change & 30D trend)";
+      }
+      renderQuoteGrid(els.big7Grid, big7, is5d, "");
+    }
   }
 
   const sectors = [...(markets.sectors || [])].sort((a, b) => {

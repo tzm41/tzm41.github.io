@@ -45,10 +45,21 @@ class SectorTile(BaseModel):
     change_5d_pct: float = 0.0
 
 
+class FearGreedIndex(BaseModel):
+    score: float
+    rating: str
+    previous_close: float | None = None
+    previous_1_week: float | None = None
+    previous_1_month: float | None = None
+    previous_1_year: float | None = None
+
+
 class MarketsSection(BaseModel):
     narrative: str
     regime_tag: MarketRegime = "Mixed"
     watchlist: list[MarketQuote] = Field(default_factory=list)
+    big7: list[MarketQuote] = Field(default_factory=list)
+    fear_greed: FearGreedIndex | None = None
     sectors: list[SectorTile] = Field(default_factory=list)
 
 

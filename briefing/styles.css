@@ -651,6 +651,133 @@ h3 {
   margin-bottom: 24px;
 }
 
+.fear-greed-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.fg-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.fg-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.fg-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.fg-score {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.fg-scale {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.fg-rating {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--neutral-badge);
+  color: var(--ink);
+}
+
+.fg-rating.extreme-fear,
+.fg-rating.fear {
+  background: var(--neg-soft);
+  color: var(--neg);
+}
+
+.fg-rating.greed,
+.fg-rating.extreme-greed {
+  background: var(--pos-soft);
+  color: var(--pos);
+}
+
+.fg-rating.neutral {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.fg-history {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--ink-muted);
+}
+
+.fg-history strong {
+  color: var(--ink);
+}
+
+.fg-bar-wrap {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    #b9382c 0%,
+    #e07a38 25%,
+    #d4a72c 50%,
+    #5fa85b 75%,
+    #157347 100%
+  );
+  margin-bottom: 6px;
+}
+
+.fg-marker {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--ink);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.fg-zones {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .quote-card {
   background: var(--surface);
   border: 1px solid var(--border);

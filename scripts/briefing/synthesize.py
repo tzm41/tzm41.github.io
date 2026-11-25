@@ -12,6 +12,7 @@ from .schema import (
     ConflictTheater,
     ConflictsSection,
     DailyBriefing,
+    FearGreedIndex,
     GeminiBriefingSynthesis,
     MarketQuote,
     MarketsSection,
@@ -239,6 +240,8 @@ def _build_extractive_fallback(
             narrative=market_narrative,
             regime_tag=regime,
             watchlist=watchlist,
+            big7=[MarketQuote(**q) for q in raw_markets.get("big7", [])],
+            fear_greed=FearGreedIndex(**raw_markets["fear_greed"]) if raw_markets.get("fear_greed") else None,
             sectors=sectors,
         ),
         conflicts=ConflictsSection(
@@ -305,6 +308,8 @@ def merge_synthesis(
             narrative=ai.market_narrative,
             regime_tag=ai.market_regime,
             watchlist=[MarketQuote(**q) for q in raw_markets.get("watchlist", [])],
+            big7=[MarketQuote(**q) for q in raw_markets.get("big7", [])],
+            fear_greed=FearGreedIndex(**raw_markets["fear_greed"]) if raw_markets.get("fear_greed") else None,
             sectors=[SectorTile(**s) for s in raw_markets.get("sectors", [])],
         ),
         conflicts=ConflictsSection(

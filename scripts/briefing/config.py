@@ -53,6 +53,19 @@ MARKET_WATCHLIST: list[dict[str, str]] = [
     {"symbol": "BTC-USD", "name": "Bitcoin", "group": "Crypto"},
 ]
 
+# Magnificent 7 mega-cap tech stocks (Yahoo Finance)
+MARKET_BIG7: list[dict[str, str]] = [
+    {"symbol": "AAPL", "name": "Apple", "group": "Big 7"},
+    {"symbol": "MSFT", "name": "Microsoft", "group": "Big 7"},
+    {"symbol": "GOOGL", "name": "Alphabet", "group": "Big 7"},
+    {"symbol": "AMZN", "name": "Amazon", "group": "Big 7"},
+    {"symbol": "NVDA", "name": "Nvidia", "group": "Big 7"},
+    {"symbol": "META", "name": "Meta", "group": "Big 7"},
+    {"symbol": "TSLA", "name": "Tesla", "group": "Big 7"},
+]
+
+FEAR_GREED_URL = "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
+
 # 11 GICS SPDR Sector ETFs
 MARKET_SECTORS: list[dict[str, str]] = [
     {"symbol": "XLK", "name": "Technology"},
