@@ -166,9 +166,17 @@
           <span class="kicker">GDELT Media Intensity &amp; Regional Developments</span>
           <h2>Global Conflict Tracker</h2>
         </div>
+        <div class="section-actions">
+          <button type="button" class="collapse-btn" id="btn-toggle-conflicts" aria-expanded="false" aria-controls="conflicts-body">
+            <span class="collapse-label">Expand</span>
+            <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+          </button>
+        </div>
       </div>
-      <p class="section-narrative" id="conflicts-overview"></p>
-      <div class="conflicts-grid" id="conflicts-grid"></div>
+      <div id="conflicts-body" class="hidden">
+        <p class="section-narrative" id="conflicts-overview"></p>
+        <div class="conflicts-grid" id="conflicts-grid"></div>
+      </div>
     </section>
 
     <!-- 5. US Politics Dashboard -->
@@ -178,29 +186,37 @@
           <span class="kicker">Prediction Markets, Policy &amp; Sentiment</span>
           <h2>US Politics Pulse</h2>
         </div>
-      </div>
-      <p class="section-narrative" id="politics-pulse"></p>
-
-      <div class="politics-layout">
-        <div class="politics-col">
-          <div class="sub-header">
-            <h3>Prediction Markets (Polymarket)</h3>
-            <span class="sub-note">Implied YES probability &amp; 24h shift</span>
-          </div>
-          <div class="polymarket-list" id="polymarket-list"></div>
+        <div class="section-actions">
+          <button type="button" class="collapse-btn" id="btn-toggle-politics" aria-expanded="false" aria-controls="politics-body">
+            <span class="collapse-label">Expand</span>
+            <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+          </button>
         </div>
+      </div>
+      <div id="politics-body" class="hidden">
+        <p class="section-narrative" id="politics-pulse"></p>
 
-        <div class="politics-col">
-          <div class="sub-header">
-            <h3>Legislative &amp; Executive Tracker</h3>
-            <span class="sub-note">Congress, White House &amp; Courts</span>
+        <div class="politics-layout">
+          <div class="politics-col">
+            <div class="sub-header">
+              <h3>Prediction Markets (Polymarket)</h3>
+              <span class="sub-note">Implied YES probability &amp; 24h shift</span>
+            </div>
+            <div class="polymarket-list" id="polymarket-list"></div>
           </div>
-          <div class="policy-list" id="policy-list"></div>
 
-          <div class="sub-header topics-header">
-            <h3>Trending Topics &amp; Framing Shifts</h3>
+          <div class="politics-col">
+            <div class="sub-header">
+              <h3>Legislative &amp; Executive Tracker</h3>
+              <span class="sub-note">Congress, White House &amp; Courts</span>
+            </div>
+            <div class="policy-list" id="policy-list"></div>
+
+            <div class="sub-header topics-header">
+              <h3>Trending Topics &amp; Framing Shifts</h3>
+            </div>
+            <div class="topics-list" id="topics-list"></div>
           </div>
-          <div class="topics-list" id="topics-list"></div>
         </div>
       </div>
     </section>
@@ -251,6 +267,6 @@
     </div>
   </footer>
 
-  <script type="module" src="./app.js?v=30"></script>
+  <script type="module" src="./app.js?v=31"></script>
 </body>
 </html>

@@ -1692,6 +1692,29 @@ async function bootstrap() {
     if (lbl) lbl.textContent = expanded ? "Collapse" : "Expand";
   });
 
+  // Collapsible sections (collapsed by default on load): Global Conflicts & US Politics
+  const wireCollapsible = (btnId, bodyId, navHash) => {
+    const btn = document.getElementById(btnId);
+    const body = document.getElementById(bodyId);
+    if (!btn || !body) return;
+    const setOpen = (open) => {
+      body.classList.toggle("hidden", !open);
+      btn.setAttribute("aria-expanded", String(open));
+      const lbl = btn.querySelector(".collapse-label");
+      if (lbl) lbl.textContent = open ? "Collapse" : "Expand";
+    };
+    btn.addEventListener("click", () => {
+      setOpen(body.classList.contains("hidden"));
+    });
+    if (navHash) {
+      document.querySelector(`.nav-links a[href="${navHash}"]`)?.addEventListener("click", () => {
+        if (body.classList.contains("hidden")) setOpen(true);
+      });
+    }
+  };
+  wireCollapsible("btn-toggle-conflicts", "conflicts-body", "#conflicts");
+  wireCollapsible("btn-toggle-politics", "politics-body", "#politics");
+
   // Positive News placement toggle (above Top News vs bottom)
   els.btnMovePositive?.addEventListener("click", () => {
     const cur = localStorage.getItem("briefing-positive-pos") || "bottom";
