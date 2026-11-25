@@ -1144,15 +1144,7 @@ function initSparklineHover() {
     return entry;
   };
 
-  root.addEventListener("pointermove", (e) => {
-    const wrap = e.target.closest(".sparkline-wrap");
-    if (!wrap) {
-      if (activeWrap) {
-        clearHover(activeWrap);
-        activeWrap = null;
-      }
-      return;
-    }
+  const showAt = (wrap, clientX) => {
     if (activeWrap && activeWrap !== wrap) {
       clearHover(activeWrap);
     }
@@ -1165,7 +1157,7 @@ function initSparklineHover() {
     if (!rect.width) return;
 
     const { values, times, min, span, guide, dot, tip } = entry;
-    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     const idx = Math.round(ratio * (values.length - 1));
     const val = values[idx];
 
@@ -1198,10 +1190,34 @@ function initSparklineHover() {
       tip.classList.remove("hidden");
     }
     wrap.classList.add("hovering");
+  };
+
+  root.addEventListener("pointerdown", (e) => {
+    const wrap = e.target.closest(".sparkline-wrap");
+    if (!wrap) {
+      if (activeWrap) {
+        clearHover(activeWrap);
+        activeWrap = null;
+      }
+      return;
+    }
+    showAt(wrap, e.clientX);
   });
 
-  root.addEventListener("pointerleave", () => {
-    if (activeWrap) {
+  root.addEventListener("pointermove", (e) => {
+    const wrap = e.target.closest(".sparkline-wrap");
+    if (!wrap) {
+      if (activeWrap && e.pointerType !== "touch") {
+        clearHover(activeWrap);
+        activeWrap = null;
+      }
+      return;
+    }
+    showAt(wrap, e.clientX);
+  });
+
+  root.addEventListener("pointerleave", (e) => {
+    if (activeWrap && e.pointerType !== "touch") {
       clearHover(activeWrap);
       activeWrap = null;
     }
