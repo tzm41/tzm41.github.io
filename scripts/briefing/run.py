@@ -204,6 +204,7 @@ def apply_external_synthesis(raw_bundle_path: str, synthesis_json_path: str) -> 
         raw_text = "\n".join(lines[1:-1] if lines[-1].strip() == "```" else lines[1:]).strip()
 
     ai = GeminiBriefingSynthesis.model_validate_json(raw_text)
+    prior = _load_prior_briefing(bundle["date"])
     briefing = merge_synthesis(
         ai=ai,
         date_str=bundle["date"],
@@ -212,6 +213,7 @@ def apply_external_synthesis(raw_bundle_path: str, synthesis_json_path: str) -> 
         raw_markets=bundle["raw_markets"],
         raw_conflicts=bundle["raw_conflicts"],
         raw_politics=bundle["raw_politics"],
+        prior_briefing=prior,
     )
     _write_briefing_files(briefing)
     return briefing

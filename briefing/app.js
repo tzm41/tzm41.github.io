@@ -8,6 +8,7 @@ const state = {
   index: null,
   currentDate: null,
   briefing: null,
+  priorBriefing: null,
   newsCategory: "All",
   marketTimeframe: "1d",
   localRegionId: null,
@@ -362,6 +363,79 @@ function renderExecutiveBrief(briefing) {
   els.executiveList.innerHTML = bullets.map((b) => `<li>${highlightSummaryHtml(b)}</li>`).join("");
 }
 
+const SIMILAR_STOPWORDS = new Set([
+  "about", "after", "again", "against", "amid", "because", "before", "being",
+  "between", "could", "first", "from", "have", "into", "more", "most", "over",
+  "said", "says", "since", "some", "still", "than", "that", "their", "them",
+  "then", "there", "these", "they", "this", "through", "today", "under",
+  "very", "were", "what", "when", "where", "which", "while", "will", "with",
+  "would", "year", "years",
+]);
+
+function contentTokens(text) {
+  const words = String(text || "").toLowerCase().match(/[a-z0-9]{4,}/g) || [];
+  const set = new Set();
+  for (const w of words) {
+    if (!SIMILAR_STOPWORDS.has(w)) set.add(w);
+  }
+  return set;
+}
+
+function jaccard(setA, setB) {
+  if (!setA.size || !setB.size) return 0;
+  let inter = 0;
+  for (const w of setA) {
+    if (setB.has(w)) inter += 1;
+  }
+  return inter / (setA.size + setB.size - inter);
+}
+
+function isContinuedFromPrior(story, priorStories = []) {
+  if (story.continued_from_prior) return true;
+  if (!Array.isArray(priorStories) || !priorStories.length) return false;
+  const hCur = contentTokens(story.headline);
+  const fCur = contentTokens(`${story.headline || ""} ${story.summary || ""}`);
+  for (const prev of priorStories) {
+    if (jaccard(hCur, contentTokens(prev.headline)) >= 0.42) return true;
+    if (jaccard(fCur, contentTokens(`${prev.headline || ""} ${prev.summary || ""}`)) >= 0.35) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function renderNewsCard(story, badgeLabel, continued) {
+  const sourcesHtml = (story.sources || [])
+    .map(
+      (src) =>
+        `<a class="source-chip" href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`
+    )
+    .join("");
+
+  const toggleBtn = continued
+    ? `<button type="button" class="card-toggle-btn" aria-expanded="false">Expand &#9662;</button>`
+    : "";
+  const continuedBadge = continued
+    ? `<span class="continued-pill" title="Substantially similar to a story from yesterday">From yesterday</span>`
+    : "";
+
+  return `
+    <article class="news-card${continued ? " is-collapsed" : ""}">
+      <div class="news-meta">
+        <div class="news-card-badges">
+          <span class="cat-pill">${escapeHtml(badgeLabel)}</span>
+          ${continuedBadge}
+        </div>
+        ${toggleBtn}
+      </div>
+      <h3>${escapeHtml(story.headline)}</h3>
+      <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
+      <div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>
+      <div class="source-links">${sourcesHtml}</div>
+    </article>
+  `;
+}
+
 function renderNews(stories = []) {
   const filtered =
     state.newsCategory === "All"
@@ -373,27 +447,11 @@ function renderNews(stories = []) {
     return;
   }
 
+  const priorTop = state.priorBriefing?.top_news || [];
   els.newsGrid.innerHTML = filtered
-    .map((story) => {
-      const sourcesHtml = (story.sources || [])
-        .map(
-          (src) =>
-            `<a class="source-chip" href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`
-        )
-        .join("");
-
-      return `
-        <article class="news-card">
-          <div class="news-meta">
-            <span class="cat-pill">${escapeHtml(story.category)}</span>
-          </div>
-          <h3>${escapeHtml(story.headline)}</h3>
-          <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
-          <div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>
-          <div class="source-links">${sourcesHtml}</div>
-        </article>
-      `;
-    })
+    .map((story) =>
+      renderNewsCard(story, story.category, isContinuedFromPrior(story, priorTop))
+    )
     .join("");
 }
 
@@ -788,29 +846,15 @@ function renderLocalNews(regions = []) {
 
   const activeRegion = regions.find((r) => r.id === state.localRegionId) || regions[0];
   const stories = activeRegion.stories || [];
+  const priorRegion = (state.priorBriefing?.local_news || []).find((r) => r.id === activeRegion.id);
+  const priorLocal = priorRegion?.stories || [];
   if (!stories.length) {
     els.localNewsGrid.innerHTML = `<div class="empty-state">No local news stories available for ${escapeHtml(activeRegion.name)} in this edition.</div>`;
   } else {
     els.localNewsGrid.innerHTML = stories
-      .map((story) => {
-        const sourcesHtml = (story.sources || [])
-          .map(
-            (src) =>
-              `<a class="source-chip" href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`
-          )
-          .join("");
-        return `
-          <article class="news-card">
-            <div class="news-meta">
-              <span class="cat-pill">${escapeHtml(activeRegion.name)}</span>
-            </div>
-            <h3>${escapeHtml(story.headline)}</h3>
-            <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
-            <div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>
-            <div class="source-links">${sourcesHtml}</div>
-          </article>
-        `;
-      })
+      .map((story) =>
+        renderNewsCard(story, activeRegion.name, isContinuedFromPrior(story, priorLocal))
+      )
       .join("");
   }
 
@@ -863,6 +907,22 @@ async function loadBriefingForDate(dateStr) {
     window.history.replaceState(null, "", `?${qs.toString()}`);
 
     updateArchiveButtons();
+    state.priorBriefing = null;
+    const dates = state.index?.dates || [];
+    const curIdx = dates.indexOf(data.date);
+    if (curIdx !== -1 && curIdx + 1 < dates.length) {
+      try {
+        const prevResp = await fetch(
+          `${DATA_BASE}/archive/${encodeURIComponent(dates[curIdx + 1])}.json`,
+          { cache: "no-store" }
+        );
+        if (prevResp.ok) {
+          state.priorBriefing = await prevResp.json();
+        }
+      } catch {
+        state.priorBriefing = null;
+      }
+    }
     renderAll(data);
   } catch (err) {
     els.statusBanner.textContent = `Could not load briefing data (${err.message}). Run the daily pipeline or check briefing/data/.`;
@@ -1064,6 +1124,17 @@ async function bootstrap() {
   initTheme();
   initScrollSpy();
   initSparklineHover();
+
+  // Delegated expand/collapse for continued-from-yesterday news cards
+  document.getElementById("app-root")?.addEventListener("click", (e) => {
+    const btn = e.target.closest(".card-toggle-btn");
+    if (!btn) return;
+    const card = btn.closest(".news-card");
+    if (!card) return;
+    const collapsed = card.classList.toggle("is-collapsed");
+    btn.setAttribute("aria-expanded", String(!collapsed));
+    btn.innerHTML = collapsed ? "Expand &#9662;" : "Collapse &#9652;";
+  });
 
   // News category filters
   els.newsFilters.addEventListener("click", (e) => {

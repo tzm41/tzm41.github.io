@@ -26,6 +26,7 @@ class NewsStory(BaseModel):
     summary: str
     why_it_matters: str
     sources: list[SourceLink] = Field(default_factory=list)
+    continued_from_prior: bool = False
 
 
 class MarketQuote(BaseModel):

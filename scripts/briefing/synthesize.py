@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import time
+from difflib import SequenceMatcher
 from typing import Any
 
 from .config import GEMINI_FALLBACK_MODELS, GEMINI_MODEL
@@ -279,6 +281,62 @@ def _build_extractive_fallback(
     )
 
 
+_WORD_RE = re.compile(r"[a-z0-9]{4,}")
+_STOPWORDS = frozenset({
+    "about", "after", "again", "against", "amid", "because", "before", "being",
+    "between", "could", "first", "from", "have", "into", "more", "most", "over",
+    "said", "says", "since", "some", "still", "than", "that", "their", "them",
+    "then", "there", "these", "they", "this", "through", "today", "under",
+    "very", "were", "what", "when", "where", "which", "while", "will", "with",
+    "would", "year", "years",
+})
+
+
+def _content_tokens(text: str) -> set[str]:
+    return {w for w in _WORD_RE.findall((text or "").lower()) if w not in _STOPWORDS}
+
+
+def _is_similar_story(story: NewsStory, prior_items: list[dict[str, Any]]) -> bool:
+    """Return True if story is substantially similar to any story from the prior day."""
+    h_cur = (story.headline or "").lower().strip()
+    t_head_cur = _content_tokens(story.headline)
+    t_full_cur = _content_tokens(f"{story.headline} {story.summary}")
+    if not t_head_cur:
+        return False
+
+    for prev in prior_items:
+        h_prev = (prev.get("headline") or "").lower().strip()
+        if h_cur and h_prev:
+            m = SequenceMatcher(None, h_cur, h_prev)
+            if m.quick_ratio() >= 0.58 and m.ratio() >= 0.58:
+                return True
+        t_head_prev = _content_tokens(prev.get("headline", ""))
+        if t_head_prev:
+            union_h = len(t_head_cur | t_head_prev)
+            if union_h and len(t_head_cur & t_head_prev) / union_h >= 0.42:
+                return True
+        t_full_prev = _content_tokens(f"{prev.get('headline', '')} {prev.get('summary', '')}")
+        if t_full_prev:
+            union_f = len(t_full_cur | t_full_prev)
+            if union_f and len(t_full_cur & t_full_prev) / union_f >= 0.35:
+                return True
+    return False
+
+
+def _flag_continued_stories(
+    stories: list[NewsStory],
+    prior_stories: list[dict[str, Any]],
+) -> list[NewsStory]:
+    if not prior_stories:
+        return stories
+    return [
+        s.model_copy(update={"continued_from_prior": True})
+        if not s.continued_from_prior and _is_similar_story(s, prior_stories)
+        else s
+        for s in stories
+    ]
+
+
 def merge_synthesis(
     ai: GeminiBriefingSynthesis,
     date_str: str,
@@ -287,6 +345,7 @@ def merge_synthesis(
     raw_markets: dict[str, Any],
     raw_conflicts: list[dict[str, Any]],
     raw_politics: dict[str, Any],
+    prior_briefing: dict[str, Any] | None = None,
 ) -> DailyBriefing:
     """Merge validated AI synthesis with deterministic numeric market, conflict, and politics data."""
     ai_theater_map = {t.id: t for t in ai.conflict_theaters}
@@ -314,13 +373,27 @@ def merge_synthesis(
             )
         )
 
+    prior_top = (prior_briefing or {}).get("top_news", [])
+    prior_local_by_id = {
+        r.get("id"): r.get("stories", [])
+        for r in (prior_briefing or {}).get("local_news", [])
+        if r.get("id")
+    }
+    flagged_top = _flag_continued_stories(ai.top_news, prior_top)
+    flagged_local = [
+        region.model_copy(
+            update={"stories": _flag_continued_stories(region.stories, prior_local_by_id.get(region.id, []))}
+        )
+        for region in ai.local_news
+    ]
+
     return DailyBriefing(
         date=date_str,
         generated_at=generated_at,
         synthesis_mode="gemini",
         source_health=health,
         executive_brief=ai.executive_brief,
-        top_news=ai.top_news,
+        top_news=flagged_top,
         markets=MarketsSection(
             narrative=ai.market_narrative,
             regime_tag=ai.market_regime,
@@ -343,7 +416,7 @@ def merge_synthesis(
             trending_topics=ai.trending_topics,
         ),
         positive_news=ai.positive_news,
-        local_news=ai.local_news,
+        local_news=flagged_local,
     )
 
 
@@ -385,4 +458,5 @@ def synthesize_briefing(
         raw_markets=raw_markets,
         raw_conflicts=raw_conflicts,
         raw_politics=raw_politics,
+        prior_briefing=prior_briefing,
     )
