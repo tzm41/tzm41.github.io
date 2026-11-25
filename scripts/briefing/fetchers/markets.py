@@ -249,8 +249,22 @@ def _download_timeframes(
         if s is None:
             prior_q = (prior_map or {}).get(symbol, {})
             return prior_q.get("sparkline_1d", []), prior_q.get("sparkline_1d_times", [])
-        cutoff = s.index[-1] - pd.Timedelta(hours=24)
-        sliced = s[s.index >= cutoff]
+        idx_ny = (
+            s.index.tz_convert("America/New_York")
+            if getattr(s.index, "tz", None) is not None
+            else s.index
+        )
+        unique_days = sorted({ts.date() for ts in idx_ny})
+        sliced = s.iloc[0:0]
+        for day in reversed(unique_days):
+            day_mask = idx_ny.date == day
+            open_mask = day_mask & (
+                (idx_ny.hour > 9) | ((idx_ny.hour == 9) & (idx_ny.minute >= 30))
+            )
+            cand = s[open_mask] if int(open_mask.sum()) >= 2 else s[day_mask]
+            if len(cand) >= 2:
+                sliced = cand
+                break
         if len(sliced) < 2:
             sliced = s.iloc[-14:]
         return [round(float(x), 2) for x in sliced.tolist()], [_fmt_iso_utc(ts) for ts in sliced.index]
