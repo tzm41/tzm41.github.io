@@ -9,7 +9,15 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from .config import ARCHIVE_DIR, DATA_DIR, INDEX_HISTORY_DAYS, INDEX_PATH, LATEST_PATH, MAX_ARCHIVE_DAYS
+from .config import (
+    ARCHIVE_DIR,
+    DATA_DIR,
+    INDEX_HISTORY_DAYS,
+    INDEX_PATH,
+    LATEST_PATH,
+    MARKETS_LIVE_PATH,
+    MAX_ARCHIVE_DAYS,
+)
 from .fetchers.conflicts import fetch_conflicts
 from .fetchers.markets import fetch_markets
 from .fetchers.news import fetch_local_news, fetch_positive_news, fetch_top_news
@@ -219,10 +227,45 @@ def apply_external_synthesis(raw_bundle_path: str, synthesis_json_path: str) -> 
     return briefing
 
 
+async def run_markets_only() -> dict[str, Any]:
+    """Fetch only live market data (watchlist, Big 7, sectors, Fear & Greed) and write markets_live.json."""
+    prior_markets: dict[str, Any] | None = None
+    for path in (MARKETS_LIVE_PATH, LATEST_PATH):
+        if path.exists():
+            try:
+                loaded = json.loads(path.read_text(encoding="utf-8"))
+                prior_markets = loaded.get("markets") if "markets" in loaded else loaded
+                break
+            except Exception:
+                continue
+
+    raw_markets, health = await fetch_markets(prior_markets=prior_markets)
+    payload = {
+        "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "health": health,
+        "watchlist": raw_markets.get("watchlist", []),
+        "big7": raw_markets.get("big7", []),
+        "fear_greed": raw_markets.get("fear_greed"),
+        "sectors": raw_markets.get("sectors", []),
+    }
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    MARKETS_LIVE_PATH.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    print(
+        f"[run] Wrote {MARKETS_LIVE_PATH.relative_to(Path.cwd()) if MARKETS_LIVE_PATH.is_relative_to(Path.cwd()) else MARKETS_LIVE_PATH} "
+        f"(health={health}, watchlist={len(payload['watchlist'])}, big7={len(payload['big7'])}, sectors={len(payload['sectors'])})"
+    )
+    return payload
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate the daily news & trends briefing.")
     parser.add_argument("--date", help="Override briefing date (YYYY-MM-DD)", default=None)
     parser.add_argument("--dry-run", action="store_true", help="Fetch and synthesize without writing files")
+    parser.add_argument(
+        "--markets-only",
+        action="store_true",
+        help="Fetch only stock market data and write briefing/data/markets_live.json",
+    )
     parser.add_argument(
         "--fetch-only",
         metavar="RAW_JSON",
@@ -235,6 +278,10 @@ def main() -> None:
         help="Validate SYNTHESIS_JSON against schema, merge with RAW_JSON, and write briefing/data/",
     )
     args = parser.parse_args()
+
+    if args.markets_only:
+        asyncio.run(run_markets_only())
+        return
 
     if args.apply_synthesis:
         apply_external_synthesis(args.apply_synthesis[0], args.apply_synthesis[1])

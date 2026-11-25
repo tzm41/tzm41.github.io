@@ -7,6 +7,7 @@ const DATA_BASE = "./data";
 const state = {
   index: null,
   currentDate: null,
+  viewingLatest: true,
   briefing: null,
   priorBriefing: null,
   newsCategory: "All",
@@ -30,6 +31,7 @@ const els = {
   newsFilters: document.getElementById("news-filters"),
   newsGrid: document.getElementById("news-grid"),
   marketRegime: document.getElementById("market-regime"),
+  marketsLivePill: document.getElementById("markets-live-pill"),
   marketNarrative: document.getElementById("market-narrative"),
   fearGreedCard: document.getElementById("fear-greed-card"),
   watchlistGrid: document.getElementById("watchlist-grid"),
@@ -892,9 +894,47 @@ function updateArchiveButtons() {
   els.btnPrevDay.disabled = idx === -1 || idx >= dates.length - 1;
 }
 
+async function refreshLiveMarkets() {
+  if (!state.viewingLatest || !state.briefing) {
+    els.marketsLivePill?.classList.add("hidden");
+    return;
+  }
+  try {
+    const resp = await fetch(`${DATA_BASE}/markets_live.json`, { cache: "no-store" });
+    if (!resp.ok) return;
+    const live = await resp.json();
+    if (!live || !Array.isArray(live.watchlist) || !live.watchlist.length) return;
+
+    state.briefing.markets = {
+      ...state.briefing.markets,
+      watchlist: live.watchlist,
+      big7: Array.isArray(live.big7) && live.big7.length ? live.big7 : state.briefing.markets.big7,
+      sectors: Array.isArray(live.sectors) && live.sectors.length ? live.sectors : state.briefing.markets.sectors,
+      fear_greed: live.fear_greed || state.briefing.markets.fear_greed,
+    };
+
+    renderKpiStrip(state.briefing);
+    renderMarkets(state.briefing.markets);
+
+    if (els.marketsLivePill && live.updated_at) {
+      const dt = new Date(live.updated_at);
+      const timeStr = Number.isNaN(dt.getTime())
+        ? live.updated_at
+        : dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+      els.marketsLivePill.innerHTML = `<span class="live-dot" aria-hidden="true"></span>${escapeHtml(timeStr)}`;
+      els.marketsLivePill.title = `Markets refreshed ${fmtLocalTimestamp(live.updated_at)}`;
+      els.marketsLivePill.classList.remove("hidden");
+    }
+  } catch {
+    // Keep daily snapshot if markets_live.json is unavailable
+  }
+}
+
 async function loadBriefingForDate(dateStr) {
   els.statusBanner.classList.add("hidden");
   const isLatest = !dateStr || dateStr === "latest";
+  state.viewingLatest = isLatest;
+  if (!isLatest) els.marketsLivePill?.classList.add("hidden");
   const url = isLatest
     ? `${DATA_BASE}/latest.json`
     : `${DATA_BASE}/archive/${encodeURIComponent(dateStr)}.json`;
@@ -930,6 +970,9 @@ async function loadBriefingForDate(dateStr) {
       }
     }
     renderAll(data);
+    if (isLatest) {
+      await refreshLiveMarkets();
+    }
   } catch (err) {
     els.statusBanner.textContent = `Could not load briefing data (${err.message}). Run the daily pipeline or check briefing/data/.`;
     els.statusBanner.classList.remove("hidden");
@@ -1222,6 +1265,13 @@ async function bootstrap() {
       : "latest";
 
   await loadBriefingForDate(initialDate);
+
+  // Periodically poll markets_live.json every 5 min while tab is visible on Latest
+  window.setInterval(() => {
+    if (!document.hidden && state.viewingLatest) {
+      refreshLiveMarkets();
+    }
+  }, 5 * 60 * 1000);
 }
 
 bootstrap();

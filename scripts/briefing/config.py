@@ -10,6 +10,7 @@ DATA_DIR = REPO_ROOT / "briefing" / "data"
 ARCHIVE_DIR = DATA_DIR / "archive"
 LATEST_PATH = DATA_DIR / "latest.json"
 INDEX_PATH = DATA_DIR / "index.json"
+MARKETS_LIVE_PATH = DATA_DIR / "markets_live.json"
 
 # Retention
 MAX_ARCHIVE_DAYS = 60
