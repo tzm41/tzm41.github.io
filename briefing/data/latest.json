@@ -1,6 +1,6 @@
 {
   "date": "2026-11-25",
-  "generated_at": "2026-11-25T05:21:36Z",
+  "generated_at": "2026-11-25T05:35:07Z",
   "synthesis_mode": "extractive_fallback",
   "source_health": {
     "news": "ok",
@@ -383,9 +383,9 @@
         "symbol": "CL=F",
         "name": "WTI Crude",
         "group": "Commodities",
-        "price": 80.71,
-        "change_pct": -1.63,
-        "change_5d_pct": -3.06,
+        "price": 80.55,
+        "change_pct": -1.83,
+        "change_5d_pct": -3.25,
         "sparkline_30d": [
           97.97,
           101.41,
@@ -416,16 +416,16 @@
           83.98,
           80.17,
           82.05,
-          80.71
+          80.55
         ]
       },
       {
         "symbol": "GC=F",
         "name": "Gold",
         "group": "Commodities",
-        "price": 3544.5,
+        "price": 3544.6,
         "change_pct": -0.49,
-        "change_5d_pct": -5.28,
+        "change_5d_pct": -5.27,
         "sparkline_30d": [
           4170.1,
           4181.1,
@@ -456,16 +456,16 @@
           3515.4,
           3651.4,
           3561.9,
-          3544.5
+          3544.6
         ]
       },
       {
         "symbol": "BTC-USD",
         "name": "Bitcoin",
         "group": "Crypto",
-        "price": 59146.18,
-        "change_pct": -3.37,
-        "change_5d_pct": -4.45,
+        "price": 59033.07,
+        "change_pct": -3.56,
+        "change_5d_pct": -4.63,
         "sparkline_30d": [
           80006.66,
           80805.08,
@@ -496,7 +496,7 @@
           60094.09,
           61161.91,
           61210.98,
-          59146.18
+          59033.07
         ]
       }
     ],
@@ -630,9 +630,9 @@
             "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9Qdkg3Q0tiSDRxSUJLX1VBMGh2blRhM1c5eHoydTItSDIxOFBRZERRbEp4RjNHQjZjaVYyLW5zdUJoNDFFbEF0SjJYZ1F0NXdwWlZYaVF1OWF3S3VQODZFWmFqRHhHdXFKNzJZZGo3MHhLc1FuSVR3?oc=5"
           },
           {
-            "headline": "Latest news on the war in the Middle East. Iran: Strait of Hormuz virtually paralysed, 400 ships waiting. Houthis strike skyscraper in Riyadh - Il Sole 24 ORE",
-            "source": "Il Sole 24 ORE",
-            "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQQnV0LVNFbXRtX0hEZWdlSUtwSlRxVy1MOE5SMzJYVVRVYkRzQkZidklrcDRFQWt4TXlPeTgwWS1Ub0F3Mkl0R2VVQW9zbkY4blgxb2xiaWZXaWxRWGJna3lMR3QyOUQydWhQUVlub0dyOHpLUDIxUmpfT2F0MWphMzFhZXFDdDRhS0xzcXdsS1htbThlNnREV0hyaFVwM191cGpJR0NrcTFLZXR3T1ZpRmFSWGpsSEZEZVBnVW5ycw?oc=5"
+            "headline": "Houthi rebels close in on the city of Aden as Yemeni forces dig in behind a fortified line - AP News",
+            "source": "AP News",
+            "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOLVEzelRwd2pzaWFoRmhiVTIwb2JRem9VRFgyTkFlUVRNOHh1bVJLRnNoTm90SnhscmpVcW56STVUaTBZS3ZsSUJZZUpDSTBidHp1Wl9DbEt4WlhuZjV1RFZGUnRkTFAwMVpEcGdJZDZXYkNncGFwZUp6SEpGRjZ1bXN2aHJmNTZaazJRdDhPdHFZUHltbXVySjIxMTlocDVSc1FVNmEyNXZNbnhGLTN5Zlhwc0RRUQ?oc=5"
           }
         ]
       },
@@ -640,10 +640,24 @@
         "id": "indo-pacific",
         "name": "Indo-Pacific / Taiwan Strait",
         "region": "Asia-Pacific",
-        "status": "elevated",
-        "trend_7d": "flat",
-        "intensity_score": 60.0,
-        "intensity_series_14d": [],
+        "status": "escalating",
+        "trend_7d": "up",
+        "intensity_score": 33.0,
+        "intensity_series_14d": [
+          42.0,
+          3.0,
+          12.0,
+          3.0,
+          5.0,
+          4.0,
+          6.0,
+          39.0,
+          8.0,
+          29.0,
+          13.0,
+          90.0,
+          33.0
+        ],
         "summary": "US, Philippines plan improvements to airport near Taiwan - Stars and Stripes",
         "timeline_events": [
           {
@@ -706,7 +720,7 @@
         "region": "Global Flashpoints",
         "status": "escalating",
         "trend_7d": "up",
-        "intensity_score": 14.0,
+        "intensity_score": 15.0,
         "intensity_series_14d": [
           9.0,
           3.0,
@@ -720,7 +734,7 @@
           11.0,
           4.0,
           23.0,
-          14.0
+          15.0
         ],
         "summary": "No major breaking updates captured in the last 24 hours.",
         "timeline_events": []
@@ -733,22 +747,22 @@
       {
         "question": "Will David Lisnard win the 2027 French presidential election?",
         "yes_prob": 0.2505,
-        "delta_24h": 0.014,
-        "volume_usd": 183685188.89,
+        "delta_24h": 0.0145,
+        "volume_usd": 183686316.45,
         "url": "https://polymarket.com/event/next-french-presidential-election"
       },
       {
         "question": "Will Benjamin Netanyahu be the next Prime Minister of Israel?",
         "yes_prob": 0.2225,
-        "delta_24h": -0.0195,
-        "volume_usd": 94341982.41,
+        "delta_24h": -0.0115,
+        "volume_usd": 94343775.16,
         "url": "https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election"
       },
       {
         "question": "Will Puma Shen win the next Taipei Mayor election?",
         "yes_prob": 0.3635,
         "delta_24h": 0.042,
-        "volume_usd": 7864897.26,
+        "volume_usd": 7864950.56,
         "url": "https://polymarket.com/event/taipei-mayor-election-winner-20260813125857100"
       },
       {
@@ -761,8 +775,8 @@
       {
         "question": "US announces end of Iranian blockade by December 31, 2026?",
         "yes_prob": 0.1315,
-        "delta_24h": -0.011,
-        "volume_usd": 55221142.16,
+        "delta_24h": -0.026,
+        "volume_usd": 55224815.53,
         "url": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080"
       },
       {
