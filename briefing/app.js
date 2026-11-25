@@ -387,9 +387,18 @@ function sectorTileStyle(pct) {
 
 /* ---------- Theme ---------- */
 
+const THEME_ORDER = ["system", "light", "dark"];
+
 const THEME_ICONS = {
+  system: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>`,
   light: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2M12 19.5v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2.5 12h2M19.5 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>`,
   dark: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`,
+};
+
+const THEME_LABELS = {
+  system: "Theme: Auto (switch to Light)",
+  light: "Theme: Light (switch to Dark)",
+  dark: "Theme: Dark (switch to Auto)",
 };
 
 function resolveTheme(pref) {
@@ -398,16 +407,16 @@ function resolveTheme(pref) {
 }
 
 function applyThemePreference(pref) {
-  const validPref = ["system", "light", "dark"].includes(pref) ? pref : "system";
+  const validPref = THEME_ORDER.includes(pref) ? pref : "system";
   const resolved = resolveTheme(validPref);
   document.documentElement.setAttribute("data-theme", resolved);
 
   if (els.themeToggle) {
-    els.themeToggle.innerHTML = THEME_ICONS[resolved];
-    const nextLabel = resolved === "dark" ? "Switch to light mode" : "Switch to dark mode";
-    els.themeToggle.setAttribute("aria-label", nextLabel);
-    els.themeToggle.setAttribute("title", nextLabel);
-    els.themeToggle.setAttribute("aria-pressed", String(resolved === "dark"));
+    els.themeToggle.dataset.themePref = validPref;
+    els.themeToggle.innerHTML = THEME_ICONS[validPref];
+    const label = THEME_LABELS[validPref];
+    els.themeToggle.setAttribute("aria-label", label);
+    els.themeToggle.setAttribute("title", label);
   }
 
   if (state.briefing) renderSectorHeatmap(state.briefing.markets);
@@ -419,8 +428,9 @@ function initTheme() {
   applyThemePreference(saved);
 
   els.themeToggle?.addEventListener("click", () => {
-    const current = document.documentElement.getAttribute("data-theme") || resolveTheme("system");
-    const nextPref = current === "dark" ? "light" : "dark";
+    const cur = localStorage.getItem("briefing-theme") || "system";
+    const idx = THEME_ORDER.indexOf(cur);
+    const nextPref = THEME_ORDER[(idx + 1) % THEME_ORDER.length];
     localStorage.setItem("briefing-theme", nextPref);
     applyThemePreference(nextPref);
   });
