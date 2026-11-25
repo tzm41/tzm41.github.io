@@ -642,32 +642,60 @@ h3 {
   color: var(--accent);
 }
 
-.source-chip[data-bias]::after {
-  content: attr(data-bias);
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 5px);
-  transform: translateX(-50%) translateY(2px);
-  background: var(--surface);
-  color: var(--ink-muted);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 2px 7px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 400;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  box-shadow: var(--shadow-sm);
-  transition: opacity 0.16s ease, transform 0.16s ease;
-  z-index: 15;
+@media (hover: hover) and (pointer: fine) {
+  .source-chip[data-bias]::after {
+    content: attr(data-bias);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 5px);
+    transform: translateX(-50%) translateY(2px);
+    background: var(--surface);
+    color: var(--ink-muted);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 400;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    box-shadow: var(--shadow-sm);
+    transition: opacity 0.16s ease, transform 0.16s ease;
+    z-index: 15;
+  }
+
+  .source-chip[data-bias]:hover::after,
+  .source-chip[data-bias]:focus-visible::after {
+    opacity: 0.9;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
-.source-chip[data-bias]:hover::after,
-.source-chip[data-bias]:focus-visible::after {
-  opacity: 0.9;
-  transform: translateX(-50%) translateY(0);
+.source-popover {
+  position: fixed;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  max-width: calc(100vw - 24px);
+}
+
+.source-popover-bias {
+  color: var(--ink-muted);
+}
+
+.source-popover-link {
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 /* ---------- Markets & Sector Heatmap ---------- */

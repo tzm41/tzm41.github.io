@@ -1208,10 +1208,70 @@ function initSparklineHover() {
   });
 }
 
+function initSourceBiasPopover() {
+  const pop = document.createElement("div");
+  pop.className = "source-popover hidden";
+  pop.setAttribute("role", "dialog");
+  document.body.appendChild(pop);
+
+  let lastPointerType = "mouse";
+  let activeChip = null;
+
+  const hide = () => {
+    pop.classList.add("hidden");
+    activeChip = null;
+  };
+
+  document.addEventListener(
+    "pointerdown",
+    (e) => {
+      lastPointerType = e.pointerType || "mouse";
+      if (!pop.classList.contains("hidden") && !pop.contains(e.target) && !e.target.closest(".source-chip")) {
+        hide();
+      }
+    },
+    { passive: true }
+  );
+
+  document.addEventListener("click", (e) => {
+    const chip = e.target.closest(".source-chip[data-bias]");
+    if (!chip) return;
+    const isTouch =
+      lastPointerType === "touch" ||
+      !window.matchMedia?.("(hover: hover) and (pointer: fine)").matches;
+    if (!isTouch) return;
+
+    e.preventDefault();
+    if (activeChip === chip && !pop.classList.contains("hidden")) {
+      hide();
+      return;
+    }
+
+    activeChip = chip;
+    const bias = chip.dataset.bias || "";
+    const href = chip.getAttribute("href") || "#";
+    pop.innerHTML = `<span class="source-popover-bias">${escapeHtml(bias)}</span><a class="source-popover-link" href="${safeUrl(href)}" target="_blank" rel="noopener noreferrer">Open &nearr;</a>`;
+    pop.classList.remove("hidden");
+
+    const rect = chip.getBoundingClientRect();
+    const popRect = pop.getBoundingClientRect();
+    const left = Math.max(
+      12,
+      Math.min(window.innerWidth - popRect.width - 12, rect.left + rect.width / 2 - popRect.width / 2)
+    );
+    const top = Math.max(12, rect.top - popRect.height - 8);
+    pop.style.left = `${left.toFixed(1)}px`;
+    pop.style.top = `${top.toFixed(1)}px`;
+  });
+
+  window.addEventListener("scroll", hide, { passive: true });
+}
+
 async function bootstrap() {
   initTheme();
   initScrollSpy();
   initSparklineHover();
+  initSourceBiasPopover();
 
   // Delegated expand/collapse for continued-from-yesterday news cards
   document.getElementById("app-root")?.addEventListener("click", (e) => {
