@@ -10,6 +10,7 @@ const state = {
   viewingLatest: true,
   briefing: null,
   priorBriefing: null,
+  tickerMap: new Map(),
   newsCategory: "All",
   marketTimeframe: "1d",
   localRegionId: null,
@@ -136,6 +137,89 @@ const EXPLICIT_BOLD_RE = /\*\*([^*]+)\*\*/g;
 const FALLBACK_HIGHLIGHT_RE =
   /(?<![\w.$])([+-]?\$\d[\d,]*(?:\.\d+)?(?:\s?(?:million|billion|trillion|M|B|K))?|[+-]?\d[\d,]*(?:\.\d+)?%|\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b)(?!\w)|(['"][A-Z][^'"]{1,40}['"])/g;
 
+const TICKER_ALIASES = [
+  ["S&P 500", "^GSPC"],
+  ["Nasdaq", "^IXIC"],
+  ["Dow Jones", "^DJI"],
+  ["Russell 2000", "^RUT"],
+  ["VIX", "^VIX"],
+  ["WTI crude", "CL=F"],
+  ["Bitcoin", "BTC-USD"],
+  ["Nvidia", "NVDA"],
+  ["Apple", "AAPL"],
+  ["Microsoft", "MSFT"],
+  ["Alphabet", "GOOGL"],
+  ["Amazon", "AMZN"],
+  ["Meta", "META"],
+  ["Tesla", "TSLA"],
+];
+
+const INLINE_TICKER_RE =
+  /\b(S&P 500|Nasdaq|Dow Jones|Russell 2000|WTI crude|Bitcoin|Nvidia|Apple|Microsoft|Alphabet|Amazon|Meta|Tesla|AAPL|MSFT|GOOGL|AMZN|NVDA|META|TSLA|XLK|XLF|XLV|XLE|XLI|XLY|XLP|XLU|XLRE|XLB|XLC|VIX)\b/g;
+
+function buildTickerMap(markets = {}) {
+  const map = new Map();
+  const bySym = new Map();
+  for (const q of [...(markets.watchlist || []), ...(markets.big7 || [])]) {
+    if (!q?.symbol) continue;
+    const info = {
+      symbol: q.symbol,
+      name: q.name,
+      price: q.price,
+      change_pct: q.change_pct,
+      hasPrice: true,
+    };
+    bySym.set(q.symbol, info);
+    map.set(q.symbol.replace(/^\^/, ""), info);
+  }
+  for (const s of markets.sectors || []) {
+    if (!s?.symbol) continue;
+    const info = {
+      symbol: s.symbol,
+      name: s.name,
+      price: null,
+      change_pct: s.change_pct,
+      hasPrice: false,
+    };
+    bySym.set(s.symbol, info);
+    map.set(s.symbol, info);
+  }
+  for (const [alias, sym] of TICKER_ALIASES) {
+    const info = bySym.get(sym);
+    if (info) map.set(alias, info);
+  }
+  state.tickerMap = map;
+}
+
+function formatTickerTip(info) {
+  const pct = fmtPct(info.change_pct);
+  const cleanSym = info.symbol.replace(/^\^/, "");
+  if (info.hasPrice) {
+    return `${cleanSym} · ${fmtPrice(info.price, info.symbol)} (1D: ${pct})`;
+  }
+  return `${cleanSym} · ${info.name} (1D: ${pct})`;
+}
+
+function escapeWithTickers(segment) {
+  if (!segment || !state.tickerMap.size) return escapeHtml(segment);
+  INLINE_TICKER_RE.lastIndex = 0;
+  let out = "";
+  let lastIdx = 0;
+  for (const match of segment.matchAll(INLINE_TICKER_RE)) {
+    const token = match[0];
+    const info = state.tickerMap.get(token);
+    if (!info) continue;
+    const idx = match.index ?? 0;
+    if (idx > lastIdx) out += escapeHtml(segment.slice(lastIdx, idx));
+    const cls = deltaClass(info.change_pct);
+    const tip = formatTickerTip(info);
+    out += `<span class="ticker-tag ${cls}" tabindex="0" data-ticker-sym="${escapeHtml(info.symbol)}" data-ticker-tip="${escapeHtml(tip)}" title="${escapeHtml(tip)}">${escapeHtml(token)}</span>`;
+    lastIdx = idx + token.length;
+  }
+  if (lastIdx < segment.length) out += escapeHtml(segment.slice(lastIdx));
+  return out;
+}
+
 function highlightSummaryHtml(text) {
   const raw = String(text ?? "");
   if (!raw) return "";
@@ -150,14 +234,14 @@ function highlightSummaryHtml(text) {
   for (const match of raw.matchAll(re)) {
     const idx = match.index ?? 0;
     if (idx > lastIdx) {
-      out += escapeHtml(raw.slice(lastIdx, idx));
+      out += escapeWithTickers(raw.slice(lastIdx, idx));
     }
     const inner = hasExplicit ? match[1] : match[0];
-    out += `<strong>${escapeHtml(inner)}</strong>`;
+    out += `<strong>${escapeWithTickers(inner)}</strong>`;
     lastIdx = idx + match[0].length;
   }
   if (lastIdx < raw.length) {
-    out += escapeHtml(raw.slice(lastIdx));
+    out += escapeWithTickers(raw.slice(lastIdx));
   }
   return out;
 }
@@ -1024,6 +1108,7 @@ function renderLocalNews(regions = []) {
 
 function renderAll(briefing) {
   state.briefing = briefing;
+  buildTickerMap(briefing.markets);
   els.editionDate.textContent = fmtReadableDate(briefing.date);
   els.generatedMeta.textContent = `Updated ${fmtLocalTimestamp(briefing.generated_at)}`;
   renderSourceHealth(briefing.source_health);
@@ -1065,6 +1150,21 @@ async function refreshLiveMarkets() {
       sectors: Array.isArray(live.sectors) && live.sectors.length ? live.sectors : state.briefing.markets.sectors,
       fear_greed: live.fear_greed || state.briefing.markets.fear_greed,
     };
+
+    buildTickerMap(state.briefing.markets);
+    document.querySelectorAll(".ticker-tag[data-ticker-sym]").forEach((el) => {
+      const sym = el.dataset.tickerSym;
+      const info =
+        state.tickerMap.get(sym) ||
+        state.tickerMap.get(sym?.replace(/^\^/, ""));
+      if (!info) return;
+      const cls = deltaClass(info.change_pct);
+      const tip = formatTickerTip(info);
+      el.classList.remove("pos", "neg", "flat");
+      el.classList.add(cls);
+      el.dataset.tickerTip = tip;
+      el.title = tip;
+    });
 
     renderKpiStrip(state.briefing);
     renderMarkets(state.briefing.markets);

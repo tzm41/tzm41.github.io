@@ -406,6 +406,60 @@ h3 {
   color: var(--ink);
 }
 
+.ticker-tag {
+  position: relative;
+  display: inline-block;
+  padding: 0 5px;
+  margin: 0 1px;
+  border-radius: 4px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-subtle);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  font-weight: 600;
+  line-height: 1.4;
+  vertical-align: baseline;
+  cursor: default;
+}
+
+.ticker-tag.pos {
+  border-color: rgba(21, 115, 71, 0.35);
+  background: var(--pos-soft);
+}
+
+.ticker-tag.neg {
+  border-color: rgba(185, 56, 44, 0.35);
+  background: var(--neg-soft);
+}
+
+.ticker-tag[data-ticker-tip]::after {
+  content: attr(data-ticker-tip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%) translateY(2px);
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: var(--shadow-sm);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 25;
+}
+
+.ticker-tag[data-ticker-tip]:hover::after,
+.ticker-tag[data-ticker-tip]:focus-visible::after {
+  opacity: 0.96;
+  transform: translateX(-50%) translateY(0);
+}
+
 /* ---------- KPI Strip & Executive Brief ---------- */
 
 .kpi-wrapper {
