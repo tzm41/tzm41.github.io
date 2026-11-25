@@ -145,7 +145,7 @@ function deltaClass(val) {
   return "flat";
 }
 
-function buildSparklineSvg(values, color, className = "sparkline") {
+function buildSparklineSvg(values, color, className = "sparkline", interactive = false) {
   if (!Array.isArray(values) || values.length < 2) {
     return `<svg class="${className}" viewBox="0 0 120 32" aria-hidden="true"><line x1="0" y1="16" x2="120" y2="16" stroke="currentColor" stroke-opacity="0.2" stroke-dasharray="3 3"/></svg>`;
   }
@@ -165,10 +165,21 @@ function buildSparklineSvg(values, color, className = "sparkline") {
   const polyline = pts.join(" ");
   const area = `0,${h} ${polyline} ${w},${h}`;
 
+  if (!interactive) {
+    return `
+      <svg class="${className}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
+        <polygon points="${area}" fill="${color}" fill-opacity="0.12"></polygon>
+        <polyline points="${polyline}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
+      </svg>
+    `;
+  }
+
   return `
     <svg class="${className}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
       <polygon points="${area}" fill="${color}" fill-opacity="0.12"></polygon>
       <polyline points="${polyline}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
+      <line class="spark-guide" x1="0" y1="0" x2="0" y2="${h}"></line>
+      <circle class="spark-dot" cx="0" cy="0" r="2.8" fill="${color}"></circle>
     </svg>
   `;
 }
@@ -421,7 +432,10 @@ function renderQuoteGrid(container, quotes, tf, emptyMsg) {
             <span class="quote-price">${fmtPrice(q.price, q.symbol)}</span>
             <span class="delta-pill ${cls}">${fmtPct(pct)}</span>
           </div>
-          ${buildSparklineSvg(series, stroke)}
+          <div class="sparkline-wrap" data-symbol="${escapeHtml(q.symbol)}" data-values="${escapeHtml(JSON.stringify(series))}">
+            <div class="spark-tooltip hidden"></div>
+            ${buildSparklineSvg(series, stroke, "sparkline", true)}
+          </div>
         </div>
       `;
     })
@@ -773,9 +787,89 @@ function initScrollSpy() {
   updateActive();
 }
 
+function initSparklineHover() {
+  const marketsSection = document.getElementById("markets");
+  if (!marketsSection) return;
+
+  const clearHover = (wrap) => {
+    if (!wrap) return;
+    wrap.classList.remove("hovering");
+    const tip = wrap.querySelector(".spark-tooltip");
+    if (tip) tip.classList.add("hidden");
+  };
+
+  let activeWrap = null;
+
+  marketsSection.addEventListener("pointermove", (e) => {
+    const wrap = e.target.closest(".sparkline-wrap");
+    if (!wrap) {
+      if (activeWrap) {
+        clearHover(activeWrap);
+        activeWrap = null;
+      }
+      return;
+    }
+    if (activeWrap && activeWrap !== wrap) {
+      clearHover(activeWrap);
+    }
+    activeWrap = wrap;
+
+    let values;
+    try {
+      values = JSON.parse(wrap.dataset.values || "[]");
+    } catch {
+      return;
+    }
+    if (!Array.isArray(values) || values.length < 2) return;
+
+    const rect = wrap.getBoundingClientRect();
+    if (!rect.width) return;
+
+    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const idx = Math.round(ratio * (values.length - 1));
+    const val = values[idx];
+
+    const w = 120;
+    const h = 32;
+    const pad = 3;
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const span = max - min || 1;
+    const ptX = (idx / (values.length - 1)) * w;
+    const ptY = h - pad - ((val - min) / span) * (h - pad * 2);
+
+    const guide = wrap.querySelector(".spark-guide");
+    const dot = wrap.querySelector(".spark-dot");
+    const tip = wrap.querySelector(".spark-tooltip");
+    if (guide) {
+      guide.setAttribute("x1", ptX.toFixed(1));
+      guide.setAttribute("x2", ptX.toFixed(1));
+    }
+    if (dot) {
+      dot.setAttribute("cx", ptX.toFixed(1));
+      dot.setAttribute("cy", ptY.toFixed(1));
+    }
+    if (tip) {
+      tip.textContent = fmtPrice(val, wrap.dataset.symbol);
+      const pctLeft = Math.max(14, Math.min(86, (ptX / w) * 100));
+      tip.style.left = `${pctLeft.toFixed(1)}%`;
+      tip.classList.remove("hidden");
+    }
+    wrap.classList.add("hovering");
+  });
+
+  marketsSection.addEventListener("pointerleave", () => {
+    if (activeWrap) {
+      clearHover(activeWrap);
+      activeWrap = null;
+    }
+  });
+}
+
 async function bootstrap() {
   initTheme();
   initScrollSpy();
+  initSparklineHover();
 
   // News category filters
   els.newsFilters.addEventListener("click", (e) => {
