@@ -72,6 +72,15 @@ class FearGreedIndex(BaseModel):
     previous_1_year: float | None = None
 
 
+class MentionedQuote(BaseModel):
+    symbol: str
+    name: str
+    price: float
+    change_pct: float
+    currency: str = "$"
+    aliases: list[str] = Field(default_factory=list)
+
+
 class MarketsSection(BaseModel):
     narrative: str
     regime_tag: MarketRegime = "Mixed"
@@ -79,6 +88,7 @@ class MarketsSection(BaseModel):
     big7: list[MarketQuote] = Field(default_factory=list)
     fear_greed: FearGreedIndex | None = None
     sectors: list[SectorTile] = Field(default_factory=list)
+    mentioned_quotes: list[MentionedQuote] = Field(default_factory=list)
 
 
 class TimelineEvent(BaseModel):

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import re
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
@@ -14,6 +15,7 @@ import yfinance as yf
 from ..config import (
     FEAR_GREED_URL,
     HTTP_TIMEOUT_SECONDS,
+    INLINE_TICKER_DIRECTORY,
     MARKET_BIG7,
     MARKET_SECTORS,
     MARKET_WATCHLIST,
@@ -419,6 +421,52 @@ def fetch_big7_and_fear_greed() -> tuple[list[dict[str, Any]], dict[str, Any] | 
         big7 = _build_quote_list(MARKET_BIG7, tf_extractors, lambda: client)
         fear_greed = _fetch_fear_greed(client)
     return big7, fear_greed
+
+
+def fetch_mentioned_quotes(texts: list[str]) -> list[dict[str, Any]]:
+    """Scan briefing texts for mentioned global public stocks and fetch lightweight 1D quotes."""
+    combined = "\n".join(t for t in texts if t)
+    if not combined:
+        return []
+
+    matched: list[tuple[str, str, str, list[str]]] = []
+    for sym, (name, currency, aliases) in INLINE_TICKER_DIRECTORY.items():
+        found_aliases: list[str] = []
+        for alias in aliases:
+            is_ascii = all(ord(ch) < 128 for ch in alias)
+            if is_ascii:
+                if re.search(rf"\b{re.escape(alias)}\b", combined):
+                    found_aliases.append(alias)
+            elif alias in combined:
+                found_aliases.append(alias)
+        if found_aliases:
+            matched.append((sym, name, currency, found_aliases))
+
+    if not matched:
+        return []
+
+    symbols = [m[0] for m in matched]
+    df = _download_df(symbols, "5d", "1d")
+    results: list[dict[str, Any]] = []
+    for sym, name, currency, aliases in matched:
+        s = _extract_series(df, sym)
+        if s is None or len(s) < 2:
+            continue
+        latest = _safe_float(s.iloc[-1], 2)
+        prev = _safe_float(s.iloc[-2], 2)
+        results.append(
+            {
+                "symbol": sym,
+                "name": name,
+                "price": latest,
+                "change_pct": _pct_change(latest, prev),
+                "currency": currency,
+                "aliases": aliases,
+            }
+        )
+    if results:
+        print(f"[markets] Fetched {len(results)} mentioned inline quotes: {[r['symbol'] for r in results]}")
+    return results
 
 
 async def fetch_markets(prior_markets: dict[str, Any] | None = None) -> tuple[dict[str, Any], str]:

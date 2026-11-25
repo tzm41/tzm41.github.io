@@ -10,6 +10,7 @@ from difflib import SequenceMatcher
 from typing import Any
 
 from .config import GEMINI_FALLBACK_MODELS, GEMINI_MODEL
+from .fetchers.markets import fetch_mentioned_quotes
 from .schema import (
     ConflictTheater,
     ConflictsSection,
@@ -18,6 +19,7 @@ from .schema import (
     GeminiBriefingSynthesis,
     MarketQuote,
     MarketsSection,
+    MentionedQuote,
     NewsStory,
     PolicyItem,
     PoliticalTopic,
@@ -396,6 +398,22 @@ def merge_synthesis(
         for region in ai.local_news
     ]
 
+    # Fetch lightweight 1D quotes for any global public stocks mentioned in text (not added to watchlist)
+    mention_texts: list[str] = [
+        item.text if hasattr(item, "text") else str(item) for item in ai.executive_brief
+    ]
+    mention_texts.append(ai.market_narrative)
+    mention_texts.append(ai.conflicts_overview)
+    mention_texts.append(ai.politics_pulse_summary)
+    for st in flagged_top:
+        mention_texts.extend([st.headline, st.summary, st.why_it_matters])
+    for reg in flagged_local:
+        for st in reg.stories + reg.stories_en:
+            mention_texts.extend([st.headline, st.summary, st.why_it_matters])
+    if ai.positive_news:
+        mention_texts.extend([ai.positive_news.headline, ai.positive_news.summary])
+    mentioned = [MentionedQuote(**q) for q in fetch_mentioned_quotes(mention_texts)]
+
     return DailyBriefing(
         date=date_str,
         generated_at=generated_at,
@@ -410,6 +428,7 @@ def merge_synthesis(
             big7=[MarketQuote(**q) for q in raw_markets.get("big7", [])],
             fear_greed=FearGreedIndex(**raw_markets["fear_greed"]) if raw_markets.get("fear_greed") else None,
             sectors=[SectorTile(**s) for s in raw_markets.get("sectors", [])],
+            mentioned_quotes=mentioned,
         ),
         conflicts=ConflictsSection(
             overview=ai.conflicts_overview,

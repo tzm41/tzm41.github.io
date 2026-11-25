@@ -11,6 +11,7 @@ const state = {
   briefing: null,
   priorBriefing: null,
   tickerMap: new Map(),
+  inlineTickerRe: null,
   newsCategory: "All",
   marketTimeframe: "1d",
   localRegionId: null,
@@ -154,8 +155,9 @@ const TICKER_ALIASES = [
   ["Tesla", "TSLA"],
 ];
 
-const INLINE_TICKER_RE =
-  /\b(S&P 500|Nasdaq|Dow Jones|Russell 2000|WTI crude|Bitcoin|Nvidia|Apple|Microsoft|Alphabet|Amazon|Meta|Tesla|AAPL|MSFT|GOOGL|AMZN|NVDA|META|TSLA|XLK|XLF|XLV|XLE|XLI|XLY|XLP|XLU|XLRE|XLB|XLC|VIX)\b/g;
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
 function buildTickerMap(markets = {}) {
   const map = new Map();
@@ -167,6 +169,7 @@ function buildTickerMap(markets = {}) {
       name: q.name,
       price: q.price,
       change_pct: q.change_pct,
+      currency: q.symbol.startsWith("^") ? "" : "$",
       hasPrice: true,
     };
     bySym.set(q.symbol, info);
@@ -179,6 +182,7 @@ function buildTickerMap(markets = {}) {
       name: s.name,
       price: null,
       change_pct: s.change_pct,
+      currency: "",
       hasPrice: false,
     };
     bySym.set(s.symbol, info);
@@ -188,24 +192,51 @@ function buildTickerMap(markets = {}) {
     const info = bySym.get(sym);
     if (info) map.set(alias, info);
   }
+  for (const mq of markets.mentioned_quotes || []) {
+    if (!mq?.symbol) continue;
+    const info = {
+      symbol: mq.symbol,
+      name: mq.name,
+      price: mq.price,
+      change_pct: mq.change_pct,
+      currency: mq.currency ?? "$",
+      hasPrice: true,
+    };
+    map.set(mq.symbol.replace(/^\^/, ""), info);
+    for (const alias of mq.aliases || []) {
+      if (alias) map.set(alias, info);
+    }
+  }
   state.tickerMap = map;
+
+  const keys = [...map.keys()].sort((a, b) => b.length - a.length);
+  if (keys.length) {
+    const parts = keys.map((k) => {
+      const esc = escapeRegex(k);
+      return /^[\x00-\x7F]+$/.test(k) ? `\\b${esc}\\b` : esc;
+    });
+    state.inlineTickerRe = new RegExp(`(${parts.join("|")})`, "g");
+  } else {
+    state.inlineTickerRe = null;
+  }
 }
 
 function formatTickerTip(info) {
   const pct = fmtPct(info.change_pct);
   const cleanSym = info.symbol.replace(/^\^/, "");
   if (info.hasPrice) {
-    return `${cleanSym} · ${fmtPrice(info.price, info.symbol)} (1D: ${pct})`;
+    const cur = info.currency || "";
+    return `${cleanSym} · ${cur}${fmtPrice(info.price, info.symbol)} (1D: ${pct})`;
   }
   return `${cleanSym} · ${info.name} (1D: ${pct})`;
 }
 
 function escapeWithTickers(segment) {
-  if (!segment || !state.tickerMap.size) return escapeHtml(segment);
-  INLINE_TICKER_RE.lastIndex = 0;
+  if (!segment || !state.tickerMap.size || !state.inlineTickerRe) return escapeHtml(segment);
+  state.inlineTickerRe.lastIndex = 0;
   let out = "";
   let lastIdx = 0;
-  for (const match of segment.matchAll(INLINE_TICKER_RE)) {
+  for (const match of segment.matchAll(state.inlineTickerRe)) {
     const token = match[0];
     const info = state.tickerMap.get(token);
     if (!info) continue;
