@@ -749,7 +749,7 @@ function renderPositiveNews(story) {
 function renderAll(briefing) {
   state.briefing = briefing;
   els.editionDate.textContent = fmtReadableDate(briefing.date);
-  els.generatedMeta.textContent = `Updated ${fmtLocalTimestamp(briefing.generated_at)} · Automated Daily Intelligence Edition`;
+  els.generatedMeta.textContent = `Updated ${fmtLocalTimestamp(briefing.generated_at)}`;
   renderSourceHealth(briefing.source_health);
   renderKpiStrip(briefing);
   renderExecutiveBrief(briefing);
