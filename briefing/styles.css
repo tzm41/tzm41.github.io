@@ -550,6 +550,15 @@ h3 {
   box-shadow: var(--shadow-sm);
 }
 
+.afternoon-panel {
+  margin-top: 16px;
+  border-top-color: var(--warn);
+}
+
+.afternoon-kicker {
+  color: var(--warn);
+}
+
 .panel-header {
   display: flex;
   align-items: flex-start;

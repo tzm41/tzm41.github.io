@@ -22,7 +22,13 @@ from .fetchers.conflicts import fetch_conflicts
 from .fetchers.markets import fetch_markets
 from .fetchers.news import fetch_local_news, fetch_positive_news, fetch_top_news
 from .fetchers.politics import fetch_politics
-from .schema import DailyBriefing, GeminiBriefingSynthesis, SourceHealth
+from .schema import (
+    AfternoonBrief,
+    AfternoonSynthesis,
+    DailyBriefing,
+    GeminiBriefingSynthesis,
+    SourceHealth,
+)
 from .synthesize import _build_prompt, merge_synthesis, synthesize_briefing
 
 
@@ -257,6 +263,57 @@ async def run_markets_only() -> dict[str, Any]:
     return payload
 
 
+async def fetch_afternoon_bundle(out_path_str: str) -> None:
+    """Fetch fresh afternoon news & market close data alongside today's morning executive brief."""
+    morning = json.loads(LATEST_PATH.read_text(encoding="utf-8")) if LATEST_PATH.exists() else {}
+    prior_markets = morning.get("markets")
+    (raw_news, _), (raw_markets, _), (raw_politics, _) = await asyncio.gather(
+        fetch_top_news(),
+        fetch_markets(prior_markets=prior_markets),
+        fetch_politics(),
+    )
+    bundle = {
+        "date": morning.get("date") or datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "morning_executive_brief": morning.get("executive_brief", []),
+        "raw_news": raw_news[:25],
+        "market_snapshot": {
+            "watchlist": [
+                {k: q[k] for k in ("symbol", "name", "price", "change_pct", "change_5d_pct") if k in q}
+                for q in raw_markets.get("watchlist", [])
+            ],
+            "big7": [
+                {k: q[k] for k in ("symbol", "name", "price", "change_pct", "change_5d_pct") if k in q}
+                for q in raw_markets.get("big7", [])
+            ],
+            "fear_greed": raw_markets.get("fear_greed"),
+            "sectors": raw_markets.get("sectors", []),
+        },
+        "raw_politics_articles": raw_politics.get("articles", [])[:15],
+        "synthesis_schema": AfternoonSynthesis.model_json_schema(),
+    }
+    out_path = Path(out_path_str)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(bundle, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"[run] Wrote afternoon fetch bundle to {out_path}")
+
+
+def apply_afternoon_synthesis(synthesis_json_path: str) -> DailyBriefing:
+    """Validate AfternoonSynthesis JSON and attach afternoon_brief to today's latest briefing."""
+    raw_text = Path(synthesis_json_path).read_text(encoding="utf-8").strip()
+    if raw_text.startswith("```"):
+        lines = raw_text.splitlines()
+        raw_text = "\n".join(lines[1:-1] if lines[-1].strip() == "```" else lines[1:]).strip()
+
+    ai = AfternoonSynthesis.model_validate_json(raw_text)
+    data = json.loads(LATEST_PATH.read_text(encoding="utf-8"))
+    now_utc = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    data["afternoon_brief"] = AfternoonBrief(generated_at=now_utc, bullets=ai.bullets).model_dump()
+    briefing = DailyBriefing.model_validate(data)
+    _write_briefing_files(briefing)
+    return briefing
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate the daily news & trends briefing.")
     parser.add_argument("--date", help="Override briefing date (YYYY-MM-DD)", default=None)
@@ -265,6 +322,16 @@ def main() -> None:
         "--markets-only",
         action="store_true",
         help="Fetch only stock market data and write briefing/data/markets_live.json",
+    )
+    parser.add_argument(
+        "--afternoon-fetch",
+        metavar="RAW_JSON",
+        help="Fetch afternoon news & market close data for Afternoon Synthesis",
+    )
+    parser.add_argument(
+        "--apply-afternoon",
+        metavar="SYNTHESIS_JSON",
+        help="Validate AfternoonSynthesis JSON and update afternoon_brief in latest.json",
     )
     parser.add_argument(
         "--fetch-only",
@@ -281,6 +348,14 @@ def main() -> None:
 
     if args.markets_only:
         asyncio.run(run_markets_only())
+        return
+
+    if args.afternoon_fetch:
+        asyncio.run(fetch_afternoon_bundle(args.afternoon_fetch))
+        return
+
+    if args.apply_afternoon:
+        apply_afternoon_synthesis(args.apply_afternoon)
         return
 
     if args.apply_synthesis:

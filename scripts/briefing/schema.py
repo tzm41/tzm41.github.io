@@ -156,6 +156,17 @@ class ExecutiveBriefItem(BaseModel):
     sentiment: StorySentiment = "neutral"
 
 
+class AfternoonBrief(BaseModel):
+    generated_at: str
+    bullets: list[str | ExecutiveBriefItem] = Field(default_factory=list)
+
+
+class AfternoonSynthesis(BaseModel):
+    bullets: list[ExecutiveBriefItem] = Field(
+        description="3 to 5 concise afternoon update bullets covering US market close and breaking developments since the morning briefing, each with category, 7-level sentiment, **bold** takeaways, and *italic* human names."
+    )
+
+
 class LocalNewsRegion(BaseModel):
     id: str
     name: str
@@ -169,6 +180,7 @@ class DailyBriefing(BaseModel):
     synthesis_mode: Literal["gemini", "extractive_fallback"] = "gemini"
     source_health: SourceHealth = Field(default_factory=SourceHealth)
     executive_brief: list[str | ExecutiveBriefItem] = Field(default_factory=list)
+    afternoon_brief: AfternoonBrief | None = None
     top_news: list[NewsStory] = Field(default_factory=list)
     markets: MarketsSection
     conflicts: ConflictsSection

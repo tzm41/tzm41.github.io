@@ -34,6 +34,9 @@ const els = {
   kpiStrip: document.getElementById("kpi-strip"),
   synthesisModeTag: document.getElementById("synthesis-mode-tag"),
   executiveList: document.getElementById("executive-list"),
+  afternoonPanel: document.getElementById("afternoon-panel"),
+  afternoonTimeTag: document.getElementById("afternoon-time-tag"),
+  afternoonList: document.getElementById("afternoon-list"),
   newsFilters: document.getElementById("news-filters"),
   newsGrid: document.getElementById("news-grid"),
   marketRegime: document.getElementById("market-regime"),
@@ -507,16 +510,19 @@ function renderKpiStrip(briefing) {
   }
 }
 
-function renderExecutiveBrief(briefing) {
-  const mode = briefing.synthesis_mode === "gemini" ? "Gemini" : "Extractive Fallback";
-  els.synthesisModeTag.textContent = mode;
+function fmtLocalTimeOnly(isoStr) {
+  if (!isoStr) return "";
+  const dt = new Date(isoStr);
+  if (Number.isNaN(dt.getTime())) return isoStr;
+  return dt.toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  });
+}
 
-  const bullets = briefing.executive_brief || [];
-  if (!bullets.length) {
-    els.executiveList.innerHTML = `<li>No executive summary items available for this edition.</li>`;
-    return;
-  }
-  els.executiveList.innerHTML = bullets
+function renderBriefBullets(bullets = []) {
+  return bullets
     .map((item) => {
       const text = typeof item === "string" ? item : item?.text || "";
       const category =
@@ -538,6 +544,33 @@ function renderExecutiveBrief(briefing) {
       `;
     })
     .join("");
+}
+
+function renderExecutiveBrief(briefing) {
+  els.synthesisModeTag.textContent = fmtLocalTimeOnly(briefing.generated_at);
+  els.synthesisModeTag.title = `Generated ${fmtLocalTimestamp(briefing.generated_at)}`;
+
+  const bullets = briefing.executive_brief || [];
+  if (!bullets.length) {
+    els.executiveList.innerHTML = `<li>No executive summary items available for this edition.</li>`;
+  } else {
+    els.executiveList.innerHTML = renderBriefBullets(bullets);
+  }
+
+  const afternoon = briefing.afternoon_brief;
+  if (els.afternoonPanel && els.afternoonList) {
+    if (afternoon && Array.isArray(afternoon.bullets) && afternoon.bullets.length) {
+      els.afternoonPanel.classList.remove("hidden");
+      if (els.afternoonTimeTag) {
+        els.afternoonTimeTag.textContent = fmtLocalTimeOnly(afternoon.generated_at);
+        els.afternoonTimeTag.title = `Generated ${fmtLocalTimestamp(afternoon.generated_at)}`;
+      }
+      els.afternoonList.innerHTML = renderBriefBullets(afternoon.bullets);
+    } else {
+      els.afternoonPanel.classList.add("hidden");
+      els.afternoonList.innerHTML = "";
+    }
+  }
 }
 
 const SIMILAR_STOPWORDS = new Set([
