@@ -16,7 +16,10 @@ from .config import DATA_DIR
 FACTS_PATH = DATA_DIR / "company_facts.json"
 
 _HONORIFIC_RE = re.compile(r"^(?:Mr\.|Ms\.|Mrs\.|Dr\.|Prof\.)\s+", re.IGNORECASE)
-_SUFFIX_RE = re.compile(r",?\s+(?:Ph\.?D\.?|J\.?D\.?|M\.?D\.?|B\.?A\.?|M\.?B\.?A\.?|D\.?V\.?M\.?|LCA|CPA|Jr\.|Sr\.|II|III)\b\.?", re.IGNORECASE)
+_SUFFIX_RE = re.compile(
+    r",?\s+(?:Ph\.?D\.?|J\.?D\.?|M\.?D\.?|B\.?A\.?|B\.?S\.?(?:c\.?)?(?:\s*\([^)]*\))?(?:\s+Mgmt\.?)?|M\.?S\.?(?:c\.?)?(?:\s+[A-Z]{2,}(?:\s+[A-Z]{2,})*)?|M\.?B\.?A\.?|B\.?Com\.?|C\.?A\.?|F\.?C\.?A\.?|C\.?F\.?A\.?|LL\.?B\.?|LL\.?M\.?|D\.?V\.?M\.?|LCA|CPA|Jr\.|Sr\.|II|III)\b\.?",
+    re.IGNORECASE,
+)
 
 # Approximate USD FX rates for non-USD market caps when ticker currency isn't USD
 FX_TO_USD = {
@@ -29,7 +32,12 @@ FX_TO_USD = {
     "SAR": 0.2666,
     "EUR": 1.08,
     "GBP": 1.27,
+    "GBp": 0.0127,
+    "GBX": 0.0127,
     "DKK": 0.145,
+    "SGD": 0.74,
+    "AUD": 0.65,
+    "CAD": 0.72,
 }
 
 
@@ -100,7 +108,9 @@ def _fetch_live_facts(item: tuple[str, str]) -> tuple[str, str | None, str | Non
         mcap = fi.get("marketCap") if hasattr(fi, "get") else getattr(fi, "market_cap", None)
         cur = (fi.get("currency") if hasattr(fi, "get") else getattr(fi, "currency", None)) or "USD"
         if mcap and float(mcap) > 0:
-            usd = float(mcap) * FX_TO_USD.get(str(cur).upper(), 1.0)
+            cur_s = str(cur)
+            fx = FX_TO_USD.get(cur_s, FX_TO_USD.get(cur_s.upper(), 1.0))
+            usd = float(mcap) * fx
             cap_str = _fmt_usd_cap(usd)
         officers = (tk.info or {}).get("companyOfficers") or []
         if officers:

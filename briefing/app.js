@@ -246,10 +246,217 @@ const EXPLICIT_ITALIC_RE = /(?<!\*)\*([^*\n]+)\*(?!\*)/g;
 const NON_PERSON_TITLE_WORD =
   "(?:Reinstatement|Leadership|Resignation|Nomination|Election|Administration|Succession|Investigation|Hearing|Policy|Orders?|Return|Ouster|Exit|Role|Office|Vote|Race|Campaign|Debate|Summit|Visit|Meeting|Statement|Scrutiny|Backlash|Reversal|Power|Term|Authority|Pardon|Veto|Cabinet|Race|Approval|Poll|Polls)\\b";
 
-const PERSON_NAME_RE = new RegExp(
-  `((?:President|Prime Minister|Attorney General|Secretary|Chairman|Sen\\.-elect|Sen\\.|Rep\\.|Gov\\.|Dr\\.)\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+(?:\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+){0,2}|CEO\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+|\\b(?:Jensen Huang|Donald Trump Jr\\.|Donald Trump|Benjamin Netanyahu|Netanyahu|Trump|Joe Biden|Biden|Kamala Harris|JD Vance|Chuck Schumer|Mike Johnson|Jimmy Gomez|Jamie Raskin|Ilhan Omar|Kilmar [ÁA]brego Garc[íi]a|Abrego Garcia|Abdul El-Sayed|Scott Colom|Puma Shen|Lai Ching-te|Guo Jiakun|Xi Jinping|Chen Jining|Raphael Warnock|Zohran Mamdani|Nick Fuentes|David Lisnard)\\b|赖清德|沈伯洋|郭嘉昆|黄仁勋|特朗普|陈吉宁)`,
-  "g"
-);
+const BASE_PERSON_NAMES = [
+  // US & Global Political Leaders
+  "Donald Trump Jr.",
+  "Donald Trump",
+  "Trump",
+  "Joe Biden",
+  "Biden",
+  "Kamala Harris",
+  "JD Vance",
+  "Benjamin Netanyahu",
+  "Netanyahu",
+  "Vladimir Putin",
+  "Putin",
+  "Volodymyr Zelenskyy",
+  "Volodymyr Zelensky",
+  "Zelenskyy",
+  "Zelensky",
+  "Xi Jinping",
+  "Lai Ching-te",
+  "Emmanuel Macron",
+  "Macron",
+  "Keir Starmer",
+  "Starmer",
+  "Friedrich Merz",
+  "Olaf Scholz",
+  "Giorgia Meloni",
+  "Mark Carney",
+  "Justin Trudeau",
+  "Narendra Modi",
+  "Modi",
+  "Shigeru Ishiba",
+  "Sanae Takaichi",
+  "Lee Jae-myung",
+  "Yoon Suk Yeol",
+  "Kim Jong Un",
+  "Masoud Pezeshkian",
+  "Ali Khamenei",
+  "Khamenei",
+  "Mohammed bin Salman",
+  "Recep Tayyip Erdogan",
+  "Erdogan",
+  "Luiz Inácio Lula da Silva",
+  "Javier Milei",
+  "Claudia Sheinbaum",
+  "Anthony Albanese",
+  // US Officials, Congress & Public Figures
+  "Jerome Powell",
+  "Scott Bessent",
+  "Marco Rubio",
+  "Pete Hegseth",
+  "Pam Bondi",
+  "Kash Patel",
+  "Tulsi Gabbard",
+  "Robert F. Kennedy Jr.",
+  "RFK Jr.",
+  "Howard Lutnick",
+  "Karoline Leavitt",
+  "Stephen Miller",
+  "Chuck Schumer",
+  "Mike Johnson",
+  "Hakeem Jeffries",
+  "John Thune",
+  "Mitch McConnell",
+  "Nancy Pelosi",
+  "Alexandria Ocasio-Cortez",
+  "Bernie Sanders",
+  "Elizabeth Warren",
+  "Gavin Newsom",
+  "Ron DeSantis",
+  "Josh Shapiro",
+  "Gretchen Whitmer",
+  "Greg Abbott",
+  "J.B. Pritzker",
+  "Raphael Warnock",
+  "Zohran Mamdani",
+  "Jimmy Gomez",
+  "Jamie Raskin",
+  "Ilhan Omar",
+  "Barack Obama",
+  "Obama",
+  "Bill Clinton",
+  "Hillary Clinton",
+  "Pope Leo XIV",
+  "Pope Francis",
+  // Tech & Business Leaders
+  "Elon Musk",
+  "Musk",
+  "Jensen Huang",
+  "Tim Cook",
+  "John Ternus",
+  "Satya Nadella",
+  "Sundar Pichai",
+  "Andy Jassy",
+  "Jeff Bezos",
+  "Bezos",
+  "Mark Zuckerberg",
+  "Zuckerberg",
+  "Sam Altman",
+  "Altman",
+  "Dario Amodei",
+  "Demis Hassabis",
+  "Bill Gates",
+  "Warren Buffett",
+  "Greg Abel",
+  "Jamie Dimon",
+  "Lisa Su",
+  "Liang Wenfeng",
+  "Jack Ma",
+  "Pony Ma",
+  "Lei Jun",
+  "Wang Chuanfu",
+  "Ren Zhengfei",
+  "Zhang Yiming",
+  // Other Notable Figures & CJK
+  "Kilmar Ábrego García",
+  "Kilmar Abrego Garcia",
+  "Abrego Garcia",
+  "Abdul El-Sayed",
+  "Scott Colom",
+  "Puma Shen",
+  "Guo Jiakun",
+  "Chen Jining",
+  "Nick Fuentes",
+  "David Lisnard",
+  "赖清德",
+  "沈伯洋",
+  "郭嘉昆",
+  "黄仁勋",
+  "特朗普",
+  "陈吉宁",
+  "习近平",
+  "普京",
+  "泽连斯基",
+  "马斯克",
+  "奥特曼",
+  "扎克伯格",
+  "库克",
+  "内塔尼亚胡",
+  "拜登",
+  "莫迪",
+  "马克龙",
+  "金正恩",
+  "鲍威尔",
+  "卢比奥",
+  "万斯",
+];
+
+const PERSON_TITLE_PREFIX_PATTERN =
+  `(?:President|Prime Minister|Attorney General|Secretary|Chairman|Mayor|Governor|Pope|King|Queen|Justice|Judge|Sen\\.-elect|Sen\\.|Rep\\.|Gov\\.|Dr\\.)\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+(?:\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+){0,2}|CEO\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+`;
+
+function compilePersonNameRegex(names) {
+  const unique = [...new Set(names.filter(Boolean))].sort((a, b) => b.length - a.length);
+  const parts = unique.map((n) => {
+    const esc = escapeRegex(n);
+    return /^[\x00-\x7F\u00C0-\u024F]+$/.test(n) ? `\\b${esc}\\b` : esc;
+  });
+  return new RegExp(`(${PERSON_TITLE_PREFIX_PATTERN}|${parts.join("|")})`, "g");
+}
+
+const PERSON_NAME_RE = compilePersonNameRegex(BASE_PERSON_NAMES);
+
+function isLikelyPersonName(raw) {
+  const s = String(raw || "").trim();
+  if (!s || s.length < 2 || s.length > 48) return false;
+  if (COMPANY_LOGOS[s] || PLACE_ALIASES[s] || US_PARTY_TAGS[s]) return false;
+  if (/^[\u4e00-\u9fff·]{2,6}$/.test(s)) return true;
+  const words = s.split(/\s+/);
+  if (words.length < 2 || words.length > 4) return false;
+  const particles = new Set(["de", "da", "del", "di", "van", "von", "bin", "al", "el", "la", "le", "Jr.", "Sr.", "II", "III", "IV"]);
+  return words.every((w) => particles.has(w) || /^[A-ZÀ-Ý][a-zA-ZÀ-ÿ'.-]+$/.test(w));
+}
+
+function buildPersonNameRegex(briefing, companyFacts) {
+  const names = new Set(BASE_PERSON_NAMES);
+
+  // Harvest leaders from company_facts.json (CEOs, Chairs, Founders)
+  for (const info of Object.values(companyFacts?.companies || {})) {
+    const rawLeader = String(info?.leader || "").replace(/\s*\([^)]*\)\s*/g, "").trim();
+    for (const part of rawLeader.split(/\s*(?:&|,|\/)\s*/)) {
+      const cleaned = part.trim();
+      if (isLikelyPersonName(cleaned)) names.add(cleaned);
+    }
+  }
+
+  // Harvest every explicitly italicized *Person Name* from summaries/briefs in this edition
+  const texts = [];
+  const pushStr = (v) => {
+    if (typeof v === "string" && v.includes("*")) texts.push(v);
+  };
+  for (const it of briefing?.morning_brief?.items || []) pushStr(it);
+  for (const it of briefing?.afternoon_brief?.items || []) pushStr(it);
+  for (const s of briefing?.top_news || []) pushStr(s?.summary);
+  pushStr(briefing?.markets?.narrative);
+  for (const t of briefing?.conflicts?.theaters || []) pushStr(t?.summary);
+  pushStr(briefing?.us_politics?.summary);
+  for (const p of briefing?.us_politics?.executive_legislative_tracker || []) pushStr(p?.summary);
+  for (const s of briefing?.positive_news || []) pushStr(s?.summary);
+  for (const r of briefing?.local_news?.regions || []) {
+    for (const s of r?.stories || []) pushStr(s?.summary);
+  }
+
+  for (const txt of texts) {
+    EXPLICIT_ITALIC_RE.lastIndex = 0;
+    for (const m of txt.matchAll(EXPLICIT_ITALIC_RE)) {
+      const candidate = (m[1] || "").trim();
+      if (isLikelyPersonName(candidate)) names.add(candidate);
+    }
+  }
+
+  state.personNameRe = compilePersonNameRegex([...names]);
+}
 
 const COMPANY_LOGOS = {
   Nvidia: "nvidia.com",
@@ -360,6 +567,65 @@ const COMPANY_LOGOS = {
   ExxonMobil: "exxonmobil.com",
   Chevron: "chevron.com",
   "Saudi Aramco": "aramco.com",
+  // Major News Networks & Media
+  BBC: "bbc.com",
+  CNN: "cnn.com",
+  Reuters: "reuters.com",
+  Bloomberg: "bloomberg.com",
+  CNBC: "cnbc.com",
+  "Fox News": "foxnews.com",
+  "NBC News": "nbcnews.com",
+  NBC: "nbcnews.com",
+  "CBS News": "cbsnews.com",
+  CBS: "cbsnews.com",
+  "ABC News": "abcnews.go.com",
+  MSNBC: "msnbc.com",
+  NPR: "npr.org",
+  "New York Times": "nytimes.com",
+  NYT: "nytimes.com",
+  "Washington Post": "washingtonpost.com",
+  "Wall Street Journal": "wsj.com",
+  WSJ: "wsj.com",
+  "Financial Times": "ft.com",
+  "The Guardian": "theguardian.com",
+  "Associated Press": "apnews.com",
+  "Al Jazeera": "aljazeera.com",
+  Politico: "politico.com",
+  "The Economist": "economist.com",
+  "The Atlantic": "theatlantic.com",
+  Axios: "axios.com",
+  "News Corp": "newscorp.com",
+  Comcast: "comcastcorporation.com",
+  "Warner Bros. Discovery": "wbd.com",
+  Paramount: "paramount.com",
+  // Major Airlines & Aviation
+  Airbus: "airbus.com",
+  "Delta Air Lines": "delta.com",
+  "United Airlines": "united.com",
+  "American Airlines": "aa.com",
+  "Southwest Airlines": "southwest.com",
+  "Alaska Airlines": "alaskaair.com",
+  JetBlue: "jetblue.com",
+  FedEx: "fedex.com",
+  UPS: "ups.com",
+  Lufthansa: "lufthansa.com",
+  "British Airways": "britishairways.com",
+  "Air France": "airfrance.com",
+  Emirates: "emirates.com",
+  "Qatar Airways": "qatarairways.com",
+  "Singapore Airlines": "singaporeair.com",
+  "Cathay Pacific": "cathaypacific.com",
+  "Japan Airlines": "jal.co.jp",
+  "Korean Air": "koreanair.com",
+  "Air China": "airchina.com.cn",
+  中国国航: "airchina.com.cn",
+  "China Eastern": "ceair.com",
+  东方航空: "ceair.com",
+  "China Southern": "csair.com",
+  南方航空: "csair.com",
+  Qantas: "qantas.com",
+  Ryanair: "ryanair.com",
+  "Air Canada": "aircanada.com",
 };
 
 const US_PARTY_TAGS = {
@@ -479,10 +745,11 @@ function formatEntitiesInPlain(segment, seen = new Set(), pillCompanies = false)
     return out;
   }
 
-  PERSON_NAME_RE.lastIndex = 0;
+  const personRe = state.personNameRe || PERSON_NAME_RE;
+  personRe.lastIndex = 0;
   let out = "";
   let last = 0;
-  for (const m of segment.matchAll(PERSON_NAME_RE)) {
+  for (const m of segment.matchAll(personRe)) {
     const idx = m.index ?? 0;
     if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen, pillCompanies);
     out += `<em>${escapeHtml(m[0])}</em>`;
@@ -1363,7 +1630,7 @@ function renderConflicts(conflicts = {}) {
         .map(
           (ev) => `
             <li>
-              <a href="${safeUrl(ev.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(ev.headline)}</a>
+              <a href="${safeUrl(ev.url)}" target="_blank" rel="noopener noreferrer">${formatEntitiesInPlain(ev.headline)}</a>
               <span class="timeline-src">${escapeHtml(ev.source)}</span>
             </li>
           `
@@ -1375,7 +1642,7 @@ function renderConflicts(conflicts = {}) {
           <div class="conflict-head">
             <div>
               <span class="conflict-region">${escapeHtml(t.region)}</span>
-              <h3>${escapeHtml(t.name)}</h3>
+              <h3>${formatEntitiesInPlain(t.name)}</h3>
             </div>
             <span class="status-badge ${escapeHtml(t.status)}">${escapeHtml(t.status)}</span>
           </div>
@@ -1572,6 +1839,7 @@ function renderLocalNews(regions = []) {
 function renderAll(briefing) {
   state.briefing = briefing;
   buildTickerMap(briefing.markets);
+  buildPersonNameRegex(briefing, state.companyFacts);
   els.editionDate.textContent = fmtReadableDate(briefing.date);
   const candidates = [
     briefing.generated_at,
@@ -2434,8 +2702,8 @@ async function bootstrap() {
     }
   });
 
-  // Fetch company facts metadata (non-blocking) for rich hover tooltips & footer note
-  fetch(`${DATA_BASE}/company_facts.json`, { cache: "no-store" })
+  // Fetch company facts metadata & archive manifest in parallel
+  const factsPromise = fetch(`${DATA_BASE}/company_facts.json`, { cache: "no-store" })
     .then((r) => (r.ok ? r.json() : null))
     .then((facts) => {
       if (!facts) return;
@@ -2446,21 +2714,21 @@ async function bootstrap() {
     })
     .catch(() => {});
 
-  // Fetch archive manifest
-  try {
-    const idxResp = await fetch(`${DATA_BASE}/index.json`, { cache: "no-store" });
-    if (idxResp.ok) {
-      state.index = await idxResp.json();
+  const indexPromise = fetch(`${DATA_BASE}/index.json`, { cache: "no-store" })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((idxData) => {
+      if (!idxData) return;
+      state.index = idxData;
       const dates = state.index.dates || [];
       if (dates.length) {
         els.dateSelect.innerHTML =
           `<option value="latest">Latest</option>` +
           dates.map((d) => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join("");
       }
-    }
-  } catch {
-    // Fall back cleanly to latest.json
-  }
+    })
+    .catch(() => {});
+
+  await Promise.all([factsPromise, indexPromise]);
 
   const requested = new URLSearchParams(window.location.search).get("date");
   const initialDate =

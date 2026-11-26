@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-26T12:19:43Z",
+  "updated_at": "2026-11-26T20:07:32Z",
   "companies": {
     "nvidia.com": {
       "name": "Nvidia",
@@ -704,6 +704,435 @@
       "leader": "Amin Nasser (CEO)",
       "public": true,
       "symbol": "2222.SR"
+    },
+    "bbc.com": {
+      "name": "BBC",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "valuation": "Public broadcaster",
+      "leader": "Tim Davie (Director-General)",
+      "public": false
+    },
+    "cnn.com": {
+      "name": "CNN",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (WBD)",
+      "leader": "Mark Thompson (CEO)",
+      "public": false
+    },
+    "reuters.com": {
+      "name": "Reuters (Thomson Reuters)",
+      "country": "Canada",
+      "country_code": "ca",
+      "valuation": "~$47B",
+      "leader": "Steve Hasker (CEO)",
+      "public": true,
+      "symbol": "TRI"
+    },
+    "bloomberg.com": {
+      "name": "Bloomberg",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Private",
+      "leader": "Vlad Kliatchko (CEO)",
+      "public": false
+    },
+    "cnbc.com": {
+      "name": "CNBC",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (Versant)",
+      "leader": "KC Sullivan (President)",
+      "public": false
+    },
+    "foxnews.com": {
+      "name": "Fox News (Fox Corp)",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$37B",
+      "leader": "Lachlan Murdoch (CEO)",
+      "public": true,
+      "symbol": "FOXA"
+    },
+    "nbcnews.com": {
+      "name": "NBC News",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (Comcast)",
+      "leader": "Cesar Conde (Chairman)",
+      "public": false
+    },
+    "cbsnews.com": {
+      "name": "CBS News",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (Paramount)",
+      "leader": "Tom Cibrowski (President)",
+      "public": false
+    },
+    "abcnews.go.com": {
+      "name": "ABC News",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (Disney)",
+      "leader": "Almin Karamehmedovic (President)",
+      "public": false
+    },
+    "msnbc.com": {
+      "name": "MSNBC",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (Versant)",
+      "leader": "Rebecca Kutler (President)",
+      "public": false
+    },
+    "npr.org": {
+      "name": "NPR",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Nonprofit public media",
+      "leader": "Katherine Maher (CEO)",
+      "public": false
+    },
+    "nytimes.com": {
+      "name": "The New York Times",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$11B",
+      "leader": "Meredith Kopit Levien (CEO)",
+      "public": true,
+      "symbol": "NYT"
+    },
+    "washingtonpost.com": {
+      "name": "The Washington Post",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Private (Jeff Bezos)",
+      "leader": "Will Lewis (Publisher & CEO)",
+      "public": false
+    },
+    "wsj.com": {
+      "name": "The Wall Street Journal",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (News Corp)",
+      "leader": "Almar Latour (CEO, Dow Jones)",
+      "public": false
+    },
+    "ft.com": {
+      "name": "Financial Times",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "valuation": "Subsidiary (Nikkei)",
+      "leader": "Jon Slade (CEO)",
+      "public": false
+    },
+    "theguardian.com": {
+      "name": "The Guardian",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "valuation": "Trust-owned (Scott Trust)",
+      "leader": "Anna Bateson (CEO)",
+      "public": false
+    },
+    "apnews.com": {
+      "name": "Associated Press",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Nonprofit cooperative",
+      "leader": "Daisy Veerasingham (CEO)",
+      "public": false
+    },
+    "aljazeera.com": {
+      "name": "Al Jazeera",
+      "country": "Qatar",
+      "country_code": "qa",
+      "valuation": "State-funded network",
+      "leader": "Mostefa Souag (Director-General)",
+      "public": false
+    },
+    "politico.com": {
+      "name": "Politico",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (Axel Springer)",
+      "leader": "Goli Sheikholeslami (CEO)",
+      "public": false
+    },
+    "economist.com": {
+      "name": "The Economist",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "valuation": "Private (Economist Group)",
+      "leader": "Lara Boro (CEO)",
+      "public": false
+    },
+    "theatlantic.com": {
+      "name": "The Atlantic",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Private (Emerson Collective)",
+      "leader": "Nicholas Thompson (CEO)",
+      "public": false
+    },
+    "axios.com": {
+      "name": "Axios",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (Cox Enterprises)",
+      "leader": "Jim VandeHei (CEO)",
+      "public": false
+    },
+    "newscorp.com": {
+      "name": "News Corp",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$14B",
+      "leader": "Robert Thomson (CEO)",
+      "public": true,
+      "symbol": "NWSA"
+    },
+    "comcastcorporation.com": {
+      "name": "Comcast",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$91B",
+      "leader": "Brian L. Roberts & Michael J. Cavanagh (Co-CEOs)",
+      "public": true,
+      "symbol": "CMCSA"
+    },
+    "wbd.com": {
+      "name": "Warner Bros. Discovery",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$78B",
+      "leader": "David Zaslav (CEO)",
+      "public": true,
+      "symbol": "WBD"
+    },
+    "paramount.com": {
+      "name": "Paramount",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$11B",
+      "leader": "David Ellison (CEO)",
+      "public": true,
+      "symbol": "PSKY"
+    },
+    "airbus.com": {
+      "name": "Airbus",
+      "country": "France",
+      "country_code": "fr",
+      "valuation": "~$165B",
+      "leader": "Guillaume Faury (CEO)",
+      "public": true,
+      "symbol": "AIR.PA"
+    },
+    "delta.com": {
+      "name": "Delta Air Lines",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$55B",
+      "leader": "Ed Bastian (CEO)",
+      "public": true,
+      "symbol": "DAL"
+    },
+    "united.com": {
+      "name": "United Airlines",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$34B",
+      "leader": "Scott Kirby (CEO)",
+      "public": true,
+      "symbol": "UAL"
+    },
+    "aa.com": {
+      "name": "American Airlines",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$8B",
+      "leader": "Robert D. Isom Jr. (CEO)",
+      "public": true,
+      "symbol": "AAL"
+    },
+    "southwest.com": {
+      "name": "Southwest Airlines",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$22B",
+      "leader": "Bob Jordan (CEO)",
+      "public": true,
+      "symbol": "LUV"
+    },
+    "alaskaair.com": {
+      "name": "Alaska Airlines",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$4B",
+      "leader": "Ben Minicucci (CEO)",
+      "public": true,
+      "symbol": "ALK"
+    },
+    "jetblue.com": {
+      "name": "JetBlue",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$1B",
+      "leader": "Joanna Geraghty (CEO)",
+      "public": true,
+      "symbol": "JBLU"
+    },
+    "fedex.com": {
+      "name": "FedEx",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$72B",
+      "leader": "Raj Subramaniam (CEO)",
+      "public": true,
+      "symbol": "FDX"
+    },
+    "ups.com": {
+      "name": "UPS",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$95B",
+      "leader": "Carol B. Tome (CEO)",
+      "public": true,
+      "symbol": "UPS"
+    },
+    "lufthansa.com": {
+      "name": "Lufthansa",
+      "country": "Germany",
+      "country_code": "de",
+      "valuation": "~$11B",
+      "leader": "Carsten Spohr (CEO)",
+      "public": true,
+      "symbol": "LHA.DE"
+    },
+    "britishairways.com": {
+      "name": "British Airways (IAG)",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "valuation": "~$24B",
+      "leader": "Luis Gallego Martin (CEO)",
+      "public": true,
+      "symbol": "IAG.L"
+    },
+    "airfrance.com": {
+      "name": "Air France-KLM",
+      "country": "France",
+      "country_code": "fr",
+      "valuation": "~$4B",
+      "leader": "Ben Smith (CEO)",
+      "public": true,
+      "symbol": "AF.PA"
+    },
+    "emirates.com": {
+      "name": "Emirates",
+      "country": "United Arab Emirates",
+      "country_code": "ae",
+      "valuation": "State-owned (Dubai)",
+      "leader": "Ahmed bin Saeed Al Maktoum (CEO)",
+      "public": false
+    },
+    "qatarairways.com": {
+      "name": "Qatar Airways",
+      "country": "Qatar",
+      "country_code": "qa",
+      "valuation": "State-owned (Qatar)",
+      "leader": "Badr Mohammed Al-Meer (CEO)",
+      "public": false
+    },
+    "singaporeair.com": {
+      "name": "Singapore Airlines",
+      "country": "Singapore",
+      "country_code": "sg",
+      "valuation": "~$16B",
+      "leader": "Choon Phong Goh (CSE) (CEO)",
+      "public": true,
+      "symbol": "C6L.SI"
+    },
+    "cathaypacific.com": {
+      "name": "Cathay Pacific",
+      "country": "Hong Kong",
+      "country_code": "hk",
+      "valuation": "~$11B",
+      "leader": "Ronald Lam (CEO)",
+      "public": true,
+      "symbol": "0293.HK"
+    },
+    "jal.co.jp": {
+      "name": "Japan Airlines",
+      "country": "Japan",
+      "country_code": "jp",
+      "valuation": "~$10B",
+      "leader": "Mitsuko Tottori (President & CEO)",
+      "public": true,
+      "symbol": "9201.T"
+    },
+    "koreanair.com": {
+      "name": "Korean Air",
+      "country": "South Korea",
+      "country_code": "kr",
+      "valuation": "~$8B",
+      "leader": "Walter Cho (Chairman & CEO)",
+      "public": true,
+      "symbol": "003490.KS"
+    },
+    "airchina.com.cn": {
+      "name": "Air China",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$9B",
+      "leader": "Ma Chongxian (Chairman)",
+      "public": true,
+      "symbol": "0753.HK"
+    },
+    "ceair.com": {
+      "name": "China Eastern Airlines",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$6B",
+      "leader": "Wang Zhiqing (Chairman)",
+      "public": true,
+      "symbol": "0670.HK"
+    },
+    "csair.com": {
+      "name": "China Southern Airlines",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$6B",
+      "leader": "Ma Xulun (Chairman)",
+      "public": true,
+      "symbol": "1055.HK"
+    },
+    "qantas.com": {
+      "name": "Qantas",
+      "country": "Australia",
+      "country_code": "au",
+      "valuation": "~$9B",
+      "leader": "Vanessa Hudson (CEO)",
+      "public": true,
+      "symbol": "QAN.AX"
+    },
+    "ryanair.com": {
+      "name": "Ryanair",
+      "country": "Ireland",
+      "country_code": "ie",
+      "valuation": "~$30B",
+      "leader": "Michael O'Leary (CEO)",
+      "public": true,
+      "symbol": "RYAAY"
+    },
+    "aircanada.com": {
+      "name": "Air Canada",
+      "country": "Canada",
+      "country_code": "ca",
+      "valuation": "~$4B",
+      "leader": "Michael Rousseau (CEO)",
+      "public": true,
+      "symbol": "AC.TO"
     }
   }
 }
