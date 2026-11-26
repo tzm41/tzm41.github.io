@@ -437,13 +437,12 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
     activeEl = el;
 
     const contLabel = (CONTINENT_META[meta.continent] || CONTINENT_META.world).label;
-    const capLabel = code === "un" ? "HQ" : "Capital";
     const cachedSvg = svgCache.get(code);
     card.innerHTML = `
       <div class="cmap-stage">${cachedSvg || `<div class="cmap-loading">Loading map…</div>`}</div>
       <div class="cmap-footer">
         <div class="cmap-title">${renderFlagImg(code)}<span>${escapeHtml(meta.name)}</span></div>
-        <div class="cmap-meta"><span>${capLabel}: <strong>${escapeHtml(meta.capital)}</strong></span><span class="cmap-cont">${escapeHtml(contLabel)}</span></div>
+        <div class="cmap-meta"><strong>${escapeHtml(meta.capital)}</strong><span class="cmap-cont">${escapeHtml(contLabel)}</span></div>
       </div>
     `;
     card.classList.remove("hidden");

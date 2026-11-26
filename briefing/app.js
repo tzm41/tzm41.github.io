@@ -2,7 +2,7 @@
  * Daily Briefing Dashboard — Client Application (Zero-Build ES Module)
  */
 
-import { COUNTRY_FLAGS, initCountryMapTooltip } from "./country-map.js?v=2";
+import { COUNTRY_FLAGS, initCountryMapTooltip } from "./country-map.js?v=3";
 
 const DATA_BASE = "./data";
 
