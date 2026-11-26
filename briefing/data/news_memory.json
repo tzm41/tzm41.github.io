@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-26T20:02:26Z",
+  "updated_at": "2026-11-26T21:07:34Z",
   "window_days": 3,
   "items": [
     {
@@ -170,6 +170,25 @@
     {
       "date": "2026-11-26",
       "section": "positive_news",
+      "id": "texas-town-thanksgiving-car-gift",
+      "headline": "Texas Town Raises Over $27,000 to Gift New Car to Woman Who Feeds 2,000 Every Thanksgiving",
+      "urls": [
+        "https://www.goodnewsnetwork.org/town-rewards-a-woman-whose-thanksgiving-meal-feeds-thousands-with-a-new-car"
+      ],
+      "tokens": [
+        "every",
+        "feeds",
+        "gift",
+        "raises",
+        "texas",
+        "thanksgiving",
+        "town",
+        "woman"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "positive_news",
       "id": "baby-brain-cancer-recovery",
       "headline": "Infant Given Weeks to Live Is Now Brain Cancer-Free After St. Jude Trial",
       "urls": [
@@ -185,6 +204,24 @@
         "live",
         "trial",
         "weeks"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "positive_news",
+      "id": "cape-cod-indigenous-land-return",
+      "headline": "126 Acres of Cape Cod Salt Marsh Returned to Indigenous Ownership After 400 Years",
+      "urls": [
+        "https://www.goodnewsnetwork.org/land-returned-indigenous-care-first-encounter-beach"
+      ],
+      "tokens": [
+        "acres",
+        "cape",
+        "indigenous",
+        "marsh",
+        "ownership",
+        "returned",
+        "salt"
       ]
     },
     {

@@ -38,7 +38,6 @@
       }
     ]
   },
-  "afternoon_brief": null,
   "top_news": [
     {
       "id": "spacex-orbital-data-centers",
@@ -4242,22 +4241,56 @@
       }
     ]
   },
-  "positive_news": {
-    "id": "baby-brain-cancer-recovery",
-    "category": "Science",
-    "headline": "Infant Given Weeks to Live Is Now Brain Cancer-Free After St. Jude Trial",
-    "summary": "An infant girl who had been **given only weeks to live on Christmas Eve** due to aggressive brain cancer has made a **full recovery**. Her family sent her case to 15 institutions before it reached St. Jude Children's Hospital, which had just completed a rigorous clinical study on her specific cancer.",
-    "why_it_matters": "The recovery highlights how **targeted pediatric oncology trials** and rapid institutional collaboration can **turn terminal diagnoses into survivable outcomes**.",
-    "sources": [
-      {
-        "name": "Good News Network",
-        "url": "https://www.goodnewsnetwork.org/girl-given-weeks-to-live-on-christmas-eve-makes-miracle-recovery-after-serendipitous-call-to-st-jude/"
-      }
-    ],
-    "sentiment": "very_positive",
-    "continued_from_prior": false,
-    "is_afternoon": false
-  },
+  "positive_news": [
+    {
+      "id": "baby-brain-cancer-recovery",
+      "category": "Science",
+      "headline": "Infant Given Weeks to Live Is Now Brain Cancer-Free After St. Jude Trial",
+      "summary": "An infant girl who had been **given only weeks to live on Christmas Eve** due to aggressive brain cancer has made a **full recovery**. Her family sent her case to 15 institutions before it reached St. Jude Children's Hospital, which had just completed a rigorous clinical study on her specific cancer.",
+      "why_it_matters": "The recovery highlights how **targeted pediatric oncology trials** and rapid institutional collaboration can **turn terminal diagnoses into survivable outcomes**.",
+      "sources": [
+        {
+          "name": "Good News Network",
+          "url": "https://www.goodnewsnetwork.org/girl-given-weeks-to-live-on-christmas-eve-makes-miracle-recovery-after-serendipitous-call-to-st-jude/"
+        }
+      ],
+      "sentiment": "very_positive",
+      "continued_from_prior": false,
+      "is_afternoon": false
+    },
+    {
+      "id": "cape-cod-indigenous-land-return",
+      "category": "Science",
+      "headline": "126 Acres of Cape Cod Salt Marsh Returned to Indigenous Ownership After 400 Years",
+      "summary": "The Nature Conservancy has **transferred roughly 126 acres of salt marsh and coastal habitat** in Eastham, Massachusetts to the **Indigenous-led Native Land Conservancy**. The handover returns ancestral land near Cape Cod to Native American stewardship more than four centuries after European settlers first arrived in the area.",
+      "why_it_matters": "Expanding **Indigenous-led land conservation** pairs cultural restoration with **long-term protection of fragile coastal ecosystems**.",
+      "sources": [
+        {
+          "name": "Good News Network",
+          "url": "https://www.goodnewsnetwork.org/land-returned-indigenous-care-first-encounter-beach/"
+        }
+      ],
+      "sentiment": "very_positive",
+      "continued_from_prior": false,
+      "is_afternoon": false
+    },
+    {
+      "id": "texas-town-thanksgiving-car-gift",
+      "category": "World",
+      "headline": "Texas Town Raises Over $27,000 to Gift New Car to Woman Who Feeds 2,000 Every Thanksgiving",
+      "summary": "After **37 years of cooking annual Thanksgiving meals for 2,000 neighbors**, Texas resident *Gloria Kennard* was surprised by her community with a **brand-new car funded by more than $27,000 in local donations**. Residents organized the fundraiser quietly while she prepared this year's holiday dinner.",
+      "why_it_matters": "The grassroots fundraiser underscores how **sustained neighborhood generosity** builds **durable civic solidarity**.",
+      "sources": [
+        {
+          "name": "Good News Network",
+          "url": "https://www.goodnewsnetwork.org/town-rewards-a-woman-whose-thanksgiving-meal-feeds-thousands-with-a-new-car/"
+        }
+      ],
+      "sentiment": "very_positive",
+      "continued_from_prior": false,
+      "is_afternoon": false
+    }
+  ],
   "local_news": [
     {
       "id": "bay-area",
