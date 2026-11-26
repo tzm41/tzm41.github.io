@@ -14,6 +14,7 @@ const state = {
   inlineTickerRe: null,
   newsCategory: "All",
   marketTimeframe: "1d",
+  expandedQuoteSymbol: null,
   localRegionId: null,
   localLang: "native",
   localExpanded: false,
@@ -1231,8 +1232,11 @@ function renderQuoteGrid(container, quotes, tf, emptyMsg) {
       const { values: series, times } = getSparklineData(q, tf);
       const logoDomain = COMPANY_LOGOS[q.name];
       const logoHtml = logoDomain ? renderCompanyLogoImg(logoDomain) : "";
+      const isExpanded = state.expandedQuoteSymbol === q.symbol;
+      const hi = series.length ? fmtPrice(Math.max(...series), q.symbol) : "—";
+      const lo = series.length ? fmtPrice(Math.min(...series), q.symbol) : "—";
       return `
-        <div class="quote-card">
+        <div class="quote-card${isExpanded ? " is-expanded" : ""}" data-symbol="${escapeHtml(q.symbol)}" role="button" tabindex="0" aria-expanded="${isExpanded}">
           <div class="quote-top">
             <span class="quote-name">${logoHtml}${escapeHtml(q.name)}</span>
             <span class="quote-sym">${escapeHtml(q.symbol)}</span>
@@ -1244,6 +1248,13 @@ function renderQuoteGrid(container, quotes, tf, emptyMsg) {
           <div class="sparkline-wrap" data-kind="${escapeHtml(tf)}" data-symbol="${escapeHtml(q.symbol)}" data-values="${escapeHtml(JSON.stringify(series))}" data-times="${escapeHtml(JSON.stringify(times))}">
             <div class="spark-tooltip hidden"></div>
             ${buildSparklineSvg(series, stroke, "sparkline", true)}
+          </div>
+          <div class="quote-expanded-stats">
+            <div class="quote-stat"><span class="quote-stat-label">1D</span><span class="quote-stat-val ${deltaClass(q.change_pct)}">${fmtPct(q.change_pct)}</span></div>
+            <div class="quote-stat"><span class="quote-stat-label">5D</span><span class="quote-stat-val ${deltaClass(q.change_5d_pct)}">${fmtPct(q.change_5d_pct)}</span></div>
+            <div class="quote-stat"><span class="quote-stat-label">30D</span><span class="quote-stat-val ${deltaClass(q.change_30d_pct)}">${fmtPct(q.change_30d_pct)}</span></div>
+            <div class="quote-stat"><span class="quote-stat-label">${escapeHtml(tf.toUpperCase())} Low</span><span class="quote-stat-val">${escapeHtml(lo)}</span></div>
+            <div class="quote-stat"><span class="quote-stat-label">${escapeHtml(tf.toUpperCase())} High</span><span class="quote-stat-val">${escapeHtml(hi)}</span></div>
           </div>
         </div>
       `;
@@ -2250,6 +2261,45 @@ async function bootstrap() {
       setMarketsOpen?.(true);
       if (state.briefing) renderMarkets(state.briefing.markets);
     });
+  });
+
+  // Expand/shrink stock tile (2x2 = 4 tiles, single active expanded tile at a time)
+  const marketsBody = document.getElementById("markets-body");
+  let sparkDragStartX = null;
+  let sparkDragged = false;
+  marketsBody?.addEventListener("pointerdown", (e) => {
+    sparkDragged = false;
+    sparkDragStartX = e.target.closest(".sparkline-wrap") ? e.clientX : null;
+  });
+  marketsBody?.addEventListener("pointermove", (e) => {
+    if (sparkDragStartX !== null && Math.abs(e.clientX - sparkDragStartX) > 8) {
+      sparkDragged = true;
+    }
+  });
+  const toggleQuoteCard = (card) => {
+    const sym = card?.dataset?.symbol;
+    if (!sym) return;
+    state.expandedQuoteSymbol = state.expandedQuoteSymbol === sym ? null : sym;
+    marketsBody?.querySelectorAll(".quote-card").forEach((el) => {
+      const expanded = el.dataset.symbol === state.expandedQuoteSymbol;
+      el.classList.toggle("is-expanded", expanded);
+      el.setAttribute("aria-expanded", String(expanded));
+    });
+  };
+  marketsBody?.addEventListener("click", (e) => {
+    if (sparkDragged) {
+      sparkDragged = false;
+      return;
+    }
+    const card = e.target.closest(".quote-card");
+    if (card) toggleQuoteCard(card);
+  });
+  marketsBody?.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const card = e.target.closest(".quote-card");
+    if (!card) return;
+    e.preventDefault();
+    toggleQuoteCard(card);
   });
 
   // Local news expand/collapse & location toggle

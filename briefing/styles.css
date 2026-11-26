@@ -1087,6 +1087,7 @@ h3 {
 .watchlist-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-auto-flow: dense;
   gap: 12px;
   margin-bottom: 24px;
 }
@@ -1224,6 +1225,78 @@ h3 {
   border-radius: var(--radius);
   padding: 14px 16px;
   box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.quote-card:hover {
+  border-color: var(--border-strong);
+}
+
+.quote-card.is-expanded {
+  grid-column: span 2;
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.quote-card.is-expanded .quote-name {
+  font-size: 16px;
+}
+
+.quote-card.is-expanded .quote-price {
+  font-size: 24px;
+}
+
+.quote-card.is-expanded .sparkline {
+  height: 112px;
+}
+
+.quote-expanded-stats {
+  display: none;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+
+.quote-card.is-expanded .quote-expanded-stats {
+  display: grid;
+}
+
+.quote-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.quote-stat-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
+.quote-stat-val {
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.quote-stat-val.pos {
+  color: var(--pos);
+}
+
+.quote-stat-val.neg {
+  color: var(--neg);
 }
 
 .quote-top {
