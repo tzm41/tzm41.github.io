@@ -1276,6 +1276,14 @@ h3 {
   z-index: 10;
 }
 
+[data-theme="dark"] .spark-tooltip,
+[data-theme="dark"] .floating-tip {
+  background: #0f141c;
+  color: var(--ink);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
 .spark-tip-time {
   font-weight: 400;
   opacity: 0.72;
