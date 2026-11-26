@@ -714,6 +714,70 @@ h3 {
   border: 1px solid var(--border-strong);
 }
 
+.floating-tip.is-company {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 9px 11px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  white-space: normal;
+  overflow: visible;
+  min-width: 215px;
+  max-width: min(290px, calc(100vw - 24px));
+}
+
+[data-theme="dark"] .floating-tip.is-company {
+  background: #0f141c;
+  color: var(--ink);
+  border-color: var(--border-strong);
+}
+
+.ctip-head {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.ctip-quote {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--ink-secondary);
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ctip-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 10px;
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+
+.ctip-k {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  padding-top: 1px;
+}
+
+.ctip-v {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.cmap-target.is-region {
+  fill-opacity: 0.35;
+}
+
 /* ---------- KPI Strip & Executive Brief ---------- */
 
 .kpi-wrapper {

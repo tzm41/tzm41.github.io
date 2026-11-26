@@ -2,7 +2,7 @@
  * Daily Briefing Dashboard — Client Application (Zero-Build ES Module)
  */
 
-import { COUNTRY_FLAGS, initCountryMapTooltip } from "./country-map.js?v=3";
+import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=4";
 
 const DATA_BASE = "./data";
 
@@ -20,6 +20,7 @@ const state = {
   localRegionId: null,
   localLang: "en",
   localExpanded: false,
+  companyFacts: null,
 };
 
 const els = {
@@ -72,6 +73,7 @@ const els = {
   btnToggleLocal: document.getElementById("btn-toggle-local"),
   localNewsBody: document.getElementById("local-news-body"),
   localNewsGrid: document.getElementById("local-news-grid"),
+  companyFactsMeta: document.getElementById("company-facts-meta"),
 };
 
 /* ---------- Utilities ---------- */
@@ -386,7 +388,7 @@ const ENTITY_DECORATOR_RE = (() => {
   const keys = [
     ...new Set([
       ...Object.keys(COMPANY_LOGOS),
-      ...Object.keys(COUNTRY_FLAGS),
+      ...Object.keys(PLACE_ALIASES),
       ...Object.keys(US_PARTY_TAGS),
     ]),
   ].sort((a, b) => b.length - a.length);
@@ -420,7 +422,7 @@ function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false)
     const idx = m.index ?? 0;
     if (idx > last) out += escapeHtml(segment.slice(last, idx));
     const domain = COMPANY_LOGOS[token];
-    const flagCode = COUNTRY_FLAGS[token];
+    const placeId = PLACE_ALIASES[token];
     const party = US_PARTY_TAGS[token];
     if (domain) {
       const key = `logo:${domain}`;
@@ -430,16 +432,19 @@ function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false)
         logoHtml = renderCompanyLogoImg(domain);
       }
       out += pillCompanies
-        ? `<span class="ticker-tag is-private">${logoHtml}${escapeHtml(token)}</span>`
+        ? `<span class="ticker-tag is-private" tabindex="0" data-company-domain="${escapeHtml(domain)}">${logoHtml}${escapeHtml(token)}</span>`
         : `${logoHtml}${escapeHtml(token)}`;
-    } else if (flagCode) {
-      const key = `flag:${flagCode}`;
+    } else if (placeId) {
+      const place = PLACE_META[placeId];
       let flagHtml = "";
-      if (!seen.has(key)) {
-        seen.add(key);
-        flagHtml = renderCountryFlagImg(flagCode);
+      if (place?.showInlineFlag) {
+        const key = `flag:${place.flagCode}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          flagHtml = renderCountryFlagImg(place.flagCode);
+        }
       }
-      out += `<span class="country-mention" tabindex="0" data-country-code="${escapeHtml(flagCode)}">${flagHtml}${escapeHtml(token)}</span>`;
+      out += `<span class="country-mention" tabindex="0" data-country-code="${escapeHtml(placeId)}">${flagHtml}${escapeHtml(token)}</span>`;
     } else if (party) {
       const key = `party:${party}`;
       let iconHtml = "";
@@ -512,7 +517,8 @@ function escapeWithTickers(segment, seen = new Set()) {
         logoHtml = renderCompanyLogoImg(domain);
       }
     }
-    out += `<span class="ticker-tag ${cls}" tabindex="0" data-ticker-sym="${escapeHtml(info.symbol)}" data-ticker-tip="${escapeHtml(tip)}" title="${escapeHtml(tip)}">${logoHtml}${escapeHtml(token)}</span>`;
+    const domainAttr = domain ? ` data-company-domain="${escapeHtml(domain)}"` : "";
+    out += `<span class="ticker-tag ${cls}" tabindex="0" data-ticker-sym="${escapeHtml(info.symbol)}" data-ticker-tip="${escapeHtml(tip)}"${domainAttr} title="${escapeHtml(tip)}">${logoHtml}${escapeHtml(token)}</span>`;
     lastIdx = idx + token.length;
   }
   if (lastIdx < segment.length) out += formatEntitiesInPlain(segment.slice(lastIdx), seen, true);
@@ -1938,22 +1944,49 @@ function initFloatingTooltips() {
   tip.setAttribute("role", "tooltip");
   document.body.appendChild(tip);
 
-  const SEL = ".ticker-tag[data-ticker-tip], .sentiment-gauge[data-tooltip]";
+  const SEL =
+    ".ticker-tag[data-ticker-tip], .ticker-tag[data-company-domain], .sentiment-gauge[data-tooltip]";
   let activeEl = null;
 
   const hide = () => {
     tip.classList.add("hidden");
+    tip.classList.remove("is-company");
     activeEl = null;
   };
 
   const show = (el) => {
     const isTicker = el.classList.contains("ticker-tag");
-    const text = isTicker ? el.dataset.tickerTip : el.dataset.tooltip;
-    if (!text) return;
-    activeEl = el;
-    tip.textContent = text;
-    tip.classList.toggle("is-subtle", !isTicker);
-    tip.classList.remove("hidden");
+    const domain = el.dataset.companyDomain;
+    const fact = domain ? state.companyFacts?.companies?.[domain] : null;
+    const tickerTip = el.dataset.tickerTip || "";
+
+    if (isTicker && fact) {
+      activeEl = el;
+      const flagHtml = fact.country_code ? renderCountryFlagImg(fact.country_code) : "";
+      const quoteRow = tickerTip
+        ? `<div class="ctip-quote">${escapeHtml(tickerTip)}</div>`
+        : "";
+      tip.innerHTML = `
+        <div class="ctip-head">${renderCompanyLogoImg(domain)}<span>${escapeHtml(fact.name)}</span></div>
+        ${quoteRow}
+        <div class="ctip-grid">
+          <span class="ctip-k">Country</span><span class="ctip-v">${flagHtml}${escapeHtml(fact.country)}</span>
+          <span class="ctip-k">Valuation</span><span class="ctip-v">${escapeHtml(fact.valuation)}</span>
+          <span class="ctip-k">Leader</span><span class="ctip-v">${escapeHtml(fact.leader)}</span>
+        </div>
+      `;
+      tip.classList.remove("is-subtle");
+      tip.classList.add("is-company");
+      tip.classList.remove("hidden");
+    } else {
+      const text = isTicker ? tickerTip : el.dataset.tooltip;
+      if (!text) return;
+      activeEl = el;
+      tip.textContent = text;
+      tip.classList.remove("is-company");
+      tip.classList.toggle("is-subtle", !isTicker);
+      tip.classList.remove("hidden");
+    }
 
     const rect = el.getBoundingClientRect();
     const tipRect = tip.getBoundingClientRect();
@@ -2245,6 +2278,18 @@ async function bootstrap() {
       els.btnRefresh.disabled = false;
     }
   });
+
+  // Fetch company facts metadata (non-blocking) for rich hover tooltips & footer note
+  fetch(`${DATA_BASE}/company_facts.json`, { cache: "no-store" })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((facts) => {
+      if (!facts) return;
+      state.companyFacts = facts;
+      if (els.companyFactsMeta && facts.updated_at) {
+        els.companyFactsMeta.textContent = ` · Company facts updated ${fmtLocalTimestamp(facts.updated_at)}.`;
+      }
+    })
+    .catch(() => {});
 
   // Fetch archive manifest
   try {

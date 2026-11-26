@@ -1,10 +1,14 @@
 /**
- * Country Metadata, Flag Aliases & Hover Continent Map Tooltip
- * Covers all 195 UN countries + major territories/blocs (EU, UN, Taiwan, Hong Kong, Macau, Palestine, Kosovo, Greenland, Puerto Rico).
- * Lazy-loads world-atlas@2/countries-110m.json once on first hover.
+ * Country, US State, Chinese Province & City (CA/GD) Hover Map Tooltip
+ * - World countries/regions: world-atlas@2/countries-110m.json (continent view)
+ * - US states & California cities: us-atlas@3/states-10m.json (US view)
+ * - Chinese provinces & Guangdong cities: geojson-map-china (China view)
+ * All topology files are lazy-loaded once on first hover and cached in memory.
  */
 
-const ATLAS_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+const WORLD_ATLAS_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+const US_ATLAS_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
+const CN_GEO_URL = "https://cdn.jsdelivr.net/gh/longwosion/geojson-map-china@master/china.json";
 
 const CONTINENT_META = {
   na: { label: "North America", bounds: [-168, -52, 7, 73] },
@@ -17,15 +21,18 @@ const CONTINENT_META = {
   world: { label: "Global", bounds: [-175, 178, -58, 78] },
 };
 
+const US_BOUNDS = [-126, -66, 24, 50];
+const US_FULL_BOUNDS = [-172, -66, 18, 72];
+const CN_BOUNDS = [73, 136, 18, 54];
+
 const EU_ISO_IDS = [
   "040", "056", "100", "191", "196", "203", "208", "233", "246",
   "250", "276", "300", "348", "372", "380", "428", "440", "442",
   "470", "528", "616", "620", "642", "703", "705", "724", "752",
 ];
 
-// Compact table: code -> [name, capital, continent, isoNumericOrArray, aliases[], optionalDotLonLat]
+// Countries: code -> [name, capital, continent, isoNumericOrArray, aliases[], optionalDotLonLat]
 const RAW_COUNTRIES = {
-  // North & Central America + Caribbean
   us: ["United States", "Washington, D.C.", "na", "840", ["United States", "U.S.", "US", "American", "Americans", "美国"]],
   ca: ["Canada", "Ottawa", "na", "124", ["Canada", "Canadian", "Canadians", "加拿大"]],
   mx: ["Mexico", "Mexico City", "na", "484", ["Mexico", "Mexican", "Mexicans", "墨西哥"]],
@@ -51,8 +58,6 @@ const RAW_COUNTRIES = {
   vc: ["Saint Vincent and the Grenadines", "Kingstown", "na", null, ["Saint Vincent and the Grenadines"], [-61.2, 13.2]],
   pr: ["Puerto Rico", "San Juan", "na", "630", ["Puerto Rico", "Puerto Rican"], [-66.1, 18.4]],
   gl: ["Greenland", "Nuuk", "na", "304", ["Greenland", "Greenlandic"]],
-
-  // South America
   br: ["Brazil", "Brasília", "sa", "076", ["Brazil", "Brazilian", "Brazilians", "巴西"]],
   ar: ["Argentina", "Buenos Aires", "sa", "032", ["Argentina", "Argentine", "Argentinian", "阿根廷"]],
   co: ["Colombia", "Bogotá", "sa", "170", ["Colombia", "Colombian"]],
@@ -65,8 +70,6 @@ const RAW_COUNTRIES = {
   uy: ["Uruguay", "Montevideo", "sa", "858", ["Uruguay", "Uruguayan"]],
   gy: ["Guyana", "Georgetown", "sa", "328", ["Guyana", "Guyanese"]],
   sr: ["Suriname", "Paramaribo", "sa", "740", ["Suriname", "Surinamese"]],
-
-  // Europe & Blocs
   eu: ["European Union", "Brussels (de facto)", "eu", EU_ISO_IDS, ["European Union", "European", "Europeans", "EU", "欧盟"]],
   gb: ["United Kingdom", "London", "eu", "826", ["United Kingdom", "UK", "Britain", "British", "英国"]],
   ie: ["Ireland", "Dublin", "eu", "372", ["Ireland", "Irish"]],
@@ -114,8 +117,6 @@ const RAW_COUNTRIES = {
   sm: ["San Marino", "San Marino", "eu", null, ["San Marino"], [12.4, 43.9]],
   va: ["Vatican City", "Vatican City", "eu", null, ["Vatican City", "Vatican"], [12.45, 41.9]],
   ru: ["Russia", "Moscow", "eurasia", "643", ["Russia", "Russian", "Russians", "俄罗斯"]],
-
-  // Asia & Middle East
   cn: ["China", "Beijing", "as", "156", ["China", "Chinese", "中国大陆", "中国"]],
   tw: ["Taiwan", "Taipei", "as", "158", ["Taiwan", "Taiwanese", "台湾"], [121.5, 25.0]],
   hk: ["Hong Kong", "Hong Kong", "as", null, ["Hong Kong", "香港"], [114.2, 22.3]],
@@ -166,8 +167,6 @@ const RAW_COUNTRIES = {
   bh: ["Bahrain", "Manama", "as", null, ["Bahrain", "Bahraini"], [50.6, 26.2]],
   om: ["Oman", "Muscat", "as", "512", ["Oman", "Omani"]],
   jo: ["Jordan", "Amman", "as", "400", ["Jordan", "Jordanian"]],
-
-  // Africa
   eg: ["Egypt", "Cairo", "af", "818", ["Egypt", "Egyptian", "埃及"]],
   ly: ["Libya", "Tripoli", "af", "434", ["Libya", "Libyan", "利比亚"]],
   tn: ["Tunisia", "Tunis", "af", "788", ["Tunisia", "Tunisian"]],
@@ -222,8 +221,6 @@ const RAW_COUNTRIES = {
   mu: ["Mauritius", "Port Louis", "af", null, ["Mauritius", "Mauritian"], [57.5, -20.2]],
   sc: ["Seychelles", "Victoria", "af", null, ["Seychelles"], [55.5, -4.6]],
   km: ["Comoros", "Moroni", "af", null, ["Comoros"], [43.3, -11.7]],
-
-  // Oceania
   au: ["Australia", "Canberra", "oc", "036", ["Australia", "Australian", "Australians", "澳大利亚"]],
   nz: ["New Zealand", "Wellington", "oc", "554", ["New Zealand", "新西兰"]],
   pg: ["Papua New Guinea", "Port Moresby", "oc", "598", ["Papua New Guinea"]],
@@ -238,25 +235,276 @@ const RAW_COUNTRIES = {
   pw: ["Palau", "Ngerulmud", "oc", null, ["Palau"], [134.6, 7.5]],
   nr: ["Nauru", "Yaren", "oc", null, ["Nauru"], [166.9, -0.5]],
   tv: ["Tuvalu", "Funafuti", "oc", null, ["Tuvalu"], [179.2, -8.5]],
-
-  // Global
   un: ["United Nations", "New York (HQ)", "world", null, ["United Nations", "UN", "联合国"], [-74.0, 40.7]],
 };
 
+// All 50 US States + DC: fips -> [name, capital, aliases[], optionalDotLonLat]
+const RAW_US_STATES = [
+  ["01", "Alabama", "Montgomery", ["Alabama"]],
+  ["02", "Alaska", "Juneau", ["Alaska"]],
+  ["04", "Arizona", "Phoenix", ["Arizona"]],
+  ["05", "Arkansas", "Little Rock", ["Arkansas"]],
+  ["06", "California", "Sacramento", ["California", "加州", "加利福尼亚"]],
+  ["08", "Colorado", "Denver", ["Colorado"]],
+  ["09", "Connecticut", "Hartford", ["Connecticut"]],
+  ["10", "Delaware", "Dover", ["Delaware"], [-75.5, 39.0]],
+  ["11", "Washington, D.C.", "Federal District", ["Washington, D.C.", "Washington D.C."], [-77.04, 38.91]],
+  ["12", "Florida", "Tallahassee", ["Florida", "佛罗里达"]],
+  ["13", "Georgia", "Atlanta", ["Georgia"]],
+  ["15", "Hawaii", "Honolulu", ["Hawaii", "夏威夷"]],
+  ["16", "Idaho", "Boise", ["Idaho"]],
+  ["17", "Illinois", "Springfield", ["Illinois"]],
+  ["18", "Indiana", "Indianapolis", ["Indiana"]],
+  ["19", "Iowa", "Des Moines", ["Iowa"]],
+  ["20", "Kansas", "Topeka", ["Kansas"]],
+  ["21", "Kentucky", "Frankfort", ["Kentucky"]],
+  ["22", "Louisiana", "Baton Rouge", ["Louisiana"]],
+  ["23", "Maine", "Augusta", ["Maine"]],
+  ["24", "Maryland", "Annapolis", ["Maryland"]],
+  ["25", "Massachusetts", "Boston", ["Massachusetts"]],
+  ["26", "Michigan", "Lansing", ["Michigan"]],
+  ["27", "Minnesota", "Saint Paul", ["Minnesota"]],
+  ["28", "Mississippi", "Jackson", ["Mississippi"]],
+  ["29", "Missouri", "Jefferson City", ["Missouri"]],
+  ["30", "Montana", "Helena", ["Montana"]],
+  ["31", "Nebraska", "Lincoln", ["Nebraska"]],
+  ["32", "Nevada", "Carson City", ["Nevada"]],
+  ["33", "New Hampshire", "Concord", ["New Hampshire"]],
+  ["34", "New Jersey", "Trenton", ["New Jersey"]],
+  ["35", "New Mexico", "Santa Fe", ["New Mexico"]],
+  ["36", "New York", "Albany", ["New York", "纽约"]],
+  ["37", "North Carolina", "Raleigh", ["North Carolina"]],
+  ["38", "North Dakota", "Bismarck", ["North Dakota"]],
+  ["39", "Ohio", "Columbus", ["Ohio"]],
+  ["40", "Oklahoma", "Oklahoma City", ["Oklahoma"]],
+  ["41", "Oregon", "Salem", ["Oregon"]],
+  ["42", "Pennsylvania", "Harrisburg", ["Pennsylvania"]],
+  ["44", "Rhode Island", "Providence", ["Rhode Island"], [-71.5, 41.7]],
+  ["45", "South Carolina", "Columbia", ["South Carolina"]],
+  ["46", "South Dakota", "Pierre", ["South Dakota"]],
+  ["47", "Tennessee", "Nashville", ["Tennessee"]],
+  ["48", "Texas", "Austin", ["Texas", "德克萨斯", "德州"]],
+  ["49", "Utah", "Salt Lake City", ["Utah"]],
+  ["50", "Vermont", "Montpelier", ["Vermont"]],
+  ["51", "Virginia", "Richmond", ["Virginia"]],
+  ["53", "Washington", "Olympia", ["Washington State"]],
+  ["54", "West Virginia", "Charleston", ["West Virginia"]],
+  ["55", "Wisconsin", "Madison", ["Wisconsin"]],
+  ["56", "Wyoming", "Cheyenne", ["Wyoming"]],
+];
+
+// All 31 Mainland Chinese Provinces / Municipalities / Autonomous Regions: gbId -> [name, capital, aliases[]]
+const RAW_CN_PROVINCES = [
+  ["11", "Beijing", "Beijing (Municipality)", ["Beijing", "北京"]],
+  ["12", "Tianjin", "Tianjin (Municipality)", ["Tianjin", "天津"]],
+  ["13", "Hebei", "Shijiazhuang", ["Hebei", "河北"]],
+  ["14", "Shanxi", "Taiyuan", ["Shanxi", "山西"]],
+  ["15", "Inner Mongolia", "Hohhot", ["Inner Mongolia", "内蒙古"]],
+  ["21", "Liaoning", "Shenyang", ["Liaoning", "辽宁"]],
+  ["22", "Jilin", "Changchun", ["Jilin", "吉林"]],
+  ["23", "Heilongjiang", "Harbin", ["Heilongjiang", "黑龙江"]],
+  ["31", "Shanghai", "Shanghai (Municipality)", ["Shanghai", "上海"]],
+  ["32", "Jiangsu", "Nanjing", ["Jiangsu", "江苏"]],
+  ["33", "Zhejiang", "Hangzhou", ["Zhejiang", "浙江"]],
+  ["34", "Anhui", "Hefei", ["Anhui", "安徽"]],
+  ["35", "Fujian", "Fuzhou", ["Fujian", "福建"]],
+  ["36", "Jiangxi", "Nanchang", ["Jiangxi", "江西"]],
+  ["37", "Shandong", "Jinan", ["Shandong", "山东"]],
+  ["41", "Henan", "Zhengzhou", ["Henan", "河南"]],
+  ["42", "Hubei", "Wuhan", ["Hubei", "湖北"]],
+  ["43", "Hunan", "Changsha", ["Hunan", "湖南"]],
+  ["44", "Guangdong", "Guangzhou", ["Guangdong", "广东"]],
+  ["45", "Guangxi", "Nanning", ["Guangxi", "广西"]],
+  ["46", "Hainan", "Haikou", ["Hainan", "海南"]],
+  ["50", "Chongqing", "Chongqing (Municipality)", ["Chongqing", "重庆"]],
+  ["51", "Sichuan", "Chengdu", ["Sichuan", "四川"]],
+  ["52", "Guizhou", "Guiyang", ["Guizhou", "贵州"]],
+  ["53", "Yunnan", "Kunming", ["Yunnan", "云南"]],
+  ["54", "Tibet", "Lhasa", ["Tibet", "Xizang", "西藏"]],
+  ["61", "Shaanxi", "Xi'an", ["Shaanxi", "陕西"]],
+  ["62", "Gansu", "Lanzhou", ["Gansu", "甘肃"]],
+  ["63", "Qinghai", "Xining", ["Qinghai", "青海"]],
+  ["64", "Ningxia", "Yinchuan", ["Ningxia", "宁夏"]],
+  ["65", "Xinjiang", "Ürümqi", ["Xinjiang", "新疆"]],
+];
+
+// All 21 Prefecture-Level Cities in Guangdong: [slug, name, lon, lat, aliases[]]
+const RAW_GD_CITIES = [
+  ["guangzhou", "Guangzhou", 113.26, 23.13, ["Guangzhou", "广州"]],
+  ["shenzhen", "Shenzhen", 114.06, 22.54, ["Shenzhen", "深圳"]],
+  ["dongguan", "Dongguan", 113.75, 23.02, ["Dongguan", "东莞"]],
+  ["foshan", "Foshan", 113.12, 23.02, ["Foshan", "佛山"]],
+  ["zhuhai", "Zhuhai", 113.58, 22.27, ["Zhuhai", "珠海"]],
+  ["zhongshan", "Zhongshan", 113.38, 22.52, ["Zhongshan", "中山"]],
+  ["huizhou", "Huizhou", 114.42, 23.11, ["Huizhou", "惠州"]],
+  ["jiangmen", "Jiangmen", 113.08, 22.58, ["Jiangmen", "江门"]],
+  ["shantou", "Shantou", 116.68, 23.35, ["Shantou", "汕头"]],
+  ["zhanjiang", "Zhanjiang", 110.36, 21.27, ["Zhanjiang", "湛江"]],
+  ["maoming", "Maoming", 110.92, 21.66, ["Maoming", "茂名"]],
+  ["zhaoqing", "Zhaoqing", 112.46, 23.05, ["Zhaoqing", "肇庆"]],
+  ["qingyuan", "Qingyuan", 113.06, 23.68, ["Qingyuan", "清远"]],
+  ["shaoguan", "Shaoguan", 113.60, 24.81, ["Shaoguan", "韶关"]],
+  ["meizhou", "Meizhou", 116.12, 24.29, ["Meizhou", "梅州"]],
+  ["shanwei", "Shanwei", 115.37, 22.78, ["Shanwei", "汕尾"]],
+  ["heyuan", "Heyuan", 114.70, 23.74, ["Heyuan", "河源"]],
+  ["yangjiang", "Yangjiang", 111.98, 21.86, ["Yangjiang", "阳江"]],
+  ["chaozhou", "Chaozhou", 116.62, 23.66, ["Chaozhou", "潮州"]],
+  ["jieyang", "Jieyang", 116.37, 23.55, ["Jieyang", "揭阳"]],
+  ["yunfu", "Yunfu", 112.04, 22.92, ["Yunfu", "云浮"]],
+];
+
+// Major Cities & Regions in California: [slug, name, lon, lat, aliases[]]
+const RAW_CA_CITIES = [
+  ["san-francisco", "San Francisco", -122.42, 37.77, ["San Francisco", "旧金山"]],
+  ["san-jose", "San Jose", -121.89, 37.34, ["San Jose", "圣何塞"]],
+  ["oakland", "Oakland", -122.27, 37.80, ["Oakland", "奥克兰"]],
+  ["berkeley", "Berkeley", -122.27, 37.87, ["Berkeley"]],
+  ["palo-alto", "Palo Alto", -122.14, 37.44, ["Palo Alto"]],
+  ["mountain-view", "Mountain View", -122.08, 37.39, ["Mountain View"]],
+  ["cupertino", "Cupertino", -122.03, 37.32, ["Cupertino"]],
+  ["menlo-park", "Menlo Park", -122.18, 37.45, ["Menlo Park"]],
+  ["sunnyvale", "Sunnyvale", -122.04, 37.37, ["Sunnyvale"]],
+  ["santa-clara", "Santa Clara", -121.95, 37.35, ["Santa Clara"]],
+  ["fremont", "Fremont", -121.99, 37.55, ["Fremont"]],
+  ["redwood-city", "Redwood City", -122.23, 37.49, ["Redwood City"]],
+  ["san-mateo", "San Mateo", -122.33, 37.56, ["San Mateo"]],
+  ["silicon-valley", "Silicon Valley", -122.04, 37.38, ["Silicon Valley", "硅谷"]],
+  ["bay-area", "Bay Area", -122.25, 37.75, ["Bay Area", "湾区"]],
+  ["los-angeles", "Los Angeles", -118.24, 34.05, ["Los Angeles", "洛杉矶"]],
+  ["san-diego", "San Diego", -117.16, 32.72, ["San Diego", "圣地亚哥"]],
+  ["sacramento", "Sacramento", -121.49, 38.58, ["Sacramento", "萨克拉门托"]],
+  ["fresno", "Fresno", -119.79, 36.74, ["Fresno"]],
+  ["long-beach", "Long Beach", -118.19, 33.77, ["Long Beach"]],
+  ["anaheim", "Anaheim", -117.91, 33.84, ["Anaheim"]],
+  ["irvine", "Irvine", -117.83, 33.68, ["Irvine"]],
+  ["santa-monica", "Santa Monica", -118.49, 34.02, ["Santa Monica"]],
+  ["pasadena", "Pasadena", -118.14, 34.15, ["Pasadena"]],
+  ["beverly-hills", "Beverly Hills", -118.40, 34.07, ["Beverly Hills"]],
+  ["bakersfield", "Bakersfield", -119.02, 35.37, ["Bakersfield"]],
+  ["riverside", "Riverside", -117.40, 33.98, ["Riverside"]],
+  ["stockton", "Stockton", -121.29, 37.96, ["Stockton"]],
+  ["santa-barbara", "Santa Barbara", -119.70, 34.42, ["Santa Barbara"]],
+  ["santa-cruz", "Santa Cruz", -122.03, 36.97, ["Santa Cruz"]],
+  ["monterey", "Monterey", -121.89, 36.60, ["Monterey"]],
+  ["napa", "Napa", -122.29, 38.30, ["Napa"]],
+];
+
+export const PLACE_META = {};
+export const PLACE_ALIASES = {};
 export const COUNTRY_META = {};
 export const COUNTRY_FLAGS = {};
 
+// 1. Countries
 for (const [code, [name, capital, continent, iso, aliases, dot]] of Object.entries(RAW_COUNTRIES)) {
-  COUNTRY_META[code] = { name, capital, continent, iso, ...(dot ? { dot } : {}) };
+  const entry = {
+    kind: "country",
+    flagCode: code,
+    showInlineFlag: true,
+    name,
+    subtitle: capital,
+    regionLabel: (CONTINENT_META[continent] || CONTINENT_META.world).label,
+    continent,
+    iso,
+    ...(dot ? { dot } : {}),
+  };
+  COUNTRY_META[code] = entry;
+  PLACE_META[code] = entry;
   for (const alias of aliases) {
     COUNTRY_FLAGS[alias] = code;
+    PLACE_ALIASES[alias] = code;
   }
 }
 
-let atlasPromise = null;
+// 2. US States
+for (const [fips, name, capital, aliases, dot] of RAW_US_STATES) {
+  const id = `us-${fips}`;
+  PLACE_META[id] = {
+    kind: "us_state",
+    flagCode: "us",
+    showInlineFlag: false,
+    name,
+    subtitle: capital,
+    regionLabel: "United States",
+    fips,
+    ...(dot ? { dot } : {}),
+  };
+  for (const alias of aliases) {
+    PLACE_ALIASES[alias] = id;
+  }
+}
+
+// 3. Chinese Provinces
+for (const [gbId, name, capital, aliases] of RAW_CN_PROVINCES) {
+  const id = `cn-${gbId}`;
+  PLACE_META[id] = {
+    kind: "cn_province",
+    flagCode: "cn",
+    showInlineFlag: false,
+    name,
+    subtitle: capital,
+    regionLabel: "China",
+    gbId,
+  };
+  for (const alias of aliases) {
+    PLACE_ALIASES[alias] = id;
+  }
+}
+
+// 4. Guangdong Cities
+for (const [slug, name, lon, lat, aliases] of RAW_GD_CITIES) {
+  const id = `gd-${slug}`;
+  PLACE_META[id] = {
+    kind: "gd_city",
+    flagCode: "cn",
+    showInlineFlag: false,
+    name,
+    subtitle: "Guangdong",
+    regionLabel: "China",
+    gbId: "44",
+    dot: [lon, lat],
+  };
+  for (const alias of aliases) {
+    PLACE_ALIASES[alias] = id;
+  }
+}
+
+// 5. California Cities
+for (const [slug, name, lon, lat, aliases] of RAW_CA_CITIES) {
+  const id = `ca-${slug}`;
+  PLACE_META[id] = {
+    kind: "ca_city",
+    flagCode: "us",
+    showInlineFlag: false,
+    name,
+    subtitle: "California",
+    regionLabel: "United States",
+    fips: "06",
+    dot: [lon, lat],
+  };
+  for (const alias of aliases) {
+    PLACE_ALIASES[alias] = id;
+  }
+}
+
+/* ---------- Lazy Atlas Loaders & Geometry Decoders ---------- */
+
+const atlasPromises = {};
 const svgCache = new Map();
 
-function decodeTopoJson(topo) {
+function computeRingsBbox(rings) {
+  let minLon = Infinity, maxLon = -Infinity, minLat = Infinity, maxLat = -Infinity;
+  for (const r of rings) {
+    for (const [lon, lat] of r) {
+      if (lon < minLon) minLon = lon;
+      if (lon > maxLon) maxLon = lon;
+      if (lat < minLat) minLat = lat;
+      if (lat > maxLat) maxLat = lat;
+    }
+  }
+  return [minLon, maxLon, minLat, maxLat];
+}
+
+function decodeTopoJson(topo, objectKey, padLen) {
   const { scale, translate } = topo.transform;
   const decodedArcs = topo.arcs.map((arc) => {
     let x = 0;
@@ -280,8 +528,8 @@ function decodeTopoJson(topo) {
   };
 
   const features = [];
-  for (const g of topo.objects.countries.geometries) {
-    const id = String(g.id ?? "").padStart(3, "0");
+  for (const g of topo.objects[objectKey].geometries) {
+    const id = String(g.id ?? "").padStart(padLen, "0");
     let rings = [];
     if (g.type === "Polygon") {
       rings = g.arcs.map(stitchRing);
@@ -291,37 +539,77 @@ function decodeTopoJson(topo) {
       }
     }
     if (!rings.length) continue;
-    let minLon = Infinity, maxLon = -Infinity, minLat = Infinity, maxLat = -Infinity;
-    for (const r of rings) {
-      for (const [lon, lat] of r) {
-        if (lon < minLon) minLon = lon;
-        if (lon > maxLon) maxLon = lon;
-        if (lat < minLat) minLat = lat;
-        if (lat > maxLat) maxLat = lat;
-      }
-    }
-    features.push({ id, rings, bbox: [minLon, maxLon, minLat, maxLat] });
+    features.push({ id, rings, bbox: computeRingsBbox(rings) });
   }
   return features;
 }
 
-function loadAtlas() {
-  if (!atlasPromise) {
-    atlasPromise = fetch(ATLAS_URL)
-      .then((r) => {
-        if (!r.ok) throw new Error(`Atlas HTTP ${r.status}`);
-        return r.json();
-      })
-      .then(decodeTopoJson);
+function decodeGeoJson(geo) {
+  const features = [];
+  for (const f of geo.features || []) {
+    const id = String(f.properties?.id ?? f.id ?? "").slice(0, 2);
+    const geom = f.geometry;
+    if (!geom) continue;
+    let rings = [];
+    if (geom.type === "Polygon") {
+      rings = geom.coordinates || [];
+    } else if (geom.type === "MultiPolygon") {
+      for (const poly of geom.coordinates || []) {
+        for (const r of poly) rings.push(r);
+      }
+    }
+    if (!rings.length) continue;
+    features.push({ id, rings, bbox: computeRingsBbox(rings) });
   }
-  return atlasPromise;
+  return features;
 }
 
-function buildContinentSvg(features, code) {
-  const meta = COUNTRY_META[code];
+function loadAtlas(kind) {
+  const key =
+    kind === "us_state" || kind === "ca_city"
+      ? "us"
+      : kind === "cn_province" || kind === "gd_city"
+      ? "cn"
+      : "world";
+
+  if (!atlasPromises[key]) {
+    if (key === "world") {
+      atlasPromises[key] = fetch(WORLD_ATLAS_URL)
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+        .then((t) => decodeTopoJson(t, "countries", 3));
+    } else if (key === "us") {
+      atlasPromises[key] = fetch(US_ATLAS_URL)
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+        .then((t) => decodeTopoJson(t, "states", 2));
+    } else {
+      atlasPromises[key] = fetch(CN_GEO_URL)
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+        .then(decodeGeoJson);
+    }
+  }
+  return atlasPromises[key];
+}
+
+function buildPlaceSvg(features, placeId) {
+  const meta = PLACE_META[placeId];
   if (!meta) return "";
-  const cont = CONTINENT_META[meta.continent] || CONTINENT_META.world;
-  const [minLon, maxLon, minLat, maxLat] = cont.bounds;
+
+  let bounds;
+  let targetIds = new Set();
+
+  if (meta.kind === "country") {
+    bounds = (CONTINENT_META[meta.continent] || CONTINENT_META.world).bounds;
+    if (Array.isArray(meta.iso)) meta.iso.forEach((x) => targetIds.add(x));
+    else if (meta.iso) targetIds.add(meta.iso);
+  } else if (meta.kind === "us_state" || meta.kind === "ca_city") {
+    bounds = meta.fips === "02" || meta.fips === "15" ? US_FULL_BOUNDS : US_BOUNDS;
+    targetIds.add(meta.fips);
+  } else {
+    bounds = CN_BOUNDS;
+    targetIds.add(meta.gbId);
+  }
+
+  const [minLon, maxLon, minLat, maxLat] = bounds;
   const w = 220;
   const h = 124;
   const pad = 6;
@@ -354,10 +642,6 @@ function buildContinentSvg(features, code) {
     return d ? `${d}Z` : "";
   };
 
-  const targetIds = new Set(
-    Array.isArray(meta.iso) ? meta.iso : meta.iso ? [meta.iso] : []
-  );
-
   let bgPaths = "";
   let fgPaths = "";
   for (const f of features) {
@@ -387,12 +671,14 @@ function buildContinentSvg(features, code) {
     dotSvg = `<circle class="cmap-dot-ring" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5.5"/><circle class="cmap-dot" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="2.8"/>`;
   }
 
+  const clipId = `cmap-clip-${placeId.replace(/[^a-z0-9-]/gi, "")}`;
+  const targetClass = meta.kind === "ca_city" || meta.kind === "gd_city" ? "cmap-target is-region" : "cmap-target";
   return `
     <svg class="cmap-svg" viewBox="0 0 ${w} ${h}" aria-hidden="true">
-      <clipPath id="cmap-clip-${code}"><rect x="0" y="0" width="${w}" height="${h}" rx="4"/></clipPath>
-      <g clip-path="url(#cmap-clip-${code})">
+      <clipPath id="${clipId}"><rect x="0" y="0" width="${w}" height="${h}" rx="4"/></clipPath>
+      <g clip-path="url(#${clipId})">
         <path class="cmap-land" d="${bgPaths}"/>
-        ${fgPaths ? `<path class="cmap-target" d="${fgPaths}"/>` : ""}
+        ${fgPaths ? `<path class="${targetClass}" d="${fgPaths}"/>` : ""}
         ${dotSvg}
       </g>
     </svg>
@@ -431,18 +717,17 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
 
   const show = async (el) => {
     clearTimeout(hideTimer);
-    const code = el?.dataset?.countryCode;
-    const meta = code ? COUNTRY_META[code] : null;
+    const placeId = el?.dataset?.countryCode;
+    const meta = placeId ? PLACE_META[placeId] : null;
     if (!meta) return;
     activeEl = el;
 
-    const contLabel = (CONTINENT_META[meta.continent] || CONTINENT_META.world).label;
-    const cachedSvg = svgCache.get(code);
+    const cachedSvg = svgCache.get(placeId);
     card.innerHTML = `
       <div class="cmap-stage">${cachedSvg || `<div class="cmap-loading">Loading map…</div>`}</div>
       <div class="cmap-footer">
-        <div class="cmap-title">${renderFlagImg(code)}<span>${escapeHtml(meta.name)}</span></div>
-        <div class="cmap-meta"><strong>${escapeHtml(meta.capital)}</strong><span class="cmap-cont">${escapeHtml(contLabel)}</span></div>
+        <div class="cmap-title">${renderFlagImg(meta.flagCode)}<span>${escapeHtml(meta.name)}</span></div>
+        <div class="cmap-meta"><strong>${escapeHtml(meta.subtitle)}</strong><span class="cmap-cont">${escapeHtml(meta.regionLabel)}</span></div>
       </div>
     `;
     card.classList.remove("hidden");
@@ -450,9 +735,9 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
 
     if (!cachedSvg) {
       try {
-        const features = await loadAtlas();
-        const svg = buildContinentSvg(features, code);
-        svgCache.set(code, svg);
+        const features = await loadAtlas(meta.kind);
+        const svg = buildPlaceSvg(features, placeId);
+        svgCache.set(placeId, svg);
         if (activeEl === el && !card.classList.contains("hidden")) {
           const stage = card.querySelector(".cmap-stage");
           if (stage) stage.innerHTML = svg;
@@ -460,7 +745,7 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
         }
       } catch {
         const stage = card.querySelector(".cmap-stage");
-        if (stage) stage.innerHTML = `<div class="cmap-loading">${escapeHtml(contLabel)}</div>`;
+        if (stage) stage.innerHTML = `<div class="cmap-loading">${escapeHtml(meta.regionLabel)}</div>`;
       }
     }
   };
