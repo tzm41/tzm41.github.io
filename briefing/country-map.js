@@ -389,6 +389,91 @@ const RAW_CA_CITIES = [
   ["napa", "Napa", -122.29, 38.30, ["Napa"]],
 ];
 
+// Remaining 26 Chinese Provincial & Autonomous Region Capitals (Guangzhou in RAW_GD_CITIES; Beijing/Tianjin/Shanghai/Chongqing in RAW_CN_PROVINCES):
+// [slug, name, gbId, provinceName, lon, lat, aliases[]]
+const RAW_CN_CAPITALS = [
+  ["shijiazhuang", "Shijiazhuang", "13", "Hebei", 114.51, 38.04, ["Shijiazhuang", "石家庄"]],
+  ["taiyuan", "Taiyuan", "14", "Shanxi", 112.55, 37.87, ["Taiyuan", "太原"]],
+  ["hohhot", "Hohhot", "15", "Inner Mongolia", 111.75, 40.84, ["Hohhot", "呼和浩特"]],
+  ["shenyang", "Shenyang", "21", "Liaoning", 123.43, 41.80, ["Shenyang", "沈阳"]],
+  ["changchun", "Changchun", "22", "Jilin", 125.32, 43.82, ["Changchun", "长春"]],
+  ["harbin", "Harbin", "23", "Heilongjiang", 126.53, 45.80, ["Harbin", "哈尔滨"]],
+  ["nanjing", "Nanjing", "32", "Jiangsu", 118.80, 32.06, ["Nanjing", "南京"]],
+  ["hangzhou", "Hangzhou", "33", "Zhejiang", 120.15, 30.27, ["Hangzhou", "杭州"]],
+  ["hefei", "Hefei", "34", "Anhui", 117.23, 31.82, ["Hefei", "合肥"]],
+  ["fuzhou", "Fuzhou", "35", "Fujian", 119.30, 26.07, ["Fuzhou", "福州"]],
+  ["nanchang", "Nanchang", "36", "Jiangxi", 115.86, 28.68, ["Nanchang", "南昌"]],
+  ["jinan", "Jinan", "37", "Shandong", 117.12, 36.65, ["Jinan", "济南"]],
+  ["zhengzhou", "Zhengzhou", "41", "Henan", 113.63, 34.75, ["Zhengzhou", "郑州"]],
+  ["wuhan", "Wuhan", "42", "Hubei", 114.30, 30.59, ["Wuhan", "武汉"]],
+  ["changsha", "Changsha", "43", "Hunan", 112.94, 28.23, ["Changsha", "长沙"]],
+  ["nanning", "Nanning", "45", "Guangxi", 108.37, 22.82, ["Nanning", "南宁"]],
+  ["haikou", "Haikou", "46", "Hainan", 110.20, 20.04, ["Haikou", "海口"]],
+  ["chengdu", "Chengdu", "51", "Sichuan", 104.07, 30.67, ["Chengdu", "成都"]],
+  ["guiyang", "Guiyang", "52", "Guizhou", 106.63, 26.65, ["Guiyang", "贵阳"]],
+  ["kunming", "Kunming", "53", "Yunnan", 102.83, 24.88, ["Kunming", "昆明"]],
+  ["lhasa", "Lhasa", "54", "Tibet", 91.11, 29.65, ["Lhasa", "拉萨"]],
+  ["xian", "Xi'an", "61", "Shaanxi", 108.94, 34.34, ["Xi'an", "Xian", "西安"]],
+  ["lanzhou", "Lanzhou", "62", "Gansu", 103.83, 36.06, ["Lanzhou", "兰州"]],
+  ["xining", "Xining", "63", "Qinghai", 101.78, 36.62, ["Xining", "西宁"]],
+  ["yinchuan", "Yinchuan", "64", "Ningxia", 106.23, 38.49, ["Yinchuan", "银川"]],
+  ["urumqi", "Ürümqi", "65", "Xinjiang", 87.62, 43.83, ["Ürümqi", "Urumqi", "乌鲁木齐"]],
+];
+
+// Remaining 49 US State Capitals (Sacramento in RAW_CA_CITIES):
+// [slug, name, fips, stateName, lon, lat, aliases[]]
+const RAW_US_CAPITALS = [
+  ["montgomery", "Montgomery", "01", "Alabama", -86.30, 32.37, ["Montgomery"]],
+  ["juneau", "Juneau", "02", "Alaska", -134.42, 58.30, ["Juneau"]],
+  ["phoenix", "Phoenix", "04", "Arizona", -112.07, 33.45, ["Phoenix", "菲尼克斯", "凤凰城"]],
+  ["little-rock", "Little Rock", "05", "Arkansas", -92.29, 34.75, ["Little Rock"]],
+  ["denver", "Denver", "08", "Colorado", -104.99, 39.74, ["Denver", "丹佛"]],
+  ["hartford", "Hartford", "09", "Connecticut", -72.68, 41.76, ["Hartford"]],
+  ["dover", "Dover", "10", "Delaware", -75.52, 39.16, ["Dover"]],
+  ["tallahassee", "Tallahassee", "12", "Florida", -84.28, 30.44, ["Tallahassee"]],
+  ["atlanta", "Atlanta", "13", "Georgia", -84.39, 33.75, ["Atlanta", "亚特兰大"]],
+  ["honolulu", "Honolulu", "15", "Hawaii", -157.86, 21.31, ["Honolulu", "檀香山", "火奴鲁鲁"]],
+  ["boise", "Boise", "16", "Idaho", -116.20, 43.62, ["Boise"]],
+  ["springfield", "Springfield", "17", "Illinois", -89.65, 39.78, ["Springfield"]],
+  ["indianapolis", "Indianapolis", "18", "Indiana", -86.16, 39.77, ["Indianapolis", "印第安纳波利斯"]],
+  ["des-moines", "Des Moines", "19", "Iowa", -93.61, 41.59, ["Des Moines"]],
+  ["topeka", "Topeka", "20", "Kansas", -95.69, 39.05, ["Topeka"]],
+  ["frankfort", "Frankfort", "21", "Kentucky", -84.87, 38.20, ["Frankfort"]],
+  ["baton-rouge", "Baton Rouge", "22", "Louisiana", -91.19, 30.45, ["Baton Rouge"]],
+  ["augusta", "Augusta", "23", "Maine", -69.78, 44.31, ["Augusta"]],
+  ["annapolis", "Annapolis", "24", "Maryland", -76.49, 38.98, ["Annapolis"]],
+  ["boston", "Boston", "25", "Massachusetts", -71.06, 42.36, ["Boston", "波士顿"]],
+  ["lansing", "Lansing", "26", "Michigan", -84.56, 42.73, ["Lansing"]],
+  ["saint-paul", "Saint Paul", "27", "Minnesota", -93.09, 44.95, ["Saint Paul", "St. Paul"]],
+  ["jackson", "Jackson", "28", "Mississippi", -90.18, 32.30, ["Jackson"]],
+  ["jefferson-city", "Jefferson City", "29", "Missouri", -92.17, 38.58, ["Jefferson City"]],
+  ["helena", "Helena", "30", "Montana", -112.03, 46.59, ["Helena"]],
+  ["lincoln", "Lincoln", "31", "Nebraska", -96.70, 40.81, ["Lincoln"]],
+  ["carson-city", "Carson City", "32", "Nevada", -119.77, 39.16, ["Carson City"]],
+  ["concord", "Concord", "33", "New Hampshire", -71.54, 43.21, ["Concord"]],
+  ["trenton", "Trenton", "34", "New Jersey", -74.76, 40.22, ["Trenton"]],
+  ["santa-fe", "Santa Fe", "35", "New Mexico", -105.94, 35.69, ["Santa Fe"]],
+  ["albany", "Albany", "36", "New York", -73.76, 42.65, ["Albany", "奥尔巴尼"]],
+  ["raleigh", "Raleigh", "37", "North Carolina", -78.64, 35.78, ["Raleigh", "罗利"]],
+  ["bismarck", "Bismarck", "38", "North Dakota", -100.78, 46.81, ["Bismarck"]],
+  ["columbus", "Columbus", "39", "Ohio", -83.00, 39.96, ["Columbus", "哥伦布"]],
+  ["oklahoma-city", "Oklahoma City", "40", "Oklahoma", -97.52, 35.47, ["Oklahoma City"]],
+  ["salem", "Salem", "41", "Oregon", -123.04, 44.94, ["Salem"]],
+  ["harrisburg", "Harrisburg", "42", "Pennsylvania", -76.89, 40.27, ["Harrisburg"]],
+  ["providence", "Providence", "44", "Rhode Island", -71.41, 41.82, ["Providence"]],
+  ["columbia", "Columbia", "45", "South Carolina", -81.03, 34.00, ["Columbia"]],
+  ["pierre", "Pierre", "46", "South Dakota", -100.35, 44.37, ["Pierre"]],
+  ["nashville", "Nashville", "47", "Tennessee", -86.78, 36.16, ["Nashville", "纳什维尔"]],
+  ["austin", "Austin", "48", "Texas", -97.74, 30.27, ["Austin", "奥斯汀"]],
+  ["salt-lake-city", "Salt Lake City", "49", "Utah", -111.89, 40.76, ["Salt Lake City", "盐湖城"]],
+  ["montpelier", "Montpelier", "50", "Vermont", -72.58, 44.26, ["Montpelier"]],
+  ["richmond", "Richmond", "51", "Virginia", -77.44, 37.54, ["Richmond", "里士满"]],
+  ["olympia", "Olympia", "53", "Washington", -122.90, 47.04, ["Olympia"]],
+  ["charleston", "Charleston", "54", "West Virginia", -81.63, 38.35, ["Charleston"]],
+  ["madison", "Madison", "55", "Wisconsin", -89.40, 43.07, ["Madison"]],
+  ["cheyenne", "Cheyenne", "56", "Wyoming", -104.82, 41.14, ["Cheyenne"]],
+];
+
 export const PLACE_META = {};
 export const PLACE_ALIASES = {};
 export const COUNTRY_META = {};
@@ -486,6 +571,42 @@ for (const [slug, name, lon, lat, aliases] of RAW_CA_CITIES) {
   }
 }
 
+// 6. Chinese Provincial Capitals
+for (const [slug, name, gbId, provinceName, lon, lat, aliases] of RAW_CN_CAPITALS) {
+  const id = `cn-cap-${slug}`;
+  PLACE_META[id] = {
+    kind: "cn_city",
+    flagCode: "cn",
+    showInlineFlag: false,
+    name,
+    subtitle: provinceName,
+    regionLabel: "China",
+    gbId,
+    dot: [lon, lat],
+  };
+  for (const alias of aliases) {
+    PLACE_ALIASES[alias] = id;
+  }
+}
+
+// 7. US State Capitals
+for (const [slug, name, fips, stateName, lon, lat, aliases] of RAW_US_CAPITALS) {
+  const id = `us-cap-${slug}`;
+  PLACE_META[id] = {
+    kind: "us_city",
+    flagCode: "us",
+    showInlineFlag: false,
+    name,
+    subtitle: stateName,
+    regionLabel: "United States",
+    fips,
+    dot: [lon, lat],
+  };
+  for (const alias of aliases) {
+    PLACE_ALIASES[alias] = id;
+  }
+}
+
 /* ---------- Lazy Atlas Loaders & Geometry Decoders ---------- */
 
 const atlasPromises = {};
@@ -566,9 +687,9 @@ function decodeGeoJson(geo) {
 
 function loadAtlas(kind) {
   const key =
-    kind === "us_state" || kind === "ca_city"
+    kind === "us_state" || kind === "ca_city" || kind === "us_city"
       ? "us"
-      : kind === "cn_province" || kind === "gd_city"
+      : kind === "cn_province" || kind === "gd_city" || kind === "cn_city"
       ? "cn"
       : "world";
 
@@ -609,16 +730,20 @@ function buildPlaceSvg(features, placeId) {
     targetIds.add(meta.gbId);
   } else {
     // City-level: zoom directly onto its parent state/province contour
-    const parentId = meta.kind === "ca_city" ? meta.fips : meta.gbId;
+    const isUsCity = meta.kind === "ca_city" || meta.kind === "us_city";
+    const parentId = isUsCity ? meta.fips : meta.gbId;
     targetIds.add(parentId);
     const parentFeat = features.find((f) => f.id === parentId);
-    if (parentFeat) {
+    if (isUsCity && meta.fips === "02") {
+      // Alaska crosses the antimeridian, so clamp to main mainland/SE panhandle bounds
+      bounds = [-172, -129, 51, 72];
+    } else if (parentFeat) {
       const [bMinLon, bMaxLon, bMinLat, bMaxLat] = parentFeat.bbox;
       const padLon = Math.max(0.4, (bMaxLon - bMinLon) * 0.1);
       const padLat = Math.max(0.4, (bMaxLat - bMinLat) * 0.1);
       bounds = [bMinLon - padLon, bMaxLon + padLon, bMinLat - padLat, bMaxLat + padLat];
     } else {
-      bounds = meta.kind === "ca_city" ? US_BOUNDS : CN_BOUNDS;
+      bounds = isUsCity ? US_BOUNDS : CN_BOUNDS;
     }
   }
 
@@ -685,7 +810,12 @@ function buildPlaceSvg(features, placeId) {
   }
 
   const clipId = `cmap-clip-${placeId.replace(/[^a-z0-9-]/gi, "")}`;
-  const targetClass = meta.kind === "ca_city" || meta.kind === "gd_city" ? "cmap-target is-region" : "cmap-target";
+  const isCityKind =
+    meta.kind === "ca_city" ||
+    meta.kind === "gd_city" ||
+    meta.kind === "us_city" ||
+    meta.kind === "cn_city";
+  const targetClass = isCityKind ? "cmap-target is-region" : "cmap-target";
   return `
     <svg class="cmap-svg" viewBox="0 0 ${w} ${h}" aria-hidden="true">
       <clipPath id="${clipId}"><rect x="0" y="0" width="${w}" height="${h}" rx="4"/></clipPath>
@@ -736,7 +866,11 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
     activeEl = el;
 
     const cachedSvg = svgCache.get(placeId);
-    const isCity = meta.kind === "ca_city" || meta.kind === "gd_city";
+    const isCity =
+      meta.kind === "ca_city" ||
+      meta.kind === "gd_city" ||
+      meta.kind === "us_city" ||
+      meta.kind === "cn_city";
     const footerHtml = isCity
       ? `<div class="cmap-title is-city">
            <span class="cmap-title-left">${renderFlagImg(meta.flagCode)}<span>${escapeHtml(meta.name)}</span></span>

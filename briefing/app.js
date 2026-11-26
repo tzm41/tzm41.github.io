@@ -2,7 +2,7 @@
  * Daily Briefing Dashboard — Client Application (Zero-Build ES Module)
  */
 
-import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=7";
+import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=8";
 
 const DATA_BASE = "./data";
 
