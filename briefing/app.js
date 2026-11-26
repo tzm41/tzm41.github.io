@@ -2399,17 +2399,18 @@ function initFloatingTooltips() {
       const rows = [
         `<span class="ctip-k">Country</span><span class="ctip-v">${flagHtml}${escapeHtml(fact.country)}</span>`,
       ];
-      if (fact.budget) {
-        rows.push(
-          `<span class="ctip-k">Budget</span><span class="ctip-v">${escapeHtml(fact.budget)}</span>`
-        );
-      } else if (fact.valuation && fact.valuation.includes("$")) {
+      if (fact.valuation && fact.valuation.includes("$")) {
         rows.push(
           `<span class="ctip-k">Valuation</span><span class="ctip-v">${escapeHtml(fact.valuation)}</span>`
         );
-      } else if (fact.valuation && !fact.bias) {
+      } else if (fact.valuation) {
         rows.push(
           `<span class="ctip-k">Status</span><span class="ctip-v">${escapeHtml(fact.valuation)}</span>`
+        );
+      }
+      if (fact.budget) {
+        rows.push(
+          `<span class="ctip-k">Budget</span><span class="ctip-v">${escapeHtml(fact.budget)}</span>`
         );
       }
       if (fact.bias) {
