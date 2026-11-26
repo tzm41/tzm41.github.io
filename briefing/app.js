@@ -237,8 +237,13 @@ function formatTickerTip(info) {
 
 const EXPLICIT_ITALIC_RE = /(?<!\*)\*([^*\n]+)\*(?!\*)/g;
 
-const PERSON_NAME_RE =
-  /((?:President|Prime Minister|Attorney General|Secretary|Chairman|Sen\.-elect|Sen\.|Rep\.|Gov\.|CEO|Dr\.)\s+[A-Z][a-zA-ZÀ-ÿ'-]+(?:\s+[A-Z][a-zA-ZÀ-ÿ'-]+){0,2}|\b(?:Jensen Huang|Donald Trump Jr\.|Donald Trump|Benjamin Netanyahu|Netanyahu|Trump|Joe Biden|Biden|Kamala Harris|JD Vance|Chuck Schumer|Mike Johnson|Jimmy Gomez|Jamie Raskin|Ilhan Omar|Kilmar [ÁA]brego Garc[íi]a|Abrego Garcia|Abdul El-Sayed|Scott Colom|Puma Shen|Lai Ching-te|Guo Jiakun|Xi Jinping|Chen Jining|Raphael Warnock|Zohran Mamdani|Nick Fuentes|David Lisnard)\b|赖清德|沈伯洋|郭嘉昆|黄仁勋|特朗普|陈吉宁)/g;
+const NON_PERSON_TITLE_WORD =
+  "(?:Reinstatement|Leadership|Resignation|Nomination|Election|Administration|Succession|Investigation|Hearing|Policy|Orders?|Return|Ouster|Exit|Role|Office|Vote|Race|Campaign|Debate|Summit|Visit|Meeting|Statement|Scrutiny|Backlash|Reversal|Power|Term|Authority|Pardon|Veto|Cabinet|Race|Approval|Poll|Polls)\\b";
+
+const PERSON_NAME_RE = new RegExp(
+  `((?:President|Prime Minister|Attorney General|Secretary|Chairman|Sen\\.-elect|Sen\\.|Rep\\.|Gov\\.|Dr\\.)\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+(?:\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+){0,2}|CEO\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+|\\b(?:Jensen Huang|Donald Trump Jr\\.|Donald Trump|Benjamin Netanyahu|Netanyahu|Trump|Joe Biden|Biden|Kamala Harris|JD Vance|Chuck Schumer|Mike Johnson|Jimmy Gomez|Jamie Raskin|Ilhan Omar|Kilmar [ÁA]brego Garc[íi]a|Abrego Garcia|Abdul El-Sayed|Scott Colom|Puma Shen|Lai Ching-te|Guo Jiakun|Xi Jinping|Chen Jining|Raphael Warnock|Zohran Mamdani|Nick Fuentes|David Lisnard)\\b|赖清德|沈伯洋|郭嘉昆|黄仁勋|特朗普|陈吉宁)`,
+  "g"
+);
 
 const COMPANY_LOGOS = {
   Nvidia: "nvidia.com",
