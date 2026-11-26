@@ -2087,6 +2087,16 @@ h3 {
   color: var(--ink);
 }
 
+.collapsible-title {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s ease;
+}
+
+.collapsible-title:hover {
+  color: var(--accent);
+}
+
 .collapse-chevron {
   display: inline-block;
   font-size: 11px;

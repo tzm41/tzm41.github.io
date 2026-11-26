@@ -2224,6 +2224,11 @@ async function bootstrap() {
     btn.addEventListener("click", () => {
       setOpen(body.classList.contains("hidden"));
     });
+    const heading = btn.closest(".section-header, .sub-header")?.querySelector("h2, h3");
+    if (heading) {
+      heading.classList.add("collapsible-title");
+      heading.addEventListener("click", () => setOpen(body.classList.contains("hidden")));
+    }
     if (navHash) {
       document.querySelector(`.nav-links a[href="${navHash}"]`)?.addEventListener("click", () => {
         if (body.classList.contains("hidden")) setOpen(true);
@@ -2353,6 +2358,11 @@ async function bootstrap() {
   els.btnToggleLocal?.addEventListener("click", () => {
     setLocalExpanded(!state.localExpanded);
   });
+  const localHeading = els.localSection?.querySelector(".section-header h2");
+  if (localHeading) {
+    localHeading.classList.add("collapsible-title");
+    localHeading.addEventListener("click", () => setLocalExpanded(!state.localExpanded));
+  }
 
   els.localLocationToggle?.addEventListener("click", (e) => {
     const btn = e.target.closest(".seg-btn");
