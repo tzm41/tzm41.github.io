@@ -500,6 +500,11 @@ h3 {
   background: var(--neg-soft);
 }
 
+.ticker-tag.is-private {
+  border-color: var(--border-strong);
+  background: var(--neutral-badge);
+}
+
 .country-mention {
   display: inline;
   border-bottom: 1px dashed var(--border-strong);

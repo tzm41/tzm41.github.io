@@ -265,9 +265,31 @@ const COMPANY_LOGOS = {
   特斯拉: "tesla.com",
   Anthropic: "anthropic.com",
   OpenAI: "openai.com",
+  "Google DeepMind": "deepmind.google",
+  DeepMind: "deepmind.google",
   DeepSeek: "deepseek.com",
   xAI: "x.ai",
+  "Mistral AI": "mistral.ai",
+  Mistral: "mistral.ai",
+  "Perplexity AI": "perplexity.ai",
   Perplexity: "perplexity.ai",
+  Cohere: "cohere.com",
+  "Hugging Face": "huggingface.co",
+  "Meta AI": "ai.meta.com",
+  "Safe Superintelligence": "ssi.inc",
+  "Thinking Machines Lab": "thinkingmachines.ai",
+  "Thinking Machines": "thinkingmachines.ai",
+  "Scale AI": "scale.com",
+  "Moonshot AI": "moonshot.cn",
+  "Zhipu AI": "zhipuai.cn",
+  智谱AI: "zhipuai.cn",
+  智谱: "zhipuai.cn",
+  MiniMax: "minimax.io",
+  Midjourney: "midjourney.com",
+  Runway: "runwayml.com",
+  ElevenLabs: "elevenlabs.io",
+  Cursor: "cursor.com",
+  "Character.AI": "character.ai",
   Huawei: "huawei.com",
   华为: "huawei.com",
   TSMC: "tsmc.com",
@@ -555,7 +577,7 @@ function renderCountryFlagImg(code) {
   return `<img class="inline-flag-icon" src="${src}" width="16" height="12" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
 }
 
-function decorateFlagsAndLogos(segment, seen = new Set()) {
+function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false) {
   if (!segment) return "";
   ENTITY_DECORATOR_RE.lastIndex = 0;
   let out = "";
@@ -569,12 +591,14 @@ function decorateFlagsAndLogos(segment, seen = new Set()) {
     const party = US_PARTY_TAGS[token];
     if (domain) {
       const key = `logo:${domain}`;
-      if (seen.has(key)) {
-        out += escapeHtml(token);
-      } else {
+      let logoHtml = "";
+      if (!seen.has(key)) {
         seen.add(key);
-        out += `${renderCompanyLogoImg(domain)}${escapeHtml(token)}`;
+        logoHtml = renderCompanyLogoImg(domain);
       }
+      out += pillCompanies
+        ? `<span class="ticker-tag is-private">${logoHtml}${escapeHtml(token)}</span>`
+        : `${logoHtml}${escapeHtml(token)}`;
     } else if (flagCode) {
       const key = `flag:${flagCode}`;
       let flagHtml = "";
@@ -600,7 +624,7 @@ function decorateFlagsAndLogos(segment, seen = new Set()) {
   return out;
 }
 
-function formatEntitiesInPlain(segment, seen = new Set()) {
+function formatEntitiesInPlain(segment, seen = new Set(), pillCompanies = false) {
   if (!segment) return "";
   EXPLICIT_ITALIC_RE.lastIndex = 0;
   if (EXPLICIT_ITALIC_RE.test(segment)) {
@@ -609,11 +633,11 @@ function formatEntitiesInPlain(segment, seen = new Set()) {
     let last = 0;
     for (const m of segment.matchAll(EXPLICIT_ITALIC_RE)) {
       const idx = m.index ?? 0;
-      if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen);
+      if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen, pillCompanies);
       out += `<em>${escapeHtml(m[1])}</em>`;
       last = idx + m[0].length;
     }
-    if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen);
+    if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen, pillCompanies);
     return out;
   }
 
@@ -622,18 +646,18 @@ function formatEntitiesInPlain(segment, seen = new Set()) {
   let last = 0;
   for (const m of segment.matchAll(PERSON_NAME_RE)) {
     const idx = m.index ?? 0;
-    if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen);
+    if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen, pillCompanies);
     out += `<em>${escapeHtml(m[0])}</em>`;
     last = idx + m[0].length;
   }
-  if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen);
+  if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen, pillCompanies);
   return out;
 }
 
 function escapeWithTickers(segment, seen = new Set()) {
   if (!segment) return "";
   if (!state.tickerMap.size || !state.inlineTickerRe) {
-    return formatEntitiesInPlain(segment, seen);
+    return formatEntitiesInPlain(segment, seen, true);
   }
   state.inlineTickerRe.lastIndex = 0;
   let out = "";
@@ -643,7 +667,7 @@ function escapeWithTickers(segment, seen = new Set()) {
     const info = state.tickerMap.get(token);
     if (!info) continue;
     const idx = match.index ?? 0;
-    if (idx > lastIdx) out += formatEntitiesInPlain(segment.slice(lastIdx, idx), seen);
+    if (idx > lastIdx) out += formatEntitiesInPlain(segment.slice(lastIdx, idx), seen, true);
     const cls = deltaClass(info.change_pct);
     const tip = formatTickerTip(info);
     const domain = COMPANY_LOGOS[token] || COMPANY_LOGOS[info.name];
@@ -658,7 +682,7 @@ function escapeWithTickers(segment, seen = new Set()) {
     out += `<span class="ticker-tag ${cls}" tabindex="0" data-ticker-sym="${escapeHtml(info.symbol)}" data-ticker-tip="${escapeHtml(tip)}" title="${escapeHtml(tip)}">${logoHtml}${escapeHtml(token)}</span>`;
     lastIdx = idx + token.length;
   }
-  if (lastIdx < segment.length) out += formatEntitiesInPlain(segment.slice(lastIdx), seen);
+  if (lastIdx < segment.length) out += formatEntitiesInPlain(segment.slice(lastIdx), seen, true);
   return out;
 }
 
