@@ -1949,58 +1949,312 @@ function updateArchiveButtons() {
   els.btnPrevDay.disabled = idx === -1 || idx >= dates.length - 1;
 }
 
-async function refreshLiveMarkets() {
+const CF_MARKETS_PROXY_URL = "https://briefing-markets-proxy.tzm41.workers.dev/markets";
+const LIVE_CACHE_KEY = "briefing-live-markets-cache-v1";
+const CF_RL_KEY = "briefing-cf-rl-v1";
+const LIVE_CACHE_TTL_MS = 100 * 1000; // 100s TTL -> max 3 fetches per 5 min
+const CF_RL_WINDOW_MS = 5 * 60 * 1000;
+const CF_RL_MAX_PER_SYMBOL = 3;
+
+function readJsonStorage(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeJsonStorage(key, val) {
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+  } catch {
+    // Ignore storage quota / private-mode errors
+  }
+}
+
+function canCallCloudflare(symbols) {
+  const now = Date.now();
+  const map = readJsonStorage(CF_RL_KEY) || {};
+  return symbols.every((sym) => {
+    const arr = Array.isArray(map[sym])
+      ? map[sym].filter((t) => typeof t === "number" && now - t < CF_RL_WINDOW_MS)
+      : [];
+    return arr.length < CF_RL_MAX_PER_SYMBOL;
+  });
+}
+
+function recordCloudflareFetch(symbols) {
+  const now = Date.now();
+  const map = readJsonStorage(CF_RL_KEY) || {};
+  const next = {};
+  for (const sym of symbols) {
+    const arr = Array.isArray(map[sym])
+      ? map[sym].filter((t) => typeof t === "number" && now - t < CF_RL_WINDOW_MS)
+      : [];
+    arr.push(now);
+    next[sym] = arr;
+  }
+  writeJsonStorage(CF_RL_KEY, next);
+}
+
+function parseYahooChartClient(symbol, payload) {
+  const result = payload?.chart?.result?.[0];
+  if (!result) return null;
+  const meta = result.meta || {};
+  const timestamps = Array.isArray(result.timestamp) ? result.timestamp : [];
+  const closes = result.indicators?.quote?.[0]?.close || [];
+
+  const sparkVals = [];
+  const sparkTimes = [];
+  const step = timestamps.length > 96 ? Math.ceil(timestamps.length / 96) : 1;
+  for (let i = 0; i < timestamps.length; i++) {
+    const v = closes[i];
+    if (v == null || !Number.isFinite(Number(v))) continue;
+    if (i % step === 0 || i === timestamps.length - 1) {
+      sparkVals.push(Number(Number(v).toFixed(4)));
+      sparkTimes.push(new Date(timestamps[i] * 1000).toISOString());
+    }
+  }
+
+  const lastBar = sparkVals.length ? sparkVals[sparkVals.length - 1] : null;
+  const regularPrice =
+    typeof meta.regularMarketPrice === "number" && Number.isFinite(meta.regularMarketPrice)
+      ? meta.regularMarketPrice
+      : null;
+  const price =
+    symbol === "^TNX" || symbol.startsWith("^")
+      ? regularPrice ?? lastBar
+      : lastBar ?? regularPrice;
+  const prevClose =
+    typeof meta.chartPreviousClose === "number" && meta.chartPreviousClose > 0
+      ? meta.chartPreviousClose
+      : typeof meta.previousClose === "number" && meta.previousClose > 0
+      ? meta.previousClose
+      : sparkVals.length
+      ? sparkVals[0]
+      : null;
+  if (price == null || !Number.isFinite(price)) return null;
+  const changePct =
+    prevClose && prevClose > 0 ? Number((((price - prevClose) / prevClose) * 100).toFixed(2)) : 0;
+
+  return {
+    symbol,
+    price: Number(price.toFixed(symbol === "^TNX" ? 3 : 2)),
+    change_pct: changePct,
+    sparkline_1d: sparkVals,
+    sparkline_1d_times: sparkTimes,
+  };
+}
+
+async function fetchSymbolViaPublicCors(symbol) {
+  const yfUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(
+    symbol
+  )}?range=1d&interval=5m&includePrePost=true`;
+  const relays = [
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(yfUrl)}`,
+    `https://corsproxy.io/?url=${encodeURIComponent(yfUrl)}`,
+  ];
+  for (const relayUrl of relays) {
+    try {
+      const ctrl = new AbortController();
+      const timer = window.setTimeout(() => ctrl.abort(), 6500);
+      const resp = await fetch(relayUrl, { signal: ctrl.signal, cache: "no-store" });
+      window.clearTimeout(timer);
+      if (!resp.ok) continue;
+      const payload = await resp.json();
+      const parsed = parseYahooChartClient(symbol, payload);
+      if (parsed) return parsed;
+    } catch {
+      // Try next public relay
+    }
+  }
+  return null;
+}
+
+async function fetchViaPublicCorsFallback(symbols) {
+  const quotes = {};
+  const batchSize = 6;
+  for (let i = 0; i < symbols.length; i += batchSize) {
+    const batch = symbols.slice(i, i + batchSize);
+    const results = await Promise.all(batch.map(fetchSymbolViaPublicCors));
+    for (const q of results) {
+      if (q) quotes[q.symbol] = q;
+    }
+  }
+  if (!Object.keys(quotes).length) return null;
+  return {
+    updated_at: new Date().toISOString(),
+    fetched_at_ms: Date.now(),
+    source: "cors-fallback",
+    quotes,
+  };
+}
+
+async function fetchClientLiveQuotes(symbols, force = false) {
+  if (!symbols.length) return null;
+
+  // Primary: Cloudflare Worker (strictly rate-limited to <= 3 fetches / symbol / 5 min)
+  if (canCallCloudflare(symbols)) {
+    try {
+      recordCloudflareFetch(symbols);
+      const ctrl = new AbortController();
+      const timer = window.setTimeout(() => ctrl.abort(), 8000);
+      const url = `${CF_MARKETS_PROXY_URL}?symbols=${encodeURIComponent(symbols.join(","))}${
+        force ? "&force=1" : ""
+      }`;
+      const resp = await fetch(url, { signal: ctrl.signal, cache: "no-store" });
+      window.clearTimeout(timer);
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data?.quotes && Object.keys(data.quotes).length > 0) {
+          return {
+            updated_at: data.updated_at || new Date().toISOString(),
+            fetched_at_ms: Date.now(),
+            source: "cloudflare",
+            quotes: data.quotes,
+          };
+        }
+      }
+      // On HTTP 429 (Worker rate limit reached) or 5xx, fall through to Option 3 public CORS fallback
+    } catch {
+      // Network/CORS failure -> fall through to Option 3 public CORS fallback
+    }
+  }
+
+  // Fallback (Option 3): Public CORS relay
+  return fetchViaPublicCorsFallback(symbols);
+}
+
+function updateMarketsLivePill(updatedAt, sourceTag = "") {
+  if (!els.marketsLivePill || !updatedAt) return;
+  const dt = new Date(updatedAt);
+  const timeStr = Number.isNaN(dt.getTime())
+    ? updatedAt
+    : dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+  const ageMin = Number.isNaN(dt.getTime()) ? 999 : Math.max(0, (Date.now() - dt.getTime()) / 60000);
+  const freshness = ageMin < 45 ? "fresh" : ageMin < 180 ? "aging" : "stale";
+  const ageLabel =
+    ageMin < 1 ? "just now" : ageMin < 60 ? `${Math.round(ageMin)}m ago` : `${Math.round(ageMin / 60)}h ago`;
+  const srcNote =
+    sourceTag === "cloudflare"
+      ? " · live"
+      : sourceTag === "cors-fallback"
+      ? " · live (fallback)"
+      : "";
+  els.marketsLivePill.innerHTML = `<span class="live-dot ${freshness}" aria-hidden="true"></span>${escapeHtml(timeStr)}`;
+  els.marketsLivePill.title = `${freshness} · ${ageLabel}${srcNote}`;
+  els.marketsLivePill.classList.remove("hidden");
+}
+
+function applyMarketQuotesPatch(quotesMap, updatedAt, sourceTag = "") {
+  if (!state.briefing?.markets || !quotesMap) return;
+  const patchList = (arr) =>
+    Array.isArray(arr)
+      ? arr.map((item) => {
+          const live = quotesMap[item?.symbol];
+          if (!live) return item;
+          return {
+            ...item,
+            price: live.price ?? item.price,
+            change_pct: live.change_pct ?? item.change_pct,
+            sparkline_1d:
+              Array.isArray(live.sparkline_1d) && live.sparkline_1d.length >= 2
+                ? live.sparkline_1d
+                : item.sparkline_1d,
+            sparkline_1d_times:
+              Array.isArray(live.sparkline_1d_times) && live.sparkline_1d_times.length >= 2
+                ? live.sparkline_1d_times
+                : item.sparkline_1d_times,
+          };
+        })
+      : arr;
+
+  state.briefing.markets = {
+    ...state.briefing.markets,
+    watchlist: patchList(state.briefing.markets.watchlist),
+    big7: patchList(state.briefing.markets.big7),
+    sectors: patchList(state.briefing.markets.sectors),
+  };
+
+  buildTickerMap(state.briefing.markets);
+  document.querySelectorAll(".ticker-tag[data-ticker-sym]").forEach((el) => {
+    const sym = el.dataset.tickerSym;
+    const info =
+      state.tickerMap.get(sym) ||
+      state.tickerMap.get(sym?.replace(/^\^/, ""));
+    if (!info) return;
+    const cls = deltaClass(info.change_pct);
+    const tip = formatTickerTip(info);
+    el.classList.remove("pos", "neg", "flat");
+    el.classList.add(cls);
+    el.dataset.tickerTip = tip;
+    el.title = tip;
+  });
+
+  renderKpiStrip(state.briefing);
+  renderMarkets(state.briefing.markets);
+  updateMarketsLivePill(updatedAt, sourceTag);
+}
+
+async function refreshLiveMarkets(forceClientRefresh = false) {
   if (!state.viewingLatest || !state.briefing) {
     els.marketsLivePill?.classList.add("hidden");
     return;
   }
+  let staticUpdatedAt = "";
   try {
     const resp = await fetch(`${DATA_BASE}/markets_live.json`, { cache: "no-store" });
-    if (!resp.ok) return;
-    const live = await resp.json();
-    if (!live || !Array.isArray(live.watchlist) || !live.watchlist.length) return;
-
-    state.briefing.markets = {
-      ...state.briefing.markets,
-      watchlist: live.watchlist,
-      big7: Array.isArray(live.big7) && live.big7.length ? live.big7 : state.briefing.markets.big7,
-      sectors: Array.isArray(live.sectors) && live.sectors.length ? live.sectors : state.briefing.markets.sectors,
-      fear_greed: live.fear_greed || state.briefing.markets.fear_greed,
-    };
-
-    buildTickerMap(state.briefing.markets);
-    document.querySelectorAll(".ticker-tag[data-ticker-sym]").forEach((el) => {
-      const sym = el.dataset.tickerSym;
-      const info =
-        state.tickerMap.get(sym) ||
-        state.tickerMap.get(sym?.replace(/^\^/, ""));
-      if (!info) return;
-      const cls = deltaClass(info.change_pct);
-      const tip = formatTickerTip(info);
-      el.classList.remove("pos", "neg", "flat");
-      el.classList.add(cls);
-      el.dataset.tickerTip = tip;
-      el.title = tip;
-    });
-
-    renderKpiStrip(state.briefing);
-    renderMarkets(state.briefing.markets);
-
-    if (els.marketsLivePill && live.updated_at) {
-      const dt = new Date(live.updated_at);
-      const timeStr = Number.isNaN(dt.getTime())
-        ? live.updated_at
-        : dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
-      const ageMin = Number.isNaN(dt.getTime()) ? 999 : Math.max(0, (Date.now() - dt.getTime()) / 60000);
-      const freshness = ageMin < 45 ? "fresh" : ageMin < 180 ? "aging" : "stale";
-      const ageLabel =
-        ageMin < 60 ? `${Math.round(ageMin)}m ago` : `${Math.round(ageMin / 60)}h ago`;
-      els.marketsLivePill.innerHTML = `<span class="live-dot ${freshness}" aria-hidden="true"></span>${escapeHtml(timeStr)}`;
-      els.marketsLivePill.title = `${freshness} · ${ageLabel}`;
-      els.marketsLivePill.classList.remove("hidden");
+    if (resp.ok) {
+      const live = await resp.json();
+      if (live && Array.isArray(live.watchlist) && live.watchlist.length) {
+        staticUpdatedAt = live.updated_at || "";
+        state.briefing.markets = {
+          ...state.briefing.markets,
+          watchlist: live.watchlist,
+          big7: Array.isArray(live.big7) && live.big7.length ? live.big7 : state.briefing.markets.big7,
+          sectors: Array.isArray(live.sectors) && live.sectors.length ? live.sectors : state.briefing.markets.sectors,
+          fear_greed: live.fear_greed || state.briefing.markets.fear_greed,
+        };
+        applyMarketQuotesPatch({}, staticUpdatedAt, "static");
+      }
     }
   } catch {
     // Keep daily snapshot if markets_live.json is unavailable
+  }
+
+  // Client-side live refresh with browser localStorage cache (Cloudflare Worker -> Option 3 fallback)
+  const symbols = [
+    ...(state.briefing.markets?.watchlist || []),
+    ...(state.briefing.markets?.big7 || []),
+    ...(state.briefing.markets?.sectors || []),
+  ]
+    .map((q) => q?.symbol)
+    .filter(Boolean);
+  if (!symbols.length) return;
+
+  const staticTs = Date.parse(staticUpdatedAt) || 0;
+  const cached = readJsonStorage(LIVE_CACHE_KEY);
+  const cacheTs = cached?.updated_at ? Date.parse(cached.updated_at) || 0 : 0;
+  const cacheFresh =
+    cached?.quotes &&
+    typeof cached.fetched_at_ms === "number" &&
+    Date.now() - cached.fetched_at_ms < LIVE_CACHE_TTL_MS;
+
+  if (!forceClientRefresh && cacheFresh && cacheTs >= staticTs) {
+    applyMarketQuotesPatch(cached.quotes, cached.updated_at, cached.source || "cloudflare");
+    return;
+  }
+
+  if (forceClientRefresh || Date.now() - staticTs > LIVE_CACHE_TTL_MS) {
+    const livePatch = await fetchClientLiveQuotes(symbols, forceClientRefresh);
+    if (livePatch?.quotes && Object.keys(livePatch.quotes).length) {
+      writeJsonStorage(LIVE_CACHE_KEY, livePatch);
+      applyMarketQuotesPatch(livePatch.quotes, livePatch.updated_at, livePatch.source);
+    } else if (cached?.quotes && cacheTs > staticTs) {
+      // Keep newer browser-cached live snapshot if upstream fetch failed
+      applyMarketQuotesPatch(cached.quotes, cached.updated_at, cached.source || "cloudflare");
+    }
   }
 }
 
@@ -2802,6 +3056,9 @@ async function bootstrap() {
         // Ignore index refresh errors and still reload current briefing
       }
       await loadBriefingForDate(state.viewingLatest ? "latest" : state.currentDate || "latest");
+      if (state.viewingLatest) {
+        await refreshLiveMarkets(true);
+      }
     } finally {
       els.btnRefresh.classList.remove("is-spinning");
       els.btnRefresh.disabled = false;
