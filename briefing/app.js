@@ -543,12 +543,12 @@ function decorateFlagsAndLogos(segment, seen = new Set()) {
       }
     } else if (flagCode) {
       const key = `flag:${flagCode}`;
-      if (seen.has(key)) {
-        out += escapeHtml(token);
-      } else {
+      let flagHtml = "";
+      if (!seen.has(key)) {
         seen.add(key);
-        out += `<span class="country-mention">${renderCountryFlagImg(flagCode)}${escapeHtml(token)}</span>`;
+        flagHtml = renderCountryFlagImg(flagCode);
       }
+      out += `<span class="country-mention">${flagHtml}${escapeHtml(token)}</span>`;
     } else {
       out += escapeHtml(token);
     }
