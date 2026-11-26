@@ -240,6 +240,238 @@ const EXPLICIT_ITALIC_RE = /(?<!\*)\*([^*\n]+)\*(?!\*)/g;
 const PERSON_NAME_RE =
   /((?:President|Prime Minister|Attorney General|Secretary|Chairman|Sen\.-elect|Sen\.|Rep\.|Gov\.|CEO|Dr\.)\s+[A-Z][a-zA-ZÀ-ÿ'-]+(?:\s+[A-Z][a-zA-ZÀ-ÿ'-]+){0,2}|\b(?:Jensen Huang|Donald Trump Jr\.|Donald Trump|Jimmy Gomez|Jamie Raskin|Ilhan Omar|Kilmar [ÁA]brego Garc[íi]a|Abdul El-Sayed|Scott Colom|Puma Shen|Lai Ching-te|Guo Jiakun|Xi Jinping)\b|赖清德|沈伯洋|郭嘉昆|黄仁勋|特朗普)/g;
 
+const COMPANY_LOGOS = {
+  Nvidia: "nvidia.com",
+  NVIDIA: "nvidia.com",
+  英伟达: "nvidia.com",
+  Apple: "apple.com",
+  苹果: "apple.com",
+  Microsoft: "microsoft.com",
+  微软: "microsoft.com",
+  Alphabet: "abc.xyz",
+  Google: "google.com",
+  谷歌: "google.com",
+  Amazon: "amazon.com",
+  亚马逊: "amazon.com",
+  Meta: "meta.com",
+  Tesla: "tesla.com",
+  特斯拉: "tesla.com",
+  Anthropic: "anthropic.com",
+  OpenAI: "openai.com",
+  DeepSeek: "deepseek.com",
+  xAI: "x.ai",
+  Perplexity: "perplexity.ai",
+  Huawei: "huawei.com",
+  华为: "huawei.com",
+  TSMC: "tsmc.com",
+  台积电: "tsmc.com",
+  Samsung: "samsung.com",
+  三星: "samsung.com",
+  ByteDance: "bytedance.com",
+  字节跳动: "bytedance.com",
+  TikTok: "tiktok.com",
+  Alibaba: "alibaba.com",
+  阿里巴巴: "alibaba.com",
+  Tencent: "tencent.com",
+  腾讯: "tencent.com",
+  Baidu: "baidu.com",
+  百度: "baidu.com",
+  Xiaomi: "mi.com",
+  小米: "mi.com",
+  BYD: "byd.com",
+  比亚迪: "byd.com",
+  CATL: "catl.com",
+  宁德时代: "catl.com",
+  Meituan: "meituan.com",
+  美团: "meituan.com",
+  "JD.com": "jd.com",
+  京东: "jd.com",
+  PDD: "pddholdings.com",
+  拼多多: "pddholdings.com",
+  Intel: "intel.com",
+  AMD: "amd.com",
+  Broadcom: "broadcom.com",
+  Qualcomm: "qualcomm.com",
+  ASML: "asml.com",
+  Oracle: "oracle.com",
+  Netflix: "netflix.com",
+  SpaceX: "spacex.com",
+  Boeing: "boeing.com",
+  Toyota: "toyota.com",
+  Sony: "sony.com",
+  Nintendo: "nintendo.com",
+  Disney: "disney.com",
+  Walmart: "walmart.com",
+  Costco: "costco.com",
+  JPMorgan: "jpmorganchase.com",
+  "Goldman Sachs": "goldmansachs.com",
+  Palantir: "palantir.com",
+  Salesforce: "salesforce.com",
+  Adobe: "adobe.com",
+  Uber: "uber.com",
+  Stripe: "stripe.com",
+  Spotify: "spotify.com",
+  IBM: "ibm.com",
+  Cisco: "cisco.com",
+  SoftBank: "softbank.jp",
+  Cloudflare: "cloudflare.com",
+  CrowdStrike: "crowdstrike.com",
+  Snowflake: "snowflake.com",
+  Databricks: "databricks.com",
+  Coinbase: "coinbase.com",
+  Visa: "visa.com",
+  Mastercard: "mastercard.com",
+  Pfizer: "pfizer.com",
+  "Eli Lilly": "lilly.com",
+  "Novo Nordisk": "novonordisk.com",
+  ExxonMobil: "exxonmobil.com",
+  Chevron: "chevron.com",
+  "Saudi Aramco": "aramco.com",
+};
+
+const COUNTRY_FLAGS = {
+  "United States": "🇺🇸",
+  "U.S.": "🇺🇸",
+  US: "🇺🇸",
+  美国: "🇺🇸",
+  China: "🇨🇳",
+  中国大陆: "🇨🇳",
+  中国: "🇨🇳",
+  Taiwan: "🇹🇼",
+  台湾: "🇹🇼",
+  "Hong Kong": "🇭🇰",
+  香港: "🇭🇰",
+  Japan: "🇯🇵",
+  日本: "🇯🇵",
+  "South Korea": "🇰🇷",
+  韩国: "🇰🇷",
+  "North Korea": "🇰🇵",
+  朝鲜: "🇰🇵",
+  Russia: "🇷🇺",
+  俄罗斯: "🇷🇺",
+  Ukraine: "🇺🇦",
+  乌克兰: "🇺🇦",
+  Israel: "🇮🇱",
+  以色列: "🇮🇱",
+  Palestine: "🇵🇸",
+  "Gaza City": "🇵🇸",
+  Gaza: "🇵🇸",
+  Iran: "🇮🇷",
+  伊朗: "🇮🇷",
+  "Saudi Arabia": "🇸🇦",
+  沙特: "🇸🇦",
+  Yemen: "🇾🇪",
+  Lebanon: "🇱🇧",
+  Syria: "🇸🇾",
+  Iraq: "🇮🇶",
+  Egypt: "🇪🇬",
+  Libya: "🇱🇾",
+  Turkey: "🇹🇷",
+  UAE: "🇦🇪",
+  Qatar: "🇶🇦",
+  Jordan: "🇯🇴",
+  "European Union": "🇪🇺",
+  EU: "🇪🇺",
+  欧盟: "🇪🇺",
+  "United Kingdom": "🇬🇧",
+  UK: "🇬🇧",
+  Britain: "🇬🇧",
+  英国: "🇬🇧",
+  France: "🇫🇷",
+  法国: "🇫🇷",
+  Germany: "🇩🇪",
+  德国: "🇩🇪",
+  Italy: "🇮🇹",
+  Spain: "🇪🇸",
+  Poland: "🇵🇱",
+  Netherlands: "🇳🇱",
+  Switzerland: "🇨🇭",
+  Sweden: "🇸🇪",
+  Norway: "🇳🇴",
+  Finland: "🇫🇮",
+  Greece: "🇬🇷",
+  Ireland: "🇮🇪",
+  Belgium: "🇧🇪",
+  Austria: "🇦🇹",
+  Portugal: "🇵🇹",
+  Denmark: "🇩🇰",
+  Canada: "🇨🇦",
+  加拿大: "🇨🇦",
+  Mexico: "🇲🇽",
+  墨西哥: "🇲🇽",
+  Brazil: "🇧🇷",
+  Argentina: "🇦🇷",
+  Venezuela: "🇻🇪",
+  Colombia: "🇨🇴",
+  Cuba: "🇨🇺",
+  "El Salvador": "🇸🇻",
+  India: "🇮🇳",
+  印度: "🇮🇳",
+  Pakistan: "🇵🇰",
+  Australia: "🇦🇺",
+  澳大利亚: "🇦🇺",
+  "New Zealand": "🇳🇿",
+  Singapore: "🇸🇬",
+  新加坡: "🇸🇬",
+  Vietnam: "🇻🇳",
+  Philippines: "🇵🇭",
+  Indonesia: "🇮🇩",
+  Thailand: "🇹🇭",
+  Malaysia: "🇲🇾",
+  Myanmar: "🇲🇲",
+  "South Africa": "🇿🇦",
+  Nigeria: "🇳🇬",
+  Sudan: "🇸🇩",
+  Ethiopia: "🇪🇹",
+  Kenya: "🇰🇪",
+  "United Nations": "🇺🇳",
+  UN: "🇺🇳",
+  联合国: "🇺🇳",
+};
+
+const ENTITY_DECORATOR_RE = (() => {
+  const keys = [...new Set([...Object.keys(COMPANY_LOGOS), ...Object.keys(COUNTRY_FLAGS)])].sort(
+    (a, b) => b.length - a.length
+  );
+  const parts = keys.map((k) => {
+    const esc = escapeRegex(k);
+    if (!/^[\x00-\x7F]+$/.test(k)) return esc;
+    const prefix = /^\w/.test(k) ? "\\b" : "";
+    const suffix = /\w$/.test(k) ? "\\b" : "";
+    return `${prefix}${esc}${suffix}`;
+  });
+  return new RegExp(`(${parts.join("|")})`, "g");
+})();
+
+function renderCompanyLogoImg(domain) {
+  const src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=32`;
+  return `<img class="inline-logo" src="${src}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
+}
+
+function decorateFlagsAndLogos(segment) {
+  if (!segment) return "";
+  ENTITY_DECORATOR_RE.lastIndex = 0;
+  let out = "";
+  let last = 0;
+  for (const m of segment.matchAll(ENTITY_DECORATOR_RE)) {
+    const token = m[0];
+    const idx = m.index ?? 0;
+    if (idx > last) out += escapeHtml(segment.slice(last, idx));
+    const domain = COMPANY_LOGOS[token];
+    const flag = COUNTRY_FLAGS[token];
+    if (domain) {
+      out += `${renderCompanyLogoImg(domain)}${escapeHtml(token)}`;
+    } else if (flag) {
+      out += `<span class="inline-flag" aria-hidden="true">${flag}</span>${escapeHtml(token)}`;
+    } else {
+      out += escapeHtml(token);
+    }
+    last = idx + token.length;
+  }
+  if (last < segment.length) out += escapeHtml(segment.slice(last));
+  return out;
+}
+
 function formatEntitiesInPlain(segment) {
   if (!segment) return "";
   EXPLICIT_ITALIC_RE.lastIndex = 0;
@@ -249,11 +481,11 @@ function formatEntitiesInPlain(segment) {
     let last = 0;
     for (const m of segment.matchAll(EXPLICIT_ITALIC_RE)) {
       const idx = m.index ?? 0;
-      if (idx > last) out += escapeHtml(segment.slice(last, idx));
+      if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx));
       out += `<em>${escapeHtml(m[1])}</em>`;
       last = idx + m[0].length;
     }
-    if (last < segment.length) out += escapeHtml(segment.slice(last));
+    if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last));
     return out;
   }
 
@@ -262,11 +494,11 @@ function formatEntitiesInPlain(segment) {
   let last = 0;
   for (const m of segment.matchAll(PERSON_NAME_RE)) {
     const idx = m.index ?? 0;
-    if (idx > last) out += escapeHtml(segment.slice(last, idx));
+    if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx));
     out += `<em>${escapeHtml(m[0])}</em>`;
     last = idx + m[0].length;
   }
-  if (last < segment.length) out += escapeHtml(segment.slice(last));
+  if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last));
   return out;
 }
 
@@ -284,7 +516,9 @@ function escapeWithTickers(segment) {
     if (idx > lastIdx) out += formatEntitiesInPlain(segment.slice(lastIdx, idx));
     const cls = deltaClass(info.change_pct);
     const tip = formatTickerTip(info);
-    out += `<span class="ticker-tag ${cls}" tabindex="0" data-ticker-sym="${escapeHtml(info.symbol)}" data-ticker-tip="${escapeHtml(tip)}" title="${escapeHtml(tip)}">${escapeHtml(token)}</span>`;
+    const domain = COMPANY_LOGOS[token] || COMPANY_LOGOS[info.name];
+    const logoHtml = domain ? renderCompanyLogoImg(domain) : "";
+    out += `<span class="ticker-tag ${cls}" tabindex="0" data-ticker-sym="${escapeHtml(info.symbol)}" data-ticker-tip="${escapeHtml(tip)}" title="${escapeHtml(tip)}">${logoHtml}${escapeHtml(token)}</span>`;
     lastIdx = idx + token.length;
   }
   if (lastIdx < segment.length) out += formatEntitiesInPlain(segment.slice(lastIdx));
@@ -763,7 +997,7 @@ function renderNewsCard(story, badgeLabel, continued) {
         </div>
         ${toggleBtn}
       </div>
-      <h3>${escapeHtml(story.headline)}</h3>
+      <h3>${decorateFlagsAndLogos(story.headline)}</h3>
       <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
       <div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>
       <div class="source-links">${sourcesHtml}</div>
@@ -1140,7 +1374,7 @@ function renderPositiveNews(story) {
           ${renderSentimentRing(posSentiment)}
         </div>
       </div>
-      <h3>${escapeHtml(story.headline)}</h3>
+      <h3>${decorateFlagsAndLogos(story.headline)}</h3>
       <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
       <div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>
       <div class="source-links">${sourcesHtml}</div>
