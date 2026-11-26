@@ -432,19 +432,29 @@ function buildPersonNameRegex(briefing, companyFacts) {
 
   // Harvest every explicitly italicized *Person Name* from summaries/briefs in this edition
   const texts = [];
+  const asArr = (v) => (Array.isArray(v) ? v : []);
   const pushStr = (v) => {
     if (typeof v === "string" && v.includes("*")) texts.push(v);
   };
-  for (const it of briefing?.morning_brief?.items || []) pushStr(it);
-  for (const it of briefing?.afternoon_brief?.items || []) pushStr(it);
-  for (const s of briefing?.top_news || []) pushStr(s?.summary);
+  for (const it of asArr(briefing?.morning_brief?.bullets)) pushStr(it);
+  for (const it of asArr(briefing?.afternoon_brief?.bullets)) pushStr(it);
+  for (const s of asArr(briefing?.top_news)) pushStr(s?.summary);
   pushStr(briefing?.markets?.narrative);
-  for (const t of briefing?.conflicts?.theaters || []) pushStr(t?.summary);
-  pushStr(briefing?.us_politics?.summary);
-  for (const p of briefing?.us_politics?.executive_legislative_tracker || []) pushStr(p?.summary);
-  for (const s of briefing?.positive_news || []) pushStr(s?.summary);
-  for (const r of briefing?.local_news?.regions || []) {
-    for (const s of r?.stories || []) pushStr(s?.summary);
+  pushStr(briefing?.conflicts?.overview);
+  for (const t of asArr(briefing?.conflicts?.theaters)) pushStr(t?.summary);
+  pushStr(briefing?.us_politics?.pulse_summary);
+  for (const p of asArr(briefing?.us_politics?.legislative_and_executive)) pushStr(p?.summary);
+  for (const t of asArr(briefing?.us_politics?.trending_topics)) pushStr(t?.note);
+  if (Array.isArray(briefing?.positive_news)) {
+    for (const s of briefing.positive_news) pushStr(s?.summary);
+  } else if (briefing?.positive_news && typeof briefing.positive_news === "object") {
+    pushStr(briefing.positive_news.summary);
+  }
+  const localRegions = Array.isArray(briefing?.local_news)
+    ? briefing.local_news
+    : asArr(briefing?.local_news?.regions);
+  for (const r of localRegions) {
+    for (const s of [...asArr(r?.stories), ...asArr(r?.stories_en)]) pushStr(s?.summary);
   }
 
   for (const txt of texts) {
