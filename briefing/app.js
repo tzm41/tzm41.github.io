@@ -1091,10 +1091,12 @@ function renderQuoteGrid(container, quotes, tf, emptyMsg) {
           ? "var(--neg)"
           : "var(--ink-muted)";
       const { values: series, times } = getSparklineData(q, tf);
+      const logoDomain = COMPANY_LOGOS[q.name];
+      const logoHtml = logoDomain ? renderCompanyLogoImg(logoDomain) : "";
       return `
         <div class="quote-card">
           <div class="quote-top">
-            <span class="quote-name">${escapeHtml(q.name)}</span>
+            <span class="quote-name">${logoHtml}${escapeHtml(q.name)}</span>
             <span class="quote-sym">${escapeHtml(q.symbol)}</span>
           </div>
           <div class="quote-mid">
