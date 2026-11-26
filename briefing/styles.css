@@ -1376,6 +1376,15 @@ h3 {
   overflow: visible;
 }
 
+.sparkline polyline,
+.spark-guide {
+  vector-effect: non-scaling-stroke;
+}
+
+.quote-card.is-expanded .sparkline polyline {
+  stroke-width: 1.75;
+}
+
 .spark-guide {
   stroke: var(--ink-muted);
   stroke-width: 1;
