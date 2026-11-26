@@ -522,7 +522,7 @@ function renderCountryFlagImg(code) {
   return `<img class="inline-flag-icon" src="${src}" width="16" height="12" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
 }
 
-function decorateFlagsAndLogos(segment, seenFlags = new Set()) {
+function decorateFlagsAndLogos(segment, seen = new Set()) {
   if (!segment) return "";
   ENTITY_DECORATOR_RE.lastIndex = 0;
   let out = "";
@@ -534,12 +534,19 @@ function decorateFlagsAndLogos(segment, seenFlags = new Set()) {
     const domain = COMPANY_LOGOS[token];
     const flagCode = COUNTRY_FLAGS[token];
     if (domain) {
-      out += `${renderCompanyLogoImg(domain)}${escapeHtml(token)}`;
-    } else if (flagCode) {
-      if (seenFlags.has(flagCode)) {
+      const key = `logo:${domain}`;
+      if (seen.has(key)) {
         out += escapeHtml(token);
       } else {
-        seenFlags.add(flagCode);
+        seen.add(key);
+        out += `${renderCompanyLogoImg(domain)}${escapeHtml(token)}`;
+      }
+    } else if (flagCode) {
+      const key = `flag:${flagCode}`;
+      if (seen.has(key)) {
+        out += escapeHtml(token);
+      } else {
+        seen.add(key);
         out += `<span class="country-mention">${renderCountryFlagImg(flagCode)}${escapeHtml(token)}</span>`;
       }
     } else {
@@ -551,7 +558,7 @@ function decorateFlagsAndLogos(segment, seenFlags = new Set()) {
   return out;
 }
 
-function formatEntitiesInPlain(segment, seenFlags = new Set()) {
+function formatEntitiesInPlain(segment, seen = new Set()) {
   if (!segment) return "";
   EXPLICIT_ITALIC_RE.lastIndex = 0;
   if (EXPLICIT_ITALIC_RE.test(segment)) {
@@ -560,11 +567,11 @@ function formatEntitiesInPlain(segment, seenFlags = new Set()) {
     let last = 0;
     for (const m of segment.matchAll(EXPLICIT_ITALIC_RE)) {
       const idx = m.index ?? 0;
-      if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seenFlags);
+      if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen);
       out += `<em>${escapeHtml(m[1])}</em>`;
       last = idx + m[0].length;
     }
-    if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seenFlags);
+    if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen);
     return out;
   }
 
@@ -573,18 +580,18 @@ function formatEntitiesInPlain(segment, seenFlags = new Set()) {
   let last = 0;
   for (const m of segment.matchAll(PERSON_NAME_RE)) {
     const idx = m.index ?? 0;
-    if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seenFlags);
+    if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen);
     out += `<em>${escapeHtml(m[0])}</em>`;
     last = idx + m[0].length;
   }
-  if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seenFlags);
+  if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen);
   return out;
 }
 
-function escapeWithTickers(segment, seenFlags = new Set()) {
+function escapeWithTickers(segment, seen = new Set()) {
   if (!segment) return "";
   if (!state.tickerMap.size || !state.inlineTickerRe) {
-    return formatEntitiesInPlain(segment, seenFlags);
+    return formatEntitiesInPlain(segment, seen);
   }
   state.inlineTickerRe.lastIndex = 0;
   let out = "";
@@ -594,15 +601,22 @@ function escapeWithTickers(segment, seenFlags = new Set()) {
     const info = state.tickerMap.get(token);
     if (!info) continue;
     const idx = match.index ?? 0;
-    if (idx > lastIdx) out += formatEntitiesInPlain(segment.slice(lastIdx, idx), seenFlags);
+    if (idx > lastIdx) out += formatEntitiesInPlain(segment.slice(lastIdx, idx), seen);
     const cls = deltaClass(info.change_pct);
     const tip = formatTickerTip(info);
     const domain = COMPANY_LOGOS[token] || COMPANY_LOGOS[info.name];
-    const logoHtml = domain ? renderCompanyLogoImg(domain) : "";
+    let logoHtml = "";
+    if (domain) {
+      const key = `logo:${domain}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        logoHtml = renderCompanyLogoImg(domain);
+      }
+    }
     out += `<span class="ticker-tag ${cls}" tabindex="0" data-ticker-sym="${escapeHtml(info.symbol)}" data-ticker-tip="${escapeHtml(tip)}" title="${escapeHtml(tip)}">${logoHtml}${escapeHtml(token)}</span>`;
     lastIdx = idx + token.length;
   }
-  if (lastIdx < segment.length) out += formatEntitiesInPlain(segment.slice(lastIdx), seenFlags);
+  if (lastIdx < segment.length) out += formatEntitiesInPlain(segment.slice(lastIdx), seen);
   return out;
 }
 
@@ -610,7 +624,7 @@ function highlightSummaryHtml(text) {
   const raw = String(text ?? "");
   if (!raw) return "";
 
-  const seenFlags = new Set();
+  const seen = new Set();
   EXPLICIT_BOLD_RE.lastIndex = 0;
   const hasExplicit = EXPLICIT_BOLD_RE.test(raw);
   const re = hasExplicit ? EXPLICIT_BOLD_RE : FALLBACK_HIGHLIGHT_RE;
@@ -621,14 +635,14 @@ function highlightSummaryHtml(text) {
   for (const match of raw.matchAll(re)) {
     const idx = match.index ?? 0;
     if (idx > lastIdx) {
-      out += escapeWithTickers(raw.slice(lastIdx, idx), seenFlags);
+      out += escapeWithTickers(raw.slice(lastIdx, idx), seen);
     }
     const inner = hasExplicit ? match[1] : match[0];
-    out += `<strong>${escapeWithTickers(inner, seenFlags)}</strong>`;
+    out += `<strong>${escapeWithTickers(inner, seen)}</strong>`;
     lastIdx = idx + match[0].length;
   }
   if (lastIdx < raw.length) {
-    out += escapeWithTickers(raw.slice(lastIdx), seenFlags);
+    out += escapeWithTickers(raw.slice(lastIdx), seen);
   }
   return out;
 }
