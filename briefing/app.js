@@ -918,7 +918,9 @@ function computeSparklineLayout(values, times, tf, symbol) {
   const isFullDayEt = symbol === "CL=F" || symbol === "GC=F";
   if (tf === "1d" && Array.isArray(times) && times.length === n && !isRolling24h) {
     const mins = times.map(getNyMinutes);
-    if (mins.every((m) => m !== null)) {
+    const isMonotonicSingleDay =
+      mins.every((m) => m !== null) && mins.every((m, i) => i === 0 || m >= mins[i - 1]);
+    if (isMonotonicSingleDay) {
       if (isFullDayEt) {
         const startMin = 0;
         const endMin = 1440;
