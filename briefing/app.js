@@ -138,7 +138,7 @@ function fmtLocalTimestamp(isoStr) {
   });
 }
 
-const EXPLICIT_BOLD_RE = /\*\*([^*]+)\*\*/g;
+const EXPLICIT_BOLD_RE = /\*\*((?:(?!\*\*).)+)\*\*/g;
 const FALLBACK_HIGHLIGHT_RE =
   /(?<![\w.$])([+-]?\$\d[\d,]*(?:\.\d+)?(?:\s?(?:million|billion|trillion|M|B|K))?|[+-]?\d[\d,]*(?:\.\d+)?%|\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b)(?!\w)|(['"][A-Z][^'"]{1,40}['"])/g;
 
