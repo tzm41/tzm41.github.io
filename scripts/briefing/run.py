@@ -267,14 +267,43 @@ async def fetch_afternoon_bundle(out_path_str: str) -> None:
     """Fetch fresh afternoon news & market close data alongside today's morning executive brief."""
     morning = json.loads(LATEST_PATH.read_text(encoding="utf-8")) if LATEST_PATH.exists() else {}
     prior_markets = morning.get("markets")
-    (raw_news, _), (raw_markets, _), (raw_politics, _) = await asyncio.gather(
+    (raw_news, _), (raw_markets, market_health), (raw_politics, _) = await asyncio.gather(
         fetch_top_news(),
         fetch_markets(prior_markets=prior_markets),
         fetch_politics(),
     )
+    now_dt = datetime.now(timezone.utc)
+    now_utc = now_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    # Refresh markets_live.json if missing or older than 2 hours
+    needs_live_refresh = True
+    if MARKETS_LIVE_PATH.exists():
+        try:
+            live_data = json.loads(MARKETS_LIVE_PATH.read_text(encoding="utf-8"))
+            ts_str = live_data.get("updated_at")
+            if ts_str:
+                live_dt = datetime.fromisoformat(str(ts_str).replace("Z", "+00:00"))
+                if (now_dt - live_dt).total_seconds() < 2 * 3600:
+                    needs_live_refresh = False
+        except Exception:
+            needs_live_refresh = True
+
+    if needs_live_refresh and raw_markets.get("watchlist"):
+        live_payload = {
+            "updated_at": now_utc,
+            "health": market_health,
+            "watchlist": raw_markets.get("watchlist", []),
+            "big7": raw_markets.get("big7", []),
+            "fear_greed": raw_markets.get("fear_greed"),
+            "sectors": raw_markets.get("sectors", []),
+        }
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        MARKETS_LIVE_PATH.write_text(json.dumps(live_payload, indent=2) + "\n", encoding="utf-8")
+        print(f"[run] Refreshed stale markets_live.json (updated_at={now_utc})")
+
     bundle = {
-        "date": morning.get("date") or datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "date": morning.get("date") or now_dt.strftime("%Y-%m-%d"),
+        "generated_at": now_utc,
         "morning_executive_brief": morning.get("executive_brief", []),
         "morning_top_news": [
             {"id": s.get("id"), "headline": s.get("headline")}
