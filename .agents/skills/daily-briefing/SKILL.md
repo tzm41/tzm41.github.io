@@ -33,10 +33,12 @@ Use this skill whenever the user asks to generate, refresh, or publish their dai
    python3 -m scripts.briefing.run --apply-synthesis /tmp/raw_briefing.json /tmp/synthesis.json
    rm -f /tmp/raw_briefing.json /tmp/synthesis.json
    ```
-5. **Commit and push** to GitHub Pages:
+5. **Conditional company facts refresh**: If any of today's synthesized news reports a **new CEO/leadership change, funding round, valuation, IPO, or acquisition** for a company or frontier AI lab tracked in `briefing/data/company_facts.json`, update that entry (and `updated_at`) in `briefing/data/company_facts.json` and run `python3 -m scripts.briefing.refresh_company_facts` so the hover tooltips reflect it immediately.
+6. **Commit and push** to GitHub Pages:
    ```bash
    git add briefing/data/
    git commit -m "chore(briefing): update daily briefing ($(date -u +%Y-%m-%d))"
+   git pull --rebase origin master
    git push origin master
    ```
-6. Report a concise summary of the published edition and link to `https://tzm41.github.io/briefing/`.
+7. Report a concise summary of the published edition and link to `https://tzm41.github.io/briefing/`.
