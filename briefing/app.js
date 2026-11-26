@@ -848,8 +848,8 @@ function renderKpiStrip(briefing) {
   els.kpiStrip.innerHTML = cards.join("");
   if (els.kpiToggleSummary) {
     els.kpiToggleSummary.textContent = sp
-      ? `S&P 500 ${fmtPrice(sp.price, sp.symbol)} (${fmtPct(sp.change_pct)}) · ${cards.length} Signals`
-      : "Market & Signal Snapshot";
+      ? `S&P 500 ${fmtPrice(sp.price, sp.symbol)} (${fmtPct(sp.change_pct)})`
+      : "Market Snapshot";
   }
 }
 
