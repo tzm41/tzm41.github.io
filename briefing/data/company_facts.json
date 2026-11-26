@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-26T12:18:08Z",
+  "updated_at": "2026-11-26T12:19:43Z",
   "companies": {
     "nvidia.com": {
       "name": "Nvidia",
@@ -24,7 +24,7 @@
       "country": "United States",
       "country_code": "us",
       "valuation": "~$3.64T",
-      "leader": "Satya Nadella & Judson B. Althoff (Co-CEOs)",
+      "leader": "Satya Nadella (CEO)",
       "public": true,
       "symbol": "MSFT"
     },
@@ -42,7 +42,7 @@
       "country": "United States",
       "country_code": "us",
       "valuation": "~$2.64T",
-      "leader": "Andrew R. Jassy & Matthew S. Garman (Co-CEOs)",
+      "leader": "Andy Jassy (CEO)",
       "public": true,
       "symbol": "AMZN"
     },
@@ -442,7 +442,7 @@
       "country": "Japan",
       "country_code": "jp",
       "valuation": "~$258B",
-      "leader": "Kenta Kon & Nobuhiko Murakami (Co-CEOs)",
+      "leader": "Kenta Kon (CEO)",
       "public": true,
       "symbol": "7203.T"
     },
@@ -496,7 +496,7 @@
       "country": "United States",
       "country_code": "us",
       "valuation": "~$841B",
-      "leader": "James Dimon & Mary Callahan Erdoes (Co-CEOs)",
+      "leader": "Jamie Dimon (CEO)",
       "public": true,
       "symbol": "JPM"
     },

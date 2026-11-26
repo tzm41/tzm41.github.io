@@ -57,7 +57,13 @@ def _extract_live_ceo(officers: list[dict[str, Any]]) -> str | None:
         name = _clean_person_name(str(o.get("name") or ""))
         title = str(o.get("title") or "")
         tl = title.lower()
-        if not name or "chief of staff" in tl or "segment" in tl or "division" in tl or "stores" in tl or "airplanes" in tl or "bank" in tl or "institute" in tl:
+        # Skip divisional/subsidiary CEOs ("CEO of AWS", "Chief Executive Officer of ...") and staff roles
+        if (
+            not name
+            or "chief of staff" in tl
+            or re.search(r"\b(?:ceo|chief executive officer)\s+(?:of|for|-)\b", tl)
+            or any(k in tl for k in ("segment", "division", "business", "stores", "airplanes", "institute", "slack", "wealth"))
+        ):
             continue
         if re.search(r"\b(?:co-?ceo|chief executive officer|ceo)\b", tl):
             if name not in ceos:
