@@ -2,11 +2,11 @@ name: Pseudo-Live Market Tickers
 
 on:
   schedule:
-    # Every 30 minutes during US market hours (Mon-Fri, covers both EDT & EST)
-    - cron: "*/30 13-21 * * 1-5"
+    # Every 30 minutes during US market hours (Mon-Fri, offset off :00/:30 to avoid GitHub cron drops)
+    - cron: "17,47 13-21 * * 1-5"
     # Every 1 hour outside US market hours (weekday off-hours & weekends)
-    - cron: "0 0-12,22-23 * * 1-5"
-    - cron: "0 * * * 0,6"
+    - cron: "17 0-12,22-23 * * 1-5"
+    - cron: "17 * * * 0,6"
   workflow_dispatch:
 
 permissions:
