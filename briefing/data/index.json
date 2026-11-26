@@ -1,19 +1,30 @@
 {
-  "updated_at": "2026-11-26T04:37:28Z",
-  "latest_date": "2026-11-25",
+  "updated_at": "2026-11-26T15:10:45Z",
+  "latest_date": "2026-11-26",
   "dates": [
+    "2026-11-26",
     "2026-11-25"
   ],
   "kpi_history_30d": [
     {
       "date": "2026-11-25",
-      "regime": "Volatility Spike",
+      "regime": "Mixed",
       "sp500_price": 7047.89,
       "sp500_pct": -2.13,
       "vix": 34.95,
       "us10y": 4.82,
       "top_theater": "Eastern Europe / Ukraine",
       "conflict_index": 1167.0
+    },
+    {
+      "date": "2026-11-26",
+      "regime": "Mixed",
+      "sp500_price": 7182.78,
+      "sp500_pct": -0.25,
+      "vix": 27.02,
+      "us10y": 4.85,
+      "top_theater": "Eastern Europe / Ukraine",
+      "conflict_index": 1355.0
     }
   ]
 }
