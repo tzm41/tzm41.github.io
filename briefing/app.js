@@ -238,7 +238,7 @@ function formatTickerTip(info) {
 const EXPLICIT_ITALIC_RE = /(?<!\*)\*([^*\n]+)\*(?!\*)/g;
 
 const PERSON_NAME_RE =
-  /((?:President|Prime Minister|Attorney General|Secretary|Chairman|Sen\.-elect|Sen\.|Rep\.|Gov\.|CEO|Dr\.)\s+[A-Z][a-zA-ZÀ-ÿ'-]+(?:\s+[A-Z][a-zA-ZÀ-ÿ'-]+){0,2}|\b(?:Jensen Huang|Donald Trump Jr\.|Donald Trump|Jimmy Gomez|Jamie Raskin|Ilhan Omar|Kilmar [ÁA]brego Garc[íi]a|Abdul El-Sayed|Scott Colom|Puma Shen|Lai Ching-te|Guo Jiakun|Xi Jinping)\b|赖清德|沈伯洋|郭嘉昆|黄仁勋|特朗普)/g;
+  /((?:President|Prime Minister|Attorney General|Secretary|Chairman|Sen\.-elect|Sen\.|Rep\.|Gov\.|CEO|Dr\.)\s+[A-Z][a-zA-ZÀ-ÿ'-]+(?:\s+[A-Z][a-zA-ZÀ-ÿ'-]+){0,2}|\b(?:Jensen Huang|Donald Trump Jr\.|Donald Trump|Benjamin Netanyahu|Netanyahu|Trump|Joe Biden|Biden|Kamala Harris|JD Vance|Chuck Schumer|Mike Johnson|Jimmy Gomez|Jamie Raskin|Ilhan Omar|Kilmar [ÁA]brego Garc[íi]a|Abrego Garcia|Abdul El-Sayed|Scott Colom|Puma Shen|Lai Ching-te|Guo Jiakun|Xi Jinping|Chen Jining|Raphael Warnock|Zohran Mamdani|Nick Fuentes|David Lisnard)\b|赖清德|沈伯洋|郭嘉昆|黄仁勋|特朗普|陈吉宁)/g;
 
 const COMPANY_LOGOS = {
   Nvidia: "nvidia.com",
@@ -498,10 +498,36 @@ const COUNTRY_FLAGS = {
   联合国: "un",
 };
 
+const US_PARTY_TAGS = {
+  "Democratic Party": "dem",
+  "Senate Democrats": "dem",
+  "House Democrats": "dem",
+  Democrats: "dem",
+  Democrat: "dem",
+  Democratic: "dem",
+  DNC: "dem",
+  "Republican Party": "gop",
+  "Senate Republicans": "gop",
+  "House Republicans": "gop",
+  Republicans: "gop",
+  Republican: "gop",
+  GOP: "gop",
+  RNC: "gop",
+};
+
+const PARTY_ICONS = {
+  dem: `<svg class="inline-party-icon" viewBox="0 0 16 16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#1d6fe2"/><text x="8" y="11.6" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="10.5" font-weight="800">D</text></svg>`,
+  gop: `<svg class="inline-party-icon" viewBox="0 0 16 16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#d93829"/><text x="8" y="11.6" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="10.5" font-weight="800">R</text></svg>`,
+};
+
 const ENTITY_DECORATOR_RE = (() => {
-  const keys = [...new Set([...Object.keys(COMPANY_LOGOS), ...Object.keys(COUNTRY_FLAGS)])].sort(
-    (a, b) => b.length - a.length
-  );
+  const keys = [
+    ...new Set([
+      ...Object.keys(COMPANY_LOGOS),
+      ...Object.keys(COUNTRY_FLAGS),
+      ...Object.keys(US_PARTY_TAGS),
+    ]),
+  ].sort((a, b) => b.length - a.length);
   const parts = keys.map((k) => {
     const esc = escapeRegex(k);
     if (!/^[\x00-\x7F]+$/.test(k)) return esc;
@@ -533,6 +559,7 @@ function decorateFlagsAndLogos(segment, seen = new Set()) {
     if (idx > last) out += escapeHtml(segment.slice(last, idx));
     const domain = COMPANY_LOGOS[token];
     const flagCode = COUNTRY_FLAGS[token];
+    const party = US_PARTY_TAGS[token];
     if (domain) {
       const key = `logo:${domain}`;
       if (seen.has(key)) {
@@ -549,6 +576,14 @@ function decorateFlagsAndLogos(segment, seen = new Set()) {
         flagHtml = renderCountryFlagImg(flagCode);
       }
       out += `<span class="country-mention">${flagHtml}${escapeHtml(token)}</span>`;
+    } else if (party) {
+      const key = `party:${party}`;
+      let iconHtml = "";
+      if (!seen.has(key)) {
+        seen.add(key);
+        iconHtml = PARTY_ICONS[party] || "";
+      }
+      out += `<span class="party-mention ${party}">${iconHtml}${escapeHtml(token)}</span>`;
     } else {
       out += escapeHtml(token);
     }
@@ -1099,7 +1134,7 @@ function renderNewsCard(story, badgeLabel, continued, showEditionTag = false) {
         </div>
         ${toggleBtn}
       </div>
-      <h3>${decorateFlagsAndLogos(story.headline)}</h3>
+      <h3>${formatEntitiesInPlain(story.headline)}</h3>
       <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
       <div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>
       <div class="source-links">${sourcesHtml}</div>
@@ -1402,7 +1437,7 @@ function renderPolitics(politics = {}) {
         return `
           <a class="poly-card" href="${safeUrl(m.url)}" target="_blank" rel="noopener noreferrer">
             <div class="poly-top">
-              <span class="poly-q">${decorateFlagsAndLogos(m.question)}</span>
+              <span class="poly-q">${formatEntitiesInPlain(m.question)}</span>
               <div class="poly-odds">
                 <div class="poly-pct">${pct}%</div>
               </div>
@@ -1429,8 +1464,8 @@ function renderPolitics(politics = {}) {
         (p) => `
           <article class="policy-card">
             <div class="policy-head">
-              <a class="policy-title" href="${safeUrl(p.url)}" target="_blank" rel="noopener noreferrer">${decorateFlagsAndLogos(p.title)}</a>
               <span class="branch-tag">${escapeHtml(p.chamber_or_branch)}</span>
+              <a class="policy-title" href="${safeUrl(p.url)}" target="_blank" rel="noopener noreferrer">${formatEntitiesInPlain(p.title)}</a>
             </div>
             <p class="policy-summary">${highlightSummaryHtml(p.summary)}</p>
           </article>
@@ -1448,7 +1483,7 @@ function renderPolitics(politics = {}) {
         (t) => `
           <article class="topic-card">
             <div class="topic-top">
-              <span class="topic-name">${decorateFlagsAndLogos(t.topic)}</span>
+              <span class="topic-name">${formatEntitiesInPlain(t.topic)}</span>
               <span class="momentum-pill ${escapeHtml(t.momentum)}">${escapeHtml(t.momentum)}</span>
             </div>
             <p class="topic-note">${highlightSummaryHtml(t.framing_note)}</p>
@@ -1481,7 +1516,7 @@ function renderPositiveNews(story) {
           ${renderSentimentRing(posSentiment)}
         </div>
       </div>
-      <h3>${decorateFlagsAndLogos(story.headline)}</h3>
+      <h3>${formatEntitiesInPlain(story.headline)}</h3>
       <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
       <div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>
       <div class="source-links">${sourcesHtml}</div>
