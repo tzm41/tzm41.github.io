@@ -244,7 +244,7 @@ function formatTickerTip(info) {
 const EXPLICIT_ITALIC_RE = /(?<!\*)\*([^*\n]+)\*(?!\*)/g;
 
 const NON_PERSON_TITLE_WORD =
-  "(?:Reinstatement|Leadership|Resignation|Nomination|Election|Administration|Succession|Investigation|Hearing|Policy|Orders?|Return|Ouster|Exit|Role|Office|Vote|Race|Campaign|Debate|Summit|Visit|Meeting|Statement|Scrutiny|Backlash|Reversal|Power|Term|Authority|Pardon|Veto|Cabinet|Race|Approval|Poll|Polls)\\b";
+  "(?:Reinstatement|Leadership|Resignation|Nomination|Election|Administration|Succession|Investigation|Hearing|Policy|Orders?|Return|Ouster|Exit|Role|Office|Vote|Race|Campaign|Debate|Summit|Visit|Meeting|Statement|Scrutiny|Backlash|Reversal|Power|Term|Authority|Pardon|Veto|Cabinet|Approval|Polls?|Rules?|Ruling|Blocks?|Blocked|Strikes?|Struck|Signs?|Signed|Vetoes?|Vetoed|Faces?|Facing|Warns?|Warned|Urges?|Urged|Calls?|Called|Backs?|Backed|Rejects?|Rejected|Approves?|Approved|Dismisses?|Dismissed|Halts?|Halted|Upholds?|Upheld|Overturns?|Overturned|Allows?|Allowed|Bars?|Barred|Finds?|Found|Says?|Said|Tells?|Told|Slams?|Praises?|Meets?|Met|Visits?|Plans?|Seeks?|Pushes?|Moves?|Drops?|Opens?|Closes?|Ends?|Starts?|Launches?|Announces?|Unveils?|Proposes?|Defends?|Criticizes?|Accuses?|Targets?|Threatens?|Promises?|Vows?|Pledges?|Cites?|Names?|Picks?|Taps?|Fires?|Hires?|Quits?|Resigns?|Steps?|Takes?|Gives?|Gets?|Makes?|Sets?|Holds?|Wins?|Loses?|Leads?|Trails?|Violates?|Violated|Sues?|Sued|Indicts?|Indicted|Charges?|Charged|Decision|Verdict|Court|Panel|Bench|Bill|Act|Law|Plan|Deal|Talks|Move|Push|Bid|Case|Trial|Suit|Probe|Report|Review|Speech|Address|Remarks|Briefing|Press|News|Media|Team|Staff|Aides?|Allies|Critics|Supporters|Opponents|Rivals|Voters|Lawmakers|Senators|Democrats|Republicans|Officials|Leaders|Ministers|Justices|Judges|Federal|State|Local|National|Global|Foreign|Domestic|New|Top|Former|Acting|Interim|Chief|Senior|Junior|High|Supreme|Appeals|District|Circuit|Over|Under|With|Without|From|Into|Onto|Against|After|Before|During|Amid|Among|Between|Through|About|Around|Near|Behind|Beyond|Towards?|For|And|But|Or|Nor|Not|No|To|In|On|At|By|Of|As|Is|Are|Was|Were|Be|Been|Has|Have|Had|Will|Would|Could|Should|May|Might|Must|Can|That|This|Who|Whom|Whose|Which|What|When|Where|Why|How)\\b";
 
 const BASE_PERSON_NAMES = [
   // US & Global Political Leaders
@@ -393,8 +393,10 @@ const BASE_PERSON_NAMES = [
   "万斯",
 ];
 
+const PERSON_NAME_WORD = `(?!${NON_PERSON_TITLE_WORD})[A-ZÀ-Ý][a-zà-ÿ'-]+`;
+
 const PERSON_TITLE_PREFIX_PATTERN =
-  `(?:President|Prime Minister|Attorney General|Secretary|Chairman|Mayor|Governor|Pope|King|Queen|Justice|Judge|Sen\\.-elect|Sen\\.|Rep\\.|Gov\\.|Dr\\.)\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+(?:\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+){0,2}|CEO\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+\\s+(?!${NON_PERSON_TITLE_WORD})[A-Z][a-zA-ZÀ-ÿ'-]+`;
+  `(?:President|Prime Minister|Pope|King|Queen|Sen\\.-elect|Sen\\.|Rep\\.|Gov\\.|Dr\\.)\\s+${PERSON_NAME_WORD}(?:\\s+${PERSON_NAME_WORD}){0,2}|(?:Attorney General|Secretary|Chairman|Mayor|Governor|Justice|Judge|CEO)\\s+${PERSON_NAME_WORD}\\s+${PERSON_NAME_WORD}(?:\\s+${PERSON_NAME_WORD})?`;
 
 function compilePersonNameRegex(names) {
   const unique = [...new Set(names.filter(Boolean))].sort((a, b) => b.length - a.length);
