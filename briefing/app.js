@@ -1086,7 +1086,7 @@ const SOURCE_BIAS_RULES = [
   [/new york times|纽约时报|washington post|sacramento bee|ktvu|abc news/i, "Lean Left", "left", 0.24],
   [/guardian/i, "Left-Center", "left", 0.28],
   [/fox news|new york post/i, "Lean Right", "right", 0.78],
-  [/arstechnica|ars technica|the verge|good news network|solidot/i, "Center · Tech / Specialty", "center", 0.5],
+  [/arstechnica|ars technica|the verge|techcrunch|mit technology review|good news network|solidot/i, "Center · Tech / Specialty", "center", 0.5],
   [/中新网|新华社|人民日报|外交部|cgtn|global times/i, "State-affiliated (CN)", "state", 0.5],
   [/澎湃|thepaper/i, "State-owned (CN) · Urban", "state", 0.5],
   [/财新|caixin|第一财经|yicai|界面|jiemian/i, "Business / Market (CN)", "center", 0.5],

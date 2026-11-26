@@ -38,6 +38,10 @@ NEWS_FEEDS: list[dict[str, str]] = [
     {"name": "CNBC Top News", "category": "Economy", "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100003114"},
     {"name": "Ars Technica", "category": "Tech", "url": "https://feeds.arstechnica.com/arstechnica/index"},
     {"name": "The Verge", "category": "Tech", "url": "https://www.theverge.com/rss/index.xml"},
+    {"name": "TechCrunch AI", "category": "Tech", "url": "https://techcrunch.com/category/artificial-intelligence/feed/"},
+    {"name": "MIT Technology Review AI", "category": "Tech", "url": "https://www.technologyreview.com/topic/artificial-intelligence/feed"},
+    {"name": "The Verge AI", "category": "Tech", "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"},
+    {"name": "Google News AI", "category": "Tech", "url": "https://news.google.com/rss/search?q=%28OpenAI+OR+Anthropic+OR+DeepMind+OR+%22artificial+intelligence%22+OR+DeepSeek+OR+xAI%29+when:2d&hl=en-US&gl=US&ceid=US:en"},
     {"name": "Google News Science", "category": "Science", "url": "https://news.google.com/rss/headlines/section/topic/SCIENCE?hl=en-US&gl=US&ceid=US:en"},
 ]
 
