@@ -258,12 +258,18 @@ def _download_timeframes(
         if s is None:
             prior_q = (prior_map or {}).get(symbol, {})
             return prior_q.get("sparkline_1d", []), prior_q.get("sparkline_1d_times", [])
+        if symbol == "BTC-USD":
+            cutoff = s.index[-1] - pd.Timedelta(hours=24)
+            sliced = s[s.index >= cutoff]
+            if len(sliced) < 2:
+                sliced = s.iloc[-48:]
+            return [round(float(x), 2) for x in sliced.tolist()], [_fmt_iso_utc(ts) for ts in sliced.index]
         idx_ny = (
             s.index.tz_convert("America/New_York")
             if getattr(s.index, "tz", None) is not None
             else s.index
         )
-        is_full_day = symbol in {"CL=F", "GC=F", "BTC-USD"}
+        is_full_day = symbol in {"CL=F", "GC=F"}
         unique_days = sorted({ts.date() for ts in idx_ny})
         sliced = s.iloc[0:0]
         for day in reversed(unique_days):

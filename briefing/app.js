@@ -581,11 +581,12 @@ function computeSparklineLayout(values, times, tf, symbol) {
   const n = values.length;
   if (n < 2) return { xs: [], closeX: null, isExtended: [] };
 
-  const is24h = symbol === "BTC-USD" || symbol === "CL=F" || symbol === "GC=F";
-  if (tf === "1d" && Array.isArray(times) && times.length === n) {
+  const isRolling24h = symbol === "BTC-USD";
+  const isFullDayEt = symbol === "CL=F" || symbol === "GC=F";
+  if (tf === "1d" && Array.isArray(times) && times.length === n && !isRolling24h) {
     const mins = times.map(getNyMinutes);
     if (mins.every((m) => m !== null)) {
-      if (is24h) {
+      if (isFullDayEt) {
         const startMin = 0;
         const endMin = 1440;
         const xs = mins.map((m) => Math.max(0, Math.min(w, ((m - startMin) / (endMin - startMin)) * w)));
