@@ -41,7 +41,8 @@ Strict rules:
 3. Keep summaries crisp, objective, and analytical (avoid sensationalism or partisan framing).
 4. When prior-day context is provided, explicitly highlight what changed or escalated/cooled since yesterday.
 5. In executive_brief bullets, summaries, why_it_matters, narratives, overviews, and framing_notes, wrap the 1–2 highest-signal phrases per sentence (the core outcome, decisive action, or key metric — roughly 15–25% of the sentence) in **double asterisks** for scannable bold highlighting, and wrap human person names in *single asterisks* for italics. Never bold entire sentences or headlines.
-6. Produce valid JSON matching the requested schema exactly."""
+6. Limit executive_brief to at most one item primarily about the stock market; keep the remaining bullets focused on non-market world, policy, conflict, tech, or science developments.
+7. Produce valid JSON matching the requested schema exactly."""
 
 
 def _build_prompt(

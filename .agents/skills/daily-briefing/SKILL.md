@@ -19,7 +19,7 @@ Use this skill whenever the user asks to generate, refresh, or publish their dai
 3. **Synthesize with Antigravity's active model** (no `GEMINI_API_KEY` needed):
    - Read `/tmp/raw_briefing.json` (specifically `prompt` and `synthesis_schema`).
    - Produce a strictly grounded, neutral JSON object matching `synthesis_schema` (`GeminiBriefingSynthesis`):
-     - `executive_brief`: 3–5 crisp cross-domain morning items (`{text, category, sentiment}` using the 7-level spectrum: `very_negative`, `negative`, `slightly_negative`, `neutral`, `slightly_positive`, `positive`, `very_positive`)
+     - `executive_brief`: 3–5 crisp cross-domain morning items (`{text, category, sentiment}` using the 7-level spectrum: `very_negative`, `negative`, `slightly_negative`, `neutral`, `slightly_positive`, `positive`, `very_positive`); **limit to at most one item primarily about the stock market**
      - `top_news`: 6–10 deduplicated stories with 2–3 sentence summaries, `why_it_matters`, 7-level `sentiment`, and verbatim URLs from `raw_news`
      - `market_narrative` & `market_regime` (`Risk-On` | `Risk-Off` | `Mixed` | `Volatility Spike`)
      - `conflicts_overview` & `conflict_theaters` (one per tracked theater `id`)

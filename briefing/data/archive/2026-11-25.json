@@ -36,17 +36,12 @@
     }
   ],
   "afternoon_brief": {
-    "generated_at": "2026-11-25T23:11:14Z",
+    "generated_at": "2026-11-26T00:10:46Z",
     "bullets": [
       {
-        "text": "**US equities staged a sharp afternoon rebound** off early lows, with the Dow climbing 0.33% to 50,182.95 and the Russell 2000 gaining 0.71% to 2,704.06, while the S&P 500 trimmed losses to -0.25% (7,182.78), the Nasdaq finished down 0.62% (23,585.80), and the **VIX cooled to 28.29** (+7.32%).",
+        "text": "**US equities staged a sharp afternoon rebound** as the Dow (+0.33%, 50,182.95) and Russell 2000 (+0.71%, 2,704.06) flipped positive, the S&P 500 (-0.25%, 7,182.78) and Nasdaq (-0.62%, 23,585.80) trimmed losses, and the **VIX cooled to 28.29** while Meta (+2.97%) and WTI crude (+2.43% to $84.04) rallied against declines in Nvidia (-3.62%).",
         "category": "Economy",
         "sentiment": "slightly_positive"
-      },
-      {
-        "text": "**Big Tech closed mixed in extended trading** as Meta rallied 2.97% ($607.34) and Apple edged up 0.34% ($355.28), offsetting declines in Nvidia (-3.62%, $149.76), Amazon (-2.75%, $245.35), and Alphabet (-1.99%, $273.49), while **WTI crude jumped 2.43% to $84.04**, Gold rose 1.48% to $3,614.60, and Bitcoin climbed 0.58% to $60,095.46.",
-        "category": "Tech",
-        "sentiment": "neutral"
       },
       {
         "text": "The **US announced new tariffs on major trading partners** including China and the EU, adding fresh trade policy pressure alongside Capitol Hill demands from Republican lawmakers for FBI and CIA answers ahead of questioning Nvidia CEO *Jensen Huang*.",
