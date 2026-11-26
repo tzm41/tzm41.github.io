@@ -847,9 +847,12 @@ function renderKpiStrip(briefing) {
   }
   els.kpiStrip.innerHTML = cards.join("");
   if (els.kpiToggleSummary) {
-    els.kpiToggleSummary.textContent = sp
+    const collapsedLabel = sp
       ? `S&P 500 ${fmtPrice(sp.price, sp.symbol)} (${fmtPct(sp.change_pct)})`
-      : "Market Snapshot";
+      : "Signals";
+    els.kpiToggleSummary.dataset.collapsedText = collapsedLabel;
+    const isExpanded = els.kpiWrapper?.classList.contains("is-expanded");
+    els.kpiToggleSummary.textContent = isExpanded ? "Signals" : collapsedLabel;
   }
 }
 
@@ -2187,6 +2190,11 @@ async function bootstrap() {
     els.btnToggleKpi.setAttribute("aria-expanded", String(open));
     const lbl = els.btnToggleKpi.querySelector(".collapse-label");
     if (lbl) lbl.textContent = open ? "Collapse" : "Expand";
+    if (els.kpiToggleSummary) {
+      els.kpiToggleSummary.textContent = open
+        ? "Signals"
+        : els.kpiToggleSummary.dataset.collapsedText || "Signals";
+    }
   };
   els.btnToggleKpi?.addEventListener("click", () => {
     const next = !els.kpiWrapper?.classList.contains("is-expanded");
