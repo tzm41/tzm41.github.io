@@ -789,8 +789,8 @@ function buildSparklineSvg(values, color, className = "sparkline", interactive =
       <polygon points="${area}" fill="${color}" fill-opacity="0.12"></polygon>
       <polyline points="${polyline}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
       <line class="spark-guide" x1="0" y1="0" x2="0" y2="${h}"></line>
-      <circle class="spark-dot" cx="0" cy="0" r="2.8" fill="${color}"></circle>
     </svg>
+    <span class="spark-dot" style="background:${color}" aria-hidden="true"></span>
   `;
 }
 
@@ -1950,8 +1950,8 @@ function initSparklineHover() {
       guide.setAttribute("x2", ptX.toFixed(1));
     }
     if (dot) {
-      dot.setAttribute("cx", ptX.toFixed(1));
-      dot.setAttribute("cy", ptY.toFixed(1));
+      dot.style.left = `${((ptX / w) * 100).toFixed(2)}%`;
+      dot.style.top = `${((ptY / h) * 100).toFixed(2)}%`;
     }
     if (tip) {
       const kind = wrap.dataset.kind || "";

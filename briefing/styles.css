@@ -1394,10 +1394,20 @@ h3 {
 }
 
 .spark-dot {
-  stroke: var(--surface);
-  stroke-width: 1.5;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.75px solid var(--surface);
+  transform: translate(-50%, -50%);
   opacity: 0;
   pointer-events: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.quote-card.is-expanded .spark-dot {
+  width: 9px;
+  height: 9px;
 }
 
 .sparkline-wrap.hovering .spark-guide,
