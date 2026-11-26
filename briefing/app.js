@@ -2,6 +2,8 @@
  * Daily Briefing Dashboard — Client Application (Zero-Build ES Module)
  */
 
+import { initCountryMapTooltip } from "./country-map.js?v=1";
+
 const DATA_BASE = "./data";
 
 const state = {
@@ -641,7 +643,7 @@ function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false)
         seen.add(key);
         flagHtml = renderCountryFlagImg(flagCode);
       }
-      out += `<span class="country-mention">${flagHtml}${escapeHtml(token)}</span>`;
+      out += `<span class="country-mention" tabindex="0" data-country-code="${escapeHtml(flagCode)}">${flagHtml}${escapeHtml(token)}</span>`;
     } else if (party) {
       const key = `party:${party}`;
       let iconHtml = "";
@@ -2223,6 +2225,7 @@ async function bootstrap() {
   initSparklineHover();
   initSourceBiasPopover();
   initFloatingTooltips();
+  initCountryMapTooltip(escapeHtml, renderCountryFlagImg);
 
   // Mobile KPI strip collapse toggle (collapsed by default on narrow screens)
   const setKpiOpen = (open) => {
