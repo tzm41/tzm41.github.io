@@ -203,3 +203,4 @@ POLITICS_FEEDS: list[dict[str, str]] = [
 ]
 
 POLYMARKET_GAMMA_URL = "https://gamma-api.polymarket.com/events"
+KALSHI_EVENTS_URL = "https://api.elections.kalshi.com/trade-api/v2/events"

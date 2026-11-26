@@ -122,6 +122,7 @@ class PredictionMarket(BaseModel):
     delta_24h: float = 0.0
     volume_usd: float = 0.0
     url: str = ""
+    source: str = ""
 
 
 class PolicyItem(BaseModel):

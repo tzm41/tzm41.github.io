@@ -1396,10 +1396,13 @@ function renderPolitics(politics = {}) {
         const pct = Math.round((m.yes_prob || 0) * 100);
         const deltaPts = (m.delta_24h || 0) * 100;
         const dCls = deltaClass(deltaPts);
+        const sourceLabel =
+          m.source ||
+          (String(m.url || "").includes("kalshi.com") ? "Kalshi" : "Polymarket");
         return `
           <a class="poly-card" href="${safeUrl(m.url)}" target="_blank" rel="noopener noreferrer">
             <div class="poly-top">
-              <span class="poly-q">${escapeHtml(m.question)}</span>
+              <span class="poly-q">${decorateFlagsAndLogos(m.question)}</span>
               <div class="poly-odds">
                 <div class="poly-pct">${pct}%</div>
               </div>
@@ -1408,7 +1411,7 @@ function renderPolitics(politics = {}) {
               <div class="poly-bar-fill" style="width:${pct}%"></div>
             </div>
             <div class="poly-foot">
-              <span>${fmtUsdCompact(m.volume_usd)}</span>
+              <span>${escapeHtml(sourceLabel)} &middot; ${fmtUsdCompact(m.volume_usd)}</span>
               <span class="delta-pill ${dCls}">24h: ${deltaPts >= 0 ? "+" : ""}${deltaPts.toFixed(1)} pts</span>
             </div>
           </a>
@@ -1426,7 +1429,7 @@ function renderPolitics(politics = {}) {
         (p) => `
           <article class="policy-card">
             <div class="policy-head">
-              <a class="policy-title" href="${safeUrl(p.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(p.title)}</a>
+              <a class="policy-title" href="${safeUrl(p.url)}" target="_blank" rel="noopener noreferrer">${decorateFlagsAndLogos(p.title)}</a>
               <span class="branch-tag">${escapeHtml(p.chamber_or_branch)}</span>
             </div>
             <p class="policy-summary">${highlightSummaryHtml(p.summary)}</p>
@@ -1445,7 +1448,7 @@ function renderPolitics(politics = {}) {
         (t) => `
           <article class="topic-card">
             <div class="topic-top">
-              <span class="topic-name">${escapeHtml(t.topic)}</span>
+              <span class="topic-name">${decorateFlagsAndLogos(t.topic)}</span>
               <span class="momentum-pill ${escapeHtml(t.momentum)}">${escapeHtml(t.momentum)}</span>
             </div>
             <p class="topic-note">${highlightSummaryHtml(t.framing_note)}</p>
