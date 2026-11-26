@@ -23,8 +23,8 @@ from .fetchers.markets import fetch_markets
 from .fetchers.news import fetch_local_news, fetch_positive_news, fetch_top_news
 from .fetchers.politics import fetch_politics
 from .schema import (
-    AfternoonBrief,
     AfternoonSynthesis,
+    BriefSection,
     DailyBriefing,
     GeminiBriefingSynthesis,
     SourceHealth,
@@ -304,7 +304,10 @@ async def fetch_afternoon_bundle(out_path_str: str) -> None:
     bundle = {
         "date": morning.get("date") or now_dt.strftime("%Y-%m-%d"),
         "generated_at": now_utc,
-        "morning_executive_brief": morning.get("executive_brief", []),
+        "morning_brief": (
+            (morning.get("morning_brief") or {}).get("bullets")
+            or morning.get("executive_brief", [])
+        ),
         "morning_top_news": [
             {"id": s.get("id"), "headline": s.get("headline")}
             for s in morning.get("top_news", [])
@@ -341,7 +344,13 @@ def apply_afternoon_synthesis(synthesis_json_path: str) -> DailyBriefing:
     ai = AfternoonSynthesis.model_validate_json(raw_text)
     data = json.loads(LATEST_PATH.read_text(encoding="utf-8"))
     now_utc = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    data["afternoon_brief"] = AfternoonBrief(generated_at=now_utc, bullets=ai.bullets).model_dump()
+    if not data.get("morning_brief") and data.get("executive_brief"):
+        data["morning_brief"] = BriefSection(
+            generated_at=data.get("generated_at") or now_utc,
+            bullets=data["executive_brief"],
+        ).model_dump()
+    data["afternoon_brief"] = BriefSection(generated_at=now_utc, bullets=ai.bullets).model_dump()
+    data["generated_at"] = now_utc
 
     if ai.new_top_news:
         existing_morning = [

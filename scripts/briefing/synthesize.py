@@ -12,6 +12,7 @@ from typing import Any
 from .config import GEMINI_FALLBACK_MODELS, GEMINI_MODEL
 from .fetchers.markets import fetch_mentioned_quotes
 from .schema import (
+    BriefSection,
     ConflictTheater,
     ConflictsSection,
     DailyBriefing,
@@ -60,7 +61,10 @@ def _build_prompt(
         "prior_day_context": (
             {
                 "date": prior_briefing.get("date"),
-                "executive_brief": prior_briefing.get("executive_brief", []),
+                "morning_brief": (
+                    (prior_briefing.get("morning_brief") or {}).get("bullets")
+                    or prior_briefing.get("executive_brief", [])
+                ),
                 "conflict_statuses": {
                     t.get("id"): t.get("status")
                     for t in prior_briefing.get("conflicts", {}).get("theaters", [])
@@ -256,7 +260,7 @@ def _build_extractive_fallback(
         generated_at=generated_at,
         synthesis_mode="extractive_fallback",
         source_health=health,
-        executive_brief=exec_bullets,
+        morning_brief=BriefSection(generated_at=generated_at, bullets=exec_bullets),
         top_news=stories,
         markets=MarketsSection(
             narrative=market_narrative,
@@ -420,7 +424,7 @@ def merge_synthesis(
         generated_at=generated_at,
         synthesis_mode="gemini",
         source_health=health,
-        executive_brief=ai.executive_brief,
+        morning_brief=BriefSection(generated_at=generated_at, bullets=ai.executive_brief),
         top_news=flagged_top,
         markets=MarketsSection(
             narrative=ai.market_narrative,

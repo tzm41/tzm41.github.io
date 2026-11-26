@@ -995,10 +995,15 @@ function renderBriefBullets(bullets = []) {
 }
 
 function renderExecutiveBrief(briefing) {
-  els.synthesisModeTag.textContent = fmtLocalTimeOnly(briefing.generated_at);
-  els.synthesisModeTag.title = `Generated ${fmtLocalTimestamp(briefing.generated_at)}`;
+  const morning = briefing.morning_brief || {
+    generated_at: briefing.generated_at,
+    bullets: briefing.executive_brief || [],
+  };
+  const morningTs = morning.generated_at || briefing.generated_at;
+  els.synthesisModeTag.textContent = fmtLocalTimeOnly(morningTs);
+  els.synthesisModeTag.title = `Generated ${fmtLocalTimestamp(morningTs)}`;
 
-  const bullets = briefing.executive_brief || [];
+  const bullets = morning.bullets || [];
   if (!bullets.length) {
     els.executiveList.innerHTML = `<li>No executive summary items available for this edition.</li>`;
   } else {
@@ -1668,11 +1673,15 @@ function renderAll(briefing) {
   state.briefing = briefing;
   buildTickerMap(briefing.markets);
   els.editionDate.textContent = fmtReadableDate(briefing.date);
-  const latestUpdateTs =
-    briefing.afternoon_brief?.generated_at &&
-    new Date(briefing.afternoon_brief.generated_at) > new Date(briefing.generated_at)
-      ? briefing.afternoon_brief.generated_at
-      : briefing.generated_at;
+  const candidates = [
+    briefing.generated_at,
+    briefing.morning_brief?.generated_at,
+    briefing.afternoon_brief?.generated_at,
+  ].filter(Boolean);
+  const latestUpdateTs = candidates.reduce((best, cur) =>
+    !best || new Date(cur) > new Date(best) ? cur : best,
+    ""
+  );
   els.generatedMeta.textContent = `Updated ${fmtLocalTimestamp(latestUpdateTs)}`;
   renderSourceHealth(briefing.source_health);
   renderKpiStrip(briefing);

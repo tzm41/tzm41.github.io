@@ -1,6 +1,6 @@
 {
   "date": "2026-11-25",
-  "generated_at": "2026-11-25T15:00:28Z",
+  "generated_at": "2026-11-26T04:37:28Z",
   "synthesis_mode": "gemini",
   "source_health": {
     "news": "ok",
@@ -8,33 +8,36 @@
     "conflicts": "ok",
     "politics": "ok"
   },
-  "executive_brief": [
-    {
-      "text": "Tech and AI shares led a **sharp Nasdaq pullback (-1.48%, XLK -3.26%)** as **Nvidia fell 7%** amid scrutiny over CEO Jensen Huang's reinstatement, while rotational buying lifted the **Dow Jones (+0.85%)** and **Russell 2000 (+0.57%)**.",
-      "category": "Economy",
-      "sentiment": "slightly_negative"
-    },
-    {
-      "text": "A New York federal jury found **Huawei guilty of stealing US trade secrets** while **acquitting the firm of racketeering**, concluding a multi-year legal battle.",
-      "category": "Tech",
-      "sentiment": "negative"
-    },
-    {
-      "text": "Middle East and Red Sea tensions remain acute, with the **Strait of Hormuz facing severe shipping paralysis**, Houthi strikes hitting Riyadh, and US investigators probing **potential Iranian cyberattacks on up to 50 commercial vessels**.",
-      "category": "World",
-      "sentiment": "very_negative"
-    },
-    {
-      "text": "Leaked Russian records point to **nearly 500,000 deaths in the Ukraine war** as Ukrainian naval drones struck Russian vessels off Libya and a **Russian drone entered Polish airspace**.",
-      "category": "World",
-      "sentiment": "very_negative"
-    },
-    {
-      "text": "In Washington, bipartisan lawmakers are pressing for **China chip export restrictions** and investigating White House ties to Nvidia's leadership reversal, while **Rep. Jimmy Gomez announced his resignation effective Dec. 1**.",
-      "category": "Policy",
-      "sentiment": "slightly_negative"
-    }
-  ],
+  "morning_brief": {
+    "generated_at": "2026-11-25T15:00:28Z",
+    "bullets": [
+      {
+        "text": "Tech and AI shares led a **sharp Nasdaq pullback (-1.48%, XLK -3.26%)** as **Nvidia fell 7%** amid scrutiny over CEO Jensen Huang's reinstatement, while rotational buying lifted the **Dow Jones (+0.85%)** and **Russell 2000 (+0.57%)**.",
+        "category": "Economy",
+        "sentiment": "slightly_negative"
+      },
+      {
+        "text": "A New York federal jury found **Huawei guilty of stealing US trade secrets** while **acquitting the firm of racketeering**, concluding a multi-year legal battle.",
+        "category": "Tech",
+        "sentiment": "negative"
+      },
+      {
+        "text": "Middle East and Red Sea tensions remain acute, with the **Strait of Hormuz facing severe shipping paralysis**, Houthi strikes hitting Riyadh, and US investigators probing **potential Iranian cyberattacks on up to 50 commercial vessels**.",
+        "category": "World",
+        "sentiment": "very_negative"
+      },
+      {
+        "text": "Leaked Russian records point to **nearly 500,000 deaths in the Ukraine war** as Ukrainian naval drones struck Russian vessels off Libya and a **Russian drone entered Polish airspace**.",
+        "category": "World",
+        "sentiment": "very_negative"
+      },
+      {
+        "text": "In Washington, bipartisan lawmakers are pressing for **China chip export restrictions** and investigating White House ties to Nvidia's leadership reversal, while **Rep. Jimmy Gomez announced his resignation effective Dec. 1**.",
+        "category": "Policy",
+        "sentiment": "slightly_negative"
+      }
+    ]
+  },
   "afternoon_brief": {
     "generated_at": "2026-11-26T04:37:28Z",
     "bullets": [
@@ -4025,42 +4028,48 @@
         "yes_prob": 0.2305,
         "delta_24h": -0.012,
         "volume_usd": 184212821.82,
-        "url": "https://polymarket.com/event/next-french-presidential-election"
+        "url": "https://polymarket.com/event/next-french-presidential-election",
+        "source": ""
       },
       {
         "question": "Will Benjamin Netanyahu be the next Prime Minister of Israel?",
         "yes_prob": 0.204,
         "delta_24h": -0.0475,
         "volume_usd": 94500077.79,
-        "url": "https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election"
+        "url": "https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election",
+        "source": ""
       },
       {
         "question": "Will Puma Shen win the next Taipei Mayor election?",
         "yes_prob": 0.3595,
         "delta_24h": -0.008,
         "volume_usd": 8057078.24,
-        "url": "https://polymarket.com/event/taipei-mayor-election-winner-20260813125857100"
+        "url": "https://polymarket.com/event/taipei-mayor-election-winner-20260813125857100",
+        "source": ""
       },
       {
         "question": "Will Raphael Warnock win the 2028 Democratic presidential nomination?",
         "yes_prob": 0.0385,
         "delta_24h": 0.0,
         "volume_usd": 1332288702.04,
-        "url": "https://polymarket.com/event/democratic-presidential-nominee-2028"
+        "url": "https://polymarket.com/event/democratic-presidential-nominee-2028",
+        "source": ""
       },
       {
         "question": "Will Josh Hawley win the 2028 Republican presidential nomination?",
         "yes_prob": 0.0115,
         "delta_24h": 0.0,
         "volume_usd": 745032139.33,
-        "url": "https://polymarket.com/event/republican-presidential-nominee-2028"
+        "url": "https://polymarket.com/event/republican-presidential-nominee-2028",
+        "source": ""
       },
       {
         "question": "US announces end of Iranian blockade by December 31, 2026?",
         "yes_prob": 0.1375,
         "delta_24h": -0.012,
         "volume_usd": 55242619.14,
-        "url": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080"
+        "url": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080",
+        "source": ""
       }
     ],
     "legislative_and_executive": [
