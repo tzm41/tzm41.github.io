@@ -711,6 +711,16 @@ function renderCountryFlagImg(code) {
   return `<img class="inline-flag-icon" src="${src}" width="16" height="12" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
 }
 
+function glueIconWithText(iconHtml, text) {
+  const s = String(text ?? "");
+  if (!iconHtml) return escapeHtml(s);
+  const sp = s.indexOf(" ");
+  if (sp === -1) {
+    return `<span class="icon-glue">${iconHtml}${escapeHtml(s)}</span>`;
+  }
+  return `<span class="icon-glue">${iconHtml}${escapeHtml(s.slice(0, sp))}</span>${escapeHtml(s.slice(sp))}`;
+}
+
 const NON_MEDIA_ABC_RE =
   /\b(?:Agricultural Bank|Alcoholic Beverage|Australian Broadcasting|Activity-Based|ABC(?:'s)?\s+of\b|ABC\s+(?:islands|weapons|stores?|liquor|board|commission|license|permit|permittee))\b/i;
 
@@ -738,8 +748,8 @@ function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false)
         logoHtml = renderCompanyLogoImg(domain);
       }
       out += pillCompanies
-        ? `<span class="ticker-tag is-private" tabindex="0" data-company-domain="${escapeHtml(domain)}">${logoHtml}${escapeHtml(token)}</span>`
-        : `<span class="company-mention" tabindex="0" data-company-domain="${escapeHtml(domain)}">${logoHtml}${escapeHtml(token)}</span>`;
+        ? `<span class="ticker-tag is-private" tabindex="0" data-company-domain="${escapeHtml(domain)}">${glueIconWithText(logoHtml, token)}</span>`
+        : `<span class="company-mention" tabindex="0" data-company-domain="${escapeHtml(domain)}">${glueIconWithText(logoHtml, token)}</span>`;
     } else if (placeId) {
       const place = PLACE_META[placeId];
       let flagHtml = "";
@@ -750,7 +760,7 @@ function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false)
           flagHtml = renderCountryFlagImg(place.flagCode);
         }
       }
-      out += `<span class="country-mention" tabindex="0" data-country-code="${escapeHtml(placeId)}">${flagHtml}${escapeHtml(token)}</span>`;
+      out += `<span class="country-mention" tabindex="0" data-country-code="${escapeHtml(placeId)}">${glueIconWithText(flagHtml, token)}</span>`;
     } else if (party) {
       const key = `party:${party}`;
       let iconHtml = "";
@@ -758,7 +768,7 @@ function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false)
         seen.add(key);
         iconHtml = PARTY_ICONS[party] || "";
       }
-      out += `<span class="party-mention ${party}">${iconHtml}${escapeHtml(token)}</span>`;
+      out += `<span class="party-mention ${party}">${glueIconWithText(iconHtml, token)}</span>`;
     } else {
       out += escapeHtml(token);
     }
