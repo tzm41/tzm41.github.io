@@ -1,0 +1,832 @@
+{
+  "updated_at": "2026-11-26T20:02:26Z",
+  "window_days": 3,
+  "items": [
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
+      "id": "trump-new-tariffs-proposal",
+      "headline": "White House Proposes New Tariffs on Major U.S. Trading Partners",
+      "urls": [
+        "https://www.npr.org/2026/11/26/nx-s1-6054103/trump-administration-proposes-new-tariffs-on-goods-from-major-u-s-trading-partners"
+      ],
+      "tokens": [
+        "house",
+        "major",
+        "partners",
+        "proposes",
+        "tariffs",
+        "trading",
+        "white"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
+      "id": "norse-atlantic-suspends-flights",
+      "headline": "Norse Atlantic Suspends All Flights Amid Urgent Funding Plea",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/c9kgmd0ldy0lo"
+      ],
+      "tokens": [
+        "atlantic",
+        "flights",
+        "funding",
+        "norse",
+        "plea",
+        "suspends",
+        "urgent"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
+      "id": "north-korea-kim-nuclear-vow",
+      "headline": "Kim Jong Un Vows to Expand Nuclear Arsenal, Ignoring U.S. Overture",
+      "urls": [
+        "https://www.npr.org/2026/11/26/g-s1-155955/north-korea-kim-nuclear-weapons-trump"
+      ],
+      "tokens": [
+        "arsenal",
+        "expand",
+        "ignoring",
+        "jong",
+        "nuclear",
+        "overture",
+        "vows"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
+      "id": "fcc-abc-free-speech-ruling",
+      "headline": "Federal Judge Rules FCC Violated ABC's First Amendment Rights",
+      "urls": [
+        "https://www.npr.org/2026/11/26/nx-s1-6000576/fcc-disney-abc-first-amendment-trump-brendan-carr"
+      ],
+      "tokens": [
+        "amendment",
+        "federal",
+        "judge",
+        "rights",
+        "rules",
+        "violated"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
+      "id": "spacex-orbital-data-centers",
+      "headline": "FCC Approves SpaceX Plan for 1 Million Orbital Data Center Satellites",
+      "urls": [
+        "https://www.npr.org/2026/11/26/g-s1-155940/fcc-spacex-satellites-data-centers-in-space"
+      ],
+      "tokens": [
+        "approves",
+        "center",
+        "data",
+        "million",
+        "orbital",
+        "plan",
+        "satellites",
+        "spacex"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
+      "id": "esa-hera-asteroid-deflection",
+      "headline": "ESA's Hera Mission Captures Chaotic Aftermath of Asteroid Deflection Test",
+      "urls": [
+        "https://arstechnica.com/space/2026/11/europes-hera-mission-returns-to-the-chaotic-scene-of-a-cosmic-smashup"
+      ],
+      "tokens": [
+        "aftermath",
+        "asteroid",
+        "captures",
+        "chaotic",
+        "deflection",
+        "hera",
+        "mission",
+        "test"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
+      "id": "congo-ebola-12000-cases",
+      "headline": "Congo Ebola Outbreak Reaches 12,000 Cases Amid Rebel Fighting",
+      "urls": [
+        "https://www.npr.org/2026/11/26/g-s1-155957/congo-ebola-responders"
+      ],
+      "tokens": [
+        "cases",
+        "congo",
+        "ebola",
+        "fighting",
+        "outbreak",
+        "reaches",
+        "rebel"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
+      "id": "lenacapavir-hiv-prevention-africa",
+      "headline": "Cheaper Twice-Yearly HIV Prevention Injection Reaches Africa",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cmly7jve72r2o"
+      ],
+      "tokens": [
+        "africa",
+        "cheaper",
+        "injection",
+        "prevention",
+        "reaches",
+        "twice",
+        "yearly"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
+      "id": "character-ai-bankruptcy-chat-sale",
+      "headline": "42 State Attorneys General Move to Block Character.AI User Chat Sale",
+      "urls": [
+        "https://www.theverge.com/policy/1042620/character-ai-sale-state-ags-block-selling-users-chats"
+      ],
+      "tokens": [
+        "attorneys",
+        "block",
+        "character",
+        "chat",
+        "general",
+        "move",
+        "sale",
+        "state",
+        "user"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "positive_news",
+      "id": "baby-brain-cancer-recovery",
+      "headline": "Infant Given Weeks to Live Is Now Brain Cancer-Free After St. Jude Trial",
+      "urls": [
+        "https://www.goodnewsnetwork.org/girl-given-weeks-to-live-on-christmas-eve-makes-miracle-recovery-after-serendipitous-call-to-st-jude"
+      ],
+      "tokens": [
+        "brain",
+        "cancer",
+        "free",
+        "given",
+        "infant",
+        "jude",
+        "live",
+        "trial",
+        "weeks"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "local:china",
+      "id": "china-us-tariff-threat-40pct",
+      "headline": "特朗普深圳会晤一周后再提关税威胁 对华税率或达40%",
+      "urls": [
+        "https://www.bbc.com/zhongwen/articles/c9ly484v6pdzo/trad"
+      ],
+      "tokens": [
+        "对华税率或达",
+        "特朗普深圳会晤一周后再提关税威胁"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "local:china",
+      "id": "china-chengdu-crosswalk-safety",
+      "headline": "成都残疾男子绿灯过街被撞身亡引发交通无障碍热议",
+      "urls": [
+        "https://www.chinanews.com.cn/sh/2026/11-26/10738468.shtml"
+      ],
+      "tokens": [
+        "成都残疾男子绿灯过街被撞身亡引发交通无障碍热议"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "local:china",
+      "id": "china-buyback-loans-600b",
+      "headline": "四大商业银行已签订超6000亿元股票回购增持贷款合同",
+      "urls": [
+        "https://www.chinanews.com.cn/cj/2026/11-26/10738467.shtml"
+      ],
+      "tokens": [
+        "6000",
+        "亿元股票回购增持贷款合同",
+        "四大商业银行已签订超"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "local:china",
+      "id": "china-us-tariff-threat-40pct",
+      "headline": "Trump Threatens Up to 40% China Tariffs One Week After Shenzhen Summit",
+      "urls": [
+        "https://www.bbc.com/zhongwen/articles/c9ly484v6pdzo/trad"
+      ],
+      "tokens": [
+        "china",
+        "shenzhen",
+        "summit",
+        "tariffs",
+        "threatens",
+        "trump",
+        "week"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "local:china",
+      "id": "china-chengdu-crosswalk-safety",
+      "headline": "Fatal Crosswalk Crash in Chengdu Sparks Debate on Accessible Traffic Timing",
+      "urls": [
+        "https://www.chinanews.com.cn/sh/2026/11-26/10738468.shtml"
+      ],
+      "tokens": [
+        "accessible",
+        "chengdu",
+        "crash",
+        "crosswalk",
+        "debate",
+        "fatal",
+        "sparks",
+        "timing",
+        "traffic"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "local:china",
+      "id": "china-buyback-loans-600b",
+      "headline": "China's Big Four Banks Sign Over 600 Billion Yuan in Share Buyback Loans",
+      "urls": [
+        "https://www.chinanews.com.cn/cj/2026/11-26/10738467.shtml"
+      ],
+      "tokens": [
+        "banks",
+        "billion",
+        "buyback",
+        "china",
+        "four",
+        "loans",
+        "share",
+        "sign",
+        "yuan"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "local:china",
+      "id": "china-3d-printing-86b",
+      "headline": "China's 3D Printing Industry Projected to Reach 86 Billion Yuan in 2026",
+      "urls": [
+        "https://www.chinanews.com.cn/cj/2026/11-26/10738463.shtml"
+      ],
+      "tokens": [
+        "2026",
+        "billion",
+        "china",
+        "industry",
+        "printing",
+        "projected",
+        "reach",
+        "yuan"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "local:china",
+      "id": "china-3d-printing-86b",
+      "headline": "2026年中国增材制造产业规模预计达约860亿元",
+      "urls": [
+        "https://www.chinanews.com.cn/cj/2026/11-26/10738463.shtml"
+      ],
+      "tokens": [
+        "2026",
+        "亿元",
+        "年中国增材制造产业规模预计达约"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "local:bay-area",
+      "id": "bay-area-san-jose-thanksgiving",
+      "headline": "San Jose Community Builders Highlighted in Thanksgiving Tributes",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMikwFBVV95cUxOYnZ2U2lCSUl2YUdEYUI2ZEpYUzlrb1lDemJZTFllSmVUS1hPNVpJTTZCYUVmY0hRQkc2NjRHT0NubWdXMjdoekFsclpCS3NvV0gtUjhwTlFUcTZrWHh3UjRGMVY3V3pTTlRHOEI5YUVVMkROWllHUEdZS3RfZE5ORVRLcUpjTlFnVkFDeXI5UEZCTmM"
+      ],
+      "tokens": [
+        "builders",
+        "community",
+        "highlighted",
+        "jose",
+        "thanksgiving",
+        "tributes"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "local:bay-area",
+      "id": "bay-area-startups-shenzhen",
+      "headline": "More U.S. Tech Startups Look to Shenzhen Over Silicon Valley",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMitwFBVV95cUxPQXB2aXJXWFFXbWZaMC0tTHZKQkpfZjRIRnBNM0hhX1dpd1FxVGNncWdzWEZVU2ZYSG5OajVLU2pTUGd1UmFmT2pUV2NzM0xpbWcyMkpKSUhrQkdNM3A1NEdxMTJuLWpDTm9tQXN4cUhheVBSMVVBX0JJdXEtVFZMUU9kN0JZQkdaNHR4c1JQS2ctdW96OEp5ZVRRUXAybW8yb2JhU3BXRFNSV2lpM2JnY08tclZpS1k"
+      ],
+      "tokens": [
+        "look",
+        "shenzhen",
+        "silicon",
+        "startups",
+        "tech",
+        "valley"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "local:bay-area",
+      "id": "bay-area-king-tides-flooding",
+      "headline": "Monster King Tides Flood Bay Area Coastline",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMikAFBVV95cUxNSEFhZ0EtSWNJRmJSY1U4TkU3cjRhbUFyQ1ZSWGNuZ3NiazBZbGlUZ2xTR3ktODlIb045dGYzdGRoRTBFemR0RXp3MDluOFpvQXRua29XOWd2OEtDRGlsSmlPNWs4LXA0ZnRLakFkeU5qbmc2ZE95MzFFeU1ydmZnTVg4NlB4MDk5cGRVbEg4OG4"
+      ],
+      "tokens": [
+        "area",
+        "coastline",
+        "flood",
+        "king",
+        "monster",
+        "tides"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "local:bay-area",
+      "id": "bay-area-sharks-ducks",
+      "headline": "Anaheim Ducks Cruise Past San Jose Sharks to Snap 4-Game Skid",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMimwFBVV95cUxPZm43WkUxY2o0US1meEc5azltSVd3Z1BXaUFHaS1Eak85ZlpYVTVBSV9Ta19NQzNtTkhNRFJMWmtZTHRCRFRlVDJOLUVmMVhaT0h3T2gzR1AyMDVmeVFVMlZfZVdfUFd4Vm5uUFRfb1dPbXZSYU9sdThJUVc3Skh5MlNfcEl4UGlMT0U3YTVSNUtLcGdWVTBMekJLUQ"
+      ],
+      "tokens": [
+        "anaheim",
+        "cruise",
+        "ducks",
+        "game",
+        "jose",
+        "past",
+        "sharks",
+        "skid",
+        "snap"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "top_news",
+      "id": "tariffs-and-pce",
+      "headline": "White House proposes new China and EU tariffs as October PCE rises 0.3%",
+      "urls": [
+        "https://thehill.com/homenews/administration/6242105-trump-administration-new-tariffs-china-european-union",
+        "https://thehill.com/business/6239346-october-pce-inflation-data"
+      ],
+      "tokens": [
+        "china",
+        "house",
+        "october",
+        "proposes",
+        "rises",
+        "tariffs",
+        "white"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "top_news",
+      "id": "holiday-shopping-trends",
+      "headline": "Value-seeking holiday shoppers turn to secondhand goods and AI agents",
+      "urls": [
+        "https://www.cnbc.com/2026/11/25/secondhand-holiday-shopping-grows-as-shoppers-seek-value.html",
+        "https://www.npr.org/2026/11/25/nx-s1-6048524/what-to-know-before-using-ai-agents-for-black-friday-shopping"
+      ],
+      "tokens": [
+        "agents",
+        "goods",
+        "holiday",
+        "secondhand",
+        "seeking",
+        "shoppers",
+        "turn",
+        "value"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "top_news",
+      "id": "ukraine-strikes-russia-losses",
+      "headline": "Ukraine hits Russian jets and warship off Libya as leaked data shows nearly 500,000 Russian dead",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/ck9q8xp5r5pgo",
+        "https://www.bbc.co.uk/news/articles/cmx27g533zwyo",
+        "https://www.theguardian.com/world/2026/nov/23/ukraine-naval-drones-strike-russian-warship-libya"
+      ],
+      "tokens": [
+        "data",
+        "dead",
+        "hits",
+        "jets",
+        "leaked",
+        "libya",
+        "nearly",
+        "russian",
+        "shows",
+        "ukraine",
+        "warship"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "top_news",
+      "id": "cairo-tanker-fire",
+      "headline": "Thirty-one killed in massive fire after fuel tanker crashes on Cairo highway",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cqy7rn30v314o"
+      ],
+      "tokens": [
+        "cairo",
+        "crashes",
+        "fire",
+        "fuel",
+        "highway",
+        "killed",
+        "massive",
+        "tanker",
+        "thirty"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "top_news",
+      "id": "solomon-islands-australia",
+      "headline": "Solomon Islands ends China security pact in favor of Australian treaty",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/ckdd1z2gvlgno",
+        "https://www.aljazeera.com/news/2026/11/25/solomon-islands-signs-security-deal-with-australia"
+      ],
+      "tokens": [
+        "australian",
+        "china",
+        "ends",
+        "favor",
+        "islands",
+        "pact",
+        "security",
+        "solomon",
+        "treaty"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "top_news",
+      "id": "nvidia-ag-congress",
+      "headline": "Nvidia drops over 6% as lawmakers question AG on Trump's role in Huang's return",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/crpdw1qx7jgxo",
+        "https://www.bbc.co.uk/news/articles/crpdw1qx7jgxo"
+      ],
+      "tokens": [
+        "drops",
+        "huang",
+        "lawmakers",
+        "nvidia",
+        "question",
+        "return",
+        "role",
+        "trump"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "top_news",
+      "id": "abrego-garcia-spain",
+      "headline": "Kilmar Abrego Garcia voluntarily departs US for Spain after two-year legal battle",
+      "urls": [
+        "https://www.npr.org/2026/11/25/nx-s1-6053203/abrego-garcia-leaves-us",
+        "https://www.theguardian.com/us-news/2026/nov/24/kilmar-abrego-garcia-leaves-us"
+      ],
+      "tokens": [
+        "abrego",
+        "battle",
+        "departs",
+        "garcia",
+        "kilmar",
+        "legal",
+        "spain",
+        "voluntarily"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "top_news",
+      "id": "netanyahu-charges-recommendation",
+      "headline": "Israeli judges recommend dropping most serious charges against Netanyahu",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cxj05mv723r2o"
+      ],
+      "tokens": [
+        "charges",
+        "dropping",
+        "israeli",
+        "judges",
+        "netanyahu",
+        "recommend",
+        "serious"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "top_news",
+      "id": "huawei-verdict",
+      "headline": "Huawei convicted of US trade secrets theft, acquitted of racketeering",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cmy49ngydqzpo",
+        "https://www.aljazeera.com/news/2026/11/25/us-court-convicts-huawei-of-theft-a-history-of-chinese-firms-global-woes"
+      ],
+      "tokens": [
+        "acquitted",
+        "convicted",
+        "huawei",
+        "racketeering",
+        "secrets",
+        "theft",
+        "trade"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "top_news",
+      "id": "hera-asteroid-crater",
+      "headline": "Europe's Hera mission reveals stadium-sized crater from NASA asteroid test",
+      "urls": [
+        "https://arstechnica.com/space/2026/11/europes-hera-mission-returns-to-the-chaotic-scene-of-a-cosmic-smashup",
+        "https://www.bbc.co.uk/news/articles/cw8dv112r5gmo"
+      ],
+      "tokens": [
+        "asteroid",
+        "crater",
+        "europe",
+        "hera",
+        "mission",
+        "nasa",
+        "reveals",
+        "sized",
+        "stadium",
+        "test"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "top_news",
+      "id": "trump-nvidia-trades",
+      "headline": "Disclosures show Trump's accounts traded Nvidia shares 44 times this year",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cq772vk664yvo",
+        "https://www.bbc.co.uk/news/articles/cq772vk664yvo"
+      ],
+      "tokens": [
+        "accounts",
+        "disclosures",
+        "nvidia",
+        "shares",
+        "show",
+        "times",
+        "traded",
+        "trump"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "top_news",
+      "id": "china-chen-jining",
+      "headline": "China places Shanghai party chief Chen Jining under investigation",
+      "urls": [
+        "https://www.npr.org/2026/11/25/nx-s1-6053801/china-investigation-politburo-shanghai-party"
+      ],
+      "tokens": [
+        "chen",
+        "chief",
+        "china",
+        "investigation",
+        "jining",
+        "party",
+        "places",
+        "shanghai"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "positive_news",
+      "id": "brazil-wolbachia-mosquitoes",
+      "headline": "Viral infections drop 68% among Brazilian schoolchildren after Wolbachia mosquito release",
+      "urls": [
+        "https://www.goodnewsnetwork.org/major-success-sees-viral-infections-fall-68-in-brazil-after-releasing-wolbachia-infected-mosquitoes"
+      ],
+      "tokens": [
+        "among",
+        "brazilian",
+        "drop",
+        "infections",
+        "mosquito",
+        "release",
+        "schoolchildren",
+        "viral",
+        "wolbachia"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "local:china",
+      "id": "cn-us-tariffs-20pct",
+      "headline": "美国拟对中国等14个贸易伙伴加征新关税，中国商品面临最高20%税率",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMi9gJBVV95cUxQRGVtblAtTS1HQzZ6QzhIMGR2TGxiVjZFSEFQTjl6TC1IUFVqVEFBOTFWaHFNaG5pcjBDa2ppRHJWVkxMRXpiUTBnNDQ0aEdkc1pEX25PLUk4NG0tZllnb2JLcTRJZVctQVJrdWxvcl9nNy1YMnh0NlUtUVlnZ0NDd1JOZ3VXdHRCVFM4anViYWNuVGdicEpuVHR3eGEyVVNEQThBWmdfU3NTY2Y3NFdwWmY2MU1tTnhoTFVxVDc5eTJ2UHlkelktblRlMXRZdTB4RlVrSFlYXzNnT1BMckxLYTgwWTZwQTBNTC1TZ2hMWXUtbEI5eGIwVVM4WUlwMnFRX3hHclV3VzNpT3pnd0h6cXE1Nml3Mm5vRmtKWW4xRGtYOUNvWHdvU0dhdElnbU10b2ZnQWRwamRmVVRZS2w5dTVJTElBcDJzWEZoUFdudThWRUEySjhGR1hOekFwOFY2MXl0MHRrTVlEMm9zVmtTZzFLUTdiUdIB9gJBVV95cUxQRGVtblAtTS1HQzZ6QzhIMGR2TGxiVjZFSEFQTjl6TC1IUFVqVEFBOTFWaHFNaG5pcjBDa2ppRHJWVkxMRXpiUTBnNDQ0aEdkc1pEX25PLUk4NG0tZllnb2JLcTRJZVctQVJrdWxvcl9nNy1YMnh0NlUtUVlnZ0NDd1JOZ3VXdHRCVFM4anViYWNuVGdicEpuVHR3eGEyVVNEQThBWmdfU3NTY2Y3NFdwWmY2MU1tTnhoTFVxVDc5eTJ2UHlkelktblRlMXRZdTB4RlVrSFlYXzNnT1BMckxLYTgwWTZwQTBNTC1TZ2hMWXUtbEI5eGIwVVM4WUlwMnFRX3hHclV3VzNpT3pnd0h6cXE1Nml3Mm5vRmtKWW4xRGtYOUNvWHdvU0dhdElnbU10b2ZnQWRwamRmVVRZS2w5dTVJTElBcDJzWEZoUFdudThWRUEySjhGR1hOekFwOFY2MXl0MHRrTVlEMm9zVmtTZzFLUTdiUQ",
+        "https://news.google.com/rss/articles/CBMi7gJBVV95cUxPTGpFbTFCWkxJTXZqWVFsVXVZYmV1LWpib2RScE41bU92ZG9iajlJMWxMZGlzaGZzcWNrVUQ3UFBxbUJTbVZsRS1ybjZYYmo0VlpUTlVaaWxYVEtOalJ5VjVhQmVzQ0RDcTNGVWJPMllfbF93c2o4VldCS2g0WEl6MEhMNDRXamRHNzNxLTFhNGlha09JeXM3MUlfdEt0ZDU5ckxfZDl5bHpkYWFuVWhUOFMtVWQ1Wk00WHBjZUlLOUt4WkhONmk3d0ZHc0JaeDhYRENjV2xIb2JMN0dmdlNXNTV6Mm8tMHh0VGxRT1BZRVdlbE1qUmQ3eVhBYXg0N2NGQy0xRVBjSzc4RmFQUFM5NUVkR195X1ZURUUwSDN4QnBCQ0kxWnZFa3VBdlBmUHVaVnpfQVhsQlpHYjV1QnRidjFBV2xjcEhYM2NqLTJhVVJxd1BCTERwdm00TElzSGZ4YWZmTk9DRUJfWE4waHc"
+      ],
+      "tokens": [
+        "个贸易伙伴加征新关税",
+        "中国商品面临最高",
+        "税率",
+        "美国拟对中国等"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "local:china",
+      "id": "cn-mfa-briefing-nov25",
+      "headline": "中国外交部举行11月25日例行记者会，回应近期涉华外交与经贸关切",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMidkFVX3lxTFBSRVJ0ci1iT0VraS1hVWdTbS1wMmx0bGg1WTNpUU1RN0c3VEk4d1FBTExkalVYMnhyaWlSYTRaUk1KaDc3dEFOTEZ0bGJ4RkRyb2wzUzNySFl5X2Nnd3ZVVE5LRnJ0Z0tpb0hpTFYzdjdWQTF0Mmc"
+      ],
+      "tokens": [
+        "中国外交部举行",
+        "回应近期涉华外交与经贸关切",
+        "日例行记者会"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "local:china",
+      "id": "cn-us-tariffs-20pct",
+      "headline": "US proposes new tariffs on 14 trading partners, with Chinese goods facing up to 20%",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMi9gJBVV95cUxQRGVtblAtTS1HQzZ6QzhIMGR2TGxiVjZFSEFQTjl6TC1IUFVqVEFBOTFWaHFNaG5pcjBDa2ppRHJWVkxMRXpiUTBnNDQ0aEdkc1pEX25PLUk4NG0tZllnb2JLcTRJZVctQVJrdWxvcl9nNy1YMnh0NlUtUVlnZ0NDd1JOZ3VXdHRCVFM4anViYWNuVGdicEpuVHR3eGEyVVNEQThBWmdfU3NTY2Y3NFdwWmY2MU1tTnhoTFVxVDc5eTJ2UHlkelktblRlMXRZdTB4RlVrSFlYXzNnT1BMckxLYTgwWTZwQTBNTC1TZ2hMWXUtbEI5eGIwVVM4WUlwMnFRX3hHclV3VzNpT3pnd0h6cXE1Nml3Mm5vRmtKWW4xRGtYOUNvWHdvU0dhdElnbU10b2ZnQWRwamRmVVRZS2w5dTVJTElBcDJzWEZoUFdudThWRUEySjhGR1hOekFwOFY2MXl0MHRrTVlEMm9zVmtTZzFLUTdiUdIB9gJBVV95cUxQRGVtblAtTS1HQzZ6QzhIMGR2TGxiVjZFSEFQTjl6TC1IUFVqVEFBOTFWaHFNaG5pcjBDa2ppRHJWVkxMRXpiUTBnNDQ0aEdkc1pEX25PLUk4NG0tZllnb2JLcTRJZVctQVJrdWxvcl9nNy1YMnh0NlUtUVlnZ0NDd1JOZ3VXdHRCVFM4anViYWNuVGdicEpuVHR3eGEyVVNEQThBWmdfU3NTY2Y3NFdwWmY2MU1tTnhoTFVxVDc5eTJ2UHlkelktblRlMXRZdTB4RlVrSFlYXzNnT1BMckxLYTgwWTZwQTBNTC1TZ2hMWXUtbEI5eGIwVVM4WUlwMnFRX3hHclV3VzNpT3pnd0h6cXE1Nml3Mm5vRmtKWW4xRGtYOUNvWHdvU0dhdElnbU10b2ZnQWRwamRmVVRZS2w5dTVJTElBcDJzWEZoUFdudThWRUEySjhGR1hOekFwOFY2MXl0MHRrTVlEMm9zVmtTZzFLUTdiUQ",
+        "https://news.google.com/rss/articles/CBMi7gJBVV95cUxPTGpFbTFCWkxJTXZqWVFsVXVZYmV1LWpib2RScE41bU92ZG9iajlJMWxMZGlzaGZzcWNrVUQ3UFBxbUJTbVZsRS1ybjZYYmo0VlpUTlVaaWxYVEtOalJ5VjVhQmVzQ0RDcTNGVWJPMllfbF93c2o4VldCS2g0WEl6MEhMNDRXamRHNzNxLTFhNGlha09JeXM3MUlfdEt0ZDU5ckxfZDl5bHpkYWFuVWhUOFMtVWQ1Wk00WHBjZUlLOUt4WkhONmk3d0ZHc0JaeDhYRENjV2xIb2JMN0dmdlNXNTV6Mm8tMHh0VGxRT1BZRVdlbE1qUmQ3eVhBYXg0N2NGQy0xRVBjSzc4RmFQUFM5NUVkR195X1ZURUUwSDN4QnBCQ0kxWnZFa3VBdlBmUHVaVnpfQVhsQlpHYjV1QnRidjFBV2xjcEhYM2NqLTJhVVJxd1BCTERwdm00TElzSGZ4YWZmTk9DRUJfWE4waHc"
+      ],
+      "tokens": [
+        "chinese",
+        "facing",
+        "goods",
+        "partners",
+        "proposes",
+        "tariffs",
+        "trading"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "local:china",
+      "id": "cn-mfa-briefing-nov25",
+      "headline": "China Foreign Ministry holds Nov. 25 regular press briefing on trade and diplomatic issues",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMidkFVX3lxTFBSRVJ0ci1iT0VraS1hVWdTbS1wMmx0bGg1WTNpUU1RN0c3VEk4d1FBTExkalVYMnhyaWlSYTRaUk1KaDc3dEFOTEZ0bGJ4RkRyb2wzUzNySFl5X2Nnd3ZVVE5LRnJ0Z0tpb0hpTFYzdjdWQTF0Mmc"
+      ],
+      "tokens": [
+        "briefing",
+        "china",
+        "diplomatic",
+        "foreign",
+        "holds",
+        "issues",
+        "ministry",
+        "press",
+        "regular",
+        "trade"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "local:china",
+      "id": "cn-ai-taiwan-election-bbc",
+      "headline": "BBC事实查核：与中国有关账号利用AI生成视频攻击台湾选举候选人",
+      "urls": [
+        "https://www.bbc.com/zhongwen/articles/c6rmgvkp322xo/trad"
+      ],
+      "tokens": [
+        "与中国有关账号利用",
+        "事实查核",
+        "生成视频攻击台湾选举候选人"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "local:china",
+      "id": "cn-ai-taiwan-election-bbc",
+      "headline": "BBC Verify: China-linked accounts use AI-generated videos to target Taiwan election candidates",
+      "urls": [
+        "https://www.bbc.com/zhongwen/articles/c6rmgvkp322xo/trad"
+      ],
+      "tokens": [
+        "accounts",
+        "candidates",
+        "china",
+        "election",
+        "generated",
+        "linked",
+        "taiwan",
+        "target",
+        "verify",
+        "videos"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "local:bay-area",
+      "id": "bay-area-sf-reparations",
+      "headline": "Taxpayer group challenges San Francisco reparations fund in court",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQRXFRSDFWYWd3aEpRUnBzWHg2OVhNeFU5WDRqNjZIYUxyamZBaXN3eklDZjN0bUNadVdEcWxBM05xcW5zdkwtWjZwZ2c5b00yX1B1Uy1RYnN4M3FqSkJaeXFvRERCWGpBcGRqS0M0ejFQZ3JfdkNaWURxWkpWSDVkc2tQaEFJWlZGN0RNWjBtMDRCeUtzSFhJZHdQeGlsdEptUVVPV3RieG1WYkE"
+      ],
+      "tokens": [
+        "challenges",
+        "court",
+        "francisco",
+        "fund",
+        "group",
+        "reparations",
+        "taxpayer"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "local:bay-area",
+      "id": "bay-area-king-tides",
+      "headline": "King tides bring coastal flooding and San Francisco flood advisory",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMikAFBVV95cUxNSEFhZ0EtSWNJRmJSY1U4TkU3cjRhbUFyQ1ZSWGNuZ3NiazBZbGlUZ2xTR3ktODlIb045dGYzdGRoRTBFemR0RXp3MDluOFpvQXRua29XOWd2OEtDRGlsSmlPNWs4LXA0ZnRLakFkeU5qbmc2ZE95MzFFeU1ydmZnTVg4NlB4MDk5cGRVbEg4OG4"
+      ],
+      "tokens": [
+        "advisory",
+        "bring",
+        "coastal",
+        "flood",
+        "flooding",
+        "francisco",
+        "king",
+        "tides"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "local:bay-area",
+      "id": "bay-area-city-cyberattacks",
+      "headline": "Hackers target Bay Area cities and public institutions for millions",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNSVFLZV9wNktoVW8zUDMzcTVXUl9rTlV4b1BNMUJuYVBNSFUzRHJ4dDNGWjlLeGVTT1lPdHJaNWk2Wm9DcUh2Sm5ZdS1scnMtWVVhQkliSFFDWWtPT2xFRFVQcGVYV2tzTndfeTJ0MzAyTl9uR2RJa0xqMTMwdjhTNHIwemw3bWt50gGQAUFVX3lxTE9hdmRlMDRMQ1I2MlQ5WksyWXpmV1c3U2ZWTy1oZFRVM2JvaXdhUk9PZGZnTzlVZDQyaU1oUXdISDk2c2xXWl93XzVyWHpZZ25HZHNycFpxYWUxc0JUdXBEV0ZNMDNGT094ZzR1alF3dVF2bWVLSG1YOTF4RE53anFpSU12bWVFa2FHWXRISWc4Sw"
+      ],
+      "tokens": [
+        "area",
+        "cities",
+        "hackers",
+        "institutions",
+        "millions",
+        "public",
+        "target"
+      ]
+    },
+    {
+      "date": "2026-11-25",
+      "section": "local:bay-area",
+      "id": "bay-area-shipwreck-oil",
+      "headline": "1953 shipwreck off San Francisco coast linked to oiled birds",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMipwFBVV95cUxPTm1EYTZyQ1ZqaXIxNE5RSWdtTmJKRFZBb3IwUDhZVHpmWFU4YXpDUldNd1FLbEgxR3UtZVNIQVNFUkJOM0NHUTFPbm91VTl1XzFPTUtkOWdjYnJVRzhRdFBsZjRlNHZUM09nQ0pFUlZmUC11TGEzU25WTmEyekh3ZGZWTzZVdHBRSDZmMTNneXRXVFVMazNOWUpGZkFvM1ppVUpfMTFONA"
+      ],
+      "tokens": [
+        "1953",
+        "birds",
+        "coast",
+        "francisco",
+        "linked",
+        "oiled",
+        "shipwreck"
+      ]
+    }
+  ]
+}

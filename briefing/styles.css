@@ -505,6 +505,10 @@ h3 {
   background: var(--neutral-badge);
 }
 
+.company-mention {
+  cursor: help;
+}
+
 .country-mention {
   display: inline;
   border-bottom: 1px dashed var(--border-strong);

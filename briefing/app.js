@@ -433,7 +433,7 @@ function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false)
       }
       out += pillCompanies
         ? `<span class="ticker-tag is-private" tabindex="0" data-company-domain="${escapeHtml(domain)}">${logoHtml}${escapeHtml(token)}</span>`
-        : `${logoHtml}${escapeHtml(token)}`;
+        : `<span class="company-mention" tabindex="0" data-company-domain="${escapeHtml(domain)}">${logoHtml}${escapeHtml(token)}</span>`;
     } else if (placeId) {
       const place = PLACE_META[placeId];
       let flagHtml = "";
@@ -2067,7 +2067,7 @@ function initFloatingTooltips() {
   document.body.appendChild(tip);
 
   const SEL =
-    ".ticker-tag[data-ticker-tip], .ticker-tag[data-company-domain], .quote-name[data-company-domain], .sentiment-gauge[data-tooltip]";
+    ".ticker-tag[data-ticker-tip], .ticker-tag[data-company-domain], .company-mention[data-company-domain], .quote-name[data-company-domain], .sentiment-gauge[data-tooltip]";
   let activeEl = null;
 
   const hide = () => {
@@ -2168,6 +2168,10 @@ function initFloatingTooltips() {
     if (!el) {
       if (activeEl) hide();
       return;
+    }
+    if (el.closest("a")) {
+      e.preventDefault();
+      e.stopPropagation();
     }
     if (activeEl === el && !tip.classList.contains("hidden")) {
       hide();

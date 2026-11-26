@@ -43,7 +43,8 @@ Strict rules:
 4. When prior-day context is provided, explicitly highlight what changed or escalated/cooled since yesterday.
 5. In executive_brief bullets, summaries, why_it_matters, narratives, overviews, and framing_notes, wrap the 1–2 highest-signal phrases per sentence (the core outcome, decisive action, or key metric — roughly 15–25% of the sentence) in **double asterisks** for scannable bold highlighting, and wrap human person names in *single asterisks* for italics. Never bold entire sentences or headlines.
 6. Limit executive_brief to at most one item primarily about the stock market; keep the remaining bullets focused on non-market world, policy, conflict, tech, or science developments.
-7. Produce valid JSON matching the requested schema exactly."""
+7. Never re-feature stories already listed in recently_shown_headlines_3d unless a major new development has occurred since they were shown.
+8. Produce valid JSON matching the requested schema exactly."""
 
 
 def _build_prompt(
@@ -55,9 +56,11 @@ def _build_prompt(
     prior_briefing: dict[str, Any] | None,
     raw_positive: list[dict[str, Any]] | None = None,
     raw_local: list[dict[str, Any]] | None = None,
+    recent_headlines_3d: list[str] | None = None,
 ) -> str:
     payload = {
         "briefing_date": date_str,
+        "recently_shown_headlines_3d": recent_headlines_3d or [],
         "prior_day_context": (
             {
                 "date": prior_briefing.get("date"),

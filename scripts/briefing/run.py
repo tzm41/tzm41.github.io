@@ -22,6 +22,13 @@ from .fetchers.conflicts import fetch_conflicts
 from .fetchers.markets import fetch_markets
 from .fetchers.news import fetch_local_news, fetch_positive_news, fetch_top_news
 from .fetchers.politics import fetch_politics
+from .memory import (
+    filter_raw_candidates,
+    format_memory_headlines,
+    is_duplicate_of_memory,
+    load_recent_memory,
+    record_shown_news,
+)
 from .schema import (
     AfternoonSynthesis,
     BriefSection,
@@ -42,6 +49,7 @@ def _write_briefing_files(briefing: DailyBriefing) -> Path:
     LATEST_PATH.write_text(serialized, encoding="utf-8")
 
     _prune_archive()
+    record_shown_news(briefing.model_dump())
     rebuild_index()
     print(f"[run] Wrote {archive_file.relative_to(Path.cwd()) if archive_file.is_relative_to(Path.cwd()) else archive_file}")
     return archive_file
@@ -152,6 +160,16 @@ async def run_pipeline(
         )
     )
 
+    memory_3d = load_recent_memory(target_date, include_same_day=False)
+    raw_news = filter_raw_candidates(raw_news, memory_3d, label="top_news", min_keep=8)
+    raw_positive = filter_raw_candidates(raw_positive, memory_3d, label="positive_news", min_keep=2)
+    for reg in raw_local:
+        if isinstance(reg, dict) and isinstance(reg.get("articles"), list):
+            reg["articles"] = filter_raw_candidates(
+                reg["articles"], memory_3d, label=f"local:{reg.get('id', 'region')}", min_keep=4
+            )
+    recent_headlines_3d = format_memory_headlines(memory_3d)
+
     health = SourceHealth(
         news=news_h,  # type: ignore[arg-type]
         markets=mkt_h,  # type: ignore[arg-type]
@@ -178,8 +196,17 @@ async def run_pipeline(
             "raw_politics": raw_politics,
             "raw_positive": raw_positive,
             "raw_local": raw_local,
+            "recently_shown_headlines_3d": recent_headlines_3d,
             "prompt": _build_prompt(
-                target_date, raw_news, raw_markets, raw_conflicts, raw_politics, prior, raw_positive, raw_local
+                target_date,
+                raw_news,
+                raw_markets,
+                raw_conflicts,
+                raw_politics,
+                prior,
+                raw_positive,
+                raw_local,
+                recent_headlines_3d=recent_headlines_3d,
             ),
             "synthesis_schema": GeminiBriefingSynthesis.model_json_schema(),
         }
@@ -301,8 +328,12 @@ async def fetch_afternoon_bundle(out_path_str: str) -> None:
         MARKETS_LIVE_PATH.write_text(json.dumps(live_payload, indent=2) + "\n", encoding="utf-8")
         print(f"[run] Refreshed stale markets_live.json (updated_at={now_utc})")
 
+    ref_date = morning.get("date") or now_dt.strftime("%Y-%m-%d")
+    memory_3d = load_recent_memory(ref_date, include_same_day=True)
+    raw_news = filter_raw_candidates(raw_news, memory_3d, label="afternoon_news", min_keep=6)
+
     bundle = {
-        "date": morning.get("date") or now_dt.strftime("%Y-%m-%d"),
+        "date": ref_date,
         "generated_at": now_utc,
         "morning_brief": (
             (morning.get("morning_brief") or {}).get("bullets")
@@ -312,6 +343,7 @@ async def fetch_afternoon_bundle(out_path_str: str) -> None:
             {"id": s.get("id"), "headline": s.get("headline")}
             for s in morning.get("top_news", [])
         ],
+        "recently_shown_headlines_3d": format_memory_headlines(memory_3d),
         "morning_market_narrative": (morning.get("markets") or {}).get("narrative", ""),
         "raw_news": raw_news[:25],
         "market_snapshot": {
@@ -362,6 +394,7 @@ def apply_afternoon_synthesis(synthesis_json_path: str) -> DailyBriefing:
         existing_morning = [
             s for s in data.get("top_news", []) if not s.get("is_afternoon")
         ]
+        memory_prior = load_recent_memory(str(data.get("date") or ""), include_same_day=False)
         seen_ids = {s.get("id") for s in existing_morning if s.get("id")}
         seen_headlines = {
             str(s.get("headline", "")).strip().lower() for s in existing_morning
@@ -369,7 +402,12 @@ def apply_afternoon_synthesis(synthesis_json_path: str) -> DailyBriefing:
         added: list[dict[str, Any]] = []
         for story in ai.new_top_news:
             hl = story.headline.strip().lower()
-            if story.id in seen_ids or hl in seen_headlines:
+            story_urls = [src.url for src in story.sources if src.url]
+            if (
+                story.id in seen_ids
+                or hl in seen_headlines
+                or is_duplicate_of_memory(story.headline, story_urls, memory_prior)
+            ):
                 continue
             seen_ids.add(story.id)
             seen_headlines.add(hl)

@@ -11,10 +11,12 @@ ARCHIVE_DIR = DATA_DIR / "archive"
 LATEST_PATH = DATA_DIR / "latest.json"
 INDEX_PATH = DATA_DIR / "index.json"
 MARKETS_LIVE_PATH = DATA_DIR / "markets_live.json"
+NEWS_MEMORY_PATH = DATA_DIR / "news_memory.json"
 
 # Retention
 MAX_ARCHIVE_DAYS = 60
 INDEX_HISTORY_DAYS = 30
+NEWS_MEMORY_DAYS = 3
 
 # HTTP settings
 HTTP_TIMEOUT_SECONDS = 15.0
