@@ -15,7 +15,7 @@ const state = {
   tickerMap: new Map(),
   inlineTickerRe: null,
   newsCategory: "All",
-  marketTimeframe: "1d",
+  marketTimeframe: [0, 6].includes(new Date().getDay()) ? "5d" : "1d",
   expandedQuoteSymbol: null,
   localRegionId: null,
   localLang: "en",
@@ -559,7 +559,62 @@ function deltaClass(val) {
   return "flat";
 }
 
-function buildSparklineSvg(values, color, className = "sparkline", interactive = false) {
+const NY_TIME_FMT = new Intl.DateTimeFormat("en-US", {
+  timeZone: "America/New_York",
+  hour12: false,
+  hour: "2-digit",
+  minute: "2-digit",
+});
+
+function getNyMinutes(isoStr) {
+  if (!isoStr || isoStr.length <= 10) return null;
+  const dt = new Date(isoStr);
+  if (Number.isNaN(dt.getTime())) return null;
+  const parts = NY_TIME_FMT.formatToParts(dt);
+  const h = Number(parts.find((p) => p.type === "hour")?.value ?? 0) % 24;
+  const m = Number(parts.find((p) => p.type === "minute")?.value ?? 0);
+  return h * 60 + m;
+}
+
+function computeSparklineLayout(values, times, tf, symbol) {
+  const w = 120;
+  const n = values.length;
+  if (n < 2) return { xs: [], closeX: null, isExtended: [] };
+
+  const is24h = symbol === "BTC-USD" || symbol === "CL=F" || symbol === "GC=F";
+  if (tf === "1d" && Array.isArray(times) && times.length === n) {
+    const mins = times.map(getNyMinutes);
+    if (mins.every((m) => m !== null)) {
+      if (is24h) {
+        const startMin = 0;
+        const endMin = 1440;
+        const xs = mins.map((m) => Math.max(0, Math.min(w, ((m - startMin) / (endMin - startMin)) * w)));
+        return { xs, closeX: null, isExtended: mins.map(() => false) };
+      }
+      const maxMin = Math.max(...mins);
+      const minMin = Math.min(...mins);
+      const startMin = minMin < 570 ? Math.min(minMin, 240) : 570; // 9:30 AM ET (or 4:00 AM if pre-market)
+      const hasAfterHours = maxMin > 960;
+      const endMin = hasAfterHours ? 1200 : 960; // 8:00 PM ET if extended, else 4:00 PM ET
+      const spanMin = Math.max(60, endMin - startMin);
+      const xs = mins.map((m) => Math.max(0, Math.min(w, ((m - startMin) / spanMin) * w)));
+      const closeX = hasAfterHours ? ((960 - startMin) / spanMin) * w : null;
+      const isExtended = mins.map((m) => m > 960 || m < 570);
+      return { xs, closeX, isExtended };
+    }
+  }
+
+  const xs = values.map((_, i) => (i / (n - 1)) * w);
+  return { xs, closeX: null, isExtended: values.map(() => false) };
+}
+
+function buildSparklineSvg(
+  values,
+  color,
+  className = "sparkline",
+  interactive = false,
+  layout = null
+) {
   if (!Array.isArray(values) || values.length < 2) {
     return `<svg class="${className}" viewBox="0 0 120 32" aria-hidden="true"><line x1="0" y1="16" x2="120" y2="16" stroke="currentColor" stroke-opacity="0.2" stroke-dasharray="3 3"/></svg>`;
   }
@@ -569,29 +624,63 @@ function buildSparklineSvg(values, color, className = "sparkline", interactive =
   const min = Math.min(...values);
   const max = Math.max(...values);
   const span = max - min || 1;
+  const xs =
+    layout?.xs && layout.xs.length === values.length
+      ? layout.xs
+      : values.map((_, i) => (i / (values.length - 1)) * w);
+  const isExt =
+    layout?.isExtended && layout.isExtended.length === values.length
+      ? layout.isExtended
+      : values.map(() => false);
 
-  const pts = values.map((v, i) => {
-    const x = (i / (values.length - 1)) * w;
-    const y = h - pad - ((v - min) / span) * (h - pad * 2);
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  });
+  const coords = values.map((v, i) => [
+    xs[i],
+    h - pad - ((v - min) / span) * (h - pad * 2),
+  ]);
 
-  const polyline = pts.join(" ");
-  const area = `0,${h} ${polyline} ${w},${h}`;
+  const toPoly = (arr) => arr.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
+  const toArea = (arr) =>
+    arr.length >= 2
+      ? `${arr[0][0].toFixed(1)},${h} ${toPoly(arr)} ${arr[arr.length - 1][0].toFixed(1)},${h}`
+      : "";
+
+  const firstExtIdx = isExt.findIndex(Boolean);
+  let shapesHtml = "";
+  if (firstExtIdx > 0 && isExt.slice(firstExtIdx).every(Boolean)) {
+    const regCoords = coords.slice(0, firstExtIdx);
+    const extCoords = coords.slice(firstExtIdx - 1);
+    shapesHtml = `
+      <polygon points="${toArea(regCoords)}" fill="${color}" fill-opacity="0.12"></polygon>
+      <polyline points="${toPoly(regCoords)}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
+      <polygon points="${toArea(extCoords)}" fill="${color}" fill-opacity="0.05"></polygon>
+      <polyline points="${toPoly(extCoords)}" fill="none" stroke="${color}" stroke-opacity="0.45" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
+    `;
+  } else {
+    const dim = isExt.every(Boolean);
+    shapesHtml = `
+      <polygon points="${toArea(coords)}" fill="${color}" fill-opacity="${dim ? "0.06" : "0.12"}"></polygon>
+      <polyline points="${toPoly(coords)}" fill="none" stroke="${color}" stroke-opacity="${dim ? "0.5" : "1"}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
+    `;
+  }
+
+  const closeLineHtml =
+    layout?.closeX != null
+      ? `<line class="spark-close-line" x1="${layout.closeX.toFixed(1)}" y1="0" x2="${layout.closeX.toFixed(1)}" y2="${h}"></line>`
+      : "";
 
   if (!interactive) {
     return `
       <svg class="${className}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
-        <polygon points="${area}" fill="${color}" fill-opacity="0.12"></polygon>
-        <polyline points="${polyline}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
+        ${closeLineHtml}
+        ${shapesHtml}
       </svg>
     `;
   }
 
   return `
     <svg class="${className}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
-      <polygon points="${area}" fill="${color}" fill-opacity="0.12"></polygon>
-      <polyline points="${polyline}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
+      ${closeLineHtml}
+      ${shapesHtml}
       <line class="spark-guide" x1="0" y1="0" x2="0" y2="${h}"></line>
     </svg>
     <span class="spark-dot" style="background:${color}" aria-hidden="true"></span>
@@ -1098,6 +1187,7 @@ function renderQuoteGrid(container, quotes, tf, emptyMsg) {
           ? "var(--neg)"
           : "var(--ink-muted)";
       const { values: series, times } = getSparklineData(q, tf);
+      const layout = computeSparklineLayout(series, times, tf, q.symbol);
       const logoDomain = COMPANY_LOGOS[q.name];
       const logoHtml = logoDomain ? renderCompanyLogoImg(logoDomain) : "";
       const isExpanded = state.expandedQuoteSymbol === q.symbol;
@@ -1113,16 +1203,16 @@ function renderQuoteGrid(container, quotes, tf, emptyMsg) {
             <span class="quote-price">${fmtPrice(q.price, q.symbol)}</span>
             <span class="delta-pill ${cls}">${fmtPct(pct)}</span>
           </div>
-          <div class="sparkline-wrap" data-kind="${escapeHtml(tf)}" data-symbol="${escapeHtml(q.symbol)}" data-values="${escapeHtml(JSON.stringify(series))}" data-times="${escapeHtml(JSON.stringify(times))}">
+          <div class="sparkline-wrap" data-kind="${escapeHtml(tf)}" data-symbol="${escapeHtml(q.symbol)}" data-values="${escapeHtml(JSON.stringify(series))}" data-times="${escapeHtml(JSON.stringify(times))}" data-xs="${escapeHtml(JSON.stringify(layout.xs.map((x) => Number(x.toFixed(2)))))}">
             <div class="spark-tooltip hidden"></div>
-            ${buildSparklineSvg(series, stroke, "sparkline", true)}
+            ${buildSparklineSvg(series, stroke, "sparkline", true, layout)}
           </div>
           <div class="quote-expanded-stats">
             <div class="quote-stat"><span class="quote-stat-label">1D</span><span class="quote-stat-val ${deltaClass(q.change_pct)}">${fmtPct(q.change_pct)}</span></div>
-            <div class="quote-stat"><span class="quote-stat-label">5D</span><span class="quote-stat-val ${deltaClass(q.change_5d_pct)}">${fmtPct(q.change_5d_pct)}</span></div>
+            <div class="quote-stat"><span class="quote-stat-label">7D</span><span class="quote-stat-val ${deltaClass(q.change_5d_pct)}">${fmtPct(q.change_5d_pct)}</span></div>
             <div class="quote-stat"><span class="quote-stat-label">30D</span><span class="quote-stat-val ${deltaClass(q.change_30d_pct)}">${fmtPct(q.change_30d_pct)}</span></div>
-            <div class="quote-stat"><span class="quote-stat-label">${escapeHtml(tf.toUpperCase())} Low</span><span class="quote-stat-val">${escapeHtml(lo)}</span></div>
-            <div class="quote-stat"><span class="quote-stat-label">${escapeHtml(tf.toUpperCase())} High</span><span class="quote-stat-val">${escapeHtml(hi)}</span></div>
+            <div class="quote-stat"><span class="quote-stat-label">${escapeHtml(tf === "5d" ? "7D" : tf.toUpperCase())} Low</span><span class="quote-stat-val">${escapeHtml(lo)}</span></div>
+            <div class="quote-stat"><span class="quote-stat-label">${escapeHtml(tf === "5d" ? "7D" : tf.toUpperCase())} High</span><span class="quote-stat-val">${escapeHtml(hi)}</span></div>
           </div>
         </div>
       `;
@@ -1550,8 +1640,12 @@ async function refreshLiveMarkets() {
       const timeStr = Number.isNaN(dt.getTime())
         ? live.updated_at
         : dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
-      els.marketsLivePill.innerHTML = `<span class="live-dot" aria-hidden="true"></span>${escapeHtml(timeStr)}`;
-      els.marketsLivePill.title = `Markets refreshed ${fmtLocalTimestamp(live.updated_at)}`;
+      const ageMin = Number.isNaN(dt.getTime()) ? 999 : Math.max(0, (Date.now() - dt.getTime()) / 60000);
+      const freshness = ageMin < 45 ? "fresh" : ageMin < 180 ? "aging" : "stale";
+      const ageLabel =
+        ageMin < 60 ? `${Math.round(ageMin)}m ago` : `${(ageMin / 60).toFixed(1)}h ago`;
+      els.marketsLivePill.innerHTML = `<span class="live-dot ${freshness}" aria-hidden="true"></span>${escapeHtml(timeStr)}`;
+      els.marketsLivePill.title = `Markets refreshed ${fmtLocalTimestamp(live.updated_at)} (${freshness} · ${ageLabel})`;
       els.marketsLivePill.classList.remove("hidden");
     }
   } catch {
@@ -1721,11 +1815,19 @@ function initSparklineHover() {
         } catch {
           times = [];
         }
+        let xs = null;
+        try {
+          const parsedXs = JSON.parse(wrap.dataset.xs || "null");
+          if (Array.isArray(parsedXs) && parsedXs.length === values.length) xs = parsedXs;
+        } catch {
+          xs = null;
+        }
         const min = Math.min(...values);
         const max = Math.max(...values);
         entry = {
           values,
           times,
+          xs,
           min,
           span: max - min || 1,
           guide: wrap.querySelector(".spark-guide"),
@@ -1752,15 +1854,29 @@ function initSparklineHover() {
     const rect = wrap.getBoundingClientRect();
     if (!rect.width) return;
 
-    const { values, times, min, span, guide, dot, tip } = entry;
+    const { values, times, xs, min, span, guide, dot, tip } = entry;
     const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    const idx = Math.round(ratio * (values.length - 1));
-    const val = values[idx];
-
     const w = 120;
     const h = 32;
     const pad = 3;
-    const ptX = (idx / (values.length - 1)) * w;
+
+    let idx = 0;
+    if (xs) {
+      const targetX = ratio * w;
+      let bestDist = Infinity;
+      for (let i = 0; i < xs.length; i++) {
+        const dist = Math.abs(xs[i] - targetX);
+        if (dist < bestDist) {
+          bestDist = dist;
+          idx = i;
+        }
+      }
+    } else {
+      idx = Math.round(ratio * (values.length - 1));
+    }
+
+    const val = values[idx];
+    const ptX = xs ? xs[idx] : (idx / (values.length - 1)) * w;
     const ptY = h - pad - ((val - min) / span) * (h - pad * 2);
 
     if (guide) {
@@ -2158,8 +2274,9 @@ async function bootstrap() {
     if (state.briefing) renderNews(state.briefing.top_news);
   });
 
-  // Market timeframe toggle (1D / 5D / 30D)
+  // Market timeframe toggle (1D / 7D / 30D; defaults to 1D on weekdays, 7D on weekends)
   const tfBtns = [els.btnTf1d, els.btnTf5d, els.btnTf30d].filter(Boolean);
+  tfBtns.forEach((b) => b.classList.toggle("active", b.dataset.tf === state.marketTimeframe));
   tfBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
       state.marketTimeframe = btn.dataset.tf;

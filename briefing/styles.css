@@ -1211,10 +1211,22 @@ h3 {
 }
 
 .live-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--pos);
+}
+
+.live-dot.fresh {
+  background: var(--pos);
+}
+
+.live-dot.aging {
+  background: var(--warn);
+}
+
+.live-dot.stale {
+  background: var(--neg);
 }
 
 .regime-badge {
@@ -1565,6 +1577,14 @@ h3 {
   stroke-width: 1;
   stroke-dasharray: 2 2;
   opacity: 0;
+  pointer-events: none;
+}
+
+.spark-close-line {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+  vector-effect: non-scaling-stroke;
   pointer-events: none;
 }
 
