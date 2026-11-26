@@ -36,27 +36,32 @@
     }
   ],
   "afternoon_brief": {
-    "generated_at": "2026-11-26T00:10:46Z",
+    "generated_at": "2026-11-26T04:15:54Z",
     "bullets": [
       {
-        "text": "**US equities staged a sharp afternoon rebound** as the Dow (+0.33%, 50,182.95) and Russell 2000 (+0.71%, 2,704.06) flipped positive, the S&P 500 (-0.25%, 7,182.78) and Nasdaq (-0.62%, 23,585.80) trimmed losses, and the **VIX cooled to 28.29** while Meta (+2.97%) and WTI crude (+2.43% to $84.04) rallied against declines in Nvidia (-3.62%).",
+        "text": "US equities **pared steeper intraday losses** to close mixed, with the **S&P 500 (-0.25%)** and **Nasdaq (-0.62%)** finishing lower alongside **Nvidia (-2.68%)** while the **Dow (+0.33%)**, **Russell 2000 (+0.71%)**, and **Meta (+3.83%)** rose; the **VIX jumped 7.32% to 28.29** and **WTI crude climbed 2.80% to $84.35**.",
         "category": "Economy",
-        "sentiment": "slightly_positive"
+        "sentiment": "slightly_negative"
       },
       {
-        "text": "The **US announced new tariffs on major trading partners** including China and the EU, adding fresh trade policy pressure alongside Capitol Hill demands from Republican lawmakers for FBI and CIA answers ahead of questioning Nvidia CEO *Jensen Huang*.",
+        "text": "The US announced **new tariffs hitting major trading partners**, including **China and the EU**, broadening trade levies across some of America's largest commercial relationships.",
         "category": "Policy",
         "sentiment": "negative"
       },
       {
-        "text": "In the Middle East, **Israeli judges recommended dropping the most serious charges** against Prime Minister *Benjamin Netanyahu* in one of his three corruption cases, while an Israeli strike in Gaza City killed senior Hamas internal security official *Mohammed Abu al-Ouf*.",
+        "text": "Forecasted Thanksgiving storms forced **Macy's to postpone its parade for the first time ever** as New York Gov. *Kathy Hochul* declared a **state of emergency**, while a **FedEx plane overshot a Miami runway** and briefly halted flights during peak holiday travel.",
         "category": "World",
-        "sentiment": "slightly_negative"
+        "sentiment": "negative"
       },
       {
-        "text": "Elsewhere globally, **Ukraine reported striking five Russian military jets** at the Savasleyka airfield, and a **highway fuel tanker crash and fire in Cairo** killed 31 people.",
+        "text": "Israeli judges **recommended dropping the most serious charges** against Prime Minister *Netanyahu*, citing little chance of conviction in one of three cases and prompting him to call for his trial to end.",
         "category": "World",
-        "sentiment": "very_negative"
+        "sentiment": "neutral"
+      },
+      {
+        "text": "Europe's **Hera spacecraft released close-up images** revealing a **stadium-sized crater** left by NASA's first planetary defense **asteroid deflection test** four years ago.",
+        "category": "Science",
+        "sentiment": "positive"
       }
     ]
   },
