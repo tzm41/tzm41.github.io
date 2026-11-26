@@ -1,86 +1,709 @@
 {
-  "updated_at": "2026-11-26T11:30:00Z",
+  "updated_at": "2026-11-26T11:48:18Z",
   "companies": {
-    "nvidia.com": { "name": "Nvidia", "country": "United States", "country_code": "us", "valuation": "~$3.6T", "leader": "Jensen Huang (CEO)", "public": true, "symbol": "NVDA" },
-    "apple.com": { "name": "Apple", "country": "United States", "country_code": "us", "valuation": "~$3.8T", "leader": "Tim Cook (CEO)", "public": true, "symbol": "AAPL" },
-    "microsoft.com": { "name": "Microsoft", "country": "United States", "country_code": "us", "valuation": "~$3.6T", "leader": "Satya Nadella (CEO)", "public": true, "symbol": "MSFT" },
-    "google.com": { "name": "Alphabet / Google", "country": "United States", "country_code": "us", "valuation": "~$3.3T", "leader": "Sundar Pichai (CEO)", "public": true, "symbol": "GOOGL" },
-    "amazon.com": { "name": "Amazon", "country": "United States", "country_code": "us", "valuation": "~$2.6T", "leader": "Andy Jassy (CEO)", "public": true, "symbol": "AMZN" },
-    "meta.com": { "name": "Meta", "country": "United States", "country_code": "us", "valuation": "~$1.5T", "leader": "Mark Zuckerberg (CEO)", "public": true, "symbol": "META" },
-    "tesla.com": { "name": "Tesla", "country": "United States", "country_code": "us", "valuation": "~$1.2T", "leader": "Elon Musk (CEO)", "public": true, "symbol": "TSLA" },
-    "anthropic.com": { "name": "Anthropic", "country": "United States", "country_code": "us", "valuation": "~$61B+", "leader": "Dario Amodei (CEO)", "public": true, "symbol": "ANT" },
-    "openai.com": { "name": "OpenAI", "country": "United States", "country_code": "us", "valuation": "~$300B", "leader": "Sam Altman (CEO)", "public": false },
-    "deepmind.google": { "name": "Google DeepMind", "country": "United Kingdom / US", "country_code": "gb", "valuation": "Alphabet subsidiary", "leader": "Demis Hassabis (CEO)", "public": false },
-    "deepseek.com": { "name": "DeepSeek", "country": "China", "country_code": "cn", "valuation": "Private (High-Flyer)", "leader": "Liang Wenfeng (Founder & CEO)", "public": false },
-    "x.ai": { "name": "xAI", "country": "United States", "country_code": "us", "valuation": "~$80B+", "leader": "Elon Musk (Founder)", "public": false },
-    "mistral.ai": { "name": "Mistral AI", "country": "France", "country_code": "fr", "valuation": "~$6B+", "leader": "Arthur Mensch (CEO)", "public": false },
-    "perplexity.ai": { "name": "Perplexity AI", "country": "United States", "country_code": "us", "valuation": "~$14B", "leader": "Aravind Srinivas (CEO)", "public": false },
-    "cohere.com": { "name": "Cohere", "country": "Canada", "country_code": "ca", "valuation": "~$5.5B", "leader": "Aidan Gomez (CEO)", "public": false },
-    "huggingface.co": { "name": "Hugging Face", "country": "United States / France", "country_code": "us", "valuation": "~$4.5B", "leader": "Clément Delangue (CEO)", "public": false },
-    "ai.meta.com": { "name": "Meta AI", "country": "United States", "country_code": "us", "valuation": "Meta division", "leader": "Mark Zuckerberg / Alexandr Wang", "public": false },
-    "ssi.inc": { "name": "Safe Superintelligence", "country": "United States", "country_code": "us", "valuation": "~$32B", "leader": "Ilya Sutskever (Co-founder)", "public": false },
-    "thinkingmachines.ai": { "name": "Thinking Machines Lab", "country": "United States", "country_code": "us", "valuation": "~$10B+", "leader": "Mira Murati (CEO)", "public": false },
-    "scale.com": { "name": "Scale AI", "country": "United States", "country_code": "us", "valuation": "~$29B", "leader": "Jason Droege (CEO)", "public": false },
-    "moonshot.cn": { "name": "Moonshot AI", "country": "China", "country_code": "cn", "valuation": "~$3.3B", "leader": "Yang Zhilin (Founder & CEO)", "public": false },
-    "zhipuai.cn": { "name": "Zhipu AI", "country": "China", "country_code": "cn", "valuation": "~$3B+", "leader": "Zhang Peng (CEO)", "public": false },
-    "minimax.io": { "name": "MiniMax", "country": "China", "country_code": "cn", "valuation": "~$2.5B+", "leader": "Yan Junjie (CEO)", "public": false },
-    "midjourney.com": { "name": "Midjourney", "country": "United States", "country_code": "us", "valuation": "Private (bootstrapped)", "leader": "David Holz (CEO)", "public": false },
-    "runwayml.com": { "name": "Runway", "country": "United States", "country_code": "us", "valuation": "~$3B+", "leader": "Cristóbal Valenzuela (CEO)", "public": false },
-    "elevenlabs.io": { "name": "ElevenLabs", "country": "United States / UK", "country_code": "us", "valuation": "~$3.3B", "leader": "Mati Staniszewski (CEO)", "public": false },
-    "cursor.com": { "name": "Cursor (Anysphere)", "country": "United States", "country_code": "us", "valuation": "~$9B+", "leader": "Michael Truell (CEO)", "public": false },
-    "character.ai": { "name": "Character.AI", "country": "United States", "country_code": "us", "valuation": "~$2.5B", "leader": "Dominic Perella (Interim CEO)", "public": false },
-    "huawei.com": { "name": "Huawei", "country": "China", "country_code": "cn", "valuation": "Private (employee-owned)", "leader": "Ren Zhengfei (Founder & CEO)", "public": false },
-    "tsmc.com": { "name": "TSMC", "country": "Taiwan", "country_code": "tw", "valuation": "~$1.0T", "leader": "C.C. Wei (Chairman & CEO)", "public": true, "symbol": "2330.TW" },
-    "samsung.com": { "name": "Samsung Electronics", "country": "South Korea", "country_code": "kr", "valuation": "~$280B", "leader": "Jun Young-hyun (Co-CEO)", "public": true, "symbol": "005930.KS" },
-    "bytedance.com": { "name": "ByteDance", "country": "China", "country_code": "cn", "valuation": "~$300B+", "leader": "Liang Rubo (CEO)", "public": false },
-    "tiktok.com": { "name": "TikTok", "country": "Singapore / China", "country_code": "sg", "valuation": "ByteDance subsidiary", "leader": "Shou Zi Chew (CEO)", "public": false },
-    "alibaba.com": { "name": "Alibaba", "country": "China", "country_code": "cn", "valuation": "~$280B", "leader": "Eddie Wu (CEO)", "public": true, "symbol": "9988.HK" },
-    "tencent.com": { "name": "Tencent", "country": "China", "country_code": "cn", "valuation": "~$580B", "leader": "Ma Huateng / Pony Ma (CEO)", "public": true, "symbol": "0700.HK" },
-    "baidu.com": { "name": "Baidu", "country": "China", "country_code": "cn", "valuation": "~$32B", "leader": "Robin Li (CEO)", "public": true, "symbol": "9888.HK" },
-    "mi.com": { "name": "Xiaomi", "country": "China", "country_code": "cn", "valuation": "~$150B", "leader": "Lei Jun (Founder & CEO)", "public": true, "symbol": "1810.HK" },
-    "byd.com": { "name": "BYD", "country": "China", "country_code": "cn", "valuation": "~$140B", "leader": "Wang Chuanfu (Chairman & CEO)", "public": true, "symbol": "1211.HK" },
-    "catl.com": { "name": "CATL", "country": "China", "country_code": "cn", "valuation": "~$160B", "leader": "Robin Zeng (Chairman & CEO)", "public": true, "symbol": "300750.SZ" },
-    "meituan.com": { "name": "Meituan", "country": "China", "country_code": "cn", "valuation": "~$120B", "leader": "Wang Xing (CEO)", "public": true, "symbol": "3690.HK" },
-    "jd.com": { "name": "JD.com", "country": "China", "country_code": "cn", "valuation": "~$55B", "leader": "Sandy Xu (CEO)", "public": true, "symbol": "9618.HK" },
-    "pddholdings.com": { "name": "PDD Holdings", "country": "China / Ireland", "country_code": "cn", "valuation": "~$160B", "leader": "Chen Lei & Zhao Jiazhen (Co-CEOs)", "public": true, "symbol": "PDD" },
-    "intel.com": { "name": "Intel", "country": "United States", "country_code": "us", "valuation": "~$100B", "leader": "Lip-Bu Tan (CEO)", "public": true, "symbol": "INTC" },
-    "amd.com": { "name": "AMD", "country": "United States", "country_code": "us", "valuation": "~$210B", "leader": "Lisa Su (CEO)", "public": true, "symbol": "AMD" },
-    "broadcom.com": { "name": "Broadcom", "country": "United States", "country_code": "us", "valuation": "~$1.0T", "leader": "Hock Tan (CEO)", "public": true, "symbol": "AVGO" },
-    "qualcomm.com": { "name": "Qualcomm", "country": "United States", "country_code": "us", "valuation": "~$180B", "leader": "Cristiano Amon (CEO)", "public": true, "symbol": "QCOM" },
-    "asml.com": { "name": "ASML", "country": "Netherlands", "country_code": "nl", "valuation": "~$300B", "leader": "Christophe Fouquet (CEO)", "public": true, "symbol": "ASML" },
-    "oracle.com": { "name": "Oracle", "country": "United States", "country_code": "us", "valuation": "~$460B", "leader": "Safra Catz (CEO)", "public": true, "symbol": "ORCL" },
-    "netflix.com": { "name": "Netflix", "country": "United States", "country_code": "us", "valuation": "~$450B", "leader": "Ted Sarandos & Greg Peters (Co-CEOs)", "public": true, "symbol": "NFLX" },
-    "spacex.com": { "name": "SpaceX", "country": "United States", "country_code": "us", "valuation": "~$350B", "leader": "Elon Musk (CEO)", "public": false },
-    "boeing.com": { "name": "Boeing", "country": "United States", "country_code": "us", "valuation": "~$140B", "leader": "Kelly Ortberg (CEO)", "public": true, "symbol": "BA" },
-    "toyota.com": { "name": "Toyota", "country": "Japan", "country_code": "jp", "valuation": "~$250B", "leader": "Koji Sato (CEO)", "public": true, "symbol": "7203.T" },
-    "sony.com": { "name": "Sony", "country": "Japan", "country_code": "jp", "valuation": "~$140B", "leader": "Hiroki Totoki (CEO)", "public": true, "symbol": "6758.T" },
-    "nintendo.com": { "name": "Nintendo", "country": "Japan", "country_code": "jp", "valuation": "~$85B", "leader": "Shuntaro Furukawa (President)", "public": true, "symbol": "7974.T" },
-    "disney.com": { "name": "Disney", "country": "United States", "country_code": "us", "valuation": "~$200B", "leader": "Bob Iger (CEO)", "public": true, "symbol": "DIS" },
-    "walmart.com": { "name": "Walmart", "country": "United States", "country_code": "us", "valuation": "~$780B", "leader": "Doug McMillon (CEO)", "public": true, "symbol": "WMT" },
-    "costco.com": { "name": "Costco", "country": "United States", "country_code": "us", "valuation": "~$430B", "leader": "Ron Vachris (CEO)", "public": true, "symbol": "COST" },
-    "jpmorganchase.com": { "name": "JPMorgan Chase", "country": "United States", "country_code": "us", "valuation": "~$720B", "leader": "Jamie Dimon (CEO)", "public": true, "symbol": "JPM" },
-    "goldmansachs.com": { "name": "Goldman Sachs", "country": "United States", "country_code": "us", "valuation": "~$190B", "leader": "David Solomon (CEO)", "public": true, "symbol": "GS" },
-    "palantir.com": { "name": "Palantir", "country": "United States", "country_code": "us", "valuation": "~$280B", "leader": "Alex Karp (CEO)", "public": true, "symbol": "PLTR" },
-    "salesforce.com": { "name": "Salesforce", "country": "United States", "country_code": "us", "valuation": "~$270B", "leader": "Marc Benioff (CEO)", "public": true, "symbol": "CRM" },
-    "adobe.com": { "name": "Adobe", "country": "United States", "country_code": "us", "valuation": "~$180B", "leader": "Shantanu Narayen (CEO)", "public": true, "symbol": "ADBE" },
-    "uber.com": { "name": "Uber", "country": "United States", "country_code": "us", "valuation": "~$180B", "leader": "Dara Khosrowshahi (CEO)", "public": true, "symbol": "UBER" },
-    "stripe.com": { "name": "Stripe", "country": "United States / Ireland", "country_code": "us", "valuation": "~$91.5B", "leader": "Patrick Collison (CEO)", "public": false },
-    "spotify.com": { "name": "Spotify", "country": "Sweden", "country_code": "se", "valuation": "~$130B", "leader": "Daniel Ek (CEO)", "public": true, "symbol": "SPOT" },
-    "ibm.com": { "name": "IBM", "country": "United States", "country_code": "us", "valuation": "~$240B", "leader": "Arvind Krishna (CEO)", "public": true, "symbol": "IBM" },
-    "cisco.com": { "name": "Cisco", "country": "United States", "country_code": "us", "valuation": "~$250B", "leader": "Chuck Robbins (CEO)", "public": true, "symbol": "CSCO" },
-    "softbank.jp": { "name": "SoftBank Group", "country": "Japan", "country_code": "jp", "valuation": "~$90B", "leader": "Masayoshi Son (CEO)", "public": true, "symbol": "9984.T" },
-    "cloudflare.com": { "name": "Cloudflare", "country": "United States", "country_code": "us", "valuation": "~$50B", "leader": "Matthew Prince (CEO)", "public": true, "symbol": "NET" },
-    "crowdstrike.com": { "name": "CrowdStrike", "country": "United States", "country_code": "us", "valuation": "~$100B", "leader": "George Kurtz (CEO)", "public": true, "symbol": "CRWD" },
-    "snowflake.com": { "name": "Snowflake", "country": "United States", "country_code": "us", "valuation": "~$60B", "leader": "Sridhar Ramaswamy (CEO)", "public": true, "symbol": "SNOW" },
-    "databricks.com": { "name": "Databricks", "country": "United States", "country_code": "us", "valuation": "~$62B", "leader": "Ali Ghodsi (CEO)", "public": false },
-    "coinbase.com": { "name": "Coinbase", "country": "United States", "country_code": "us", "valuation": "~$70B", "leader": "Brian Armstrong (CEO)", "public": true, "symbol": "COIN" },
-    "visa.com": { "name": "Visa", "country": "United States", "country_code": "us", "valuation": "~$680B", "leader": "Ryan McInerney (CEO)", "public": true, "symbol": "V" },
-    "mastercard.com": { "name": "Mastercard", "country": "United States", "country_code": "us", "valuation": "~$500B", "leader": "Michael Miebach (CEO)", "public": true, "symbol": "MA" },
-    "pfizer.com": { "name": "Pfizer", "country": "United States", "country_code": "us", "valuation": "~$145B", "leader": "Albert Bourla (CEO)", "public": true, "symbol": "PFE" },
-    "lilly.com": { "name": "Eli Lilly", "country": "United States", "country_code": "us", "valuation": "~$750B", "leader": "David Ricks (CEO)", "public": true, "symbol": "LLY" },
-    "novonordisk.com": { "name": "Novo Nordisk", "country": "Denmark", "country_code": "dk", "valuation": "~$350B", "leader": "Lars Fruergaard Jørgensen (CEO)", "public": true, "symbol": "NVO" },
-    "exxonmobil.com": { "name": "ExxonMobil", "country": "United States", "country_code": "us", "valuation": "~$480B", "leader": "Darren Woods (CEO)", "public": true, "symbol": "XOM" },
-    "chevron.com": { "name": "Chevron", "country": "United States", "country_code": "us", "valuation": "~$270B", "leader": "Mike Wirth (CEO)", "public": true, "symbol": "CVX" },
-    "aramco.com": { "name": "Saudi Aramco", "country": "Saudi Arabia", "country_code": "sa", "valuation": "~$1.7T", "leader": "Amin Nasser (CEO)", "public": true, "symbol": "2222.SR" }
+    "nvidia.com": {
+      "name": "Nvidia",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$3.61T",
+      "leader": "Jensen Huang (CEO)",
+      "public": true,
+      "symbol": "NVDA"
+    },
+    "apple.com": {
+      "name": "Apple",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$5.17T",
+      "leader": "Tim Cook (CEO)",
+      "public": true,
+      "symbol": "AAPL"
+    },
+    "microsoft.com": {
+      "name": "Microsoft",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$3.64T",
+      "leader": "Satya Nadella (CEO)",
+      "public": true,
+      "symbol": "MSFT"
+    },
+    "google.com": {
+      "name": "Alphabet / Google",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$3.36T",
+      "leader": "Sundar Pichai (CEO)",
+      "public": true,
+      "symbol": "GOOGL"
+    },
+    "amazon.com": {
+      "name": "Amazon",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$2.64T",
+      "leader": "Andy Jassy (CEO)",
+      "public": true,
+      "symbol": "AMZN"
+    },
+    "meta.com": {
+      "name": "Meta",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$1.56T",
+      "leader": "Mark Zuckerberg (CEO)",
+      "public": true,
+      "symbol": "META"
+    },
+    "tesla.com": {
+      "name": "Tesla",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$1.50T",
+      "leader": "Elon Musk (CEO)",
+      "public": true,
+      "symbol": "TSLA"
+    },
+    "anthropic.com": {
+      "name": "Anthropic",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$1.11T",
+      "leader": "Dario Amodei (CEO)",
+      "public": true,
+      "symbol": "ANT"
+    },
+    "openai.com": {
+      "name": "OpenAI",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$1.25T",
+      "leader": "Sam Altman (CEO)",
+      "public": false
+    },
+    "deepmind.google": {
+      "name": "Google DeepMind",
+      "country": "United Kingdom / US",
+      "country_code": "gb",
+      "valuation": "Alphabet subsidiary",
+      "leader": "Demis Hassabis (CEO)",
+      "public": false
+    },
+    "deepseek.com": {
+      "name": "DeepSeek",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "Private (High-Flyer)",
+      "leader": "Liang Wenfeng (Founder & CEO)",
+      "public": false
+    },
+    "x.ai": {
+      "name": "xAI",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "SpaceX subsidiary ($250B acq.)",
+      "leader": "Elon Musk (Founder)",
+      "public": false
+    },
+    "mistral.ai": {
+      "name": "Mistral AI",
+      "country": "France",
+      "country_code": "fr",
+      "valuation": "~$6B+",
+      "leader": "Arthur Mensch (CEO)",
+      "public": false
+    },
+    "perplexity.ai": {
+      "name": "Perplexity AI",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$14B",
+      "leader": "Aravind Srinivas (CEO)",
+      "public": false
+    },
+    "cohere.com": {
+      "name": "Cohere",
+      "country": "Canada",
+      "country_code": "ca",
+      "valuation": "~$5.5B",
+      "leader": "Aidan Gomez (CEO)",
+      "public": false
+    },
+    "huggingface.co": {
+      "name": "Hugging Face",
+      "country": "United States / France",
+      "country_code": "us",
+      "valuation": "~$4.5B",
+      "leader": "Clément Delangue (CEO)",
+      "public": false
+    },
+    "ai.meta.com": {
+      "name": "Meta AI",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Meta division",
+      "leader": "Mark Zuckerberg / Alexandr Wang",
+      "public": false
+    },
+    "ssi.inc": {
+      "name": "Safe Superintelligence",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$32B",
+      "leader": "Ilya Sutskever (Co-founder)",
+      "public": false
+    },
+    "thinkingmachines.ai": {
+      "name": "Thinking Machines Lab",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$10B+",
+      "leader": "Mira Murati (CEO)",
+      "public": false
+    },
+    "scale.com": {
+      "name": "Scale AI",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$29B",
+      "leader": "Jason Droege (CEO)",
+      "public": false
+    },
+    "moonshot.cn": {
+      "name": "Moonshot AI",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$3.3B",
+      "leader": "Yang Zhilin (Founder & CEO)",
+      "public": false
+    },
+    "zhipuai.cn": {
+      "name": "Zhipu AI",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$3B+",
+      "leader": "Zhang Peng (CEO)",
+      "public": false
+    },
+    "minimax.io": {
+      "name": "MiniMax",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$2.5B+",
+      "leader": "Yan Junjie (CEO)",
+      "public": false
+    },
+    "midjourney.com": {
+      "name": "Midjourney",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Private (bootstrapped)",
+      "leader": "David Holz (CEO)",
+      "public": false
+    },
+    "runwayml.com": {
+      "name": "Runway",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$3B+",
+      "leader": "Cristóbal Valenzuela (CEO)",
+      "public": false
+    },
+    "elevenlabs.io": {
+      "name": "ElevenLabs",
+      "country": "United States / UK",
+      "country_code": "us",
+      "valuation": "~$3.3B",
+      "leader": "Mati Staniszewski (CEO)",
+      "public": false
+    },
+    "cursor.com": {
+      "name": "Cursor (Anysphere)",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$9B+",
+      "leader": "Michael Truell (CEO)",
+      "public": false
+    },
+    "character.ai": {
+      "name": "Character.AI",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$2.5B",
+      "leader": "Dominic Perella (Interim CEO)",
+      "public": false
+    },
+    "huawei.com": {
+      "name": "Huawei",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "Private (employee-owned)",
+      "leader": "Ren Zhengfei (Founder & CEO)",
+      "public": false
+    },
+    "tsmc.com": {
+      "name": "TSMC",
+      "country": "Taiwan",
+      "country_code": "tw",
+      "valuation": "~$1.72T",
+      "leader": "C.C. Wei (Chairman & CEO)",
+      "public": true,
+      "symbol": "2330.TW"
+    },
+    "samsung.com": {
+      "name": "Samsung Electronics",
+      "country": "South Korea",
+      "country_code": "kr",
+      "valuation": "~$803B",
+      "leader": "Jun Young-hyun (Co-CEO)",
+      "public": true,
+      "symbol": "005930.KS"
+    },
+    "bytedance.com": {
+      "name": "ByteDance",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$400B–$600B",
+      "leader": "Liang Rubo (CEO)",
+      "public": false
+    },
+    "tiktok.com": {
+      "name": "TikTok",
+      "country": "Singapore / China",
+      "country_code": "sg",
+      "valuation": "ByteDance subsidiary",
+      "leader": "Shou Zi Chew (CEO)",
+      "public": false
+    },
+    "alibaba.com": {
+      "name": "Alibaba",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$210B",
+      "leader": "Eddie Wu (CEO)",
+      "public": true,
+      "symbol": "9988.HK"
+    },
+    "tencent.com": {
+      "name": "Tencent",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$393B",
+      "leader": "Ma Huateng / Pony Ma (CEO)",
+      "public": true,
+      "symbol": "0700.HK"
+    },
+    "baidu.com": {
+      "name": "Baidu",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$21B",
+      "leader": "Robin Li (CEO)",
+      "public": true,
+      "symbol": "9888.HK"
+    },
+    "mi.com": {
+      "name": "Xiaomi",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$88B",
+      "leader": "Lei Jun (Founder & CEO)",
+      "public": true,
+      "symbol": "1810.HK"
+    },
+    "byd.com": {
+      "name": "BYD",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$66B",
+      "leader": "Wang Chuanfu (Chairman & CEO)",
+      "public": true,
+      "symbol": "1211.HK"
+    },
+    "catl.com": {
+      "name": "CATL",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$130B",
+      "leader": "Robin Zeng (Chairman & CEO)",
+      "public": true,
+      "symbol": "300750.SZ"
+    },
+    "meituan.com": {
+      "name": "Meituan",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$50B",
+      "leader": "Wang Xing (CEO)",
+      "public": true,
+      "symbol": "3690.HK"
+    },
+    "jd.com": {
+      "name": "JD.com",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$35B",
+      "leader": "Sandy Xu (CEO)",
+      "public": true,
+      "symbol": "9618.HK"
+    },
+    "pddholdings.com": {
+      "name": "PDD Holdings",
+      "country": "China / Ireland",
+      "country_code": "cn",
+      "valuation": "~$124B",
+      "leader": "Chen Lei & Zhao Jiazhen (Co-CEOs)",
+      "public": true,
+      "symbol": "PDD"
+    },
+    "intel.com": {
+      "name": "Intel",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$290B",
+      "leader": "Lip-Bu Tan (CEO)",
+      "public": true,
+      "symbol": "INTC"
+    },
+    "amd.com": {
+      "name": "AMD",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$672B",
+      "leader": "Lisa Su (CEO)",
+      "public": true,
+      "symbol": "AMD"
+    },
+    "broadcom.com": {
+      "name": "Broadcom",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$1.44T",
+      "leader": "Hock Tan (CEO)",
+      "public": true,
+      "symbol": "AVGO"
+    },
+    "qualcomm.com": {
+      "name": "Qualcomm",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$180B",
+      "leader": "Cristiano Amon (CEO)",
+      "public": true,
+      "symbol": "QCOM"
+    },
+    "asml.com": {
+      "name": "ASML",
+      "country": "Netherlands",
+      "country_code": "nl",
+      "valuation": "~$502B",
+      "leader": "Christophe Fouquet (CEO)",
+      "public": true,
+      "symbol": "ASML"
+    },
+    "oracle.com": {
+      "name": "Oracle",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$324B",
+      "leader": "Safra Catz (CEO)",
+      "public": true,
+      "symbol": "ORCL"
+    },
+    "netflix.com": {
+      "name": "Netflix",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$244B",
+      "leader": "Ted Sarandos & Greg Peters (Co-CEOs)",
+      "public": true,
+      "symbol": "NFLX"
+    },
+    "spacex.com": {
+      "name": "SpaceX",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$1.73T",
+      "leader": "Elon Musk (CEO)",
+      "public": true,
+      "symbol": "SPCX"
+    },
+    "boeing.com": {
+      "name": "Boeing",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$130B",
+      "leader": "Kelly Ortberg (CEO)",
+      "public": true,
+      "symbol": "BA"
+    },
+    "toyota.com": {
+      "name": "Toyota",
+      "country": "Japan",
+      "country_code": "jp",
+      "valuation": "~$258B",
+      "leader": "Koji Sato (CEO)",
+      "public": true,
+      "symbol": "7203.T"
+    },
+    "sony.com": {
+      "name": "Sony",
+      "country": "Japan",
+      "country_code": "jp",
+      "valuation": "~$169B",
+      "leader": "Hiroki Totoki (CEO)",
+      "public": true,
+      "symbol": "6758.T"
+    },
+    "nintendo.com": {
+      "name": "Nintendo",
+      "country": "Japan",
+      "country_code": "jp",
+      "valuation": "~$68B",
+      "leader": "Shuntaro Furukawa (President)",
+      "public": true,
+      "symbol": "7974.T"
+    },
+    "disney.com": {
+      "name": "Disney",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$215B",
+      "leader": "Bob Iger (CEO)",
+      "public": true,
+      "symbol": "DIS"
+    },
+    "walmart.com": {
+      "name": "Walmart",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$1.05T",
+      "leader": "Doug McMillon (CEO)",
+      "public": true,
+      "symbol": "WMT"
+    },
+    "costco.com": {
+      "name": "Costco",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$482B",
+      "leader": "Ron Vachris (CEO)",
+      "public": true,
+      "symbol": "COST"
+    },
+    "jpmorganchase.com": {
+      "name": "JPMorgan Chase",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$841B",
+      "leader": "Jamie Dimon (CEO)",
+      "public": true,
+      "symbol": "JPM"
+    },
+    "goldmansachs.com": {
+      "name": "Goldman Sachs",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$231B",
+      "leader": "David Solomon (CEO)",
+      "public": true,
+      "symbol": "GS"
+    },
+    "palantir.com": {
+      "name": "Palantir",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$394B",
+      "leader": "Alex Karp (CEO)",
+      "public": true,
+      "symbol": "PLTR"
+    },
+    "salesforce.com": {
+      "name": "Salesforce",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$162B",
+      "leader": "Marc Benioff (CEO)",
+      "public": true,
+      "symbol": "CRM"
+    },
+    "adobe.com": {
+      "name": "Adobe",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$91B",
+      "leader": "Shantanu Narayen (CEO)",
+      "public": true,
+      "symbol": "ADBE"
+    },
+    "uber.com": {
+      "name": "Uber",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$135B",
+      "leader": "Dara Khosrowshahi (CEO)",
+      "public": true,
+      "symbol": "UBER"
+    },
+    "stripe.com": {
+      "name": "Stripe",
+      "country": "United States / Ireland",
+      "country_code": "us",
+      "valuation": "~$159B+",
+      "leader": "Patrick Collison (CEO)",
+      "public": false
+    },
+    "spotify.com": {
+      "name": "Spotify",
+      "country": "Sweden",
+      "country_code": "se",
+      "valuation": "~$127B",
+      "leader": "Daniel Ek (CEO)",
+      "public": true,
+      "symbol": "SPOT"
+    },
+    "ibm.com": {
+      "name": "IBM",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$230B",
+      "leader": "Arvind Krishna (CEO)",
+      "public": true,
+      "symbol": "IBM"
+    },
+    "cisco.com": {
+      "name": "Cisco",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$371B",
+      "leader": "Chuck Robbins (CEO)",
+      "public": true,
+      "symbol": "CSCO"
+    },
+    "softbank.jp": {
+      "name": "SoftBank Group",
+      "country": "Japan",
+      "country_code": "jp",
+      "valuation": "~$107B",
+      "leader": "Masayoshi Son (CEO)",
+      "public": true,
+      "symbol": "9984.T"
+    },
+    "cloudflare.com": {
+      "name": "Cloudflare",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$102B",
+      "leader": "Matthew Prince (CEO)",
+      "public": true,
+      "symbol": "NET"
+    },
+    "crowdstrike.com": {
+      "name": "CrowdStrike",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$216B",
+      "leader": "George Kurtz (CEO)",
+      "public": true,
+      "symbol": "CRWD"
+    },
+    "snowflake.com": {
+      "name": "Snowflake",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$94B",
+      "leader": "Sridhar Ramaswamy (CEO)",
+      "public": true,
+      "symbol": "SNOW"
+    },
+    "databricks.com": {
+      "name": "Databricks",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$62B",
+      "leader": "Ali Ghodsi (CEO)",
+      "public": false
+    },
+    "coinbase.com": {
+      "name": "Coinbase",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$27B",
+      "leader": "Brian Armstrong (CEO)",
+      "public": true,
+      "symbol": "COIN"
+    },
+    "visa.com": {
+      "name": "Visa",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$792B",
+      "leader": "Ryan McInerney (CEO)",
+      "public": true,
+      "symbol": "V"
+    },
+    "mastercard.com": {
+      "name": "Mastercard",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$575B",
+      "leader": "Michael Miebach (CEO)",
+      "public": true,
+      "symbol": "MA"
+    },
+    "pfizer.com": {
+      "name": "Pfizer",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$162B",
+      "leader": "Albert Bourla (CEO)",
+      "public": true,
+      "symbol": "PFE"
+    },
+    "lilly.com": {
+      "name": "Eli Lilly",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$1.24T",
+      "leader": "David Ricks (CEO)",
+      "public": true,
+      "symbol": "LLY"
+    },
+    "novonordisk.com": {
+      "name": "Novo Nordisk",
+      "country": "Denmark",
+      "country_code": "dk",
+      "valuation": "~$181B",
+      "leader": "Lars Fruergaard Jørgensen (CEO)",
+      "public": true,
+      "symbol": "NVO"
+    },
+    "exxonmobil.com": {
+      "name": "ExxonMobil",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$645B",
+      "leader": "Darren Woods (CEO)",
+      "public": true,
+      "symbol": "XOM"
+    },
+    "chevron.com": {
+      "name": "Chevron",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$412B",
+      "leader": "Mike Wirth (CEO)",
+      "public": true,
+      "symbol": "CVX"
+    },
+    "aramco.com": {
+      "name": "Saudi Aramco",
+      "country": "Saudi Arabia",
+      "country_code": "sa",
+      "valuation": "~$1.70T",
+      "leader": "Amin Nasser (CEO)",
+      "public": true,
+      "symbol": "2222.SR"
+    }
   }
 }
