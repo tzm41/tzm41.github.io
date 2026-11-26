@@ -795,6 +795,18 @@ h3 {
   font-weight: 500;
 }
 
+.ctip-bias {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ctip-bias .half-ring-svg {
+  width: 20px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
 .cmap-target.is-region {
   fill-opacity: 0.35;
 }

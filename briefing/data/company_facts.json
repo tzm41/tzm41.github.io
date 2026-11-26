@@ -711,7 +711,12 @@
       "country_code": "gb",
       "valuation": "Public broadcaster",
       "leader": "Tim Davie (Director-General)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Center-Left · Public",
+        "tone": "left",
+        "pos": 0.36
+      }
     },
     "cnn.com": {
       "name": "CNN",
@@ -719,7 +724,12 @@
       "country_code": "us",
       "valuation": "Subsidiary (WBD)",
       "leader": "Mark Thompson (CEO)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Lean Left",
+        "tone": "left",
+        "pos": 0.26
+      }
     },
     "reuters.com": {
       "name": "Reuters (Thomson Reuters)",
@@ -728,7 +738,12 @@
       "valuation": "~$47B",
       "leader": "Steve Hasker (CEO)",
       "public": true,
-      "symbol": "TRI"
+      "symbol": "TRI",
+      "bias": {
+        "text": "Center · Wire",
+        "tone": "center",
+        "pos": 0.5
+      }
     },
     "bloomberg.com": {
       "name": "Bloomberg",
@@ -736,7 +751,12 @@
       "country_code": "us",
       "valuation": "Private",
       "leader": "Vlad Kliatchko (CEO)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Center · Business",
+        "tone": "center",
+        "pos": 0.5
+      }
     },
     "cnbc.com": {
       "name": "CNBC",
@@ -744,7 +764,12 @@
       "country_code": "us",
       "valuation": "Subsidiary (Versant)",
       "leader": "KC Sullivan (President)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Center · Business",
+        "tone": "center",
+        "pos": 0.5
+      }
     },
     "foxnews.com": {
       "name": "Fox News (Fox Corp)",
@@ -753,7 +778,12 @@
       "valuation": "~$37B",
       "leader": "Lachlan Murdoch (CEO)",
       "public": true,
-      "symbol": "FOXA"
+      "symbol": "FOXA",
+      "bias": {
+        "text": "Right",
+        "tone": "right",
+        "pos": 0.82
+      }
     },
     "nbcnews.com": {
       "name": "NBC News",
@@ -761,7 +791,12 @@
       "country_code": "us",
       "valuation": "Subsidiary (Comcast)",
       "leader": "Cesar Conde (Chairman)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Lean Left",
+        "tone": "left",
+        "pos": 0.28
+      }
     },
     "cbsnews.com": {
       "name": "CBS News",
@@ -769,7 +804,12 @@
       "country_code": "us",
       "valuation": "Subsidiary (Paramount)",
       "leader": "Tom Cibrowski (President)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Center-Left",
+        "tone": "left",
+        "pos": 0.38
+      }
     },
     "abcnews.go.com": {
       "name": "ABC News",
@@ -777,7 +817,12 @@
       "country_code": "us",
       "valuation": "Subsidiary (Disney)",
       "leader": "Almin Karamehmedovic (President)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Lean Left",
+        "tone": "left",
+        "pos": 0.28
+      }
     },
     "msnbc.com": {
       "name": "MSNBC",
@@ -785,7 +830,12 @@
       "country_code": "us",
       "valuation": "Subsidiary (Versant)",
       "leader": "Rebecca Kutler (President)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Left",
+        "tone": "left",
+        "pos": 0.15
+      }
     },
     "npr.org": {
       "name": "NPR",
@@ -793,7 +843,12 @@
       "country_code": "us",
       "valuation": "Nonprofit public media",
       "leader": "Katherine Maher (CEO)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Lean Left · Public",
+        "tone": "left",
+        "pos": 0.24
+      }
     },
     "nytimes.com": {
       "name": "The New York Times",
@@ -802,7 +857,12 @@
       "valuation": "~$11B",
       "leader": "Meredith Kopit Levien (CEO)",
       "public": true,
-      "symbol": "NYT"
+      "symbol": "NYT",
+      "bias": {
+        "text": "Lean Left",
+        "tone": "left",
+        "pos": 0.24
+      }
     },
     "washingtonpost.com": {
       "name": "The Washington Post",
@@ -810,7 +870,12 @@
       "country_code": "us",
       "valuation": "Private (Jeff Bezos)",
       "leader": "Will Lewis (Publisher & CEO)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Lean Left",
+        "tone": "left",
+        "pos": 0.26
+      }
     },
     "wsj.com": {
       "name": "The Wall Street Journal",
@@ -818,7 +883,12 @@
       "country_code": "us",
       "valuation": "Subsidiary (News Corp)",
       "leader": "Almar Latour (CEO, Dow Jones)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Center · Business",
+        "tone": "center",
+        "pos": 0.54
+      }
     },
     "ft.com": {
       "name": "Financial Times",
@@ -826,7 +896,12 @@
       "country_code": "gb",
       "valuation": "Subsidiary (Nikkei)",
       "leader": "Jon Slade (CEO)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Center · Business",
+        "tone": "center",
+        "pos": 0.5
+      }
     },
     "theguardian.com": {
       "name": "The Guardian",
@@ -834,7 +909,12 @@
       "country_code": "gb",
       "valuation": "Trust-owned (Scott Trust)",
       "leader": "Anna Bateson (CEO)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Left-Center",
+        "tone": "left",
+        "pos": 0.28
+      }
     },
     "apnews.com": {
       "name": "Associated Press",
@@ -842,7 +922,12 @@
       "country_code": "us",
       "valuation": "Nonprofit cooperative",
       "leader": "Daisy Veerasingham (CEO)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Center · Wire",
+        "tone": "center",
+        "pos": 0.5
+      }
     },
     "aljazeera.com": {
       "name": "Al Jazeera",
@@ -850,7 +935,12 @@
       "country_code": "qa",
       "valuation": "State-funded network",
       "leader": "Mostefa Souag (Director-General)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Center-Left · Int’l public",
+        "tone": "left",
+        "pos": 0.36
+      }
     },
     "politico.com": {
       "name": "Politico",
@@ -858,7 +948,12 @@
       "country_code": "us",
       "valuation": "Subsidiary (Axel Springer)",
       "leader": "Goli Sheikholeslami (CEO)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Center-Left",
+        "tone": "left",
+        "pos": 0.38
+      }
     },
     "economist.com": {
       "name": "The Economist",
@@ -866,7 +961,12 @@
       "country_code": "gb",
       "valuation": "Private (Economist Group)",
       "leader": "Lara Boro (CEO)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Center",
+        "tone": "center",
+        "pos": 0.48
+      }
     },
     "theatlantic.com": {
       "name": "The Atlantic",
@@ -874,7 +974,12 @@
       "country_code": "us",
       "valuation": "Private (Emerson Collective)",
       "leader": "Nicholas Thompson (CEO)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Lean Left",
+        "tone": "left",
+        "pos": 0.22
+      }
     },
     "axios.com": {
       "name": "Axios",
@@ -882,7 +987,12 @@
       "country_code": "us",
       "valuation": "Subsidiary (Cox Enterprises)",
       "leader": "Jim VandeHei (CEO)",
-      "public": false
+      "public": false,
+      "bias": {
+        "text": "Center-Left",
+        "tone": "left",
+        "pos": 0.38
+      }
     },
     "newscorp.com": {
       "name": "News Corp",
@@ -1140,7 +1250,8 @@
       "country_code": "us",
       "valuation": "Government agency",
       "leader": "Jared Isaacman (Administrator)",
-      "public": false
+      "public": false,
+      "budget": "~$25B / yr"
     },
     "esa.int": {
       "name": "European Space Agency (ESA)",
@@ -1148,7 +1259,8 @@
       "country_code": "eu",
       "valuation": "Intergovernmental agency",
       "leader": "Josef Aschbacher (Director General)",
-      "public": false
+      "public": false,
+      "budget": "~$8.4B / yr"
     },
     "cnsa.gov.cn": {
       "name": "China National Space Administration (CNSA)",
@@ -1156,7 +1268,8 @@
       "country_code": "cn",
       "valuation": "Government agency",
       "leader": "Shan Zhongde (Administrator)",
-      "public": false
+      "public": false,
+      "budget": "~$14B / yr (est.)"
     },
     "roscosmos.ru": {
       "name": "Roscosmos",
@@ -1164,7 +1277,8 @@
       "country_code": "ru",
       "valuation": "State corporation",
       "leader": "Dmitry Bakanov (Director General)",
-      "public": false
+      "public": false,
+      "budget": "~$3B / yr"
     },
     "jaxa.jp": {
       "name": "JAXA",
@@ -1172,7 +1286,8 @@
       "country_code": "jp",
       "valuation": "Government agency",
       "leader": "Hiroshi Yamakawa (President)",
-      "public": false
+      "public": false,
+      "budget": "~$1.6B / yr"
     },
     "isro.gov.in": {
       "name": "ISRO",
@@ -1180,7 +1295,8 @@
       "country_code": "in",
       "valuation": "Government agency",
       "leader": "V. Narayanan (Chairman)",
-      "public": false
+      "public": false,
+      "budget": "~$1.6B / yr"
     },
     "asc-csa.gc.ca": {
       "name": "Canadian Space Agency",
@@ -1188,7 +1304,8 @@
       "country_code": "ca",
       "valuation": "Government agency",
       "leader": "Lisa Campbell (President)",
-      "public": false
+      "public": false,
+      "budget": "~$320M / yr"
     },
     "cnes.fr": {
       "name": "CNES",
@@ -1196,7 +1313,8 @@
       "country_code": "fr",
       "valuation": "Government agency",
       "leader": "François Jacq (Chairman & CEO)",
-      "public": false
+      "public": false,
+      "budget": "~$2.8B / yr"
     },
     "dlr.de": {
       "name": "DLR (German Aerospace Center)",
@@ -1204,7 +1322,8 @@
       "country_code": "de",
       "valuation": "Government agency",
       "leader": "Anke Kaysser-Pyzalla (Chair)",
-      "public": false
+      "public": false,
+      "budget": "~$1.7B / yr"
     },
     "asi.it": {
       "name": "Italian Space Agency (ASI)",
@@ -1212,7 +1331,8 @@
       "country_code": "it",
       "valuation": "Government agency",
       "leader": "Teodoro Valente (President)",
-      "public": false
+      "public": false,
+      "budget": "~$1.4B / yr"
     },
     "kasa.go.kr": {
       "name": "Korea AeroSpace Administration (KASA)",
@@ -1220,7 +1340,8 @@
       "country_code": "kr",
       "valuation": "Government agency",
       "leader": "Yoon Young-bin (Administrator)",
-      "public": false
+      "public": false,
+      "budget": "~$700M / yr"
     },
     "space.gov.ae": {
       "name": "UAE Space Agency",
@@ -1228,7 +1349,8 @@
       "country_code": "ae",
       "valuation": "Government agency",
       "leader": "Salem Butti Al Qubaisi (Director General)",
-      "public": false
+      "public": false,
+      "budget": "~$150M / yr"
     },
     "space.gov.au": {
       "name": "Australian Space Agency",
@@ -1236,7 +1358,8 @@
       "country_code": "au",
       "valuation": "Government agency",
       "leader": "Enrico Palermo (Head)",
-      "public": false
+      "public": false,
+      "budget": "~$50M / yr"
     }
   }
 }

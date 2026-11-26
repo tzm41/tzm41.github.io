@@ -2396,13 +2396,40 @@ function initFloatingTooltips() {
       const quoteRow = tickerTip
         ? `<div class="ctip-quote">${escapeHtml(tickerTip)}</div>`
         : "";
+      const rows = [
+        `<span class="ctip-k">Country</span><span class="ctip-v">${flagHtml}${escapeHtml(fact.country)}</span>`,
+      ];
+      if (fact.budget) {
+        rows.push(
+          `<span class="ctip-k">Budget</span><span class="ctip-v">${escapeHtml(fact.budget)}</span>`
+        );
+      } else if (fact.valuation && fact.valuation.includes("$")) {
+        rows.push(
+          `<span class="ctip-k">Valuation</span><span class="ctip-v">${escapeHtml(fact.valuation)}</span>`
+        );
+      } else if (fact.valuation && !fact.bias) {
+        rows.push(
+          `<span class="ctip-k">Status</span><span class="ctip-v">${escapeHtml(fact.valuation)}</span>`
+        );
+      }
+      if (fact.bias) {
+        const tone = fact.bias.tone || "neutral";
+        const color = BIAS_TONE_COLOR[tone] || BIAS_TONE_COLOR.neutral;
+        const gauge = buildHalfRingSvg(fact.bias.pos ?? 0.5, color);
+        rows.push(
+          `<span class="ctip-k">Bias</span><span class="ctip-v ctip-bias">${gauge}<span>${escapeHtml(fact.bias.text)}</span></span>`
+        );
+      }
+      if (fact.leader) {
+        rows.push(
+          `<span class="ctip-k">Leader</span><span class="ctip-v">${escapeHtml(fact.leader)}</span>`
+        );
+      }
       tip.innerHTML = `
         <div class="ctip-head">${renderCompanyLogoImg(domain)}<span>${escapeHtml(fact.name)}</span></div>
         ${quoteRow}
         <div class="ctip-grid">
-          <span class="ctip-k">Country</span><span class="ctip-v">${flagHtml}${escapeHtml(fact.country)}</span>
-          <span class="ctip-k">Valuation</span><span class="ctip-v">${escapeHtml(fact.valuation)}</span>
-          <span class="ctip-k">Leader</span><span class="ctip-v">${escapeHtml(fact.leader)}</span>
+          ${rows.join("\n          ")}
         </div>
       `;
       tip.classList.remove("is-subtle");
