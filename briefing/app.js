@@ -1511,6 +1511,36 @@ function fmtSparkTime(raw, kind) {
   return dt.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 }
 
+const NY_DATE_FMT = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "America/New_York",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+
+function getPriorSessionBadge(times, tf) {
+  if (tf !== "1d" || !Array.isArray(times) || !times.length) return null;
+  const lastRaw = times[times.length - 1];
+  if (!lastRaw) return null;
+  const lastDt = new Date(lastRaw);
+  if (Number.isNaN(lastDt.getTime())) return null;
+  const lastEt = NY_DATE_FMT.format(lastDt);
+  const refEt = state.viewingLatest
+    ? NY_DATE_FMT.format(new Date())
+    : String(state.briefing?.date || "").slice(0, 10);
+  if (!refEt || lastEt >= refEt) return null;
+  const diffDays = Math.round((Date.parse(`${refEt}T00:00:00Z`) - Date.parse(`${lastEt}T00:00:00Z`)) / 86400000);
+  const shortDate = lastDt.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    timeZone: "America/New_York",
+  });
+  return {
+    label: diffDays === 1 ? "Yesterday" : shortDate,
+    title: `Market closed today · showing ${shortDate} session`,
+  };
+}
+
 function renderQuoteGrid(container, quotes, tf, emptyMsg) {
   if (!quotes.length) {
     container.innerHTML = `<div class="empty-state">${escapeHtml(emptyMsg)}</div>`;
@@ -1534,11 +1564,15 @@ function renderQuoteGrid(container, quotes, tf, emptyMsg) {
       const isExpanded = state.expandedQuoteSymbol === q.symbol;
       const hi = series.length ? fmtPrice(Math.max(...series), q.symbol) : "—";
       const lo = series.length ? fmtPrice(Math.min(...series), q.symbol) : "—";
+      const prevBadge = getPriorSessionBadge(times, tf);
+      const prevBadgeHtml = prevBadge
+        ? `<span class="quote-prev-badge" title="${escapeHtml(prevBadge.title)}">${escapeHtml(prevBadge.label)}</span>`
+        : "";
       return `
         <div class="quote-card${isExpanded ? " is-expanded" : ""}" data-symbol="${escapeHtml(q.symbol)}" role="button" tabindex="0" aria-expanded="${isExpanded}">
           <div class="quote-top">
             <span class="quote-name"${domainAttr}>${logoHtml}${escapeHtml(q.name)}</span>
-            <span class="quote-sym">${escapeHtml(q.symbol)}</span>
+            <span class="quote-top-right">${prevBadgeHtml}<span class="quote-sym">${escapeHtml(q.symbol)}</span></span>
           </div>
           <div class="quote-mid">
             <span class="quote-price">${fmtPrice(q.price, q.symbol)}</span>

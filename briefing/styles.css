@@ -1469,32 +1469,36 @@ h3 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 18px 20px;
+  padding: 14px 16px;
   border-color: var(--border-strong);
   box-shadow: var(--shadow-md);
 }
 
 .quote-card.is-expanded .quote-name {
-  font-size: 16px;
+  font-size: 15px;
+}
+
+.quote-card.is-expanded .quote-mid {
+  margin: 4px 0 6px;
 }
 
 .quote-card.is-expanded .quote-price {
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .quote-card.is-expanded .sparkline {
-  height: 112px;
+  height: 92px;
 }
 
 .quote-expanded-stats {
   display: none;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 12px;
-  padding-top: 10px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 8px;
   border-top: 1px solid var(--border);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--ink-muted);
 }
 
@@ -1545,6 +1549,26 @@ h3 {
 .source-chip[data-bias],
 .live-pill[title],
 [data-tooltip] {
+  cursor: help;
+}
+
+.quote-top-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.quote-prev-badge {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  line-height: 1.2;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--neutral-badge);
+  color: var(--ink-muted);
+  white-space: nowrap;
   cursor: help;
 }
 
