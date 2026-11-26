@@ -1643,9 +1643,9 @@ async function refreshLiveMarkets() {
       const ageMin = Number.isNaN(dt.getTime()) ? 999 : Math.max(0, (Date.now() - dt.getTime()) / 60000);
       const freshness = ageMin < 45 ? "fresh" : ageMin < 180 ? "aging" : "stale";
       const ageLabel =
-        ageMin < 60 ? `${Math.round(ageMin)}m ago` : `${(ageMin / 60).toFixed(1)}h ago`;
+        ageMin < 60 ? `${Math.round(ageMin)}m ago` : `${Math.round(ageMin / 60)}h ago`;
       els.marketsLivePill.innerHTML = `<span class="live-dot ${freshness}" aria-hidden="true"></span>${escapeHtml(timeStr)}`;
-      els.marketsLivePill.title = `Markets refreshed ${fmtLocalTimestamp(live.updated_at)} (${freshness} · ${ageLabel})`;
+      els.marketsLivePill.title = `${freshness} · ${ageLabel}`;
       els.marketsLivePill.classList.remove("hidden");
     }
   } catch {
