@@ -815,6 +815,18 @@ h3 {
   border-radius: 4px;
 }
 
+.afternoon-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--warn);
+  background: var(--warn-soft);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
 .card-toggle-btn {
   background: transparent;
   border: 1px solid var(--border);

@@ -37,6 +37,7 @@ class NewsStory(BaseModel):
     sources: list[SourceLink] = Field(default_factory=list)
     sentiment: StorySentiment = "neutral"
     continued_from_prior: bool = False
+    is_afternoon: bool = False
 
 
 class MarketQuote(BaseModel):
@@ -163,7 +164,11 @@ class AfternoonBrief(BaseModel):
 
 class AfternoonSynthesis(BaseModel):
     bullets: list[ExecutiveBriefItem] = Field(
-        description="3 to 5 concise afternoon update bullets covering US market close and breaking developments since the morning briefing, each with category, 7-level sentiment, **bold** takeaways, and *italic* human names."
+        description="3 to 5 concise afternoon update bullets covering US market close and breaking developments since the morning briefing (limit to at most one item primarily about the stock market), each with category, 7-level sentiment, **bold** takeaways, and *italic* human names."
+    )
+    new_top_news: list[NewsStory] = Field(
+        default_factory=list,
+        description="2 to 4 newly broken afternoon top news stories not already covered in morning_top_news, each with 2-3 sentence summary, why_it_matters, 7-level sentiment, and verbatim source URLs from raw_news or raw_politics_articles.",
     )
 
 

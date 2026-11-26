@@ -988,6 +988,9 @@ function renderNewsCard(story, badgeLabel, continued) {
   const toggleBtn = continued
     ? `<button type="button" class="card-toggle-btn" aria-expanded="false">Expand &#9662;</button>`
     : "";
+  const afternoonBadge = story.is_afternoon
+    ? `<span class="afternoon-pill" title="Added in Afternoon Update">Afternoon</span>`
+    : "";
   const continuedBadge = continued
     ? `<span class="continued-pill" title="Substantially similar to a story from yesterday">From yesterday</span>`
     : "";
@@ -998,6 +1001,7 @@ function renderNewsCard(story, badgeLabel, continued) {
         <div class="news-card-badges">
           <span class="cat-pill">${escapeHtml(badgeLabel)}</span>
           ${renderSentimentRing(sentiment)}
+          ${afternoonBadge}
           ${continuedBadge}
         </div>
         ${toggleBtn}

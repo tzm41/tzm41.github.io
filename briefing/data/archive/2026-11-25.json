@@ -36,36 +36,103 @@
     }
   ],
   "afternoon_brief": {
-    "generated_at": "2026-11-26T04:15:54Z",
+    "generated_at": "2026-11-26T04:37:28Z",
     "bullets": [
       {
-        "text": "US equities **pared steeper intraday losses** to close mixed, with the **S&P 500 (-0.25%)** and **Nasdaq (-0.62%)** finishing lower alongside **Nvidia (-2.68%)** while the **Dow (+0.33%)**, **Russell 2000 (+0.71%)**, and **Meta (+3.83%)** rose; the **VIX jumped 7.32% to 28.29** and **WTI crude climbed 2.80% to $84.35**.",
+        "text": "**US equities staged a sharp afternoon rebound** as the Dow (+0.33%, 50,182.95) and Russell 2000 (+0.71%, 2,704.06) flipped positive, the S&P 500 (-0.25%, 7,182.78) and Nasdaq (-0.62%, 23,585.80) trimmed losses, and the **VIX cooled to 28.29** while Meta (+2.97%) and WTI crude (+2.43% to $84.04) rallied against declines in Nvidia (-3.62%).",
         "category": "Economy",
-        "sentiment": "slightly_negative"
+        "sentiment": "slightly_positive"
       },
       {
-        "text": "The US announced **new tariffs hitting major trading partners**, including **China and the EU**, broadening trade levies across some of America's largest commercial relationships.",
+        "text": "The **US announced new tariffs on major trading partners** including China and the EU, while disclosures showed President *Donald Trump*'s accounts **traded Nvidia shares 44 times this year** amid Capitol Hill scrutiny of CEO *Jensen Huang*.",
         "category": "Policy",
         "sentiment": "negative"
       },
       {
-        "text": "Forecasted Thanksgiving storms forced **Macy's to postpone its parade for the first time ever** as New York Gov. *Kathy Hochul* declared a **state of emergency**, while a **FedEx plane overshot a Miami runway** and briefly halted flights during peak holiday travel.",
+        "text": "In the Middle East, **Israeli judges recommended dropping the most serious charges** against Prime Minister *Benjamin Netanyahu* in one of his three corruption cases, while a **Cairo highway fuel tanker crash and fire** killed 31 people.",
         "category": "World",
         "sentiment": "negative"
       },
       {
-        "text": "Israeli judges **recommended dropping the most serious charges** against Prime Minister *Netanyahu*, citing little chance of conviction in one of three cases and prompting him to call for his trial to end.",
-        "category": "World",
-        "sentiment": "neutral"
-      },
-      {
-        "text": "Europe's **Hera spacecraft released close-up images** revealing a **stadium-sized crater** left by NASA's first planetary defense **asteroid deflection test** four years ago.",
+        "text": "In science and space, **Europe's Hera spacecraft returned close-up images** revealing a **stadium-sized crater** on the asteroid struck in NASA's planetary defense deflection test.",
         "category": "Science",
         "sentiment": "positive"
       }
     ]
   },
   "top_news": [
+    {
+      "id": "netanyahu-charges-recommendation",
+      "category": "World",
+      "headline": "Israeli judges recommend dropping most serious charges against Netanyahu",
+      "summary": "**Israeli judges said there was little chance of conviction** on the most serious charges in one of three corruption cases against Prime Minister *Benjamin Netanyahu*. *Benjamin Netanyahu* responded by calling for his long-running trial to end.",
+      "why_it_matters": "A collapse of the flagship charges could **reshape Israeli domestic politics** and remove a major legal overhang for *Benjamin Netanyahu*'s governing coalition.",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/cxj05mv723r2o?at_medium=RSS&at_campaign=rss"
+        }
+      ],
+      "sentiment": "slightly_negative",
+      "continued_from_prior": false,
+      "is_afternoon": true
+    },
+    {
+      "id": "trump-nvidia-trades",
+      "category": "Policy",
+      "headline": "Disclosures show Trump's accounts traded Nvidia shares 44 times this year",
+      "summary": "A review of US financial disclosures found that **President *Donald Trump*'s investment portfolios traded Nvidia shares 44 times** this year. The revelation lands as lawmakers investigate White House involvement in CEO *Jensen Huang*'s reinstatement.",
+      "why_it_matters": "Frequent trading in a flagship AI chipmaker **intensifies conflict-of-interest scrutiny** as Washington debates export controls and corporate governance oversight.",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/cq772vk664yvo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "name": "BBC Business",
+          "url": "https://www.bbc.co.uk/news/articles/cq772vk664yvo?at_medium=RSS&at_campaign=rss"
+        }
+      ],
+      "sentiment": "negative",
+      "continued_from_prior": false,
+      "is_afternoon": true
+    },
+    {
+      "id": "hera-asteroid-crater",
+      "category": "Science",
+      "headline": "Europe's Hera mission reveals stadium-sized crater from NASA asteroid test",
+      "summary": "Close-up images from the **European Hera spacecraft revealed a stadium-sized crater** and chaotic surface debris left by NASA's deliberate asteroid deflection crash four years ago. Scientists say the data provides an unprecedented look at how kinetic impactors reshape small bodies.",
+      "why_it_matters": "Direct post-impact measurements **validate planetary defense modeling** needed to deflect potentially hazardous asteroids in the future.",
+      "sources": [
+        {
+          "name": "Ars Technica",
+          "url": "https://arstechnica.com/space/2026/11/europes-hera-mission-returns-to-the-chaotic-scene-of-a-cosmic-smashup/"
+        },
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/cw8dv112r5gmo?at_medium=RSS&at_campaign=rss"
+        }
+      ],
+      "sentiment": "positive",
+      "continued_from_prior": false,
+      "is_afternoon": true
+    },
+    {
+      "id": "cairo-tanker-fire",
+      "category": "World",
+      "headline": "Thirty-one killed in massive fire after fuel tanker crashes on Cairo highway",
+      "summary": "**Thirty-one people were killed and 21 injured** after a fuel tanker overturned and erupted into a massive fire on a busy ring road in Egypt's capital. Emergency crews worked to contain the blaze and clear the major commuter artery.",
+      "why_it_matters": "The deadly crash underscores **persistent road-safety and hazardous-transport risks** across densely populated Middle East urban corridors.",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/cqy7rn30v314o?at_medium=RSS&at_campaign=rss"
+        }
+      ],
+      "sentiment": "very_negative",
+      "continued_from_prior": false,
+      "is_afternoon": true
+    },
     {
       "id": "nvidia-ag-congress",
       "category": "Tech",
@@ -83,7 +150,8 @@
         }
       ],
       "sentiment": "neutral",
-      "continued_from_prior": false
+      "continued_from_prior": false,
+      "is_afternoon": false
     },
     {
       "id": "huawei-verdict",
@@ -102,7 +170,8 @@
         }
       ],
       "sentiment": "neutral",
-      "continued_from_prior": false
+      "continued_from_prior": false,
+      "is_afternoon": false
     },
     {
       "id": "tariffs-and-pce",
@@ -121,7 +190,8 @@
         }
       ],
       "sentiment": "neutral",
-      "continued_from_prior": false
+      "continued_from_prior": false,
+      "is_afternoon": false
     },
     {
       "id": "ukraine-strikes-russia-losses",
@@ -144,7 +214,8 @@
         }
       ],
       "sentiment": "neutral",
-      "continued_from_prior": false
+      "continued_from_prior": false,
+      "is_afternoon": false
     },
     {
       "id": "solomon-islands-australia",
@@ -163,7 +234,8 @@
         }
       ],
       "sentiment": "neutral",
-      "continued_from_prior": false
+      "continued_from_prior": false,
+      "is_afternoon": false
     },
     {
       "id": "abrego-garcia-spain",
@@ -182,7 +254,8 @@
         }
       ],
       "sentiment": "neutral",
-      "continued_from_prior": false
+      "continued_from_prior": false,
+      "is_afternoon": false
     },
     {
       "id": "china-chen-jining",
@@ -197,7 +270,8 @@
         }
       ],
       "sentiment": "neutral",
-      "continued_from_prior": false
+      "continued_from_prior": false,
+      "is_afternoon": false
     },
     {
       "id": "holiday-shopping-trends",
@@ -216,7 +290,8 @@
         }
       ],
       "sentiment": "neutral",
-      "continued_from_prior": false
+      "continued_from_prior": false,
+      "is_afternoon": false
     }
   ],
   "markets": {
@@ -4050,7 +4125,8 @@
       }
     ],
     "sentiment": "very_positive",
-    "continued_from_prior": false
+    "continued_from_prior": false,
+    "is_afternoon": false
   },
   "local_news": [
     {
@@ -4070,7 +4146,8 @@
             }
           ],
           "sentiment": "neutral",
-          "continued_from_prior": false
+          "continued_from_prior": false,
+          "is_afternoon": false
         },
         {
           "id": "bay-area-city-cyberattacks",
@@ -4085,7 +4162,8 @@
             }
           ],
           "sentiment": "neutral",
-          "continued_from_prior": false
+          "continued_from_prior": false,
+          "is_afternoon": false
         },
         {
           "id": "bay-area-shipwreck-oil",
@@ -4100,7 +4178,8 @@
             }
           ],
           "sentiment": "neutral",
-          "continued_from_prior": false
+          "continued_from_prior": false,
+          "is_afternoon": false
         },
         {
           "id": "bay-area-sf-reparations",
@@ -4115,7 +4194,8 @@
             }
           ],
           "sentiment": "neutral",
-          "continued_from_prior": false
+          "continued_from_prior": false,
+          "is_afternoon": false
         }
       ],
       "stories_en": []
@@ -4141,7 +4221,8 @@
             }
           ],
           "sentiment": "negative",
-          "continued_from_prior": false
+          "continued_from_prior": false,
+          "is_afternoon": false
         },
         {
           "id": "cn-ai-taiwan-election-bbc",
@@ -4156,7 +4237,8 @@
             }
           ],
           "sentiment": "negative",
-          "continued_from_prior": false
+          "continued_from_prior": false,
+          "is_afternoon": false
         },
         {
           "id": "cn-mfa-briefing-nov25",
@@ -4171,7 +4253,8 @@
             }
           ],
           "sentiment": "neutral",
-          "continued_from_prior": false
+          "continued_from_prior": false,
+          "is_afternoon": false
         }
       ],
       "stories_en": [
@@ -4192,7 +4275,8 @@
             }
           ],
           "sentiment": "negative",
-          "continued_from_prior": false
+          "continued_from_prior": false,
+          "is_afternoon": false
         },
         {
           "id": "cn-ai-taiwan-election-bbc",
@@ -4207,7 +4291,8 @@
             }
           ],
           "sentiment": "negative",
-          "continued_from_prior": false
+          "continued_from_prior": false,
+          "is_afternoon": false
         },
         {
           "id": "cn-mfa-briefing-nov25",
@@ -4222,7 +4307,8 @@
             }
           ],
           "sentiment": "neutral",
-          "continued_from_prior": false
+          "continued_from_prior": false,
+          "is_afternoon": false
         }
       ]
     }

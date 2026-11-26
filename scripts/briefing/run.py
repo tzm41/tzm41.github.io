@@ -276,6 +276,10 @@ async def fetch_afternoon_bundle(out_path_str: str) -> None:
         "date": morning.get("date") or datetime.now(timezone.utc).strftime("%Y-%m-%d"),
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "morning_executive_brief": morning.get("executive_brief", []),
+        "morning_top_news": [
+            {"id": s.get("id"), "headline": s.get("headline")}
+            for s in morning.get("top_news", [])
+        ],
         "raw_news": raw_news[:25],
         "market_snapshot": {
             "watchlist": [
@@ -309,6 +313,28 @@ def apply_afternoon_synthesis(synthesis_json_path: str) -> DailyBriefing:
     data = json.loads(LATEST_PATH.read_text(encoding="utf-8"))
     now_utc = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     data["afternoon_brief"] = AfternoonBrief(generated_at=now_utc, bullets=ai.bullets).model_dump()
+
+    if ai.new_top_news:
+        existing_morning = [
+            s for s in data.get("top_news", []) if not s.get("is_afternoon")
+        ]
+        seen_ids = {s.get("id") for s in existing_morning if s.get("id")}
+        seen_headlines = {
+            str(s.get("headline", "")).strip().lower() for s in existing_morning
+        }
+        added: list[dict[str, Any]] = []
+        for story in ai.new_top_news:
+            hl = story.headline.strip().lower()
+            if story.id in seen_ids or hl in seen_headlines:
+                continue
+            seen_ids.add(story.id)
+            seen_headlines.add(hl)
+            dumped = story.model_dump()
+            dumped["is_afternoon"] = True
+            added.append(dumped)
+        if added:
+            data["top_news"] = added + existing_morning
+
     briefing = DailyBriefing.model_validate(data)
     _write_briefing_files(briefing)
     return briefing
