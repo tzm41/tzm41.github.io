@@ -601,12 +601,25 @@ function buildPlaceSvg(features, placeId) {
     bounds = (CONTINENT_META[meta.continent] || CONTINENT_META.world).bounds;
     if (Array.isArray(meta.iso)) meta.iso.forEach((x) => targetIds.add(x));
     else if (meta.iso) targetIds.add(meta.iso);
-  } else if (meta.kind === "us_state" || meta.kind === "ca_city") {
+  } else if (meta.kind === "us_state") {
     bounds = meta.fips === "02" || meta.fips === "15" ? US_FULL_BOUNDS : US_BOUNDS;
     targetIds.add(meta.fips);
-  } else {
+  } else if (meta.kind === "cn_province") {
     bounds = CN_BOUNDS;
     targetIds.add(meta.gbId);
+  } else {
+    // City-level: zoom directly onto its parent state/province contour
+    const parentId = meta.kind === "ca_city" ? meta.fips : meta.gbId;
+    targetIds.add(parentId);
+    const parentFeat = features.find((f) => f.id === parentId);
+    if (parentFeat) {
+      const [bMinLon, bMaxLon, bMinLat, bMaxLat] = parentFeat.bbox;
+      const padLon = Math.max(0.4, (bMaxLon - bMinLon) * 0.1);
+      const padLat = Math.max(0.4, (bMaxLat - bMinLat) * 0.1);
+      bounds = [bMinLon - padLon, bMaxLon + padLon, bMinLat - padLat, bMaxLat + padLat];
+    } else {
+      bounds = meta.kind === "ca_city" ? US_BOUNDS : CN_BOUNDS;
+    }
   }
 
   const [minLon, maxLon, minLat, maxLat] = bounds;
@@ -723,12 +736,17 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
     activeEl = el;
 
     const cachedSvg = svgCache.get(placeId);
+    const isCity = meta.kind === "ca_city" || meta.kind === "gd_city";
+    const footerHtml = isCity
+      ? `<div class="cmap-title is-city">
+           <span class="cmap-title-left">${renderFlagImg(meta.flagCode)}<span>${escapeHtml(meta.name)}</span></span>
+           <span class="cmap-cont">${escapeHtml(meta.subtitle)}</span>
+         </div>`
+      : `<div class="cmap-title">${renderFlagImg(meta.flagCode)}<span>${escapeHtml(meta.name)}</span></div>
+         <div class="cmap-meta"><strong>${escapeHtml(meta.subtitle)}</strong><span class="cmap-cont">${escapeHtml(meta.regionLabel)}</span></div>`;
     card.innerHTML = `
       <div class="cmap-stage">${cachedSvg || `<div class="cmap-loading">Loading map…</div>`}</div>
-      <div class="cmap-footer">
-        <div class="cmap-title">${renderFlagImg(meta.flagCode)}<span>${escapeHtml(meta.name)}</span></div>
-        <div class="cmap-meta"><strong>${escapeHtml(meta.subtitle)}</strong><span class="cmap-cont">${escapeHtml(meta.regionLabel)}</span></div>
-      </div>
+      <div class="cmap-footer">${footerHtml}</div>
     `;
     card.classList.remove("hidden");
     positionCard(el);

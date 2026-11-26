@@ -603,6 +603,23 @@ h3 {
   color: var(--ink);
 }
 
+.cmap-title.is-city {
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cmap-title-left {
+  display: inline-flex;
+  align-items: center;
+}
+
+.cmap-title.is-city .cmap-cont {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
 .cmap-meta {
   display: flex;
   align-items: baseline;
