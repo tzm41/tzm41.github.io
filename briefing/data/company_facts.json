@@ -1133,6 +1133,110 @@
       "leader": "Michael Rousseau (CEO)",
       "public": true,
       "symbol": "AC.TO"
+    },
+    "nasa.gov": {
+      "name": "NASA",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Government agency",
+      "leader": "Jared Isaacman (Administrator)",
+      "public": false
+    },
+    "esa.int": {
+      "name": "European Space Agency (ESA)",
+      "country": "Europe",
+      "country_code": "eu",
+      "valuation": "Intergovernmental agency",
+      "leader": "Josef Aschbacher (Director General)",
+      "public": false
+    },
+    "cnsa.gov.cn": {
+      "name": "China National Space Administration (CNSA)",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "Government agency",
+      "leader": "Shan Zhongde (Administrator)",
+      "public": false
+    },
+    "roscosmos.ru": {
+      "name": "Roscosmos",
+      "country": "Russia",
+      "country_code": "ru",
+      "valuation": "State corporation",
+      "leader": "Dmitry Bakanov (Director General)",
+      "public": false
+    },
+    "jaxa.jp": {
+      "name": "JAXA",
+      "country": "Japan",
+      "country_code": "jp",
+      "valuation": "Government agency",
+      "leader": "Hiroshi Yamakawa (President)",
+      "public": false
+    },
+    "isro.gov.in": {
+      "name": "ISRO",
+      "country": "India",
+      "country_code": "in",
+      "valuation": "Government agency",
+      "leader": "V. Narayanan (Chairman)",
+      "public": false
+    },
+    "asc-csa.gc.ca": {
+      "name": "Canadian Space Agency",
+      "country": "Canada",
+      "country_code": "ca",
+      "valuation": "Government agency",
+      "leader": "Lisa Campbell (President)",
+      "public": false
+    },
+    "cnes.fr": {
+      "name": "CNES",
+      "country": "France",
+      "country_code": "fr",
+      "valuation": "Government agency",
+      "leader": "François Jacq (Chairman & CEO)",
+      "public": false
+    },
+    "dlr.de": {
+      "name": "DLR (German Aerospace Center)",
+      "country": "Germany",
+      "country_code": "de",
+      "valuation": "Government agency",
+      "leader": "Anke Kaysser-Pyzalla (Chair)",
+      "public": false
+    },
+    "asi.it": {
+      "name": "Italian Space Agency (ASI)",
+      "country": "Italy",
+      "country_code": "it",
+      "valuation": "Government agency",
+      "leader": "Teodoro Valente (President)",
+      "public": false
+    },
+    "kasa.go.kr": {
+      "name": "Korea AeroSpace Administration (KASA)",
+      "country": "South Korea",
+      "country_code": "kr",
+      "valuation": "Government agency",
+      "leader": "Yoon Young-bin (Administrator)",
+      "public": false
+    },
+    "space.gov.ae": {
+      "name": "UAE Space Agency",
+      "country": "United Arab Emirates",
+      "country_code": "ae",
+      "valuation": "Government agency",
+      "leader": "Salem Butti Al Qubaisi (Director General)",
+      "public": false
+    },
+    "space.gov.au": {
+      "name": "Australian Space Agency",
+      "country": "Australia",
+      "country_code": "au",
+      "valuation": "Government agency",
+      "leader": "Enrico Palermo (Head)",
+      "public": false
     }
   }
 }

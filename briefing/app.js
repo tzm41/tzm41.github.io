@@ -591,6 +591,7 @@ const COMPANY_LOGOS = {
   "CBS News": "cbsnews.com",
   CBS: "cbsnews.com",
   "ABC News": "abcnews.go.com",
+  ABC: "abcnews.go.com",
   MSNBC: "msnbc.com",
   NPR: "npr.org",
   "New York Times": "nytimes.com",
@@ -638,6 +639,26 @@ const COMPANY_LOGOS = {
   Qantas: "qantas.com",
   Ryanair: "ryanair.com",
   "Air Canada": "aircanada.com",
+  // Major Space Agencies
+  NASA: "nasa.gov",
+  ESA: "esa.int",
+  "European Space Agency": "esa.int",
+  CNSA: "cnsa.gov.cn",
+  "China National Space Administration": "cnsa.gov.cn",
+  国家航天局: "cnsa.gov.cn",
+  Roscosmos: "roscosmos.ru",
+  俄罗斯航天局: "roscosmos.ru",
+  JAXA: "jaxa.jp",
+  ISRO: "isro.gov.in",
+  "Indian Space Research Organisation": "isro.gov.in",
+  "Canadian Space Agency": "asc-csa.gc.ca",
+  CNES: "cnes.fr",
+  DLR: "dlr.de",
+  "Italian Space Agency": "asi.it",
+  KASA: "kasa.go.kr",
+  "Korea AeroSpace Administration": "kasa.go.kr",
+  "UAE Space Agency": "space.gov.ae",
+  "Australian Space Agency": "space.gov.au",
 };
 
 const US_PARTY_TAGS = {
@@ -690,6 +711,9 @@ function renderCountryFlagImg(code) {
   return `<img class="inline-flag-icon" src="${src}" width="16" height="12" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
 }
 
+const NON_MEDIA_ABC_RE =
+  /\b(?:Agricultural Bank|Alcoholic Beverage|Australian Broadcasting|Activity-Based|ABC(?:'s)?\s+of\b|ABC\s+(?:islands|weapons|stores?|liquor|board|commission|license|permit|permittee))\b/i;
+
 function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false) {
   if (!segment) return "";
   ENTITY_DECORATOR_RE.lastIndex = 0;
@@ -699,7 +723,11 @@ function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false)
     const token = m[0];
     const idx = m.index ?? 0;
     if (idx > last) out += escapeHtml(segment.slice(last, idx));
-    const domain = COMPANY_LOGOS[token];
+    let domain = COMPANY_LOGOS[token];
+    if (token === "ABC") {
+      const ctx = segment.slice(Math.max(0, idx - 40), Math.min(segment.length, idx + 45));
+      if (NON_MEDIA_ABC_RE.test(ctx)) domain = undefined;
+    }
     const placeId = PLACE_ALIASES[token];
     const party = US_PARTY_TAGS[token];
     if (domain) {
