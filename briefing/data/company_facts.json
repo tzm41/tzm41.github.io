@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-26T11:48:18Z",
+  "updated_at": "2026-11-26T12:18:08Z",
   "companies": {
     "nvidia.com": {
       "name": "Nvidia",
@@ -15,7 +15,7 @@
       "country": "United States",
       "country_code": "us",
       "valuation": "~$5.17T",
-      "leader": "Tim Cook (CEO)",
+      "leader": "John Ternus (CEO)",
       "public": true,
       "symbol": "AAPL"
     },
@@ -24,7 +24,7 @@
       "country": "United States",
       "country_code": "us",
       "valuation": "~$3.64T",
-      "leader": "Satya Nadella (CEO)",
+      "leader": "Satya Nadella & Judson B. Althoff (Co-CEOs)",
       "public": true,
       "symbol": "MSFT"
     },
@@ -42,7 +42,7 @@
       "country": "United States",
       "country_code": "us",
       "valuation": "~$2.64T",
-      "leader": "Andy Jassy (CEO)",
+      "leader": "Andrew R. Jassy & Matthew S. Garman (Co-CEOs)",
       "public": true,
       "symbol": "AMZN"
     },
@@ -406,7 +406,7 @@
       "country": "United States",
       "country_code": "us",
       "valuation": "~$324B",
-      "leader": "Safra Catz (CEO)",
+      "leader": "Michael D. Sicilia & Clayton M. Magouyrk (Co-CEOs)",
       "public": true,
       "symbol": "ORCL"
     },
@@ -442,7 +442,7 @@
       "country": "Japan",
       "country_code": "jp",
       "valuation": "~$258B",
-      "leader": "Koji Sato (CEO)",
+      "leader": "Kenta Kon & Nobuhiko Murakami (Co-CEOs)",
       "public": true,
       "symbol": "7203.T"
     },
@@ -478,7 +478,7 @@
       "country": "United States",
       "country_code": "us",
       "valuation": "~$1.05T",
-      "leader": "Doug McMillon (CEO)",
+      "leader": "John R. Furner (CEO)",
       "public": true,
       "symbol": "WMT"
     },
@@ -496,7 +496,7 @@
       "country": "United States",
       "country_code": "us",
       "valuation": "~$841B",
-      "leader": "Jamie Dimon (CEO)",
+      "leader": "James Dimon & Mary Callahan Erdoes (Co-CEOs)",
       "public": true,
       "symbol": "JPM"
     },
@@ -523,7 +523,7 @@
       "country": "United States",
       "country_code": "us",
       "valuation": "~$162B",
-      "leader": "Marc Benioff (CEO)",
+      "leader": "Marc R. Benioff & Parker Harris (Co-CEOs)",
       "public": true,
       "symbol": "CRM"
     },
@@ -558,7 +558,7 @@
       "country": "Sweden",
       "country_code": "se",
       "valuation": "~$127B",
-      "leader": "Daniel Ek (CEO)",
+      "leader": "Alex Norström & Gustav Söderström (Co-CEOs)",
       "public": true,
       "symbol": "SPOT"
     },
@@ -674,7 +674,7 @@
       "country": "Denmark",
       "country_code": "dk",
       "valuation": "~$181B",
-      "leader": "Lars Fruergaard Jørgensen (CEO)",
+      "leader": "Maziar Mike Doustdar (CEO)",
       "public": true,
       "symbol": "NVO"
     },
