@@ -242,6 +242,19 @@ a {
   display: block;
 }
 
+.masthead-icon-btn.is-spinning svg {
+  animation: spin-once 0.75s linear infinite;
+}
+
+@keyframes spin-once {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .masthead-controls .segmented {
   height: 32px;
   align-items: stretch;

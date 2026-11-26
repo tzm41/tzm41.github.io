@@ -26,6 +26,7 @@ const els = {
   btnPrevDay: document.getElementById("btn-prev-day"),
   btnNextDay: document.getElementById("btn-next-day"),
   btnExpandAll: document.getElementById("btn-expand-all"),
+  btnRefresh: document.getElementById("btn-refresh"),
   themeToggle: document.getElementById("theme-toggle"),
   sourceHealth: document.getElementById("source-health"),
   statusBanner: document.getElementById("status-banner"),
@@ -2290,6 +2291,35 @@ async function bootstrap() {
     const idx = dates.indexOf(state.currentDate);
     if (idx > 0) {
       loadBriefingForDate(idx - 1 === 0 ? "latest" : dates[idx - 1]);
+    }
+  });
+
+  // Refresh button: re-fetch archive index + current edition (+ live markets if on Latest)
+  els.btnRefresh?.addEventListener("click", async () => {
+    if (els.btnRefresh.disabled) return;
+    els.btnRefresh.disabled = true;
+    els.btnRefresh.classList.add("is-spinning");
+    try {
+      try {
+        const idxResp = await fetch(`${DATA_BASE}/index.json`, { cache: "no-store" });
+        if (idxResp.ok) {
+          state.index = await idxResp.json();
+          const dates = state.index.dates || [];
+          if (dates.length) {
+            const curVal = els.dateSelect.value;
+            els.dateSelect.innerHTML =
+              `<option value="latest">Latest</option>` +
+              dates.map((d) => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join("");
+            els.dateSelect.value = curVal;
+          }
+        }
+      } catch {
+        // Ignore index refresh errors and still reload current briefing
+      }
+      await loadBriefingForDate(state.viewingLatest ? "latest" : state.currentDate || "latest");
+    } finally {
+      els.btnRefresh.classList.remove("is-spinning");
+      els.btnRefresh.disabled = false;
     }
   });
 
