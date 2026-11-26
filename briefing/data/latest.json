@@ -298,8 +298,8 @@
     }
   ],
   "markets": {
-    "narrative": "US markets posted a **sharp sector rotation** on Tuesday, with the **Nasdaq falling 1.48% to 23,733.54** and **Technology (XLK) dropping 3.26%** on Nvidia-led AI selling, while the **Dow Jones (+0.85% to 50,018.70)** and Russell 2000 (+0.57%) advanced alongside Health Care (+2.95%) and Consumer Staples (+1.66%). Treasury yields eased slightly with the **10-year at 4.90% (-0.41%)** and the **VIX held elevated at 26.36** ahead of key inflation data. Commodities and crypto retreated, with **WTI crude at $81.25 (-0.98%)**, gold at **$3,517.20 (-1.25%)**, and **Bitcoin falling 3.21% to $59,245.72**.",
-    "regime_tag": "Volatility Spike",
+    "narrative": "**US equities staged a sharp afternoon rebound** off early lows, with the Dow (+0.33%, 50,182.95) and Russell 2000 (+0.71%, 2,704.06) flipping positive while the S&P 500 (-0.25%, 7,182.78) and Nasdaq (-0.62%, 23,585.80) trimmed steep morning losses. **Volatility cooled into the close** as the VIX retreated to 28.29 (+7.32%) and the 10-year Treasury yield eased to 4.85% (-1.02%), while Meta (+2.97%), WTI crude (+2.43% to $84.04), Gold (+1.48% to $3,614.60), and Bitcoin (+0.58% to $60,095.46) rallied against declines in Nvidia (-3.62%) and Amazon (-2.75%).",
+    "regime_tag": "Mixed",
     "watchlist": [
       {
         "symbol": "^GSPC",

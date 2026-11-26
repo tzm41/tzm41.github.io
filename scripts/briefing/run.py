@@ -312,6 +312,7 @@ async def fetch_afternoon_bundle(out_path_str: str) -> None:
             {"id": s.get("id"), "headline": s.get("headline")}
             for s in morning.get("top_news", [])
         ],
+        "morning_market_narrative": (morning.get("markets") or {}).get("narrative", ""),
         "raw_news": raw_news[:25],
         "market_snapshot": {
             "watchlist": [
@@ -351,6 +352,11 @@ def apply_afternoon_synthesis(synthesis_json_path: str) -> DailyBriefing:
         ).model_dump()
     data["afternoon_brief"] = BriefSection(generated_at=now_utc, bullets=ai.bullets).model_dump()
     data["generated_at"] = now_utc
+
+    if ai.market_narrative and isinstance(data.get("markets"), dict):
+        data["markets"]["narrative"] = ai.market_narrative
+    if ai.market_regime and isinstance(data.get("markets"), dict):
+        data["markets"]["regime_tag"] = ai.market_regime
 
     if ai.new_top_news:
         existing_morning = [

@@ -170,6 +170,14 @@ class AfternoonSynthesis(BaseModel):
     bullets: list[ExecutiveBriefItem] = Field(
         description="3 to 5 concise afternoon update bullets covering US market close and breaking developments since the morning briefing (limit to at most one item primarily about the stock market), each with category, 7-level sentiment, **bold** takeaways, and *italic* human names."
     )
+    market_narrative: str | None = Field(
+        default=None,
+        description="Updated 2 to 3 sentence market narrative reflecting the US market close, extended-hours movers, VIX, rates, and commodities, with **bold** takeaways.",
+    )
+    market_regime: MarketRegime | None = Field(
+        default=None,
+        description="Updated market regime tag (Risk-On | Risk-Off | Mixed | Volatility Spike) reflecting the afternoon/close session.",
+    )
     new_top_news: list[NewsStory] = Field(
         default_factory=list,
         description="2 to 4 newly broken afternoon top news stories not already covered in morning_top_news, each with 2-3 sentence summary, why_it_matters, 7-level sentiment, and verbatim source URLs from raw_news or raw_politics_articles.",
