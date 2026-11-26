@@ -150,7 +150,7 @@ async def fetch_positive_news() -> list[dict[str, Any]]:
     ) as client:
         results = await asyncio.gather(*[_fetch_feed(client, cfg) for cfg in POSITIVE_NEWS_FEEDS])
     all_items = [item for batch in results for item in batch]
-    return deduplicate_articles(all_items, max_items=8)
+    return deduplicate_articles(all_items, max_items=15)
 
 
 async def fetch_local_news() -> list[dict[str, Any]]:

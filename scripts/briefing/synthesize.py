@@ -115,7 +115,7 @@ def _build_prompt(
             "prediction_markets": raw_politics.get("prediction_markets", [])[:6],
             "articles": raw_politics.get("articles", [])[:25],
         },
-        "positive_news_candidates": (raw_positive or [])[:8],
+        "positive_news_candidates": (raw_positive or [])[:12],
         "local_news_candidates": raw_local or [],
     }
     return (
@@ -419,7 +419,9 @@ def merge_synthesis(
         for st in reg.stories + reg.stories_en:
             mention_texts.extend([st.headline, st.summary, st.why_it_matters])
     if ai.positive_news:
-        mention_texts.extend([ai.positive_news.headline, ai.positive_news.summary])
+        pos_list = ai.positive_news if isinstance(ai.positive_news, list) else [ai.positive_news]
+        for st in pos_list:
+            mention_texts.extend([st.headline, st.summary, st.why_it_matters])
     mentioned = [MentionedQuote(**q) for q in fetch_mentioned_quotes(mention_texts)]
 
     return DailyBriefing(

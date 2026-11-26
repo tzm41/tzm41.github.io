@@ -2067,12 +2067,18 @@ h3 {
   color: var(--pos);
 }
 
+.positive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
 .positive-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-top: 3px solid var(--pos);
   border-radius: var(--radius);
-  padding: 20px 24px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -2086,10 +2092,22 @@ h3 {
 
 .positive-card h3 {
   font-family: var(--font-serif);
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 1.3;
   color: var(--ink);
+}
+
+.positive-grid.is-single .positive-card {
+  padding: 20px 24px;
+}
+
+.positive-grid.is-single .positive-card h3 {
+  font-size: 21px;
+}
+
+.positive-card .source-links {
+  margin-top: auto;
 }
 
 /* ---------- Local News (Collapsible) ---------- */

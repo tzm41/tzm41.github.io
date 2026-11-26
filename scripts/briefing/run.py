@@ -162,7 +162,7 @@ async def run_pipeline(
 
     memory_3d = load_recent_memory(target_date, include_same_day=False)
     raw_news = filter_raw_candidates(raw_news, memory_3d, label="top_news", min_keep=8)
-    raw_positive = filter_raw_candidates(raw_positive, memory_3d, label="positive_news", min_keep=2)
+    raw_positive = filter_raw_candidates(raw_positive, memory_3d, label="positive_news", min_keep=4)
     for reg in raw_local:
         if isinstance(reg, dict) and isinstance(reg.get("articles"), list):
             reg["articles"] = filter_raw_candidates(

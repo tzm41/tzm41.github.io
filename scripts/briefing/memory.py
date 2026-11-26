@@ -82,7 +82,11 @@ def _extract_entries_from_briefing(data: dict[str, Any]) -> list[dict[str, Any]]
             add_story(s, "top_news")
 
     pos = data.get("positive_news")
-    if isinstance(pos, dict):
+    if isinstance(pos, list):
+        for s in pos:
+            if isinstance(s, dict):
+                add_story(s, "positive_news")
+    elif isinstance(pos, dict):
         add_story(pos, "positive_news")
 
     for reg in data.get("local_news") or []:

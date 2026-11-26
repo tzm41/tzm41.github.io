@@ -1792,34 +1792,45 @@ function renderPolitics(politics = {}) {
   }
 }
 
-function renderPositiveNews(story) {
+function renderPositiveNews(positiveNews) {
   if (!els.positiveSection || !els.positiveNewsSlot) return;
-  if (!story || !story.headline) {
+  const stories = Array.isArray(positiveNews)
+    ? positiveNews.filter((s) => s && s.headline)
+    : positiveNews && positiveNews.headline
+    ? [positiveNews]
+    : [];
+  if (!stories.length) {
     els.positiveSection.classList.add("hidden");
     els.positiveNewsSlot.innerHTML = "";
     return;
   }
-  const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
 
   els.positiveSection.classList.remove("hidden");
-  const posSentiment =
-    story.sentiment && SENTIMENT_LABELS[story.sentiment] && story.sentiment !== "neutral"
-      ? story.sentiment
-      : "very_positive";
-  els.positiveNewsSlot.innerHTML = `
-    <article class="positive-card">
-      <div class="news-meta">
-        <div class="news-card-badges">
-          <span class="cat-pill">${escapeHtml(story.category || "Progress")}</span>
-          ${renderSentimentRing(posSentiment)}
-        </div>
-      </div>
-      <h3>${formatEntitiesInPlain(story.headline)}</h3>
-      <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
-      <div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>
-      <div class="source-links">${sourcesHtml}</div>
-    </article>
-  `;
+  const cardsHtml = stories
+    .map((story) => {
+      const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
+      const posSentiment =
+        story.sentiment && SENTIMENT_LABELS[story.sentiment] && story.sentiment !== "neutral"
+          ? story.sentiment
+          : "very_positive";
+      return `
+        <article class="positive-card">
+          <div class="news-meta">
+            <div class="news-card-badges">
+              <span class="cat-pill">${escapeHtml(story.category || "Progress")}</span>
+              ${renderSentimentRing(posSentiment)}
+            </div>
+          </div>
+          <h3>${formatEntitiesInPlain(story.headline)}</h3>
+          <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
+          <div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>
+          <div class="source-links">${sourcesHtml}</div>
+        </article>
+      `;
+    })
+    .join("");
+
+  els.positiveNewsSlot.innerHTML = `<div class="positive-grid${stories.length === 1 ? " is-single" : ""}">${cardsHtml}</div>`;
 }
 
 let syncExpandAllButton = () => {};
