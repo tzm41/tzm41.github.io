@@ -2249,6 +2249,7 @@ async function bootstrap() {
     return setOpen;
   };
   const setMarketsOpen = wireCollapsible("btn-toggle-markets", "markets-body", "#markets");
+  wireCollapsible("btn-toggle-heatmap", "sector-heatmap");
   wireCollapsible("btn-toggle-conflicts", "conflicts-body", "#conflicts");
   wireCollapsible("btn-toggle-politics", "politics-body", "#politics");
 

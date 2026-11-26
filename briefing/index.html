@@ -172,10 +172,16 @@
 
         <div class="sub-block">
           <div class="sub-header">
-            <h3>S&amp;P 500 GICS Sector Heatmap</h3>
-            <span class="sub-note" id="heatmap-label">Daily ETF performance (SPDR Select Sectors)</span>
+            <div>
+              <h3>S&amp;P 500 GICS Sector Heatmap</h3>
+              <span class="sub-note" id="heatmap-label">Daily ETF performance (SPDR Select Sectors)</span>
+            </div>
+            <button type="button" class="collapse-btn" id="btn-toggle-heatmap" aria-expanded="false" aria-controls="sector-heatmap">
+              <span class="collapse-label">Expand</span>
+              <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+            </button>
           </div>
-          <div class="sector-heatmap" id="sector-heatmap"></div>
+          <div class="sector-heatmap hidden" id="sector-heatmap"></div>
         </div>
       </div>
     </section>
@@ -288,6 +294,6 @@
     </div>
   </footer>
 
-  <script type="module" src="./app.js?v=63"></script>
+  <script type="module" src="./app.js?v=64"></script>
 </body>
 </html>
