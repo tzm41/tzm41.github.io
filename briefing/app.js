@@ -2,7 +2,7 @@
  * Daily Briefing Dashboard — Client Application (Zero-Build ES Module)
  */
 
-import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=5";
+import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=6";
 
 const DATA_BASE = "./data";
 
@@ -2122,19 +2122,23 @@ function initFloatingTooltips() {
     tip.style.top = `${top.toFixed(1)}px`;
   };
 
+  const canHover = () => window.matchMedia?.("(hover: hover) and (pointer: fine)").matches;
+  let lastPointerType = "mouse";
+
   document.addEventListener("pointerover", (e) => {
-    if (e.pointerType === "touch") return;
+    if (e.pointerType === "touch" || !canHover()) return;
     const el = e.target.closest(SEL);
     if (el) show(el);
   });
 
   document.addEventListener("pointerout", (e) => {
-    if (e.pointerType === "touch") return;
+    if (e.pointerType === "touch" || !canHover()) return;
     const el = e.target.closest(SEL);
     if (el && el === activeEl) hide();
   });
 
   document.addEventListener("focusin", (e) => {
+    if (lastPointerType === "touch" || !canHover()) return;
     const el = e.target.closest?.(SEL);
     if (el) show(el);
   });
@@ -2147,12 +2151,13 @@ function initFloatingTooltips() {
   document.addEventListener(
     "pointerdown",
     (e) => {
+      lastPointerType = e.pointerType || "mouse";
       const el = e.target.closest(SEL);
       if (!el) {
         if (activeEl) hide();
         return;
       }
-      if (e.pointerType === "touch") {
+      if (e.pointerType === "touch" || !canHover()) {
         if (activeEl === el && !tip.classList.contains("hidden")) {
           hide();
         } else {
@@ -2315,6 +2320,9 @@ async function bootstrap() {
   marketsBody?.addEventListener("click", (e) => {
     if (sparkDragged) {
       sparkDragged = false;
+      return;
+    }
+    if (e.target.closest(".quote-name[data-company-domain]")) {
       return;
     }
     const card = e.target.closest(".quote-card");

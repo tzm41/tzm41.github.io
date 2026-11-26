@@ -768,14 +768,17 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
     }
   };
 
+  const canHover = () => window.matchMedia?.("(hover: hover) and (pointer: fine)").matches;
+  let lastPointerType = "mouse";
+
   document.addEventListener("pointerover", (e) => {
-    if (e.pointerType === "touch") return;
+    if (e.pointerType === "touch" || !canHover()) return;
     const el = e.target.closest(".country-mention[data-country-code]");
     if (el) show(el);
   });
 
   document.addEventListener("pointerout", (e) => {
-    if (e.pointerType === "touch") return;
+    if (e.pointerType === "touch" || !canHover()) return;
     const el = e.target.closest(".country-mention[data-country-code]");
     if (el && el === activeEl) {
       hideTimer = setTimeout(hide, 80);
@@ -783,6 +786,7 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
   });
 
   document.addEventListener("focusin", (e) => {
+    if (lastPointerType === "touch" || !canHover()) return;
     const el = e.target.closest?.(".country-mention[data-country-code]");
     if (el) show(el);
   });
@@ -795,12 +799,13 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
   document.addEventListener(
     "pointerdown",
     (e) => {
+      lastPointerType = e.pointerType || "mouse";
       const el = e.target.closest(".country-mention[data-country-code]");
       if (!el) {
         if (activeEl) hide();
         return;
       }
-      if (e.pointerType === "touch") {
+      if (e.pointerType === "touch" || !canHover()) {
         if (activeEl === el && !card.classList.contains("hidden")) {
           hide();
         } else {
