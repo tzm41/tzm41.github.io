@@ -263,14 +263,18 @@ def _download_timeframes(
             if getattr(s.index, "tz", None) is not None
             else s.index
         )
+        is_full_day = symbol in {"CL=F", "GC=F", "BTC-USD"}
         unique_days = sorted({ts.date() for ts in idx_ny})
         sliced = s.iloc[0:0]
         for day in reversed(unique_days):
             day_mask = idx_ny.date == day
-            open_mask = day_mask & (
-                (idx_ny.hour > 9) | ((idx_ny.hour == 9) & (idx_ny.minute >= 30))
-            )
-            cand = s[open_mask] if int(open_mask.sum()) >= 2 else s[day_mask]
+            if is_full_day:
+                cand = s[day_mask]
+            else:
+                open_mask = day_mask & (
+                    (idx_ny.hour > 9) | ((idx_ny.hour == 9) & (idx_ny.minute >= 30))
+                )
+                cand = s[open_mask] if int(open_mask.sum()) >= 2 else s[day_mask]
             if len(cand) >= 2:
                 sliced = cand
                 break

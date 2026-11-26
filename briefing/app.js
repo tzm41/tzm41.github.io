@@ -594,12 +594,13 @@ function computeSparklineLayout(values, times, tf, symbol) {
       const maxMin = Math.max(...mins);
       const minMin = Math.min(...mins);
       const startMin = minMin < 570 ? Math.min(minMin, 240) : 570; // 9:30 AM ET (or 4:00 AM if pre-market)
-      const hasAfterHours = maxMin > 960;
-      const endMin = hasAfterHours ? 1200 : 960; // 8:00 PM ET if extended, else 4:00 PM ET
+      const isTnx = symbol === "^TNX";
+      const hasAfterHours = !isTnx && maxMin > 960;
+      const endMin = isTnx ? 870 : hasAfterHours ? 1200 : 960; // TNX 2:30 PM ET bar (3:00 close); equities 4:00 / 8:00 PM ET
       const spanMin = Math.max(60, endMin - startMin);
       const xs = mins.map((m) => Math.max(0, Math.min(w, ((m - startMin) / spanMin) * w)));
       const closeX = hasAfterHours ? ((960 - startMin) / spanMin) * w : null;
-      const isExtended = mins.map((m) => m > 960 || m < 570);
+      const isExtended = mins.map((m) => !isTnx && (m > 960 || m < 570));
       return { xs, closeX, isExtended };
     }
   }
