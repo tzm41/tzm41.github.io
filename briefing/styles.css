@@ -487,13 +487,22 @@ h3 {
   background: var(--neg-soft);
 }
 
-.inline-flag {
+.country-mention {
+  display: inline;
+  border-bottom: 1px dashed var(--border-strong);
+  border-bottom-color: color-mix(in srgb, var(--ink-muted) 65%, transparent);
+  padding-bottom: 1px;
+}
+
+.inline-flag-icon {
   display: inline-block;
-  font-style: normal;
-  font-size: 0.92em;
-  line-height: 1;
-  margin-right: 3px;
-  vertical-align: -0.04em;
+  width: 15px;
+  height: 11px;
+  margin-right: 4px;
+  border-radius: 2.5px;
+  vertical-align: -0.08em;
+  object-fit: cover;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.16);
 }
 
 .inline-logo {
