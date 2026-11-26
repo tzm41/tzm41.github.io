@@ -445,12 +445,12 @@ const ENTITY_DECORATOR_RE = (() => {
 
 function renderCompanyLogoImg(domain) {
   const src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=32`;
-  return `<img class="inline-logo" src="${src}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
+  return `<img class="inline-logo" src="${src}" width="14" height="14" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
 }
 
 function renderCountryFlagImg(code) {
   const src = `https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/flags/4x3/${encodeURIComponent(code)}.svg`;
-  return `<img class="inline-flag-icon" src="${src}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
+  return `<img class="inline-flag-icon" src="${src}" width="16" height="12" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
 }
 
 function decorateFlagsAndLogos(segment) {
