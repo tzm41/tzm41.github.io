@@ -522,7 +522,7 @@ function renderCountryFlagImg(code) {
   return `<img class="inline-flag-icon" src="${src}" width="16" height="12" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
 }
 
-function decorateFlagsAndLogos(segment) {
+function decorateFlagsAndLogos(segment, seenFlags = new Set()) {
   if (!segment) return "";
   ENTITY_DECORATOR_RE.lastIndex = 0;
   let out = "";
@@ -536,7 +536,12 @@ function decorateFlagsAndLogos(segment) {
     if (domain) {
       out += `${renderCompanyLogoImg(domain)}${escapeHtml(token)}`;
     } else if (flagCode) {
-      out += `<span class="country-mention">${renderCountryFlagImg(flagCode)}${escapeHtml(token)}</span>`;
+      if (seenFlags.has(flagCode)) {
+        out += escapeHtml(token);
+      } else {
+        seenFlags.add(flagCode);
+        out += `<span class="country-mention">${renderCountryFlagImg(flagCode)}${escapeHtml(token)}</span>`;
+      }
     } else {
       out += escapeHtml(token);
     }
@@ -546,7 +551,7 @@ function decorateFlagsAndLogos(segment) {
   return out;
 }
 
-function formatEntitiesInPlain(segment) {
+function formatEntitiesInPlain(segment, seenFlags = new Set()) {
   if (!segment) return "";
   EXPLICIT_ITALIC_RE.lastIndex = 0;
   if (EXPLICIT_ITALIC_RE.test(segment)) {
@@ -555,11 +560,11 @@ function formatEntitiesInPlain(segment) {
     let last = 0;
     for (const m of segment.matchAll(EXPLICIT_ITALIC_RE)) {
       const idx = m.index ?? 0;
-      if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx));
+      if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seenFlags);
       out += `<em>${escapeHtml(m[1])}</em>`;
       last = idx + m[0].length;
     }
-    if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last));
+    if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seenFlags);
     return out;
   }
 
@@ -568,17 +573,19 @@ function formatEntitiesInPlain(segment) {
   let last = 0;
   for (const m of segment.matchAll(PERSON_NAME_RE)) {
     const idx = m.index ?? 0;
-    if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx));
+    if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seenFlags);
     out += `<em>${escapeHtml(m[0])}</em>`;
     last = idx + m[0].length;
   }
-  if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last));
+  if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seenFlags);
   return out;
 }
 
-function escapeWithTickers(segment) {
+function escapeWithTickers(segment, seenFlags = new Set()) {
   if (!segment) return "";
-  if (!state.tickerMap.size || !state.inlineTickerRe) return formatEntitiesInPlain(segment);
+  if (!state.tickerMap.size || !state.inlineTickerRe) {
+    return formatEntitiesInPlain(segment, seenFlags);
+  }
   state.inlineTickerRe.lastIndex = 0;
   let out = "";
   let lastIdx = 0;
@@ -587,7 +594,7 @@ function escapeWithTickers(segment) {
     const info = state.tickerMap.get(token);
     if (!info) continue;
     const idx = match.index ?? 0;
-    if (idx > lastIdx) out += formatEntitiesInPlain(segment.slice(lastIdx, idx));
+    if (idx > lastIdx) out += formatEntitiesInPlain(segment.slice(lastIdx, idx), seenFlags);
     const cls = deltaClass(info.change_pct);
     const tip = formatTickerTip(info);
     const domain = COMPANY_LOGOS[token] || COMPANY_LOGOS[info.name];
@@ -595,7 +602,7 @@ function escapeWithTickers(segment) {
     out += `<span class="ticker-tag ${cls}" tabindex="0" data-ticker-sym="${escapeHtml(info.symbol)}" data-ticker-tip="${escapeHtml(tip)}" title="${escapeHtml(tip)}">${logoHtml}${escapeHtml(token)}</span>`;
     lastIdx = idx + token.length;
   }
-  if (lastIdx < segment.length) out += formatEntitiesInPlain(segment.slice(lastIdx));
+  if (lastIdx < segment.length) out += formatEntitiesInPlain(segment.slice(lastIdx), seenFlags);
   return out;
 }
 
@@ -603,6 +610,7 @@ function highlightSummaryHtml(text) {
   const raw = String(text ?? "");
   if (!raw) return "";
 
+  const seenFlags = new Set();
   EXPLICIT_BOLD_RE.lastIndex = 0;
   const hasExplicit = EXPLICIT_BOLD_RE.test(raw);
   const re = hasExplicit ? EXPLICIT_BOLD_RE : FALLBACK_HIGHLIGHT_RE;
@@ -613,14 +621,14 @@ function highlightSummaryHtml(text) {
   for (const match of raw.matchAll(re)) {
     const idx = match.index ?? 0;
     if (idx > lastIdx) {
-      out += escapeWithTickers(raw.slice(lastIdx, idx));
+      out += escapeWithTickers(raw.slice(lastIdx, idx), seenFlags);
     }
     const inner = hasExplicit ? match[1] : match[0];
-    out += `<strong>${escapeWithTickers(inner)}</strong>`;
+    out += `<strong>${escapeWithTickers(inner, seenFlags)}</strong>`;
     lastIdx = idx + match[0].length;
   }
   if (lastIdx < raw.length) {
-    out += escapeWithTickers(raw.slice(lastIdx));
+    out += escapeWithTickers(raw.slice(lastIdx), seenFlags);
   }
   return out;
 }
