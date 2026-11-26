@@ -800,21 +800,26 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
     "pointerdown",
     (e) => {
       lastPointerType = e.pointerType || "mouse";
-      const el = e.target.closest(".country-mention[data-country-code]");
-      if (!el) {
-        if (activeEl) hide();
-        return;
-      }
-      if (e.pointerType === "touch" || !canHover()) {
-        if (activeEl === el && !card.classList.contains("hidden")) {
-          hide();
-        } else {
-          show(el);
-        }
+      if (!e.target.closest(".country-mention[data-country-code]") && activeEl) {
+        hide();
       }
     },
     { passive: true }
   );
+
+  document.addEventListener("click", (e) => {
+    if (lastPointerType !== "touch" && canHover()) return;
+    const el = e.target.closest(".country-mention[data-country-code]");
+    if (!el) {
+      if (activeEl) hide();
+      return;
+    }
+    if (activeEl === el && !card.classList.contains("hidden")) {
+      hide();
+    } else {
+      show(el);
+    }
+  });
 
   window.addEventListener("scroll", hide, { passive: true });
 }

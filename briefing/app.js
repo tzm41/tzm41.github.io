@@ -2,7 +2,7 @@
  * Daily Briefing Dashboard — Client Application (Zero-Build ES Module)
  */
 
-import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=6";
+import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=7";
 
 const DATA_BASE = "./data";
 
@@ -2155,21 +2155,26 @@ function initFloatingTooltips() {
     "pointerdown",
     (e) => {
       lastPointerType = e.pointerType || "mouse";
-      const el = e.target.closest(SEL);
-      if (!el) {
-        if (activeEl) hide();
-        return;
-      }
-      if (e.pointerType === "touch" || !canHover()) {
-        if (activeEl === el && !tip.classList.contains("hidden")) {
-          hide();
-        } else {
-          show(el);
-        }
+      if (!e.target.closest(SEL) && activeEl) {
+        hide();
       }
     },
     { passive: true }
   );
+
+  document.addEventListener("click", (e) => {
+    if (lastPointerType !== "touch" && canHover()) return;
+    const el = e.target.closest(SEL);
+    if (!el) {
+      if (activeEl) hide();
+      return;
+    }
+    if (activeEl === el && !tip.classList.contains("hidden")) {
+      hide();
+    } else {
+      show(el);
+    }
+  });
 
   window.addEventListener("scroll", hide, { passive: true });
 }
