@@ -2150,6 +2150,10 @@ h3 {
 }
 
 @media (max-width: 860px) {
+  .section-narrative {
+    max-width: 100%;
+  }
+
   .politics-layout {
     grid-template-columns: 1fr;
   }
