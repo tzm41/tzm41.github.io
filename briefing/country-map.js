@@ -18,6 +18,7 @@ const CONTINENT_META = {
   af: { label: "Africa", bounds: [-20, 53, -36, 38] },
   as: { label: "Asia", bounds: [25, 150, -11, 56] },
   oc: { label: "Oceania", bounds: [110, 180, -48, 2] },
+  an: { label: "Antarctica", bounds: [-175, 178, -85, -45] },
   world: { label: "Global", bounds: [-175, 178, -58, 78] },
 };
 
@@ -500,22 +501,39 @@ for (const [code, [name, capital, continent, iso, aliases, dot]] of Object.entri
   }
 }
 
-// 1b. Continents (Europe — distinct from EU unless semantically referring to EU)
-const EUROPE_ISO_IDS = Object.entries(RAW_COUNTRIES)
-  .filter(([code, [, , cont, iso]]) => code !== "eu" && cont === "eu" && typeof iso === "string")
-  .map(([, [, , , iso]]) => iso);
-PLACE_META["continent-europe"] = {
-  kind: "continent",
-  flagCode: null,
-  showInlineFlag: false,
-  name: "Europe",
-  subtitle: "Continent",
-  regionLabel: "44 countries",
-  continent: "eu",
-  iso: EUROPE_ISO_IDS,
+// 1b. Continents (all 7 continents; Europe distinct from EU unless semantically referring to EU)
+const isosForContinent = (contKey, extra = []) => {
+  const set = new Set(extra);
+  for (const [code, [, , cont, iso]] of Object.entries(RAW_COUNTRIES)) {
+    if (code !== "eu" && cont === contKey && typeof iso === "string") set.add(iso);
+  }
+  return [...set];
 };
-for (const alias of ["Europe", "European", "Europeans", "欧洲"]) {
-  PLACE_ALIASES[alias] = "continent-europe";
+
+const RAW_CONTINENTS = [
+  ["continent-europe", "Europe", "44 countries", "eu", isosForContinent("eu", ["643"]), ["Europe", "European", "Europeans", "欧洲"]],
+  ["continent-asia", "Asia", "48 countries", "as", isosForContinent("as", ["643"]), ["Asia", "Asian", "Asians", "亚洲"]],
+  ["continent-africa", "Africa", "54 countries", "af", isosForContinent("af"), ["Africa", "African", "Africans", "非洲"]],
+  ["continent-north-america", "North America", "23 countries", "na", isosForContinent("na"), ["North America", "North American", "北美洲", "北美"]],
+  ["continent-south-america", "South America", "12 countries", "sa", isosForContinent("sa"), ["South America", "South American", "南美洲", "南美"]],
+  ["continent-oceania", "Oceania", "14 countries", "oc", isosForContinent("oc"), ["Oceania", "大洋洲"]],
+  ["continent-antarctica", "Antarctica", "Polar continent", "an", ["010"], ["Antarctica", "Antarctic", "南极洲", "南极"]],
+];
+
+for (const [id, name, regionLabel, continent, iso, aliases] of RAW_CONTINENTS) {
+  PLACE_META[id] = {
+    kind: "continent",
+    flagCode: null,
+    showInlineFlag: false,
+    name,
+    subtitle: "Continent",
+    regionLabel,
+    continent,
+    iso,
+  };
+  for (const alias of aliases) {
+    PLACE_ALIASES[alias] = id;
+  }
 }
 
 // 2. US States
