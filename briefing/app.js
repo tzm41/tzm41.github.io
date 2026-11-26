@@ -1668,7 +1668,12 @@ function renderAll(briefing) {
   state.briefing = briefing;
   buildTickerMap(briefing.markets);
   els.editionDate.textContent = fmtReadableDate(briefing.date);
-  els.generatedMeta.textContent = `Updated ${fmtLocalTimestamp(briefing.generated_at)}`;
+  const latestUpdateTs =
+    briefing.afternoon_brief?.generated_at &&
+    new Date(briefing.afternoon_brief.generated_at) > new Date(briefing.generated_at)
+      ? briefing.afternoon_brief.generated_at
+      : briefing.generated_at;
+  els.generatedMeta.textContent = `Updated ${fmtLocalTimestamp(latestUpdateTs)}`;
   renderSourceHealth(briefing.source_health);
   renderKpiStrip(briefing);
   renderExecutiveBrief(briefing);
