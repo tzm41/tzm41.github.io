@@ -253,7 +253,7 @@ const COMPANY_LOGOS = {
   苹果: "apple.com",
   Microsoft: "microsoft.com",
   微软: "microsoft.com",
-  Alphabet: "abc.xyz",
+  Alphabet: "google.com",
   Google: "google.com",
   谷歌: "google.com",
   Amazon: "amazon.com",
