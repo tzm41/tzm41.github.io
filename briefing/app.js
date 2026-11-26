@@ -2,7 +2,7 @@
  * Daily Briefing Dashboard — Client Application (Zero-Build ES Module)
  */
 
-import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=8";
+import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=9";
 
 const DATA_BASE = "./data";
 
@@ -724,6 +724,12 @@ function glueIconWithText(iconHtml, text) {
 const NON_MEDIA_ABC_RE =
   /\b(?:Agricultural Bank|Alcoholic Beverage|Australian Broadcasting|Activity-Based|ABC(?:'s)?\s+of\b|ABC\s+(?:islands|weapons|stores?|liquor|board|commission|license|permit|permittee))\b/i;
 
+const NATIVE_BEFORE_RE = /\bNative\s+$/i;
+const INDIGENOUS_INDIAN_CTX_RE =
+  /\b(?:American|Native|Plains|Pueblo|Navajo|Cherokee|Sioux|Apache|Mohawk|Iroquois|Algonquin|Seminole|Lakota|Shawnee|Cheyenne|Comanche|Wampanoag)\s+Indians?\b|\bIndians?\s+(?:Tribes?|Tribal|Nations?|Reservations?|Territory|Affairs|Health Service|Country|Heritage|Boarding Schools?|Child Welfare|Gaming|Lands?)\b|\b(?:Indigenous|Native Americans?|First Nations|Bureau of Indian Affairs|Pilgrims|Thanksgiving)\b/i;
+const EU_INSTITUTION_AFTER_RE =
+  /^\s+(?:Commission|Parliament|Council|Central Bank|Court of Justice|Medicines Agency|External Action|Investment Bank|Stability Mechanism|Banking Authority|Securities|Single Market|Green Deal|Defen[cs]e Fund|Competitiveness)\b/i;
+
 function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false) {
   if (!segment) return "";
   ENTITY_DECORATOR_RE.lastIndex = 0;
@@ -738,7 +744,17 @@ function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false)
       const ctx = segment.slice(Math.max(0, idx - 40), Math.min(segment.length, idx + 45));
       if (NON_MEDIA_ABC_RE.test(ctx)) domain = undefined;
     }
-    const placeId = PLACE_ALIASES[token];
+    let placeId = PLACE_ALIASES[token];
+    if (placeId === "us" && (token === "American" || token === "Americans")) {
+      const before = segment.slice(Math.max(0, idx - 12), idx);
+      if (NATIVE_BEFORE_RE.test(before)) placeId = undefined;
+    } else if (placeId === "in" && (token === "Indian" || token === "Indians")) {
+      const ctx = segment.slice(Math.max(0, idx - 60), Math.min(segment.length, idx + 60));
+      if (INDIGENOUS_INDIAN_CTX_RE.test(ctx)) placeId = undefined;
+    } else if (placeId === "continent-europe" && token === "European") {
+      const after = segment.slice(idx + token.length, Math.min(segment.length, idx + token.length + 35));
+      if (EU_INSTITUTION_AFTER_RE.test(after)) placeId = "eu";
+    }
     const party = US_PARTY_TAGS[token];
     if (domain) {
       const key = `logo:${domain}`;
@@ -2601,6 +2617,7 @@ async function bootstrap() {
   wireCollapsible("btn-toggle-heatmap", "sector-heatmap");
   wireCollapsible("btn-toggle-conflicts", "conflicts-body", "#conflicts");
   wireCollapsible("btn-toggle-politics", "politics-body", "#politics");
+  wireCollapsible("btn-toggle-positive", "positive-news-slot", "#positive");
 
   const areAllSectionsExpanded = () => {
     const coreOpen = collapsibleControllers.every((c) => c.isOpen());

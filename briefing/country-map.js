@@ -70,7 +70,7 @@ const RAW_COUNTRIES = {
   uy: ["Uruguay", "Montevideo", "sa", "858", ["Uruguay", "Uruguayan"]],
   gy: ["Guyana", "Georgetown", "sa", "328", ["Guyana", "Guyanese"]],
   sr: ["Suriname", "Paramaribo", "sa", "740", ["Suriname", "Surinamese"]],
-  eu: ["European Union", "Brussels (de facto)", "eu", EU_ISO_IDS, ["European Union", "European", "Europeans", "EU", "欧盟"]],
+  eu: ["European Union", "Brussels (de facto)", "eu", EU_ISO_IDS, ["European Union", "EU", "欧盟", "欧洲联盟"]],
   gb: ["United Kingdom", "London", "eu", "826", ["United Kingdom", "UK", "Britain", "British", "英国"]],
   ie: ["Ireland", "Dublin", "eu", "372", ["Ireland", "Irish"]],
   fr: ["France", "Paris", "eu", "250", ["France", "French", "法国"]],
@@ -500,6 +500,24 @@ for (const [code, [name, capital, continent, iso, aliases, dot]] of Object.entri
   }
 }
 
+// 1b. Continents (Europe — distinct from EU unless semantically referring to EU)
+const EUROPE_ISO_IDS = Object.entries(RAW_COUNTRIES)
+  .filter(([code, [, , cont, iso]]) => code !== "eu" && cont === "eu" && typeof iso === "string")
+  .map(([, [, , , iso]]) => iso);
+PLACE_META["continent-europe"] = {
+  kind: "continent",
+  flagCode: null,
+  showInlineFlag: false,
+  name: "Europe",
+  subtitle: "Continent",
+  regionLabel: "44 countries",
+  continent: "eu",
+  iso: EUROPE_ISO_IDS,
+};
+for (const alias of ["Europe", "European", "Europeans", "欧洲"]) {
+  PLACE_ALIASES[alias] = "continent-europe";
+}
+
 // 2. US States
 for (const [fips, name, capital, aliases, dot] of RAW_US_STATES) {
   const id = `us-${fips}`;
@@ -718,7 +736,7 @@ function buildPlaceSvg(features, placeId) {
   let bounds;
   let targetIds = new Set();
 
-  if (meta.kind === "country") {
+  if (meta.kind === "country" || meta.kind === "continent") {
     bounds = (CONTINENT_META[meta.continent] || CONTINENT_META.world).bounds;
     if (Array.isArray(meta.iso)) meta.iso.forEach((x) => targetIds.add(x));
     else if (meta.iso) targetIds.add(meta.iso);
@@ -871,12 +889,13 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
       meta.kind === "gd_city" ||
       meta.kind === "us_city" ||
       meta.kind === "cn_city";
+    const flagHtml = meta.flagCode ? renderFlagImg(meta.flagCode) : "";
     const footerHtml = isCity
       ? `<div class="cmap-title is-city">
-           <span class="cmap-title-left">${renderFlagImg(meta.flagCode)}<span>${escapeHtml(meta.name)}</span></span>
+           <span class="cmap-title-left">${flagHtml}<span>${escapeHtml(meta.name)}</span></span>
            <span class="cmap-cont">${escapeHtml(meta.subtitle)}</span>
          </div>`
-      : `<div class="cmap-title">${renderFlagImg(meta.flagCode)}<span>${escapeHtml(meta.name)}</span></div>
+      : `<div class="cmap-title">${flagHtml}<span>${escapeHtml(meta.name)}</span></div>
          <div class="cmap-meta"><strong>${escapeHtml(meta.subtitle)}</strong><span class="cmap-cont">${escapeHtml(meta.regionLabel)}</span></div>`;
     card.innerHTML = `
       <div class="cmap-stage">${cachedSvg || `<div class="cmap-loading">Loading map…</div>`}</div>
