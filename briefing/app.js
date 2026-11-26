@@ -16,7 +16,7 @@ const state = {
   marketTimeframe: "1d",
   expandedQuoteSymbol: null,
   localRegionId: null,
-  localLang: "native",
+  localLang: "en",
   localExpanded: false,
 };
 
