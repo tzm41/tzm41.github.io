@@ -1190,13 +1190,14 @@ function renderQuoteGrid(container, quotes, tf, emptyMsg) {
       const layout = computeSparklineLayout(series, times, tf, q.symbol);
       const logoDomain = COMPANY_LOGOS[q.name];
       const logoHtml = logoDomain ? renderCompanyLogoImg(logoDomain) : "";
+      const domainAttr = logoDomain ? ` data-company-domain="${escapeHtml(logoDomain)}"` : "";
       const isExpanded = state.expandedQuoteSymbol === q.symbol;
       const hi = series.length ? fmtPrice(Math.max(...series), q.symbol) : "—";
       const lo = series.length ? fmtPrice(Math.min(...series), q.symbol) : "—";
       return `
         <div class="quote-card${isExpanded ? " is-expanded" : ""}" data-symbol="${escapeHtml(q.symbol)}" role="button" tabindex="0" aria-expanded="${isExpanded}">
           <div class="quote-top">
-            <span class="quote-name">${logoHtml}${escapeHtml(q.name)}</span>
+            <span class="quote-name"${domainAttr}>${logoHtml}${escapeHtml(q.name)}</span>
             <span class="quote-sym">${escapeHtml(q.symbol)}</span>
           </div>
           <div class="quote-mid">
@@ -2061,7 +2062,7 @@ function initFloatingTooltips() {
   document.body.appendChild(tip);
 
   const SEL =
-    ".ticker-tag[data-ticker-tip], .ticker-tag[data-company-domain], .sentiment-gauge[data-tooltip]";
+    ".ticker-tag[data-ticker-tip], .ticker-tag[data-company-domain], .quote-name[data-company-domain], .sentiment-gauge[data-tooltip]";
   let activeEl = null;
 
   const hide = () => {
@@ -2076,7 +2077,7 @@ function initFloatingTooltips() {
     const fact = domain ? state.companyFacts?.companies?.[domain] : null;
     const tickerTip = el.dataset.tickerTip || "";
 
-    if (isTicker && fact) {
+    if (fact && domain) {
       activeEl = el;
       const flagHtml = fact.country_code ? renderCountryFlagImg(fact.country_code) : "";
       const quoteRow = tickerTip
