@@ -17,9 +17,11 @@ import {
   renderSentimentRing,
 } from "../shared/ui.js?v=1";
 import {
+  DEFAULT_PERSON_NAME_RE,
   buildPersonNameRegexFromTexts,
   createEntityFormatter,
   initFloatingTooltips,
+  renderCountryFlagImg,
 } from "../shared/entities.js?v=1";
 
 const DATA_BASE = "./data";
@@ -63,9 +65,7 @@ const els = {
 };
 
 const { formatEntitiesInPlain, highlightSummaryHtml } = createEntityFormatter({
-  getPersonNameRe: () => state.personNameRe,
-  getCompanyFacts: () => state.companyFacts,
-  getCountryLeaders: () => state.countryLeaders,
+  getPersonRe: () => state.personNameRe || DEFAULT_PERSON_NAME_RE,
   pillCompaniesInSummary: false,
 });
 
@@ -398,18 +398,21 @@ async function bootstrap() {
   initScrollSpy();
   initSourceBiasPopover();
   initFloatingTooltips(() => state.companyFacts);
-  initCountryMapTooltip(() => state.countryLeaders);
+  initCountryMapTooltip(
+    escapeHtml,
+    renderCountryFlagImg,
+    (code) => state.countryLeaders?.leaders?.[code] || null
+  );
 
   // Wire collapsible sections (Science, Culture, History open by default; Long Reads & Week in Brief collapsed)
-  const scienceCtrl = collapsibles.wireCollapsible("btn-toggle-science", "science-body", "#science");
-  const cultureCtrl = collapsibles.wireCollapsible("btn-toggle-culture", "culture-body", "#culture");
-  const historyCtrl = collapsibles.wireCollapsible("btn-toggle-history", "history-body", "#history");
+  const setScienceOpen = collapsibles.wireCollapsible("btn-toggle-science", "science-body", "#science");
+  const setCultureOpen = collapsibles.wireCollapsible("btn-toggle-culture", "culture-body", "#culture");
+  const setHistoryOpen = collapsibles.wireCollapsible("btn-toggle-history", "history-body", "#history");
   collapsibles.wireCollapsible("btn-toggle-longreads", "longreads-body", "#longreads");
   collapsibles.wireCollapsible("btn-toggle-pulse", "pulse-body", "#pulse");
-  scienceCtrl?.setOpen(true);
-  cultureCtrl?.setOpen(true);
-  historyCtrl?.setOpen(true);
-  collapsibles.wireExpandAll();
+  setScienceOpen?.(true);
+  setCultureOpen?.(true);
+  setHistoryOpen?.(true);
   collapsibles.syncExpandAllButton();
 
   els.dateSelect.addEventListener("change", () => {
@@ -431,7 +434,7 @@ async function bootstrap() {
   els.btnRefresh?.addEventListener("click", async () => {
     if (els.btnRefresh.disabled) return;
     els.btnRefresh.disabled = true;
-    els.btnRefresh.classList.add("spinning");
+    els.btnRefresh.classList.add("is-spinning");
     try {
       const idxData = await fetchJson(`${DATA_BASE}/index.json?t=${Date.now()}`);
       state.index = idxData;
@@ -441,7 +444,7 @@ async function bootstrap() {
       await loadEdition(state.viewingLatest ? "latest" : state.currentDate, false);
     } finally {
       els.btnRefresh.disabled = false;
-      els.btnRefresh.classList.remove("spinning");
+      els.btnRefresh.classList.remove("is-spinning");
     }
   });
 
