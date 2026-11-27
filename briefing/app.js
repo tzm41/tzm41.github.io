@@ -2,7 +2,7 @@
  * Daily Briefing Dashboard — Client Application (Zero-Build ES Module)
  */
 
-import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=10";
+import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=11";
 
 const DATA_BASE = "./data";
 
@@ -791,7 +791,9 @@ function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false)
         seen.add(key);
         iconHtml = PARTY_ICONS[party] || "";
       }
-      out += `<span class="party-mention ${party}">${glueIconWithText(iconHtml, token)}</span>`;
+      const partyWiki =
+        party === "dem" ? "Democratic Party (United States)" : "Republican Party (United States)";
+      out += `<span class="party-mention ${party}" tabindex="0" data-wiki-title="${escapeHtml(partyWiki)}">${glueIconWithText(iconHtml, token)}</span>`;
     } else {
       out += escapeHtml(token);
     }
@@ -799,6 +801,19 @@ function decorateFlagsAndLogos(segment, seen = new Set(), pillCompanies = false)
   }
   if (last < segment.length) out += escapeHtml(segment.slice(last));
   return out;
+}
+
+const PERSON_PREFIX_STRIP_RE =
+  /^(?:President|Prime Minister|Attorney General|Secretary|Chairman|Mayor|Governor|Pope|King|Queen|Justice|Judge|CEO|Sen\.-elect|Sen\.|Rep\.|Gov\.|Dr\.)\s+/i;
+
+function personWikiTitle(raw) {
+  return String(raw || "").trim().replace(PERSON_PREFIX_STRIP_RE, "").trim();
+}
+
+function renderPersonSpan(raw) {
+  const title = personWikiTitle(raw);
+  const attr = title ? ` class="person-mention" tabindex="0" data-wiki-title="${escapeHtml(title)}"` : "";
+  return `<em${attr}>${escapeHtml(raw)}</em>`;
 }
 
 function formatEntitiesInPlain(segment, seen = new Set(), pillCompanies = false) {
@@ -811,7 +826,7 @@ function formatEntitiesInPlain(segment, seen = new Set(), pillCompanies = false)
     for (const m of segment.matchAll(EXPLICIT_ITALIC_RE)) {
       const idx = m.index ?? 0;
       if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen, pillCompanies);
-      out += `<em>${escapeHtml(m[1])}</em>`;
+      out += renderPersonSpan(m[1]);
       last = idx + m[0].length;
     }
     if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen, pillCompanies);
@@ -825,7 +840,7 @@ function formatEntitiesInPlain(segment, seen = new Set(), pillCompanies = false)
   for (const m of segment.matchAll(personRe)) {
     const idx = m.index ?? 0;
     if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen, pillCompanies);
-    out += `<em>${escapeHtml(m[0])}</em>`;
+    out += renderPersonSpan(m[0]);
     last = idx + m[0].length;
   }
   if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen, pillCompanies);
@@ -2871,6 +2886,46 @@ function applyPositivePlacement(pos) {
   }
 }
 
+const COMPANY_WIKI_OVERRIDES = {
+  "apple.com": "Apple_Inc.",
+  "amazon.com": "Amazon_(company)",
+  "meta.com": "Meta_Platforms",
+  "google.com": "Alphabet_Inc.",
+  "delta.com": "Delta_Air_Lines",
+  "paramount.com": "Paramount_Skydance",
+  "cursor.com": "Cursor_(code_editor)",
+  "runwayml.com": "Runway_(company)",
+  "x.ai": "XAI_(company)",
+  "ups.com": "United_Parcel_Service",
+  "abcnews.go.com": "ABC_News",
+  "reuters.com": "Reuters",
+  "foxnews.com": "Fox_News",
+  "britishairways.com": "British_Airways",
+  "esa.int": "European_Space_Agency",
+  "cnsa.gov.cn": "China_National_Space_Administration",
+  "dlr.de": "German_Aerospace_Center",
+  "asi.it": "Italian_Space_Agency",
+  "kasa.go.kr": "Korea_AeroSpace_Administration",
+};
+
+function buildEntityWikiUrl(el) {
+  if (!el) return "";
+  const domain = el.dataset.companyDomain;
+  if (domain) {
+    if (COMPANY_WIKI_OVERRIDES[domain]) {
+      return `https://en.wikipedia.org/wiki/${COMPANY_WIKI_OVERRIDES[domain]}`;
+    }
+    const fact = state.companyFacts?.companies?.[domain];
+    const clean = (fact?.name || el.textContent || "").replace(/\s*\([^)]*\)\s*/g, "").trim();
+    return clean ? `https://en.wikipedia.org/wiki/${encodeURIComponent(clean.replace(/ /g, "_"))}` : "";
+  }
+  const title = el.dataset.wikiTitle;
+  if (title) {
+    return `https://en.wikipedia.org/wiki/${encodeURIComponent(title.replace(/ /g, "_"))}`;
+  }
+  return "";
+}
+
 function initFloatingTooltips() {
   const tip = document.createElement("div");
   tip.className = "floating-tip hidden";
@@ -2878,20 +2933,25 @@ function initFloatingTooltips() {
   document.body.appendChild(tip);
 
   const SEL =
-    ".ticker-tag[data-ticker-tip], .ticker-tag[data-company-domain], .company-mention[data-company-domain], .quote-name[data-company-domain], .quote-prev-badge[data-tooltip], .sentiment-gauge[data-tooltip]";
+    ".ticker-tag[data-ticker-tip], .ticker-tag[data-company-domain], .company-mention[data-company-domain], .quote-name[data-company-domain], .person-mention[data-wiki-title], .party-mention[data-wiki-title], .quote-prev-badge[data-tooltip], .sentiment-gauge[data-tooltip]";
   let activeEl = null;
 
   const hide = () => {
     tip.classList.add("hidden");
-    tip.classList.remove("is-company");
+    tip.classList.remove("is-company", "is-touch");
     activeEl = null;
   };
 
-  const show = (el) => {
+  const show = (el, includeWikiLink = false) => {
     const isTicker = el.classList.contains("ticker-tag");
     const domain = el.dataset.companyDomain;
     const fact = domain ? state.companyFacts?.companies?.[domain] : null;
     const tickerTip = el.dataset.tickerTip || "";
+    const wikiUrl = buildEntityWikiUrl(el);
+    const wikiLinkHtml =
+      includeWikiLink && wikiUrl
+        ? `<div class="tip-wiki-row"><a class="tip-wiki-link" href="${wikiUrl}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a></div>`
+        : "";
 
     if (fact && domain) {
       activeEl = el;
@@ -2935,16 +2995,28 @@ function initFloatingTooltips() {
         <div class="ctip-grid">
           ${rows.join("\n          ")}
         </div>
+        ${wikiLinkHtml}
       `;
       tip.classList.remove("is-subtle");
       tip.classList.add("is-company");
+      tip.classList.toggle("is-touch", Boolean(includeWikiLink && wikiUrl));
+      tip.classList.remove("hidden");
+    } else if (el.dataset.wikiTitle && wikiUrl) {
+      activeEl = el;
+      const label = el.dataset.wikiTitle;
+      tip.innerHTML = includeWikiLink
+        ? `<span>${escapeHtml(label)}</span> <a class="tip-wiki-link inline" href="${wikiUrl}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a>`
+        : `${escapeHtml(label)} · Click for Wikipedia &nearr;`;
+      tip.classList.remove("is-company");
+      tip.classList.add("is-subtle");
+      tip.classList.toggle("is-touch", Boolean(includeWikiLink));
       tip.classList.remove("hidden");
     } else {
       const text = isTicker ? tickerTip : el.dataset.tooltip;
       if (!text) return;
       activeEl = el;
       tip.textContent = text;
-      tip.classList.remove("is-company");
+      tip.classList.remove("is-company", "is-touch");
       tip.classList.toggle("is-subtle", !isTicker);
       tip.classList.remove("hidden");
     }
@@ -2970,7 +3042,7 @@ function initFloatingTooltips() {
   document.addEventListener("pointerover", (e) => {
     if (e.pointerType === "touch" || !canHover()) return;
     const el = e.target.closest(SEL);
-    if (el) show(el);
+    if (el) show(el, false);
   });
 
   document.addEventListener("pointerout", (e) => {
@@ -2982,7 +3054,7 @@ function initFloatingTooltips() {
   document.addEventListener("focusin", (e) => {
     if (lastPointerType === "touch" || !canHover()) return;
     const el = e.target.closest?.(SEL);
-    if (el) show(el);
+    if (el) show(el, false);
   });
 
   document.addEventListener("focusout", (e) => {
@@ -2994,7 +3066,7 @@ function initFloatingTooltips() {
     "pointerdown",
     (e) => {
       lastPointerType = e.pointerType || "mouse";
-      if (!e.target.closest(SEL) && activeEl) {
+      if (!tip.contains(e.target) && !e.target.closest(SEL) && activeEl) {
         hide();
       }
     },
@@ -3002,20 +3074,30 @@ function initFloatingTooltips() {
   );
 
   document.addEventListener("click", (e) => {
-    if (lastPointerType !== "touch" && canHover()) return;
+    if (tip.contains(e.target)) return;
     const el = e.target.closest(SEL);
     if (!el) {
       if (activeEl) hide();
       return;
     }
-    if (el.closest("a")) {
+    const isTouch = lastPointerType === "touch" || !canHover();
+    if (!isTouch) {
+      const wikiUrl = buildEntityWikiUrl(el);
+      if (wikiUrl) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.open(wikiUrl, "_blank", "noopener,noreferrer");
+      }
+      return;
+    }
+    if (el.closest("a") || el.dataset.companyDomain || el.dataset.wikiTitle) {
       e.preventDefault();
       e.stopPropagation();
     }
     if (activeEl === el && !tip.classList.contains("hidden")) {
       hide();
     } else {
-      show(el);
+      show(el, true);
     }
   });
 

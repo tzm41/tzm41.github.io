@@ -800,6 +800,41 @@ h3 {
   font-weight: 500;
 }
 
+.country-map-tip.is-touch,
+.floating-tip.is-touch {
+  pointer-events: auto;
+}
+
+.person-mention[data-wiki-title],
+.party-mention[data-wiki-title] {
+  cursor: help;
+}
+
+.tip-wiki-row {
+  margin-top: 7px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tip-wiki-link {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.tip-wiki-link.inline {
+  margin-left: 6px;
+  color: #93c5fd;
+}
+
+.tip-wiki-link:hover {
+  text-decoration: underline;
+}
+
 .ctip-bias {
   display: inline-flex;
   align-items: center;

@@ -864,6 +864,28 @@ function buildPlaceSvg(features, placeId) {
   `;
 }
 
+const PLACE_WIKI_OVERRIDES = {
+  ge: "Georgia_(country)",
+  "us-13": "Georgia_(U.S._state)",
+  "us-36": "New_York_(state)",
+  "us-53": "Washington_(state)",
+  "us-11": "Washington,_D.C.",
+  "ca-silicon-valley": "Silicon_Valley",
+  "ca-bay-area": "San_Francisco_Bay_Area",
+};
+
+function buildPlaceWikiUrl(placeId, meta) {
+  if (!meta) return "";
+  if (PLACE_WIKI_OVERRIDES[placeId]) {
+    return `https://en.wikipedia.org/wiki/${PLACE_WIKI_OVERRIDES[placeId]}`;
+  }
+  const title =
+    (meta.kind === "ca_city" || meta.kind === "us_city") && meta.subtitle
+      ? `${meta.name}, ${meta.subtitle}`
+      : meta.name;
+  return `https://en.wikipedia.org/wiki/${encodeURIComponent(String(title).replace(/ /g, "_"))}`;
+}
+
 export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
   const card = document.createElement("div");
   card.className = "country-map-tip hidden";
@@ -875,6 +897,7 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
 
   const hide = () => {
     card.classList.add("hidden");
+    card.classList.remove("is-touch");
     activeEl = null;
   };
 
@@ -894,7 +917,7 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
     card.style.top = `${top.toFixed(1)}px`;
   };
 
-  const show = async (el) => {
+  const show = async (el, includeWikiLink = false) => {
     clearTimeout(hideTimer);
     const placeId = el?.dataset?.countryCode;
     const meta = placeId ? PLACE_META[placeId] : null;
@@ -908,17 +931,23 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
       meta.kind === "us_city" ||
       meta.kind === "cn_city";
     const flagHtml = meta.flagCode ? renderFlagImg(meta.flagCode) : "";
+    const wikiUrl = buildPlaceWikiUrl(placeId, meta);
+    const wikiLinkHtml =
+      includeWikiLink && wikiUrl
+        ? `<div class="tip-wiki-row"><a class="tip-wiki-link" href="${wikiUrl}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a></div>`
+        : "";
     const footerHtml = isCity
       ? `<div class="cmap-title is-city">
            <span class="cmap-title-left">${flagHtml}<span>${escapeHtml(meta.name)}</span></span>
            <span class="cmap-cont">${escapeHtml(meta.subtitle)}</span>
-         </div>`
+         </div>${wikiLinkHtml}`
       : `<div class="cmap-title">${flagHtml}<span>${escapeHtml(meta.name)}</span></div>
-         <div class="cmap-meta"><strong>${escapeHtml(meta.subtitle)}</strong><span class="cmap-cont">${escapeHtml(meta.regionLabel)}</span></div>`;
+         <div class="cmap-meta"><strong>${escapeHtml(meta.subtitle)}</strong><span class="cmap-cont">${escapeHtml(meta.regionLabel)}</span></div>${wikiLinkHtml}`;
     card.innerHTML = `
       <div class="cmap-stage">${cachedSvg || `<div class="cmap-loading">Loading map…</div>`}</div>
       <div class="cmap-footer">${footerHtml}</div>
     `;
+    card.classList.toggle("is-touch", Boolean(includeWikiLink));
     card.classList.remove("hidden");
     positionCard(el);
 
@@ -971,7 +1000,7 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
     "pointerdown",
     (e) => {
       lastPointerType = e.pointerType || "mouse";
-      if (!e.target.closest(".country-mention[data-country-code]") && activeEl) {
+      if (!card.contains(e.target) && !e.target.closest(".country-mention[data-country-code]") && activeEl) {
         hide();
       }
     },
@@ -979,16 +1008,30 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
   );
 
   document.addEventListener("click", (e) => {
-    if (lastPointerType !== "touch" && canHover()) return;
+    if (card.contains(e.target)) return;
     const el = e.target.closest(".country-mention[data-country-code]");
     if (!el) {
       if (activeEl) hide();
       return;
     }
+    const isTouch = lastPointerType === "touch" || !canHover();
+    if (!isTouch) {
+      const placeId = el.dataset.countryCode;
+      const meta = placeId ? PLACE_META[placeId] : null;
+      const wikiUrl = buildPlaceWikiUrl(placeId, meta);
+      if (wikiUrl) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.open(wikiUrl, "_blank", "noopener,noreferrer");
+      }
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
     if (activeEl === el && !card.classList.contains("hidden")) {
       hide();
     } else {
-      show(el);
+      show(el, true);
     }
   });
 
