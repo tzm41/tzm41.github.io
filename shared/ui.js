@@ -323,7 +323,7 @@ export function renderSourceChip(src) {
   return `<a class="source-chip"${biasAttr} href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`;
 }
 
-export const TAG_COLOR_COUNT = 12;
+export const TAG_COLOR_COUNT = 48;
 
 export function hashTagColorIndex(label, paletteSize = TAG_COLOR_COUNT) {
   const str = String(label ?? "").trim().toLowerCase();
@@ -332,6 +332,12 @@ export function hashTagColorIndex(label, paletteSize = TAG_COLOR_COUNT) {
     hash ^= str.charCodeAt(i);
     hash = Math.imul(hash, 0x01000193);
   }
+  // Murmur3 32-bit avalanche finalizer for uniform spread across the hue wheel
+  hash ^= hash >>> 16;
+  hash = Math.imul(hash, 0x85ebca6b);
+  hash ^= hash >>> 13;
+  hash = Math.imul(hash, 0xc2b2ae35);
+  hash ^= hash >>> 16;
   return (hash >>> 0) % paletteSize;
 }
 
@@ -339,8 +345,9 @@ export function renderHashedTag(label, extraClass = "") {
   const text = String(label ?? "").trim();
   if (!text) return "";
   const idx = hashTagColorIndex(text, TAG_COLOR_COUNT);
-  const cls = extraClass ? `cat-pill tag-hue-${idx} ${extraClass}` : `cat-pill tag-hue-${idx}`;
-  return `<span class="${cls}">${escapeHtml(text)}</span>`;
+  const hue = ((idx * 360) / TAG_COLOR_COUNT).toFixed(1);
+  const cls = extraClass ? `cat-pill tag-hashed ${extraClass}` : "cat-pill tag-hashed";
+  return `<span class="${cls}" style="--tag-h:${hue}">${escapeHtml(text)}</span>`;
 }
 
 export const SENTIMENT_META = {

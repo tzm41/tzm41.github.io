@@ -16,7 +16,7 @@ import {
   renderHashedTag,
   initSourceBiasPopover,
   renderSentimentRing,
-} from "../shared/ui.js?v=2";
+} from "../shared/ui.js?v=3";
 import {
   DEFAULT_PERSON_NAME_RE,
   buildPersonNameRegexFromTexts,

@@ -12,43 +12,29 @@
   --accent-soft: rgba(106, 183, 204, 0.15);
 }
 
-/* Deterministic hashed category tag color palette (12 editorial hues) */
-.cat-pill[class*="tag-hue-"] {
-  border: 1px solid color-mix(in srgb, var(--tag-fg) 24%, transparent);
+/* Deterministic hashed category tag colors (48 perceptually uniform OKLCH hues) */
+.cat-pill.tag-hashed {
+  --tag-fg: hsl(var(--tag-h, 200) 56% 34%);
+  border: 1px solid color-mix(in srgb, var(--tag-fg) 25%, transparent);
   background: color-mix(in srgb, var(--tag-fg) 10%, transparent);
   color: var(--tag-fg);
 }
 
-[data-theme="dark"] .cat-pill[class*="tag-hue-"] {
+[data-theme="dark"] .cat-pill.tag-hashed {
+  --tag-fg: hsl(var(--tag-h, 200) 74% 72%);
   border-color: color-mix(in srgb, var(--tag-fg) 30%, transparent);
   background: color-mix(in srgb, var(--tag-fg) 15%, transparent);
 }
 
-.tag-hue-0  { --tag-fg: #9f2f23; }
-.tag-hue-1  { --tag-fg: #1e56a0; }
-.tag-hue-2  { --tag-fg: #156c47; }
-.tag-hue-3  { --tag-fg: #9a5508; }
-.tag-hue-4  { --tag-fg: #6d3596; }
-.tag-hue-5  { --tag-fg: #166371; }
-.tag-hue-6  { --tag-fg: #a3295d; }
-.tag-hue-7  { --tag-fg: #3948a3; }
-.tag-hue-8  { --tag-fg: #4b6b1a; }
-.tag-hue-9  { --tag-fg: #9b4416; }
-.tag-hue-10 { --tag-fg: #0f628c; }
-.tag-hue-11 { --tag-fg: #842843; }
+@supports (color: oklch(0.5 0.1 0)) {
+  .cat-pill.tag-hashed {
+    --tag-fg: oklch(0.45 0.135 var(--tag-h, 200));
+  }
 
-[data-theme="dark"] .tag-hue-0  { --tag-fg: #f48d7e; }
-[data-theme="dark"] .tag-hue-1  { --tag-fg: #7cb4f9; }
-[data-theme="dark"] .tag-hue-2  { --tag-fg: #5cd49f; }
-[data-theme="dark"] .tag-hue-3  { --tag-fg: #f0b354; }
-[data-theme="dark"] .tag-hue-4  { --tag-fg: #c392ec; }
-[data-theme="dark"] .tag-hue-5  { --tag-fg: #62cbd9; }
-[data-theme="dark"] .tag-hue-6  { --tag-fg: #f285b3; }
-[data-theme="dark"] .tag-hue-7  { --tag-fg: #8f9ff8; }
-[data-theme="dark"] .tag-hue-8  { --tag-fg: #a2cc62; }
-[data-theme="dark"] .tag-hue-9  { --tag-fg: #f19b68; }
-[data-theme="dark"] .tag-hue-10 { --tag-fg: #5bc0eb; }
-[data-theme="dark"] .tag-hue-11 { --tag-fg: #df7c9a; }
+  [data-theme="dark"] .cat-pill.tag-hashed {
+    --tag-fg: oklch(0.78 0.13 var(--tag-h, 200));
+  }
+}
 
 /* Quote / Idea of the Week callout */
 .quote-card {
