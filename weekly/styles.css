@@ -380,6 +380,11 @@
   right: 46px;
 }
 
+.geo-fact-popover > .share-btn,
+.geo-mobile-card > .share-btn {
+  right: 76px;
+}
+
 .geo-fact-head {
   display: flex;
   align-items: flex-start;

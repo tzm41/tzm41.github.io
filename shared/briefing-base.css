@@ -1006,13 +1006,46 @@ h3 {
   flex-shrink: 0;
 }
 
-/* ---------- Top-Edge Bookmark Ribbon & Auth Masthead ---------- */
+/* ---------- Top-Edge Bookmark Ribbon, Share Paperplane & Auth Masthead ---------- */
+
+/* Keep card text/badges visually in front of top-edge bookmark & share icons,
+   while letting empty flex space in top metadata rows pass pointer events through. */
+.news-card,
+.positive-card,
+.geo-fact-popover,
+.geo-mobile-card {
+  isolation: isolate;
+}
+
+.news-card > :not(.bookmark-btn):not(.share-btn),
+.positive-card > :not(.bookmark-btn):not(.share-btn),
+.geo-fact-popover > :not(.bookmark-btn):not(.share-btn),
+.geo-mobile-card > :not(.bookmark-btn):not(.share-btn) {
+  position: relative;
+  z-index: 2;
+}
+
+.news-card > .news-meta,
+.positive-card > .positive-meta,
+.geo-fact-popover > .geo-fact-head,
+.geo-mobile-card > .geo-fact-head,
+.news-card > .bm-origin-row {
+  pointer-events: none;
+}
+
+.news-card > .news-meta > *,
+.positive-card > .positive-meta > *,
+.geo-fact-popover > .geo-fact-head > *,
+.geo-mobile-card > .geo-fact-head > *,
+.news-card > .bm-origin-row > * {
+  pointer-events: auto;
+}
 
 .bookmark-btn {
   position: absolute;
   top: 0;
   right: 14px;
-  z-index: 5;
+  z-index: 1;
   display: inline-flex;
   align-items: flex-start;
   justify-content: center;
@@ -1105,63 +1138,90 @@ h3 {
 
 .share-btn {
   position: absolute;
-  top: 7px;
+  top: 0;
   right: 44px;
-  z-index: 5;
+  z-index: 1;
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   padding: 0;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 5px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
   color: var(--ink-muted);
   cursor: pointer;
+  flex-shrink: 0;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-4px);
-  transition: opacity 0.16s ease, transform 0.18s ease, color 0.15s ease, border-color 0.15s ease;
+  transform: translateY(-100%);
+  transition: opacity 0.18s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), color 0.15s ease;
+}
+
+.share-btn::after {
+  content: "";
+  position: absolute;
+  inset: -4px -8px -10px -8px;
 }
 
 .share-btn svg {
-  width: 13px;
-  height: 13px;
+  width: 21px;
+  height: 21px;
   display: block;
+  fill: var(--surface);
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
 }
 
-.news-card:hover > .share-btn,
-.news-card:focus-within > .share-btn,
-.news-card.bm-card-revealed > .share-btn,
-.positive-card:hover > .share-btn,
-.positive-card:focus-within > .share-btn,
-.positive-card.bm-card-revealed > .share-btn,
-.geo-fact-popover:hover > .share-btn,
-.geo-fact-popover:focus-within > .share-btn,
-.geo-fact-popover.bm-card-revealed > .share-btn,
-.geo-mobile-card:hover > .share-btn,
-.geo-mobile-card:focus-within > .share-btn,
-.geo-mobile-card.bm-card-revealed > .share-btn {
-  opacity: 0.85;
+.news-card:hover > .share-btn:not(.is-copied),
+.news-card:focus-within > .share-btn:not(.is-copied),
+.news-card.bm-card-revealed > .share-btn:not(.is-copied),
+.positive-card:hover > .share-btn:not(.is-copied),
+.positive-card:focus-within > .share-btn:not(.is-copied),
+.positive-card.bm-card-revealed > .share-btn:not(.is-copied),
+.geo-fact-popover:hover > .share-btn:not(.is-copied),
+.geo-fact-popover:focus-within > .share-btn:not(.is-copied),
+.geo-fact-popover.bm-card-revealed > .share-btn:not(.is-copied),
+.geo-mobile-card:hover > .share-btn:not(.is-copied),
+.geo-mobile-card:focus-within > .share-btn:not(.is-copied),
+.geo-mobile-card.bm-card-revealed > .share-btn:not(.is-copied) {
+  opacity: 0.78;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translateY(-9px);
 }
 
 .share-btn:hover,
-.share-btn:focus-visible {
+.share-btn:focus-visible,
+.news-card:hover > .share-btn:hover,
+.news-card:focus-within > .share-btn:focus-visible,
+.news-card.bm-card-revealed > .share-btn:hover,
+.positive-card:hover > .share-btn:hover,
+.positive-card:focus-within > .share-btn:focus-visible,
+.positive-card.bm-card-revealed > .share-btn:hover,
+.geo-fact-popover:hover > .share-btn:hover,
+.geo-fact-popover:focus-within > .share-btn:focus-visible,
+.geo-fact-popover.bm-card-revealed > .share-btn:hover,
+.geo-mobile-card:hover > .share-btn:hover,
+.geo-mobile-card:focus-within > .share-btn:focus-visible,
+.geo-mobile-card.bm-card-revealed > .share-btn:hover {
   opacity: 1;
   color: var(--accent);
-  border-color: var(--accent);
-  outline: none;
+  transform: translateY(-2px);
 }
 
 .share-btn.is-copied {
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translateY(-2px);
   color: var(--pos);
-  border-color: var(--pos);
+}
+
+.share-btn.is-copied svg {
+  fill: none;
 }
 
 @keyframes shared-card-pulse {
@@ -1183,7 +1243,8 @@ h3 {
   border-color: var(--accent);
 }
 
-.bookmark-btn:focus-visible {
+.bookmark-btn:focus-visible,
+.share-btn:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
   border-radius: 3px;
