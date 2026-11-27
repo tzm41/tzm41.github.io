@@ -1,8 +1,9 @@
 {
-  "updated_at": "2026-11-27T09:57:19Z",
-  "latest_date": "2026-11-26",
+  "updated_at": "2026-11-27T15:05:23Z",
+  "latest_date": "2026-11-27",
   "archive_ttl_days": 60,
   "dates": [
+    "2026-11-27",
     "2026-11-26",
     "2026-11-25"
   ],
@@ -26,6 +27,16 @@
       "us10y": 4.85,
       "top_theater": "Eastern Europe / Ukraine",
       "conflict_index": 1355.0
+    },
+    {
+      "date": "2026-11-27",
+      "regime": "Mixed",
+      "sp500_price": 7221.59,
+      "sp500_pct": 0.54,
+      "vix": 26.87,
+      "us10y": 4.89,
+      "top_theater": "Eastern Europe / Ukraine",
+      "conflict_index": 1354.0
     }
   ]
 }

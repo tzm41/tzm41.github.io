@@ -1,7 +1,427 @@
 {
-  "updated_at": "2026-11-27T01:01:13Z",
+  "updated_at": "2026-11-27T15:05:23Z",
   "window_days": 3,
+  "editions": [
+    "2026-11-27",
+    "2026-11-26",
+    "2026-11-25"
+  ],
   "items": [
+    {
+      "date": "2026-11-27",
+      "section": "top_news",
+      "id": "story-zelensky-criticizes-trump-putin-ties-as-eu-deadlocks-on-ukraine-aid-39afca",
+      "headline": "Zelensky Criticizes Trump-Putin Ties as EU Deadlocks on Ukraine Aid Budget",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/c820q9wgrpyyo",
+        "https://thehill.com/policy/international/6245089-zelensky-calls-for-us-peace-progress",
+        "https://www.bbc.co.uk/news/articles/cw4gnm3m9deno"
+      ],
+      "tokens": [
+        "budget",
+        "criticizes",
+        "deadlocks",
+        "putin",
+        "ties",
+        "trump",
+        "ukraine",
+        "zelensky"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "top_news",
+      "id": "story-venezuela-moves-to-scrap-law-barring-opposition-figures-from-public-117588",
+      "headline": "Venezuela Moves to Scrap Law Barring Opposition Figures From Public Office",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/c58j4pw9xjrlo"
+      ],
+      "tokens": [
+        "barring",
+        "figures",
+        "moves",
+        "office",
+        "opposition",
+        "public",
+        "scrap",
+        "venezuela"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "top_news",
+      "id": "story-un-warns-famine-risks-are-rising-across-16-global-hotspots-amid-con-86b6d6",
+      "headline": "UN Warns Famine Risks Are Rising Across 16 Global Hotspots Amid Conflict and El Niño",
+      "urls": [
+        "https://www.aljazeera.com/news/2026/11/27/famine-expect-to-rise-due-to-global-conflict-el-nino-warns-un"
+      ],
+      "tokens": [
+        "across",
+        "conflict",
+        "famine",
+        "global",
+        "hotspots",
+        "rising",
+        "risks",
+        "warns"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "top_news",
+      "id": "story-supreme-court-to-weigh-trump-asylum-overhaul-as-advocates-push-to-r-1713f4",
+      "headline": "Supreme Court to Weigh Trump Asylum Overhaul as Advocates Push to Restore Access",
+      "urls": [
+        "https://www.npr.org/2026/11/27/nx-s1-6037854/trump-effectively-ended-asylum-supreme-court"
+      ],
+      "tokens": [
+        "access",
+        "advocates",
+        "asylum",
+        "court",
+        "overhaul",
+        "push",
+        "restore",
+        "supreme",
+        "trump",
+        "weigh"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "top_news",
+      "id": "story-hundreds-of-thousands-without-power-after-thanksgiving-storms-as-bl-7980ed",
+      "headline": "Hundreds of Thousands Without Power After Thanksgiving Storms as Black Friday Begins",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cre3dj5n7dpwo",
+        "https://www.npr.org/2026/11/27/nx-s1-6054884/thanksgiving-weather-black-friday",
+        "https://www.npr.org/2026/11/27/g-s1-156004/up-first-newsletter-thanksgiving-storm-black-friday-shopping-asylum-supreme-court"
+      ],
+      "tokens": [
+        "begins",
+        "black",
+        "friday",
+        "hundreds",
+        "power",
+        "storms",
+        "thanksgiving",
+        "thousands",
+        "without"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "top_news",
+      "id": "story-hackers-breach-u-s-air-force-cloud-one-platform-risking-sensitive-d-d5f6c5",
+      "headline": "Hackers Breach U.S. Air Force Cloud One Platform, Risking Sensitive Data",
+      "urls": [
+        "https://thehill.com/policy/defense/6245197-air-force-cloud-one-hack"
+      ],
+      "tokens": [
+        "breach",
+        "cloud",
+        "data",
+        "force",
+        "hackers",
+        "platform",
+        "risking",
+        "sensitive"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "top_news",
+      "id": "story-french-actor-gerard-depardieu-ordered-to-stand-trial-for-rape-and-s-e98ad5",
+      "headline": "French Actor Gérard Depardieu Ordered to Stand Trial for Rape and Sexual Assault",
+      "urls": [
+        "https://www.npr.org/2026/11/27/nx-s1-6055559/gerard-depardieu-trial-rape-france"
+      ],
+      "tokens": [
+        "actor",
+        "assault",
+        "depardieu",
+        "french",
+        "ordered",
+        "rape",
+        "rard",
+        "sexual",
+        "stand",
+        "trial"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "top_news",
+      "id": "story-android-rolls-out-ai-powered-diy-widgets-with-gemini-https-www-thev-072acf",
+      "headline": "Android Rolls Out AI-Powered DIY Widgets With Gemini",
+      "urls": [
+        "https://www.theverge.com/tech/1041801/android-intelligence-create-my-widget-gemini"
+      ],
+      "tokens": [
+        "android",
+        "gemini",
+        "powered",
+        "rolls",
+        "widgets"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "positive_news",
+      "id": "story-texas-volunteers-farm-borrowed-land-to-fund-3-million-in-college-sc-515e48",
+      "headline": "Texas Volunteers Farm Borrowed Land to Fund $3 Million in College Scholarships",
+      "urls": [
+        "https://www.goodnewsnetwork.org/texans-work-for-free-on-farms-that-arent-theirs-to-send-others-kids-to-college"
+      ],
+      "tokens": [
+        "borrowed",
+        "college",
+        "farm",
+        "fund",
+        "land",
+        "million",
+        "scholarships",
+        "texas",
+        "volunteers"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "positive_news",
+      "id": "story-classical-roman-glass-unearthed-in-elite-xiongnu-silk-road-tomb-in-aeb4d9",
+      "headline": "Classical Roman Glass Unearthed in Elite Xiongnu Silk Road Tomb in Mongolia",
+      "urls": [
+        "https://www.goodnewsnetwork.org/roman-glass-among-the-silk-road-treasures-unearthed-in-nomadic-nobles-tomb"
+      ],
+      "tokens": [
+        "classical",
+        "elite",
+        "glass",
+        "mongolia",
+        "road",
+        "roman",
+        "silk",
+        "tomb",
+        "unearthed",
+        "xiongnu"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "positive_news",
+      "id": "story-aerial-photos-show-florida-bay-recovering-as-everglades-restoration-3455bd",
+      "headline": "Aerial Photos Show Florida Bay Recovering as Everglades Restoration Flows",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiywFBVV95cUxOU0FxcDBkcF90cDhMenZuTnN0Tm9KZjRMd3RLTVBGREtpQWpWOXd4Y09VRkY0bGhtc29mOXR3eEVqNGJHLWc2U092S2tweFZ3ajc2YnJtbnFzTVdBWkJoWWJfOV9jVGJjU1BQd2JpdTBPNlFCeW1YeVlUMUlpUXZlN09INUI0T2NiMjFreTBKUG9SYVRMTHZyNkZxUU5DZXg1eG1lUldmUXFKSm1iNlpzdko4UDVwWHh2dTlQTC1ONGdhNUtteHFNaWVzcw"
+      ],
+      "tokens": [
+        "aerial",
+        "everglades",
+        "florida",
+        "flows",
+        "photos",
+        "recovering",
+        "restoration",
+        "show"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "local:china",
+      "id": "story-90-https-news-google-com-rss-articles-cbmivkfvx3lxte1twwhjtgxtwu5vs-4573b7",
+      "headline": "中国科大实现效率超过90%的可集成量子存储",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1tWWhJTGxtWU5vSVNyRWUwMlBJVDhHNGtZOFdRZkUwSW1KMGZtLWR2MkljRHRLQ1NhNWhxcGRGbmV2YlNFUXcxSUh5c3Jwek1GODFicnpB"
+      ],
+      "tokens": [
+        "中国科大实现效率超过",
+        "的可集成量子存储"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "local:china",
+      "id": "story-6g-https-news-google-com-rss-articles-cbmiyefvx3lxte9bckvpb0x3b2jnu-9611b8",
+      "headline": "中国正式启动6G试点工作",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9BckVPb0x3b2JNUlZmTlNoVThRTjlzTzNZLWlMNVduUUJOeUR3RF9WaXFZM3EyX1pyc1FHUjlwbG5Fc0d6VVVpSDE2UTlNZEpRdkprb3FFaUFtNWZqUjAyVg"
+      ],
+      "tokens": [
+        "中国正式启动",
+        "试点工作"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "local:china",
+      "id": "story-04-https-www-chinanews-com-cn-gn-2026-11-27-10739085-shtml-ee09b9",
+      "headline": "中国成功发射遥感五十号04星",
+      "urls": [
+        "https://www.chinanews.com.cn/gn/2026/11-27/10739085.shtml"
+      ],
+      "tokens": [
+        "中国成功发射遥感五十号"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "local:china",
+      "id": "story-90-https-news-google-com-rss-articles-cbmivkfvx3lxte1twwhjtgxtwu5vs-4573b7",
+      "headline": "USTC Achieves Over 90% Efficiency in Integrable Quantum Memory",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1tWWhJTGxtWU5vSVNyRWUwMlBJVDhHNGtZOFdRZkUwSW1KMGZtLWR2MkljRHRLQ1NhNWhxcGRGbmV2YlNFUXcxSUh5c3Jwek1GODFicnpB"
+      ],
+      "tokens": [
+        "achieves",
+        "efficiency",
+        "integrable",
+        "memory",
+        "quantum",
+        "ustc"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "local:china",
+      "id": "story-04-https-www-chinanews-com-cn-gn-2026-11-27-10739085-shtml-ee09b9",
+      "headline": "China Successfully Launches Yaogan-50 04 Remote Sensing Satellite",
+      "urls": [
+        "https://www.chinanews.com.cn/gn/2026/11-27/10739085.shtml"
+      ],
+      "tokens": [
+        "china",
+        "launches",
+        "remote",
+        "satellite",
+        "sensing",
+        "successfully",
+        "yaogan"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "local:china",
+      "id": "story-6g-https-news-google-com-rss-articles-cbmiyefvx3lxte9bckvpb0x3b2jnu-9611b8",
+      "headline": "China Officially Launches 6G Pilot Trials",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9BckVPb0x3b2JNUlZmTlNoVThRTjlzTzNZLWlMNVduUUJOeUR3RF9WaXFZM3EyX1pyc1FHUjlwbG5Fc0d6VVVpSDE2UTlNZEpRdkprb3FFaUFtNWZqUjAyVg"
+      ],
+      "tokens": [
+        "china",
+        "launches",
+        "officially",
+        "pilot",
+        "trials"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "local:china",
+      "id": "story-2026-https-www-chinanews-com-cn-cj-2026-11-27-10739072-shtml-666ee0",
+      "headline": "2026兴隆湖能源电力创新发展大会在成都举行 聚焦“人工智能+能源”",
+      "urls": [
+        "https://www.chinanews.com.cn/cj/2026/11-27/10739072.shtml"
+      ],
+      "tokens": [
+        "2026",
+        "人工智能",
+        "兴隆湖能源电力创新发展大会在成都举行",
+        "聚焦",
+        "能源"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "local:china",
+      "id": "story-2026-https-www-chinanews-com-cn-cj-2026-11-27-10739072-shtml-666ee0",
+      "headline": "2026 Xinglong Lake Energy Innovation Conference in Chengdu Focuses on 'AI + Energy'",
+      "urls": [
+        "https://www.chinanews.com.cn/cj/2026/11-27/10739072.shtml"
+      ],
+      "tokens": [
+        "2026",
+        "chengdu",
+        "conference",
+        "energy",
+        "focuses",
+        "innovation",
+        "lake",
+        "xinglong"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "local:bay-area",
+      "id": "story-san-jose-s-christmas-in-the-park-opens-with-two-new-holiday-display-efa5e5",
+      "headline": "San Jose's Christmas in the Park Opens With Two New Holiday Displays",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiowFBVV95cUxPZmNVWFZZMUhiWHdPQ0hOWVh5blU5TzhiOGhsWWhOY3FRUWtPVE1UVkJBQW1zSDg5RG9BRHl2amYtTDh1QngyWkJfNGd1Mno3ZGo0N0FLZ25JdU9IQ1B1V08xRG02cE9Na09WZ3lmazI1WjlCTWtOcDlKZ1p0bHpXTkhlZmhIb3VOSGI0YmZCaS1KQlBDQTBMSEVvOXZfdUdpZWtF"
+      ],
+      "tokens": [
+        "christmas",
+        "displays",
+        "holiday",
+        "jose",
+        "opens",
+        "park"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "local:bay-area",
+      "id": "story-oakland-s-underground-art-scene-endures-and-evolves-ten-years-after-a1aae4",
+      "headline": "Oakland's Underground Art Scene Endures and Evolves Ten Years After Ghost Ship",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMinwFBVV95cUxOVjNnUVFzUUtvdGlZRVhwYlk0RkVFNlVaVGEwOHNZU255U3kxS0ozWVl6SDFqenhlRG00ZEUzWHJFTDVvMVJYQkp1OC1KU3B6ZFZDUmxRWmhtZXFGbTVvTDh3YTFIZkZxSno5NlZXZHlOc0NqMXo0UDBGYzVoZk1WcWtKeTBieDh4cDJjTmJqY0JweVQ1VGVlSzhYUUpUN2c"
+      ],
+      "tokens": [
+        "endures",
+        "evolves",
+        "ghost",
+        "oakland",
+        "scene",
+        "ship",
+        "underground"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "local:bay-area",
+      "id": "story-coastal-flood-advisory-extended-for-san-francisco-county-through-su-c2f781",
+      "headline": "Coastal Flood Advisory Extended for San Francisco County Through Sunday Evening",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMib0FVX3lxTE01Vzgzd3B3WW5ZN3VadHpaNzVxdWNCdG9qNzByYVEwUFNfa2lLRDJxTUxHUVhmbTFxLVJYazhFQjVQeExiR2lZQnphMW1YT3lIajJyWEVpc0pzWnJBcERpb3VCbXFod25ZcHhJOUdXNA"
+      ],
+      "tokens": [
+        "advisory",
+        "coastal",
+        "county",
+        "evening",
+        "extended",
+        "flood",
+        "francisco",
+        "sunday"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "local:bay-area",
+      "id": "story-ai-giants-continue-to-dominate-bay-area-s-largest-venture-capital-d-7e33bf",
+      "headline": "AI Giants Continue to Dominate Bay Area's Largest Venture Capital Deals",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMipwFBVV95cUxQa3ZjYkd4anBPbG5jNTFOQjZkZzlyMFU2MHJhSTRhRG1jUVNpdU9fSUlleXNlb015V1NwZ194Y3RrQ0JvXzFpMkFtcnlaZkVNS1cwYzJkWVZZbmpIOURacjhfYjZRU3Jua3Q2U29OQUZ5TE9Xazh0SmhUeEpjVTBER2J0Z0ZrTXRtTEJhNXlvYXREN2twT0ZhdlIwZ3dpX1dsZmxRdXNnaw"
+      ],
+      "tokens": [
+        "area",
+        "capital",
+        "continue",
+        "deals",
+        "dominate",
+        "giants",
+        "largest",
+        "venture"
+      ]
+    },
     {
       "date": "2026-11-26",
       "section": "top_news",
