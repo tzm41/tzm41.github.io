@@ -2255,6 +2255,14 @@ h3 {
     padding: 11px 12px;
   }
 
+  .quote-card:not(.is-expanded) .quote-top-right:has(.quote-prev-badge) .quote-sym {
+    display: none;
+  }
+
+  .quote-card:not(.is-expanded) .quote-name {
+    white-space: nowrap;
+  }
+
   .quote-price {
     font-size: 15px;
   }
