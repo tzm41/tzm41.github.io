@@ -83,18 +83,28 @@ function parseYahooChart(symbol, payload) {
   const result = payload?.chart?.result?.[0];
   if (!result) return null;
   const meta = result.meta || {};
-  const timestamps = Array.isArray(result.timestamp) ? result.timestamp : [];
-  const closes = result.indicators?.quote?.[0]?.close || [];
+  const rawTimestamps = Array.isArray(result.timestamp) ? result.timestamp : [];
+  const rawCloses = result.indicators?.quote?.[0]?.close || [];
+
+  const isRolling24h = symbol === "BTC-USD";
+  const cutoffSec = isRolling24h ? Math.floor(Date.now() / 1000) - 86400 : 0;
+
+  const valid = [];
+  for (let i = 0; i < rawTimestamps.length; i++) {
+    const ts = rawTimestamps[i];
+    const v = rawCloses[i];
+    if (v == null || !Number.isFinite(Number(v))) continue;
+    if (isRolling24h && ts < cutoffSec) continue;
+    valid.push([ts, Number(v)]);
+  }
 
   const sparkVals = [];
   const sparkTimes = [];
-  const step = timestamps.length > 96 ? Math.ceil(timestamps.length / 96) : 1;
-  for (let i = 0; i < timestamps.length; i++) {
-    const v = closes[i];
-    if (v == null || !Number.isFinite(Number(v))) continue;
-    if (i % step === 0 || i === timestamps.length - 1) {
-      sparkVals.push(Number(Number(v).toFixed(4)));
-      sparkTimes.push(new Date(timestamps[i] * 1000).toISOString());
+  const step = valid.length > 96 ? Math.ceil(valid.length / 96) : 1;
+  for (let i = 0; i < valid.length; i++) {
+    if (i % step === 0 || i === valid.length - 1) {
+      sparkVals.push(Number(valid[i][1].toFixed(4)));
+      sparkTimes.push(new Date(valid[i][0] * 1000).toISOString());
     }
   }
 
@@ -108,14 +118,17 @@ function parseYahooChart(symbol, payload) {
       ? regularPrice ?? lastBar
       : lastBar ?? regularPrice;
 
-  const prevClose =
-    typeof meta.chartPreviousClose === "number" && meta.chartPreviousClose > 0
-      ? meta.chartPreviousClose
-      : typeof meta.previousClose === "number" && meta.previousClose > 0
-      ? meta.previousClose
-      : sparkVals.length
+  const prevClose = isRolling24h
+    ? sparkVals.length
       ? sparkVals[0]
-      : null;
+      : null
+    : typeof meta.chartPreviousClose === "number" && meta.chartPreviousClose > 0
+    ? meta.chartPreviousClose
+    : typeof meta.previousClose === "number" && meta.previousClose > 0
+    ? meta.previousClose
+    : sparkVals.length
+    ? sparkVals[0]
+    : null;
 
   if (price == null || !Number.isFinite(price)) return null;
 
@@ -133,9 +146,13 @@ function parseYahooChart(symbol, payload) {
 }
 
 async function fetchYahooOne(symbol) {
+  const isRolling24h = symbol === "BTC-USD";
+  const rangeParams = isRolling24h
+    ? "range=2d&interval=15m"
+    : "range=1d&interval=5m&includePrePost=true";
   const yfUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(
     symbol
-  )}?range=1d&interval=5m&includePrePost=true`;
+  )}?${rangeParams}`;
   try {
     const resp = await fetch(yfUrl, {
       headers: {

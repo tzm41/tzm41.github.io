@@ -929,14 +929,34 @@ function computeSparklineLayout(values, times, tf, symbol) {
       }
       const maxMin = Math.max(...mins);
       const minMin = Math.min(...mins);
-      const startMin = minMin < 570 ? Math.min(minMin, 240) : 570; // 9:30 AM ET (or 4:00 AM if pre-market)
       const isTnx = symbol === "^TNX";
-      const hasAfterHours = !isTnx && maxMin > 960;
-      const endMin = isTnx ? 870 : hasAfterHours ? 1200 : 960; // TNX 2:30 PM ET bar (3:00 close); equities 4:00 / 8:00 PM ET
+      const isVix = symbol === "^VIX";
+      if (isTnx) {
+        // US 10Y Treasury yields trade 8:20 AM–3:00 PM ET (500–900 min)
+        const startMin = Math.min(minMin, 500);
+        const endMin = Math.max(maxMin, 900);
+        const spanMin = Math.max(60, endMin - startMin);
+        const xs = mins.map((m) => Math.max(0, Math.min(w, ((m - startMin) / spanMin) * w)));
+        return { xs, closeX: null, isExtended: mins.map(() => false) };
+      }
+      if (isVix) {
+        // CBOE VIX trades global hours (3:15 AM–4:15 PM ET) with early holiday closes;
+        // fill edge-to-edge once session is closed (>30m since last bar)
+        const lastMs = Date.parse(times[times.length - 1] || "");
+        const sessionClosed = !Number.isNaN(lastMs) && Date.now() - lastMs > 30 * 60 * 1000;
+        const startMin = minMin;
+        const endMin = sessionClosed ? Math.max(maxMin, minMin + 1) : Math.max(maxMin, 975);
+        const spanMin = Math.max(60, endMin - startMin);
+        const xs = mins.map((m) => Math.max(0, Math.min(w, ((m - startMin) / spanMin) * w)));
+        return { xs, closeX: null, isExtended: mins.map(() => false) };
+      }
+      const startMin = minMin < 570 ? Math.min(minMin, 240) : 570; // 9:30 AM ET (or 4:00 AM if pre-market)
+      const hasAfterHours = maxMin > 960;
+      const endMin = hasAfterHours ? 1200 : 960; // equities 4:00 / 8:00 PM ET
       const spanMin = Math.max(60, endMin - startMin);
       const xs = mins.map((m) => Math.max(0, Math.min(w, ((m - startMin) / spanMin) * w)));
       const closeX = hasAfterHours ? ((960 - startMin) / spanMin) * w : null;
-      const isExtended = mins.map((m) => !isTnx && (m > 960 || m < 570));
+      const isExtended = mins.map((m) => m > 960 || m < 570);
       return { xs, closeX, isExtended };
     }
   }
@@ -1536,7 +1556,7 @@ function getPriorSessionBadge(times, tf) {
     timeZone: "America/New_York",
   });
   return {
-    label: diffDays === 1 ? "Yesterday" : shortDate,
+    label: `-${diffDays}D`,
     title: `Market closed today · showing ${shortDate} session`,
   };
 }
@@ -1986,7 +2006,7 @@ function updateArchiveButtons() {
 }
 
 const CF_MARKETS_PROXY_URL = "https://briefing-markets-proxy.tzm41.workers.dev/markets";
-const LIVE_CACHE_KEY = "briefing-live-markets-cache-v1";
+const LIVE_CACHE_KEY = "briefing-live-markets-cache-v2";
 const CF_RL_KEY = "briefing-cf-rl-v1";
 const LIVE_CACHE_TTL_MS = 100 * 1000; // 100s TTL -> max 3 fetches per 5 min
 const CF_RL_WINDOW_MS = 5 * 60 * 1000;
@@ -2038,18 +2058,28 @@ function parseYahooChartClient(symbol, payload) {
   const result = payload?.chart?.result?.[0];
   if (!result) return null;
   const meta = result.meta || {};
-  const timestamps = Array.isArray(result.timestamp) ? result.timestamp : [];
-  const closes = result.indicators?.quote?.[0]?.close || [];
+  const rawTimestamps = Array.isArray(result.timestamp) ? result.timestamp : [];
+  const rawCloses = result.indicators?.quote?.[0]?.close || [];
+
+  const isRolling24h = symbol === "BTC-USD";
+  const cutoffSec = isRolling24h ? Math.floor(Date.now() / 1000) - 86400 : 0;
+
+  const valid = [];
+  for (let i = 0; i < rawTimestamps.length; i++) {
+    const ts = rawTimestamps[i];
+    const v = rawCloses[i];
+    if (v == null || !Number.isFinite(Number(v))) continue;
+    if (isRolling24h && ts < cutoffSec) continue;
+    valid.push([ts, Number(v)]);
+  }
 
   const sparkVals = [];
   const sparkTimes = [];
-  const step = timestamps.length > 96 ? Math.ceil(timestamps.length / 96) : 1;
-  for (let i = 0; i < timestamps.length; i++) {
-    const v = closes[i];
-    if (v == null || !Number.isFinite(Number(v))) continue;
-    if (i % step === 0 || i === timestamps.length - 1) {
-      sparkVals.push(Number(Number(v).toFixed(4)));
-      sparkTimes.push(new Date(timestamps[i] * 1000).toISOString());
+  const step = valid.length > 96 ? Math.ceil(valid.length / 96) : 1;
+  for (let i = 0; i < valid.length; i++) {
+    if (i % step === 0 || i === valid.length - 1) {
+      sparkVals.push(Number(valid[i][1].toFixed(4)));
+      sparkTimes.push(new Date(valid[i][0] * 1000).toISOString());
     }
   }
 
@@ -2062,14 +2092,17 @@ function parseYahooChartClient(symbol, payload) {
     symbol === "^TNX" || symbol.startsWith("^")
       ? regularPrice ?? lastBar
       : lastBar ?? regularPrice;
-  const prevClose =
-    typeof meta.chartPreviousClose === "number" && meta.chartPreviousClose > 0
-      ? meta.chartPreviousClose
-      : typeof meta.previousClose === "number" && meta.previousClose > 0
-      ? meta.previousClose
-      : sparkVals.length
+  const prevClose = isRolling24h
+    ? sparkVals.length
       ? sparkVals[0]
-      : null;
+      : null
+    : typeof meta.chartPreviousClose === "number" && meta.chartPreviousClose > 0
+    ? meta.chartPreviousClose
+    : typeof meta.previousClose === "number" && meta.previousClose > 0
+    ? meta.previousClose
+    : sparkVals.length
+    ? sparkVals[0]
+    : null;
   if (price == null || !Number.isFinite(price)) return null;
   const changePct =
     prevClose && prevClose > 0 ? Number((((price - prevClose) / prevClose) * 100).toFixed(2)) : 0;
@@ -2084,9 +2117,13 @@ function parseYahooChartClient(symbol, payload) {
 }
 
 async function fetchSymbolViaPublicCors(symbol) {
+  const isRolling24h = symbol === "BTC-USD";
+  const rangeParams = isRolling24h
+    ? "range=2d&interval=15m"
+    : "range=1d&interval=5m&includePrePost=true";
   const yfUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(
     symbol
-  )}?range=1d&interval=5m&includePrePost=true`;
+  )}?${rangeParams}`;
   const relays = [
     `https://api.allorigins.win/raw?url=${encodeURIComponent(yfUrl)}`,
     `https://corsproxy.io/?url=${encodeURIComponent(yfUrl)}`,
