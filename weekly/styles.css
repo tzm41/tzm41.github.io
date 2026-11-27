@@ -578,7 +578,8 @@
     padding: 10px;
   }
 
-  .geo-fact-popover {
+  .geo-fact-popover,
+  .world-map-legend {
     display: none !important;
   }
 }
