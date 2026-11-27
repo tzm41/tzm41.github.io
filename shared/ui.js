@@ -204,6 +204,31 @@ export function initMasthead({
   }
 }
 
+export function focusSharedCardFromUrl({ onBeforeFind = null } = {}) {
+  if (typeof window === "undefined") return false;
+  const cardId = new URLSearchParams(window.location.search).get("card");
+  if (!cardId) return false;
+  if (typeof onBeforeFind === "function") onBeforeFind(cardId);
+  const esc = typeof CSS !== "undefined" && CSS.escape ? CSS.escape(cardId) : cardId.replace(/"/g, '\\"');
+  const el = document.querySelector(`[data-card-id="${esc}"]`);
+  if (!el) return false;
+  if (el.classList.contains("is-collapsed")) {
+    el.classList.remove("is-collapsed");
+    const btn = el.querySelector(".card-toggle-btn");
+    if (btn) {
+      btn.setAttribute("aria-expanded", "true");
+      btn.innerHTML = "Collapse &#9652;";
+    }
+  }
+  el.classList.remove("is-shared-target");
+  void el.offsetWidth;
+  el.classList.add("is-shared-target");
+  window.requestAnimationFrame(() => {
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  return true;
+}
+
 export function renderSourceHealth(el, entries = []) {
   if (!el) return;
   el.innerHTML = entries

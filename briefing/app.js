@@ -14,6 +14,7 @@ import {
   initTheme,
   initMasthead,
   initScrollSpy,
+  focusSharedCardFromUrl,
   createCollapsibleManager,
   renderSourceChip,
   showToast,
@@ -785,6 +786,25 @@ function renderAll(briefing) {
   renderPolitics(briefing.us_politics);
   renderPositiveNews(briefing.positive_news);
   renderLocalNews(briefing.local_news);
+
+  focusSharedCardFromUrl({
+    onBeforeFind(cardId) {
+      if (state.newsCategory !== "All" && (briefing.top_news || []).some((s) => s?.id === cardId)) {
+        state.newsCategory = "All";
+        renderNews(briefing.top_news);
+      }
+      const localReg = (briefing.local_news || []).find(
+        (r) =>
+          (r?.stories || []).some((s) => s?.id === cardId) ||
+          (r?.stories_en || []).some((s) => s?.id === cardId)
+      );
+      if (localReg) {
+        state.localRegionId = localReg.id;
+        state.localExpanded = true;
+        renderLocalNews(briefing.local_news);
+      }
+    },
+  });
 }
 
 /* ---------- Archive Navigation & Data Loading ---------- */

@@ -11,6 +11,40 @@ import {
   writeJsonStorage,
 } from "./utils.js";
 
+const SHARE_ORIGIN = "https://briefing-markets-proxy.tzm41.workers.dev";
+const SHARE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>`;
+const CHECK_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+function showToast(msg) {
+  if (typeof document === "undefined") return;
+  let el = document.querySelector(".auth-toast[data-shared-toast]");
+  if (!el) {
+    el = document.createElement("div");
+    el.className = "auth-toast";
+    el.dataset.sharedToast = "1";
+    el.setAttribute("role", "status");
+    document.body.appendChild(el);
+  }
+  el.textContent = String(msg ?? "");
+  el.classList.remove("hidden");
+  window.clearTimeout(el._t);
+  el._t = window.setTimeout(() => el.classList.add("hidden"), 2600);
+}
+
+export function buildCardShareUrl({ edition, date, id } = {}) {
+  if (!date || !id) return "";
+  const ed = edition === "weekly" ? "w" : "d";
+  return `${SHARE_ORIGIN}/s/${ed}/${encodeURIComponent(date)}/${encodeURIComponent(id)}`;
+}
+
+export function renderShareButton({ edition, date, id, title = "story" } = {}) {
+  const url = buildCardShareUrl({ edition, date, id });
+  if (!url) return "";
+  const safeUrlAttr = escapeHtml(url);
+  const safeTitle = escapeHtml(String(title || "story").trim() || "story");
+  return `<button type="button" class="share-btn" data-share-url="${safeUrlAttr}" data-share-title="${safeTitle}" aria-label="Share ${safeTitle}" title="Share link to this card">${SHARE_SVG}</button>`;
+}
+
 export const BOOKMARKS_STORAGE_KEY = "briefing-bookmarks-v1";
 export const MAX_BOOKMARKS = 100;
 export const ARCHIVE_TTL_DAYS = Object.freeze({ daily: 60, weekly: 364 });
@@ -575,7 +609,7 @@ export function mergeFromRemote(
 
 const BOOKMARK_SVG = `<svg viewBox="0 0 24 26" aria-hidden="true"><path d="M4.5 0h15v23.5l-7.5-4.8-7.5 4.8V0z"/></svg>`;
 
-export function renderBookmarkButton(key, { saved = false, label = "story", extraClass = "" } = {}) {
+export function renderBookmarkButton(key, { saved = false, label = "story", extraClass = "", share = null } = {}) {
   const safeKey = escapeHtml(key);
   const cleanLabel = String(label || "story").trim() || "story";
   const safeLabel = escapeHtml(cleanLabel);
@@ -584,7 +618,8 @@ export function renderBookmarkButton(key, { saved = false, label = "story", extr
     : `Bookmark ${safeLabel}`;
   const title = saved ? "Saved in Bookmarks (click to remove)" : "Save to Bookmarks";
   const cls = `bookmark-btn${saved ? " is-saved" : ""}${extraClass ? ` ${escapeHtml(extraClass)}` : ""}`;
-  return `<button type="button" class="${cls}" data-bookmark-key="${safeKey}" data-bookmark-label="${safeLabel}" aria-pressed="${saved ? "true" : "false"}" aria-label="${ariaLabel}" title="${title}">${BOOKMARK_SVG}</button>`;
+  const shareHtml = share ? renderShareButton({ ...share, title: share.title || cleanLabel }) : "";
+  return `${shareHtml}<button type="button" class="${cls}" data-bookmark-key="${safeKey}" data-bookmark-label="${safeLabel}" aria-pressed="${saved ? "true" : "false"}" aria-label="${ariaLabel}" title="${title}">${BOOKMARK_SVG}</button>`;
 }
 
 export function createBookmarkRegistry({ edition, getDate }) {
@@ -630,6 +665,7 @@ export function createBookmarkRegistry({ edition, getDate }) {
       return renderBookmarkButton(key, {
         saved: isBookmarked(key),
         label: title || label,
+        share: { edition, date, id, title: title || label },
       });
     },
   };
@@ -694,6 +730,50 @@ export function bindBookmarkToggle(
   if (!root || typeof root.addEventListener !== "function") return () => {};
 
   const handler = (e) => {
+    const shareBtn = e.target?.closest?.(".share-btn[data-share-url]");
+    if (shareBtn && root.contains(shareBtn)) {
+      e.preventDefault();
+      e.stopPropagation();
+      const shareUrl = shareBtn.dataset.shareUrl;
+      const shareTitle = shareBtn.dataset.shareTitle || document.title;
+      if (!shareUrl) return;
+
+      const flashCopied = () => {
+        shareBtn.classList.add("is-copied");
+        shareBtn.innerHTML = CHECK_SVG;
+        window.setTimeout(() => {
+          shareBtn.classList.remove("is-copied");
+          shareBtn.innerHTML = SHARE_SVG;
+        }, 1600);
+      };
+
+      const copyFallback = () => {
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard
+            .writeText(shareUrl)
+            .then(() => {
+              flashCopied();
+              showToast("Card link copied to clipboard");
+            })
+            .catch(() => {
+              window.prompt("Copy card link:", shareUrl);
+            });
+        } else {
+          window.prompt("Copy card link:", shareUrl);
+        }
+      };
+
+      const isTouch = window.matchMedia?.("(hover: none), (pointer: coarse)")?.matches;
+      if (isTouch && typeof navigator.share === "function") {
+        navigator.share({ title: shareTitle, url: shareUrl }).catch((err) => {
+          if (err?.name !== "AbortError") copyFallback();
+        });
+      } else {
+        copyFallback();
+      }
+      return;
+    }
+
     const btn = e.target?.closest?.(".bookmark-btn[data-bookmark-key]");
     if (!btn || !root.contains(btn)) return;
     e.preventDefault();
@@ -738,7 +818,7 @@ export function bindBookmarkToggle(
   const revealHandler = (e) => {
     if (e.pointerType !== "touch" && e.pointerType !== "pen") return;
     const target = e.target;
-    if (target?.closest?.(".bookmark-btn")) return;
+    if (target?.closest?.(".bookmark-btn, .share-btn")) return;
     const card = target?.closest?.(CARD_SELECTOR);
     if (card && root.contains(card)) {
       setRevealedCard(card);

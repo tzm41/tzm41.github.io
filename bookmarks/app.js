@@ -270,7 +270,11 @@ function buildRichCardHtml(entry) {
   const { key, record, ttl, extracted } = entry;
   if (!extracted) return buildFallbackCardHtml(entry);
 
-  const bookmarkHtml = renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" });
+  const bookmarkHtml = renderBookmarkButton(key, {
+    saved: true,
+    label: record.title || "bookmark",
+    share: { edition: record.edition, date: record.date, id: record.id, title: record.title },
+  });
   const headerHtml = renderOriginRowHtml(record, extracted);
   const footerHtml = renderTtlBarHtml(ttl);
   const typeLabel = getBookmarkType(entry);

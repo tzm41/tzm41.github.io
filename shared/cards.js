@@ -210,6 +210,7 @@ export function renderBriefBullets(
  */
 export function renderCardShell({
   className = "news-card",
+  cardId = "",
   innerOnly = false,
   bookmarkHtml = "",
   headerHtml = "",
@@ -252,7 +253,8 @@ export function renderCardShell({
   `;
 
   if (innerOnly) return inner;
-  return `<article class="${escapeHtml(className)}">${inner}</article>`;
+  const idAttr = cardId ? ` data-card-id="${escapeHtml(cardId)}"` : "";
+  return `<article class="${escapeHtml(className)}"${idAttr}>${inner}</article>`;
 }
 
 /**
@@ -300,6 +302,7 @@ export function renderDailyStoryCard(
 
   return renderCardShell({
     className: isPositive ? "positive-card" : `news-card${continued ? " is-collapsed" : ""}`,
+    cardId: story.id || "",
     innerOnly,
     bookmarkHtml,
     headerHtml,
@@ -363,6 +366,7 @@ export function renderWeeklyStoryCard(
 
   return renderCardShell({
     className: "news-card",
+    cardId: item.id || "",
     innerOnly,
     bookmarkHtml,
     headerHtml,

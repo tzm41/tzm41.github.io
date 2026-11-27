@@ -996,6 +996,165 @@ async function handleHtmlRewriterPreview(request, url, kind, isExplicitPreviewRo
   return new Response(rewritten.body, { status: rewritten.status, headers });
 }
 
+function findCardInEdition(kind, data, cardId) {
+  if (!data || !cardId) return null;
+  if (kind === "weekly") {
+    for (const [sec, label] of [
+      ["science", "Science"],
+      ["culture", "Culture & Arts"],
+      ["history", "History"],
+    ]) {
+      const hit = (data?.[sec]?.items || []).find((it) => it?.id === cardId);
+      if (hit) {
+        return {
+          title: hit.headline || label,
+          description: hit.summary || hit.takeaway || "",
+          badge: hit.category || label,
+        };
+      }
+    }
+    const lr = (data?.long_reads || []).find((it) => it?.id === cardId);
+    if (lr) {
+      return {
+        title: lr.headline || "Long Read",
+        description: lr.summary || "",
+        badge: lr.topic || "Long Read",
+      };
+    }
+    const geo = (data?.around_the_world || []).find((it) => it?.id === cardId);
+    if (geo) {
+      return {
+        title: `${geo.title || geo.place} (${geo.region || "Around the World"})`,
+        description: geo.fact || "",
+        badge: geo.kind === "cuisine" ? "Cuisine" : "Geology",
+      };
+    }
+    return null;
+  }
+
+  const topHit = (data?.top_news || []).find((s) => s?.id === cardId);
+  if (topHit) {
+    return {
+      title: topHit.headline || "Daily Briefing",
+      description: topHit.summary || topHit.why_it_matters || "",
+      badge: topHit.category || "Top News",
+    };
+  }
+  const posList = Array.isArray(data?.positive_news)
+    ? data.positive_news
+    : data?.positive_news
+    ? [data.positive_news]
+    : [];
+  const posHit = posList.find((s) => s?.id === cardId);
+  if (posHit) {
+    return {
+      title: posHit.headline || "Positive News",
+      description: posHit.summary || posHit.why_it_matters || "",
+      badge: posHit.category || "Positive News",
+    };
+  }
+  for (const reg of data?.local_news || []) {
+    const enHit = (reg?.stories_en || []).find((s) => s?.id === cardId);
+    const natHit = (reg?.stories || []).find((s) => s?.id === cardId);
+    const hit = enHit || natHit;
+    if (hit) {
+      return {
+        title: hit.headline || reg.name || "Local News",
+        description: hit.summary || hit.why_it_matters || "",
+        badge: reg.name || hit.category || "Local News",
+      };
+    }
+  }
+  return null;
+}
+
+async function handleCardShareRoute(request, url, kind, dateStr, cardId) {
+  const basePath = kind === "weekly" ? "weekly" : "briefing";
+  const targetUrl = `${SITE_ORIGIN}/${basePath}/?date=${encodeURIComponent(dateStr)}&card=${encodeURIComponent(cardId)}`;
+  const ua = request.headers.get("User-Agent") || "";
+  const forcePreview = url.searchParams.get("preview") === "1";
+
+  // Human visitors redirect straight to the deep-linked card on colintan.dev
+  if (!forcePreview && !PREVIEW_BOT_RE.test(ua)) {
+    return Response.redirect(targetUrl, 302);
+  }
+
+  const [originResp, fetched] = await Promise.all([
+    fetch(`${SITE_ORIGIN}/${basePath}/`, { cf: { cacheTtl: 120, cacheEverything: true } }),
+    fetchEditionForPreview(kind, dateStr),
+  ]);
+  if (!originResp.ok || !fetched) return originResp;
+
+  const card = findCardInEdition(kind, fetched.data, cardId);
+  if (!card) {
+    return handleHtmlRewriterPreview(request, url, kind, true);
+  }
+
+  const readable = fmtReadableDateUtc(fetched.data?.date || dateStr);
+  const pubName = kind === "weekly" ? "Weekly Briefing" : "Daily Briefing";
+  const title = `${truncatePreview(card.title, 90)} — ${pubName} (${readable})`;
+  const description = truncatePreview(card.description, 200);
+
+  // Dynamic text-only summary card (zero storage, zero WASM overhead, clean card-specific preview)
+  const rewritten = new HTMLRewriter()
+    .on("title", {
+      element(el) {
+        el.setInnerContent(title);
+      },
+    })
+    .on('meta[name="description"]', {
+      element(el) {
+        el.setAttribute("content", description);
+      },
+    })
+    .on('meta[property="og:type"]', {
+      element(el) {
+        el.setAttribute("content", "article");
+      },
+    })
+    .on('meta[property="og:title"]', {
+      element(el) {
+        el.setAttribute("content", title);
+      },
+    })
+    .on('meta[property="og:description"]', {
+      element(el) {
+        el.setAttribute("content", description);
+      },
+    })
+    .on('meta[property="og:url"]', {
+      element(el) {
+        el.setAttribute("content", targetUrl);
+      },
+    })
+    .on('meta[property="og:image"], meta[property="og:image:width"], meta[property="og:image:height"], meta[name="twitter:image"]', {
+      element(el) {
+        el.remove();
+      },
+    })
+    .on('meta[name="twitter:card"]', {
+      element(el) {
+        el.setAttribute("content", "summary");
+      },
+    })
+    .on('meta[name="twitter:title"]', {
+      element(el) {
+        el.setAttribute("content", title);
+      },
+    })
+    .on('meta[name="twitter:description"]', {
+      element(el) {
+        el.setAttribute("content", description);
+      },
+    })
+    .transform(originResp);
+
+  const headers = new Headers(rewritten.headers);
+  headers.set("Cache-Control", "public, max-age=3600");
+  headers.set("X-Preview-Card", cardId);
+  return new Response(rewritten.body, { status: rewritten.status, headers });
+}
+
 export default {
   async scheduled(controller, env, ctx) {
     const cron = controller.cron || "";
@@ -1032,6 +1191,17 @@ export default {
 
     if (url.pathname === "/health") {
       return jsonResponse({ ok: true, symbols: ALL_SYMBOLS_LIST.length, storage: "kv" }, 200, request);
+    }
+
+    const shareMatch = url.pathname.match(/^\/s\/(d|w)\/(\d{4}-\d{2}-\d{2})\/([A-Za-z0-9._-]{2,80})\/?$/);
+    if (shareMatch) {
+      return handleCardShareRoute(
+        request,
+        url,
+        shareMatch[1] === "w" ? "weekly" : "daily",
+        shareMatch[2],
+        shareMatch[3]
+      );
     }
 
     if (url.pathname === "/og/briefing.svg") {

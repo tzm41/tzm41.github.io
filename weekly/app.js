@@ -14,6 +14,7 @@ import {
   initTheme,
   initMasthead,
   initScrollSpy,
+  focusSharedCardFromUrl,
   createCollapsibleManager,
   showToast,
   syncButtonGroup,
@@ -695,6 +696,17 @@ function renderEdition(ed) {
 
   archiveNav.updateControls();
   showBanner("");
+
+  focusSharedCardFromUrl({
+    onBeforeFind(cardId) {
+      if ((ed.long_reads || []).some((it) => it?.id === cardId)) {
+        const body = document.getElementById("longreads-body");
+        const btn = document.getElementById("btn-toggle-longreads");
+        body?.classList.remove("hidden");
+        btn?.setAttribute("aria-expanded", "true");
+      }
+    },
+  });
 }
 
 /* ---------- Archive Navigation & Data Loading ---------- */
