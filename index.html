@@ -7,10 +7,11 @@
   <meta name="description" content="Navigation hub for colintan.dev — Daily Briefing and Weekly Briefing.">
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf8f5">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1d2430">
-  <link rel="icon" type="image/svg+xml" href="/briefing/favicon.svg">
-  <link rel="icon" type="image/png" sizes="32x32" href="/briefing/favicon-32x32.png">
-  <link rel="shortcut icon" href="/briefing/favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="/briefing/apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/briefing/favicon-32x32.png?v=2">
+  <link rel="shortcut icon" href="/favicon.ico?v=2">
+  <link rel="mask-icon" href="/favicon.svg?v=2" color="#c44530">
+  <link rel="apple-touch-icon" sizes="180x180" href="/briefing/apple-touch-icon.png?v=2">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
@@ -226,33 +227,6 @@
       transform: translateY(-1px);
     }
 
-    .quick-links {
-      width: 100%;
-      margin-top: 22px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 7px;
-    }
-
-    .quick-chip {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--ink-secondary);
-      background: var(--surface-subtle);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 4px 10px;
-      transition: border-color 0.15s ease, color 0.15s ease;
-    }
-
-    .quick-chip:hover {
-      border-color: var(--card-accent, var(--accent));
-      color: var(--card-accent, var(--accent));
-    }
-
     @media (max-width: 780px) {
       .hub-grid {
         grid-template-columns: 1fr;
@@ -293,14 +267,6 @@
         <a class="primary-cta" href="/briefing/?date=latest">
           Open Daily Briefing &rarr;
         </a>
-        <div class="quick-links" aria-label="Daily Briefing sections">
-          <a class="quick-chip" href="/briefing/?date=latest#executive">Overview</a>
-          <a class="quick-chip" href="/briefing/?date=latest#news">Top News</a>
-          <a class="quick-chip" href="/briefing/?date=latest#markets">Markets</a>
-          <a class="quick-chip" href="/briefing/?date=latest#conflicts">Conflicts</a>
-          <a class="quick-chip" href="/briefing/?date=latest#politics">US Politics</a>
-          <a class="quick-chip" href="/briefing/?date=latest#positive">Positive News</a>
-        </div>
       </section>
 
       <section class="nav-card nav-card--weekly" aria-label="Weekly Briefing">
@@ -312,15 +278,6 @@
         <a class="primary-cta" href="/weekly/?date=latest">
           Open Weekly Briefing &rarr;
         </a>
-        <div class="quick-links" aria-label="Weekly Briefing sections">
-          <a class="quick-chip" href="/weekly/?date=latest#overview">Overview</a>
-          <a class="quick-chip" href="/weekly/?date=latest#science">Science</a>
-          <a class="quick-chip" href="/weekly/?date=latest#culture">Culture &amp; Arts</a>
-          <a class="quick-chip" href="/weekly/?date=latest#history">History</a>
-          <a class="quick-chip" href="/weekly/?date=latest#around-world">Around the World</a>
-          <a class="quick-chip" href="/weekly/?date=latest#longreads">Long Reads</a>
-          <a class="quick-chip" href="/weekly/?date=latest#pulse">Week in Brief</a>
-        </div>
       </section>
     </div>
   </main>
