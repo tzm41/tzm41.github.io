@@ -43,6 +43,10 @@ class WeeklyDigestBullet(BaseModel):
     text: str = Field(
         description="Concise 1-2 sentence weekly synthesis bullet with **bold** key insight and *italic* person names."
     )
+    points: list[str] = Field(
+        min_length=1,
+        description="1 to 3 standalone single-story bullet points breaking down `text` (one distinct discovery/work per point, preserving **bold** takeaways and *italic* human names).",
+    )
     category: Literal["Science", "Culture & Arts", "History", "Long Reads", "World"] = "Science"
     sentiment: SentimentTag = "positive"
 
@@ -136,6 +140,10 @@ class LongReadItem(BaseModel):
 
 class PulseBullet(BaseModel):
     text: str
+    points: list[str] = Field(
+        min_length=1,
+        description="1 to 3 standalone single-news bullet points breaking down `text` (one distinct development per point, preserving **bold** takeaways and *italic* human names).",
+    )
     category: Literal["World", "Economy", "Tech", "Policy", "Climate"] = "World"
     sentiment: SentimentTag = "neutral"
 

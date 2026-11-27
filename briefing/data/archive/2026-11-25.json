@@ -16,27 +16,48 @@
       {
         "text": "Tech and AI shares led a **sharp Nasdaq pullback (-1.48%, XLK -3.26%)** as **Nvidia fell 7%** amid scrutiny over CEO Jensen Huang's reinstatement, while rotational buying lifted the **Dow Jones (+0.85%)** and **Russell 2000 (+0.57%)**.",
         "category": "Economy",
-        "sentiment": "slightly_negative"
+        "sentiment": "slightly_negative",
+        "points": [
+          "Tech and AI shares led a **sharp Nasdaq pullback (-1.48%, XLK -3.26%)** as **Nvidia fell 7%** amid scrutiny over CEO *Jensen Huang*'s reinstatement.",
+          "Rotational buying lifted the **Dow Jones (+0.85%)** and **Russell 2000 (+0.57%)**."
+        ]
       },
       {
         "text": "A New York federal jury found **Huawei guilty of stealing US trade secrets** while **acquitting the firm of racketeering**, concluding a multi-year legal battle.",
         "category": "Tech",
-        "sentiment": "negative"
+        "sentiment": "negative",
+        "points": [
+          "A New York federal jury found **Huawei guilty of stealing US trade secrets** while **acquitting the firm of racketeering**, concluding a multi-year legal battle."
+        ]
       },
       {
         "text": "Middle East and Red Sea tensions remain acute, with the **Strait of Hormuz facing severe shipping paralysis**, Houthi strikes hitting Riyadh, and US investigators probing **potential Iranian cyberattacks on up to 50 commercial vessels**.",
         "category": "World",
-        "sentiment": "very_negative"
+        "sentiment": "very_negative",
+        "points": [
+          "Middle East and Red Sea tensions remain acute as the **Strait of Hormuz faces severe shipping paralysis**.",
+          "Houthi strikes hit Riyadh.",
+          "US investigators are probing **potential Iranian cyberattacks on up to 50 commercial vessels**."
+        ]
       },
       {
         "text": "Leaked Russian records point to **nearly 500,000 deaths in the Ukraine war** as Ukrainian naval drones struck Russian vessels off Libya and a **Russian drone entered Polish airspace**.",
         "category": "World",
-        "sentiment": "very_negative"
+        "sentiment": "very_negative",
+        "points": [
+          "Leaked Russian records point to **nearly 500,000 deaths in the Ukraine war**.",
+          "Ukrainian naval drones struck Russian vessels off Libya.",
+          "A **Russian drone entered Polish airspace**."
+        ]
       },
       {
         "text": "In Washington, bipartisan lawmakers are pressing for **China chip export restrictions** and investigating White House ties to Nvidia's leadership reversal, while **Rep. Jimmy Gomez announced his resignation effective Dec. 1**.",
         "category": "Policy",
-        "sentiment": "slightly_negative"
+        "sentiment": "slightly_negative",
+        "points": [
+          "Bipartisan lawmakers in Washington are pressing for **China chip export restrictions** and investigating White House ties to Nvidia's leadership reversal.",
+          "**Rep. *Jimmy Gomez* announced his resignation effective Dec. 1**."
+        ]
       }
     ]
   },
@@ -46,22 +67,37 @@
       {
         "text": "**US equities staged a sharp afternoon rebound** as the Dow (+0.33%, 50,182.95) and Russell 2000 (+0.71%, 2,704.06) flipped positive, the S&P 500 (-0.25%, 7,182.78) and Nasdaq (-0.62%, 23,585.80) trimmed losses, and the **VIX cooled to 28.29** while Meta (+2.97%) and WTI crude (+2.43% to $84.04) rallied against declines in Nvidia (-3.62%).",
         "category": "Economy",
-        "sentiment": "slightly_positive"
+        "sentiment": "slightly_positive",
+        "points": [
+          "**US equities staged a sharp afternoon rebound** as the Dow (+0.33%, 50,182.95) and Russell 2000 (+0.71%, 2,704.06) flipped positive, while the S&P 500 (-0.25%) and Nasdaq (-0.62%) trimmed losses.",
+          "The **VIX cooled to 28.29**, with Meta (+2.97%) and WTI crude (+2.43% to $84.04) rallying against declines in Nvidia (-3.62%)."
+        ]
       },
       {
         "text": "The **US announced new tariffs on major trading partners** including China and the EU, while disclosures showed President *Donald Trump*'s accounts **traded Nvidia shares 44 times this year** amid Capitol Hill scrutiny of CEO *Jensen Huang*.",
         "category": "Policy",
-        "sentiment": "negative"
+        "sentiment": "negative",
+        "points": [
+          "The **US announced new tariffs on major trading partners** including China and the EU.",
+          "Disclosures showed President *Donald Trump*'s accounts **traded Nvidia shares 44 times this year** amid Capitol Hill scrutiny of CEO *Jensen Huang*."
+        ]
       },
       {
         "text": "In the Middle East, **Israeli judges recommended dropping the most serious charges** against Prime Minister *Benjamin Netanyahu* in one of his three corruption cases, while a **Cairo highway fuel tanker crash and fire** killed 31 people.",
         "category": "World",
-        "sentiment": "negative"
+        "sentiment": "negative",
+        "points": [
+          "**Israeli judges recommended dropping the most serious charges** against Prime Minister *Benjamin Netanyahu* in one of his three corruption cases.",
+          "A **Cairo highway fuel tanker crash and fire** killed 31 people."
+        ]
       },
       {
         "text": "In science and space, **Europe's Hera spacecraft returned close-up images** revealing a **stadium-sized crater** on the asteroid struck in NASA's planetary defense deflection test.",
         "category": "Science",
-        "sentiment": "positive"
+        "sentiment": "positive",
+        "points": [
+          "**Europe's Hera spacecraft returned close-up images** revealing a **stadium-sized crater** on the asteroid struck in NASA's planetary defense deflection test."
+        ]
       }
     ]
   },

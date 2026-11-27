@@ -215,6 +215,10 @@ class SourceHealth(BaseModel):
 
 class ExecutiveBriefItem(BaseModel):
     text: str
+    points: list[str] = Field(
+        min_length=1,
+        description="1 to 3 concise, self-contained single-news bullet points breaking down `text` (one distinct news development per point, preserving **bold** key takeaways and *italic* human names).",
+    )
     category: NewsCategory = "World"
     sentiment: StorySentiment = "neutral"
 
@@ -229,7 +233,7 @@ AfternoonBrief = BriefSection
 
 class AfternoonSynthesis(BaseModel):
     bullets: list[ExecutiveBriefItem] = Field(
-        description="3 to 5 concise afternoon update bullets covering breaking developments since the morning briefing (limit to at most one item primarily about the stock market on US trading days; omit US stock market updates entirely on US weekends or market holidays when us_market_open_today is false), each with category, 7-level sentiment, **bold** takeaways, and *italic* human names."
+        description="3 to 5 concise afternoon update bullets covering breaking developments since the morning briefing (limit to at most one item primarily about the stock market on US trading days; omit US stock market updates entirely on US weekends or market holidays when us_market_open_today is false), each with `text`, required `points` (1-3 standalone single-news lines), category, 7-level sentiment, **bold** takeaways, and *italic* human names."
     )
     market_narrative: str | None = Field(
         default=None,

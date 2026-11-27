@@ -17,27 +17,47 @@
       {
         "text": "U.S. equities opened higher on Black Friday with the **S&P 500 (+0.54%)**, **Nasdaq (+0.56%)**, and **Dow (+0.56%)** advancing alongside **gold (+3.73% to $3,667.80)**, even as **Nvidia (-2.14%)** and **Bitcoin (-2.71%)** slipped and sentiment stayed in **Extreme Fear (21.6)**.",
         "category": "Economy",
-        "sentiment": "slightly_positive"
+        "sentiment": "slightly_positive",
+        "points": [
+          "U.S. equities opened higher on Black Friday with the **S&P 500 (+0.54%)**, **Nasdaq (+0.56%)**, and **Dow (+0.56%)** advancing alongside **gold (+3.73% to $3,667.80)**.",
+          "**Nvidia (-2.14%)** and **Bitcoin (-2.71%)** slipped as sentiment stayed in **Extreme Fear (21.6)**."
+        ]
       },
       {
         "text": "Hackers **breached the U.S. Air Force's Cloud One platform**, risking sensitive data in the latest major federal cyber incident, while **hundreds of thousands remain without power** across Pennsylvania and neighboring East Coast states after Thanksgiving storms.",
         "category": "Policy",
-        "sentiment": "negative"
+        "sentiment": "negative",
+        "points": [
+          "Hackers **breached the U.S. Air Force's Cloud One platform**, risking sensitive data in the latest major federal cyber incident.",
+          "**Hundreds of thousands remain without power** across Pennsylvania and neighboring East Coast states after Thanksgiving storms."
+        ]
       },
       {
         "text": "Ukrainian President *Volodymyr Zelensky* criticized *Donald Trump*'s **\"strange\" friendship with *Vladimir Putin*** in a BBC interview, warning Washington is **not pressuring Russia hard enough** in peace talks as **EU budget talks over Ukraine aid stall**.",
         "category": "World",
-        "sentiment": "slightly_negative"
+        "sentiment": "slightly_negative",
+        "points": [
+          "Ukrainian President *Volodymyr Zelensky* criticized *Donald Trump*'s **\"strange\" friendship with *Vladimir Putin*** in a BBC interview, warning Washington is **not pressuring Russia hard enough** in peace talks.",
+          "**EU budget talks over Ukraine aid remain stalled**."
+        ]
       },
       {
         "text": "The **U.S. Supreme Court** is set to weigh whether the *Trump* administration's sweeping **asylum overhaul violates due process**, while *Donald Trump* signaled **openness to bipartisan healthcare talks** with Democrats following GOP midterm losses.",
         "category": "Policy",
-        "sentiment": "neutral"
+        "sentiment": "neutral",
+        "points": [
+          "The **U.S. Supreme Court** is set to weigh whether the *Trump* administration's sweeping **asylum overhaul violates due process**.",
+          "*Donald Trump* signaled **openness to bipartisan healthcare talks** with Democrats following GOP midterm losses."
+        ]
       },
       {
         "text": "Aerial imagery confirmed **ecological recovery in Florida Bay** as Everglades restoration sends fresh water south, while archaeologists in Mongolia unearthed **Classical Roman glass** inside an elite **Xiongnu Silk Road tomb**.",
         "category": "Science",
-        "sentiment": "positive"
+        "sentiment": "positive",
+        "points": [
+          "Aerial imagery confirmed **ecological recovery in Florida Bay** as Everglades restoration sends fresh water south.",
+          "Archaeologists in Mongolia unearthed **Classical Roman glass** inside an elite **Xiongnu Silk Road tomb**."
+        ]
       }
     ]
   },

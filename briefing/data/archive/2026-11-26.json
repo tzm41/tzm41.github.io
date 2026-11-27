@@ -16,27 +16,48 @@
       {
         "text": "U.S. equities finished mixed as **tech weakness weighed on the Nasdaq (-0.62%) and S&P 500 (-0.25%)**, with **Nvidia (-2.68%)** and **Amazon (-2.19%)** sliding while **Meta (+3.83%)**, the **Dow (+0.33%)**, and **Russell 2000 (+0.71%)** gained amid **Extreme Fear (15.0)**.",
         "category": "Economy",
-        "sentiment": "slightly_negative"
+        "sentiment": "slightly_negative",
+        "points": [
+          "U.S. equities finished mixed as **tech weakness weighed on the Nasdaq (-0.62%) and S&P 500 (-0.25%)**, with **Nvidia (-2.68%)** and **Amazon (-2.19%)** sliding.",
+          "**Meta (+3.83%)**, the **Dow (+0.33%)**, and **Russell 2000 (+0.71%)** gained amid **Extreme Fear (15.0)**."
+        ]
       },
       {
         "text": "A federal judge ruled the **FCC violated ABC's First Amendment rights** by moving to review local broadcast licenses, while the **White House proposed new tariffs** on major U.S. trading partners.",
         "category": "Policy",
-        "sentiment": "neutral"
+        "sentiment": "neutral",
+        "points": [
+          "A federal judge ruled the **FCC violated ABC's First Amendment rights** by moving to review local broadcast licenses.",
+          "The **White House proposed new tariffs** on major U.S. trading partners."
+        ]
       },
       {
         "text": "The **FCC approved SpaceX's plan to deploy 1 million satellites** for orbital data centers despite scientist skepticism, while budget carrier **Norse Atlantic suspended all flights** amid bankruptcy risk.",
         "category": "World",
-        "sentiment": "neutral"
+        "sentiment": "neutral",
+        "points": [
+          "The **FCC approved SpaceX's plan to deploy 1 million satellites** for orbital data centers despite scientist skepticism.",
+          "Budget carrier **Norse Atlantic suspended all flights** amid bankruptcy risk."
+        ]
       },
       {
         "text": "North Korean leader *Kim Jong Un* vowed to **expand nuclear weapons production**, while **Israeli strikes in Gaza killed eight** including a Hamas official and **Congo's Ebola outbreak reached 12,000 cases**.",
         "category": "World",
-        "sentiment": "very_negative"
+        "sentiment": "very_negative",
+        "points": [
+          "North Korean leader *Kim Jong Un* vowed to **expand nuclear weapons production**.",
+          "**Israeli strikes in Gaza killed eight**, including a Hamas official.",
+          "**Congo's Ebola outbreak reached 12,000 cases**."
+        ]
       },
       {
         "text": "A **cheaper twice-yearly HIV prevention injection (lenacapavir)** with near-100% efficacy began reaching Africa, and **ESA's Hera spacecraft** returned close-up imagery of NASA's asteroid deflection crater.",
         "category": "Science",
-        "sentiment": "positive"
+        "sentiment": "positive",
+        "points": [
+          "A **cheaper twice-yearly HIV prevention injection (lenacapavir)** with near-100% efficacy began reaching Africa.",
+          "**ESA's Hera spacecraft** returned close-up imagery of NASA's asteroid deflection crater."
+        ]
       }
     ]
   },
@@ -46,22 +67,37 @@
       {
         "text": "U.S. equities held a **mixed close** with the **Nasdaq (-0.62%)** and **S&P 500 (-0.25%)** trailing the **Dow (+0.33%)** and **Russell 2000 (+0.71%)**, while **WTI crude climbed 1.83% to $85.21**, **gold rose 1.42% to $3,586.10**, and the **VIX eased 5.27% to 26.80**.",
         "category": "Economy",
-        "sentiment": "neutral"
+        "sentiment": "neutral",
+        "points": [
+          "U.S. equities held a **mixed close** with the **Nasdaq (-0.62%)** and **S&P 500 (-0.25%)** trailing the **Dow (+0.33%)** and **Russell 2000 (+0.71%)**.",
+          "**WTI crude climbed 1.83% to $85.21**, **gold rose 1.42% to $3,586.10**, and the **VIX eased 5.27% to 26.80**."
+        ]
       },
       {
         "text": "**Nvidia paused AI chip shipments to Southeast Asia** and instructed buyers to rule out Chinese renters, halting **billions in data center deals** under U.S. export curbs.",
         "category": "Tech",
-        "sentiment": "negative"
+        "sentiment": "negative",
+        "points": [
+          "**Nvidia paused AI chip shipments to Southeast Asia** and instructed buyers to rule out Chinese renters, halting **billions in data center deals** under U.S. export curbs."
+        ]
       },
       {
         "text": "Severe **Thanksgiving coastal storms knocked out power to nearly 1 million U.S. customers**, grounded flights at Reagan National Airport, and forced the **postponement of the Macy's Thanksgiving Day Parade**.",
         "category": "World",
-        "sentiment": "negative"
+        "sentiment": "negative",
+        "points": [
+          "Severe **Thanksgiving coastal storms knocked out power to nearly 1 million U.S. customers** and grounded flights at Reagan National Airport.",
+          "The storms forced the **postponement of the Macy's Thanksgiving Day Parade**."
+        ]
       },
       {
         "text": "A **strike in Kuwait killed two Italian Rheinmetall technicians**, which Iranian Foreign Minister *Abbas Araghchi* called \"suspicious,\" while Ukrainian President *Volodymyr Zelensky* told the BBC the U.S. is **not pushing Russia hard enough**.",
         "category": "World",
-        "sentiment": "very_negative"
+        "sentiment": "very_negative",
+        "points": [
+          "A **strike in Kuwait killed two Italian Rheinmetall technicians**, which Iranian Foreign Minister *Abbas Araghchi* called \"suspicious.\"",
+          "Ukrainian President *Volodymyr Zelensky* told the BBC the U.S. is **not pushing Russia hard enough**."
+        ]
       }
     ]
   },

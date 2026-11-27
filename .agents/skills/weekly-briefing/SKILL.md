@@ -28,7 +28,7 @@ This fetches live RSS feeds across **Science & Discovery** (Quanta, Nature, Scie
 Read `/tmp/raw_weekly.json`, inspect the `instructions`, `synthesis_schema`, and fetched candidates, and write a strictly valid JSON file to `/tmp/weekly_synthesis.json` matching `WeeklySynthesis`:
 
 - `theme_title`: Evocative 2–5 word thematic title capturing the connecting thread across this Sunday's edition.
-- `digest`: 4–6 high-signal weekly takeaway bullets (`{text, category, sentiment}`) spanning Science, Culture & Arts, History, and Long Reads.
+- `digest`: 4–6 high-signal weekly takeaway bullets (`{text, points, category, sentiment}`) spanning Science, Culture & Arts, History, and Long Reads, where **`points` is required** (1–3 standalone single-story bullet lines per item).
 - `featured_quote`: A real, accurately attributed quote (`{quote, author, context}`) from a scientist, artist, writer, or historian resonating with the week's theme.
 - `science`: `{narrative, items}` with **4–5** grounded discoveries (`id`, `category`, `discipline`, `headline`, `summary`, `takeaway`, `sentiment`, `sources`).
 - `culture`: `{narrative, items}` with **4–5** grounded art, architecture, literature, film, music, or cultural stories.
@@ -36,7 +36,7 @@ Read `/tmp/raw_weekly.json`, inspect the `instructions`, `synthesis_schema`, and
 - `this_week_in_history`: **4** well-verified historical, scientific, or artistic anniversaries falling within `week_label` (`{year, date_label, title, summary}`).
 - `around_the_world`: **10–11** geographically well-spaced pins across all continents: **6** geological fun facts (`kind: "geology"`) and **4–5** iconic regional dishes/cuisines (`kind: "cuisine"`), each with accurate decimal `lat`/`lon`, `country_code`, `feature_type`, `title`, `fact`, and `wiki_title` (avoiding any places/dishes in `recently_shown_3_editions`).
 - `long_reads`: **4–5** curated essays (`{id, topic, reading_time, headline, summary, sources}`).
-- `week_in_brief`: **3–4** concise macro/world recap bullets (`{text, category, sentiment}`), keeping markets/politics light.
+- `week_in_brief`: **3–4** concise macro/world recap bullets (`{text, points, category, sentiment}` with required `points` array of 1–3 single-news lines), keeping markets/politics light.
 
 **Formatting & Grounding Rules:**
 - Every story in `science`, `culture`, `history`, and `long_reads` must be grounded in `/tmp/raw_weekly.json` with **verbatim source URLs**.

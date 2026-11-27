@@ -9,27 +9,46 @@
     {
       "text": "Mathematicians are scrutinizing **dual human- and AI-assisted proofs of the Riemann hypothesis**, while physicists expand precision experiments hunting for **ultralight dark matter**.",
       "category": "Science",
-      "sentiment": "very_positive"
+      "sentiment": "very_positive",
+      "points": [
+        "Mathematicians are scrutinizing **dual human- and AI-assisted proofs of the Riemann hypothesis**.",
+        "Physicists are expanding precision experiments hunting for **ultralight dark matter**."
+      ]
     },
     {
       "text": "Recordings across 43 brain regions challenge decades of textbook neuroscience by showing **most neurons act as versatile multitaskers** rather than single-purpose specialists.",
       "category": "Science",
-      "sentiment": "positive"
+      "sentiment": "positive",
+      "points": [
+        "Recordings across 43 brain regions challenge decades of textbook neuroscience by showing **most neurons act as versatile multitaskers** rather than single-purpose specialists."
+      ]
     },
     {
       "text": "Museum exhibitions and digital archives highlight **the hidden craft of art and geometry** — from *M.C. Escher*'s self-taught hyperbolic worlds and *William Morris*'s textile paradox to empty antique picture frames taking center stage in Toronto.",
       "category": "Culture & Arts",
-      "sentiment": "positive"
+      "sentiment": "positive",
+      "points": [
+        "Museum exhibitions and digital archives highlight *M.C. Escher*'s **self-taught hyperbolic worlds** and *William Morris*'s **textile paradox**.",
+        "Empty antique picture frames are taking center stage in a new Toronto exhibition."
+      ]
     },
     {
       "text": "Archaeologists uncovered **subterranean tunnels beneath Istanbul's Hagia Sophia**, nearly 100 Acheulean hand axes in Botswana's Kalahari Desert, and a Ptolemaic limestone foundation in Alexandria.",
       "category": "History",
-      "sentiment": "positive"
+      "sentiment": "positive",
+      "points": [
+        "Archaeologists uncovered **subterranean tunnels beneath Istanbul's Hagia Sophia**.",
+        "Excavations revealed **nearly 100 Acheulean hand axes** in Botswana's Kalahari Desert and a **Ptolemaic limestone foundation** in Alexandria."
+      ]
     },
     {
       "text": "Long-form essays trace how **deep environmental and cultural memory shapes the present** — from *Dagomar Degroot* on millennia of El Niño disruptions to architect *Lina Ghotmeh*'s \"archaeology of the future.\"",
       "category": "Long Reads",
-      "sentiment": "slightly_positive"
+      "sentiment": "slightly_positive",
+      "points": [
+        "*Dagomar Degroot* traces **millennia of El Niño climate disruptions** shaping human history.",
+        "Architect *Lina Ghotmeh* outlines her **\"archaeology of the future\"** design philosophy."
+      ]
     }
   ],
   "featured_quote": {
@@ -508,22 +527,34 @@
     {
       "text": "Europe's Hera spacecraft revealed **a stadium-sized crater on asteroid Dimorphos** left by NASA's DART planetary-defense impact test, confirming kinetic deflection physics.",
       "category": "Tech",
-      "sentiment": "positive"
+      "sentiment": "positive",
+      "points": [
+        "Europe's Hera spacecraft revealed **a stadium-sized crater on asteroid Dimorphos** left by NASA's DART planetary-defense impact test, confirming kinetic deflection physics."
+      ]
     },
     {
       "text": "Nvidia paused select AI chip shipments to Southeast Asia amid **tightening semiconductor export controls**, underscoring ongoing supply-chain realignments.",
       "category": "Economy",
-      "sentiment": "slightly_negative"
+      "sentiment": "slightly_negative",
+      "points": [
+        "Nvidia paused select AI chip shipments to Southeast Asia amid **tightening semiconductor export controls**, underscoring ongoing supply-chain realignments."
+      ]
     },
     {
       "text": "Argentina enacted a monetary guardrail **barring its central bank from printing money to finance government spending** as part of its inflation-curbing overhaul.",
       "category": "Policy",
-      "sentiment": "neutral"
+      "sentiment": "neutral",
+      "points": [
+        "Argentina enacted a monetary guardrail **barring its central bank from printing money to finance government spending** as part of its inflation-curbing overhaul."
+      ]
     },
     {
       "text": "Severe Thanksgiving winter storms swept across parts of the United States, **cutting power to nearly one million customers** and snarling holiday travel.",
       "category": "Climate",
-      "sentiment": "negative"
+      "sentiment": "negative",
+      "points": [
+        "Severe Thanksgiving winter storms swept across parts of the United States, **cutting power to nearly one million customers** and snarling holiday travel."
+      ]
     }
   ],
   "source_health": {
