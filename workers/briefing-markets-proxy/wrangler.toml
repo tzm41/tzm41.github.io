@@ -11,8 +11,7 @@ id = "5c4a1c48d7204b84ad4672d5187246b0"
 
 [[kv_namespaces]]
 binding = "USER_PREFS_KV"
-# TODO: Replace with live KV namespace ID created via `wrangler kv namespace create USER_PREFS_KV` before deploy.
-id = "REPLACE_WITH_USER_PREFS_KV_ID"
+id = "3a1aed34f63b4cbcb7fdb274715dcb69"
 
 [vars]
 GOOGLE_CLIENT_ID = "860276707063-9giqi2mtolon02mntnh0vjmi1uos9sge.apps.googleusercontent.com"
