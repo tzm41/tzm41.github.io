@@ -58,9 +58,18 @@ function computeSparklineLayout(values, times, tf, symbol) {
       mins.every((m) => m !== null) && mins.every((m, i) => i === 0 || m >= mins[i - 1]);
     if (isMonotonicSingleDay) {
       if (isFullDayEt) {
-        const startMin = 0;
-        const endMin = 1440;
-        const xs = mins.map((m) => Math.max(0, Math.min(w, ((m - startMin) / (endMin - startMin)) * w)));
+        // WTI Crude & Gold futures (CME Globex): anchor to first bar (snap to left, avoiding
+        // holiday/delayed-open left gaps), track progress to 5:00 PM ET close (or midnight if
+        // evening Globex bars past 6:00 PM ET exist), and snap edge-to-edge once closed (>30m).
+        const lastMs = Date.parse(times[times.length - 1] || "");
+        const sessionClosed = !Number.isNaN(lastMs) && Date.now() - lastMs > 30 * 60 * 1000;
+        const minMin = Math.min(...mins);
+        const maxMin = Math.max(...mins);
+        const startMin = minMin;
+        const targetClose = maxMin >= 1080 ? 1440 : 1020;
+        const endMin = sessionClosed ? Math.max(maxMin, minMin + 1) : Math.max(maxMin, targetClose);
+        const spanMin = Math.max(60, endMin - startMin);
+        const xs = mins.map((m) => Math.max(0, Math.min(w, ((m - startMin) / spanMin) * w)));
         return { xs, closeX: null, isExtended: mins.map(() => false) };
       }
       const maxMin = Math.max(...mins);

@@ -327,7 +327,7 @@ class GeminiBriefingSynthesis(BaseModel):
         description="3 to 5 key bills, executive actions, agency moves, or court developments grounded in the provided items."
     )
     trending_topics: list[PoliticalTopic] = Field(
-        description="3 to 5 trending US political topics with momentum and neutral framing notes."
+        description="3 to 5 trending US political topics with momentum and neutral framing notes. Every topic MUST be distinct from and non-overlapping with items in legislative_and_executive (never duplicate the same bill, probe, or agency action in both lists)."
     )
     positive_news: list[NewsStory] = Field(
         default_factory=list,
