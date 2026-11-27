@@ -1727,10 +1727,12 @@ function renderSectorHeatmap(markets = {}) {
 }
 
 function renderMarkets(markets = {}) {
-  const regime = markets.regime_tag || "Mixed";
-  const regimeSlug = regime.toLowerCase().replace(/\s+/g, "-");
-  els.marketRegime.textContent = regime;
-  els.marketRegime.className = `regime-badge ${regimeSlug}`;
+  if (els.marketRegime) {
+    const regime = markets.regime_tag || "Mixed";
+    const regimeSlug = regime.toLowerCase().replace(/\s+/g, "-");
+    els.marketRegime.textContent = regime;
+    els.marketRegime.className = `regime-badge ${regimeSlug}`;
+  }
   els.marketNarrative.innerHTML = highlightSummaryHtml(markets.narrative || "");
 
   const tf = state.marketTimeframe;
