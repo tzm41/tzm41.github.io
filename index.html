@@ -415,6 +415,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 8px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
@@ -433,6 +434,24 @@
       color: var(--accent);
       box-shadow: var(--shadow-md);
       transform: translateY(-1px);
+    }
+
+    .bookmarks-bar-count {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      color: var(--ink-secondary);
+    }
+
+    .bookmarks-bar-cta:hover .bookmarks-bar-count {
+      background: var(--accent-soft);
+      border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+      color: var(--accent);
     }
 
     .nav-card {
@@ -556,7 +575,11 @@
       </div>
 
       <div class="bookmarks-bar">
-        <a class="bookmarks-bar-cta" href="/bookmarks/">Open Bookmarks &rarr;</a>
+        <a class="bookmarks-bar-cta" href="/bookmarks/">
+          <span>Open Bookmarks</span>
+          <span class="bookmarks-bar-count hidden" id="home-bookmarks-count"></span>
+          <span aria-hidden="true">&rarr;</span>
+        </a>
       </div>
     </div>
   </main>
@@ -603,13 +626,49 @@
           }
         });
       }
+
+      try {
+        const raw = localStorage.getItem("briefing-bookmarks-v1");
+        const countEl = document.getElementById("home-bookmarks-count");
+        if (raw && countEl) {
+          const parsed = JSON.parse(raw);
+          const list = Array.isArray(parsed)
+            ? parsed
+            : Array.isArray(parsed?.items)
+            ? parsed.items
+            : [];
+          if (list.length > 0) {
+            countEl.textContent = String(list.length);
+            countEl.classList.remove("hidden");
+          }
+        }
+      } catch {
+        // Ignore storage / parse errors
+      }
     })();
   </script>
 
   <script type="module">
-    import { initAuth, setPreference } from "./shared/auth.js?v=2";
+    import { getBookmarkStats, onBookmarksChange } from "./shared/bookmarks.js?v=2";
+    import { initAuth, setPreference } from "./shared/auth.js?v=3";
 
+    const countEl = document.getElementById("home-bookmarks-count");
     const switcher = document.getElementById("theme-switcher");
+
+    function syncHomeBookmarksCount() {
+      if (!countEl) return;
+      const stats = getBookmarkStats();
+      if (stats.total > 0) {
+        countEl.textContent = String(stats.total);
+        countEl.classList.remove("hidden");
+      } else {
+        countEl.textContent = "";
+        countEl.classList.add("hidden");
+      }
+    }
+
+    syncHomeBookmarksCount();
+    onBookmarksChange(syncHomeBookmarksCount);
 
     switcher?.addEventListener("click", (e) => {
       const btn = e.target.closest(".seg-btn");

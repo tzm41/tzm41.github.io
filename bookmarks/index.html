@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../briefing/styles.css?v=63">
-  <link rel="stylesheet" href="./styles.css?v=2">
+  <link rel="stylesheet" href="./styles.css?v=3">
 </head>
 <body class="bookmarks-page">
   <header class="masthead" id="top">
@@ -97,11 +97,14 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>Bookmarks are stored locally in your browser and optionally synced when signed in with Google.</p>
+      <div class="bm-footer-sync is-signed-out" id="bookmarks-sync-indicator" role="status" aria-live="polite">
+        <span class="bm-footer-sync-dot" aria-hidden="true"></span>
+        <span class="bm-footer-sync-text">Not signed in &middot; Stored locally in this browser</span>
+      </div>
       <a href="#top">Back to top &uarr;</a>
     </div>
   </footer>
 
-  <script type="module" src="./app.js?v=3"></script>
+  <script type="module" src="./app.js?v=4"></script>
 </body>
 </html>

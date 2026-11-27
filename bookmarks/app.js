@@ -37,7 +37,7 @@ import {
   bindBookmarkToggle,
   onBookmarksChange,
 } from "../shared/bookmarks.js?v=2";
-import { initAuth, setPreference } from "../shared/auth.js?v=2";
+import { initAuth, setPreference, getSyncState, onSyncStatusChange } from "../shared/auth.js?v=3";
 
 const BRIEFING_DATA = "../briefing/data";
 const WEEKLY_DATA = "../weekly/data";
@@ -87,6 +87,7 @@ const els = {
   expiredSection: document.getElementById("expired-section"),
   expiredCountNote: document.getElementById("expired-count-note"),
   expiredGrid: document.getElementById("expired-grid"),
+  footerSync: document.getElementById("bookmarks-sync-indicator"),
 };
 
 /* ---------- Formatting Helpers ---------- */
@@ -1053,6 +1054,38 @@ async function fetchJsonNoCache(url) {
   return resp.json();
 }
 
+function renderFooterSyncIndicator(syncState = getSyncState()) {
+  const el = els.footerSync;
+  if (!el) return;
+  const textEl = el.querySelector(".bm-footer-sync-text");
+  const accountName = syncState?.user?.name?.trim() || "";
+
+  let cls = "is-signed-out";
+  let text = "Not signed in · Stored locally in this browser";
+
+  if (syncState?.signedIn) {
+    if (syncState.status === "syncing") {
+      cls = "is-syncing";
+      text = accountName
+        ? `Syncing bookmarks for ${accountName}…`
+        : "Syncing bookmarks to your account…";
+    } else if (syncState.status === "local" || syncState.status === "error" || syncState.dirty) {
+      cls = "is-local";
+      text = accountName
+        ? `Saved locally · Pending sync for ${accountName}`
+        : "Saved locally · Pending account sync";
+    } else {
+      cls = "is-synced";
+      text = accountName
+        ? `Bookmarks synced for ${accountName}`
+        : "Bookmarks synced to your account";
+    }
+  }
+
+  el.className = `bm-footer-sync ${cls}`;
+  if (textEl) textEl.textContent = text;
+}
+
 async function bootstrap() {
   // 1. UI primitives & auth (zero cold-load requests when signed out)
   let themeBooted = false;
@@ -1076,7 +1109,10 @@ async function bootstrap() {
         themeCtrl?.apply?.(prefs.theme, { silent: true });
       }
     },
+    onAuthChange: () => renderFooterSyncIndicator(),
   });
+  renderFooterSyncIndicator();
+  onSyncStatusChange((snapshot) => renderFooterSyncIndicator(snapshot));
 
   bindEvents();
 

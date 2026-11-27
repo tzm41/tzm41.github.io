@@ -123,6 +123,10 @@ function setDirty(flag) {
   } catch {
     // Ignore
   }
+  if (syncStatus !== "syncing") {
+    updateSyncStatusUi();
+  }
+  emitSyncStatus();
 }
 
 function getLastSyncMs() {
@@ -302,6 +306,7 @@ function clearSessionOnly({ notify = true } = {}) {
   menuOpen = false;
   popoverOpen = false;
   renderWidget();
+  emitSyncStatus();
   if (notify) {
     onAuthChangeCb?.(null);
   }
@@ -327,9 +332,48 @@ function captureRefreshedToken(resp) {
   }
 }
 
+const syncStatusListeners = new Set();
+
+export function getSyncState() {
+  const signedIn = isSignedIn();
+  const dirty = isDirty();
+  const { text, cls } = signedIn
+    ? syncStatusMeta()
+    : { text: "Not signed in", cls: "is-signed-out" };
+  return {
+    signedIn,
+    status: signedIn ? syncStatus : "signed_out",
+    dirty,
+    text,
+    cls,
+    user: getUser(),
+  };
+}
+
+export function onSyncStatusChange(listener) {
+  if (typeof listener !== "function") return () => {};
+  syncStatusListeners.add(listener);
+  return () => {
+    syncStatusListeners.delete(listener);
+  };
+}
+
+function emitSyncStatus() {
+  if (!syncStatusListeners.size) return;
+  const snapshot = getSyncState();
+  for (const fn of syncStatusListeners) {
+    try {
+      fn(snapshot);
+    } catch {
+      // Isolate listener errors
+    }
+  }
+}
+
 function setSyncStatus(next) {
   syncStatus = next;
   updateSyncStatusUi();
+  emitSyncStatus();
 }
 
 function syncStatusMeta() {
@@ -740,6 +784,7 @@ async function handleGoogleCredential(response) {
     popoverOpen = false;
     menuOpen = false;
     renderWidget();
+    emitSyncStatus();
     onAuthChangeCb?.(getUser());
 
     if (data.state && typeof data.state === "object") {
@@ -1010,6 +1055,7 @@ function bindGlobalListeners() {
         popoverOpen = false;
         menuOpen = false;
         renderWidget();
+        emitSyncStatus();
         onAuthChangeCb?.(getUser());
       }
     } else if (e.key === PREFS_KEY || e.key === THEME_KEY || e.key === POSITIVE_POS_KEY) {
