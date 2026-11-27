@@ -168,7 +168,7 @@ AfternoonBrief = BriefSection
 
 class AfternoonSynthesis(BaseModel):
     bullets: list[ExecutiveBriefItem] = Field(
-        description="3 to 5 concise afternoon update bullets covering US market close and breaking developments since the morning briefing (limit to at most one item primarily about the stock market), each with category, 7-level sentiment, **bold** takeaways, and *italic* human names."
+        description="3 to 5 concise afternoon update bullets covering breaking developments since the morning briefing (limit to at most one item primarily about the stock market on US trading days; omit US stock market updates entirely on US weekends or market holidays when us_market_open_today is false), each with category, 7-level sentiment, **bold** takeaways, and *italic* human names."
     )
     market_narrative: str | None = Field(
         default=None,

@@ -19,7 +19,7 @@ from .config import (
     MAX_ARCHIVE_DAYS,
 )
 from .fetchers.conflicts import fetch_conflicts
-from .fetchers.markets import fetch_markets
+from .fetchers.markets import fetch_markets, is_us_equity_trading_day
 from .fetchers.news import fetch_local_news, fetch_positive_news, fetch_top_news
 from .fetchers.politics import fetch_politics
 from .memory import (
@@ -335,6 +335,7 @@ async def fetch_afternoon_bundle(out_path_str: str) -> None:
     bundle = {
         "date": ref_date,
         "generated_at": now_utc,
+        "us_market_open_today": is_us_equity_trading_day(ref_date),
         "morning_brief": (
             (morning.get("morning_brief") or {}).get("bullets")
             or morning.get("executive_brief", [])

@@ -10,7 +10,7 @@ from difflib import SequenceMatcher
 from typing import Any
 
 from .config import GEMINI_FALLBACK_MODELS, GEMINI_MODEL
-from .fetchers.markets import fetch_mentioned_quotes
+from .fetchers.markets import fetch_mentioned_quotes, is_us_equity_trading_day
 from .schema import (
     BriefSection,
     ConflictTheater,
@@ -42,7 +42,7 @@ Strict rules:
 3. Keep summaries crisp, objective, and analytical (avoid sensationalism or partisan framing).
 4. When prior-day context is provided, explicitly highlight what changed or escalated/cooled since yesterday.
 5. In executive_brief bullets, summaries, why_it_matters, narratives, overviews, and framing_notes, wrap the 1–2 highest-signal phrases per sentence (the core outcome, decisive action, or key metric — roughly 15–25% of the sentence) in **double asterisks** for scannable bold highlighting, and wrap human person names in *single asterisks* for italics. Never bold entire sentences or headlines.
-6. Limit executive_brief to at most one item primarily about the stock market; keep the remaining bullets focused on non-market world, policy, conflict, tech, or science developments.
+6. Limit executive_brief to at most one item primarily about the stock market on US trading days; when us_market_open_today is false (US weekends or market holidays), omit US stock market updates from the brief entirely and focus all bullets on world, policy, conflict, tech, or science developments.
 7. Never re-feature stories already listed in recently_shown_headlines_3d unless a major new development has occurred since they were shown.
 8. Produce valid JSON matching the requested schema exactly."""
 
@@ -77,6 +77,7 @@ def _build_prompt(
             else None
         ),
         "news_candidates": raw_news[:30],
+        "us_market_open_today": is_us_equity_trading_day(date_str),
         "market_snapshot": {
             "watchlist": [
                 {

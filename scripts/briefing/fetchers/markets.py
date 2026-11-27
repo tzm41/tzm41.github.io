@@ -398,6 +398,15 @@ def _us_market_holidays(year: int) -> set[date]:
     }
 
 
+def is_us_equity_trading_day(date_str: str) -> bool:
+    """Return True if YYYY-MM-DD is a US equity trading day (Mon-Fri, not a major US market holiday)."""
+    try:
+        d = date.fromisoformat(str(date_str)[:10])
+    except ValueError:
+        return True
+    return d.weekday() < 5 and d not in _us_market_holidays(d.year)
+
+
 def is_symbol_trading_now(symbol: str, now_utc: datetime | None = None) -> bool:
     """Return True if the given symbol is currently in an active trading session (ET)."""
     if symbol == "BTC-USD":
