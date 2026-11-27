@@ -747,6 +747,255 @@ async function handleAuthAndUserRoutes(request, env, url) {
   }
 }
 
+/* ---------- Per-Archive Link Preview (HTMLRewriter + Dynamic OG Card) ---------- */
+
+const SITE_ORIGIN = "https://colintan.dev";
+const PREVIEW_BOT_RE =
+  /bot|crawler|spider|preview|facebookexternalhit|facebot|twitterbot|slackbot|discordbot|whatsapp|telegrambot|linkedinbot|applebot|imessage|micromessenger|vkshare|pinterest|embedly|quora|outbrain|flipboard/i;
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function stripMdPreview(text) {
+  return String(text || "")
+    .replace(/\*\*((?:(?!\*\*(?!\*)).)+?)\*\*(?!\*)/g, "$1")
+    .replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function truncatePreview(text, maxLen) {
+  const s = stripMdPreview(text);
+  if (s.length <= maxLen) return s;
+  const cut = s.slice(0, maxLen - 1).replace(/\s+\S*$/, "");
+  return (cut || s.slice(0, maxLen - 1)).replace(/[.,;:\s]+$/, "") + "…";
+}
+
+function fmtReadableDateUtc(dateStr) {
+  if (!ISO_DATE_RE.test(dateStr || "")) return dateStr || "";
+  const dt = new Date(`${dateStr}T12:00:00Z`);
+  if (Number.isNaN(dt.getTime())) return dateStr;
+  return dt.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+function escapeXml(str) {
+  return String(str || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+async function fetchEditionForPreview(kind, requestedDate) {
+  const basePath = kind === "weekly" ? "weekly" : "briefing";
+  const isArchive = ISO_DATE_RE.test(requestedDate || "");
+  const dataUrl = isArchive
+    ? `${SITE_ORIGIN}/${basePath}/data/archive/${requestedDate}.json`
+    : `${SITE_ORIGIN}/${basePath}/data/latest.json`;
+  const resp = await fetch(dataUrl, { cf: { cacheTtl: 300, cacheEverything: true } });
+  if (!resp.ok) {
+    if (isArchive) {
+      const fb = await fetch(`${SITE_ORIGIN}/${basePath}/data/latest.json`, {
+        cf: { cacheTtl: 300, cacheEverything: true },
+      });
+      if (fb.ok) return { data: await fb.json(), isArchive: false };
+    }
+    return null;
+  }
+  return { data: await resp.json(), isArchive };
+}
+
+function buildEditionPreviewMeta(kind, data, workerOrigin, isArchive) {
+  const dateStr = String(data?.date || "");
+  const readable = fmtReadableDateUtc(dateStr);
+  const basePath = kind === "weekly" ? "weekly" : "briefing";
+  const pageUrl = isArchive
+    ? `${SITE_ORIGIN}/${basePath}/?date=${encodeURIComponent(dateStr)}`
+    : `${SITE_ORIGIN}/${basePath}/`;
+
+  if (kind === "weekly") {
+    const theme = String(data?.theme_title || "Sunday Edition");
+    const firstDigest = (data?.digest || [])[0];
+    const lead = firstDigest
+      ? truncatePreview(typeof firstDigest === "object" ? firstDigest.text : firstDigest, 160)
+      : "Weekly briefing curating science, culture, arts, history, and long-form essays.";
+    const items = [];
+    for (const [k, lbl] of [
+      ["science", "SCIENCE"],
+      ["culture", "CULTURE"],
+      ["history", "HISTORY"],
+    ]) {
+      const first = data?.[k]?.items?.[0];
+      if (first?.headline) items.push([lbl, truncatePreview(first.headline, 70)]);
+    }
+    return {
+      title: `Weekly Briefing — ${readable}`,
+      description: lead,
+      url: pageUrl,
+      imageUrl: isArchive
+        ? `${workerOrigin}/og/weekly.svg?date=${encodeURIComponent(dateStr)}`
+        : `${SITE_ORIGIN}/weekly/og-latest.png?v=${encodeURIComponent(dateStr || "latest")}`,
+      kicker: `WEEKLY BRIEFING · ${readable.toUpperCase()}`,
+      heading: "Weekly Briefing",
+      badge: theme,
+      accent: "#2c5d6b",
+      items,
+      footerRight: "Science · Culture · History · Long Reads",
+    };
+  }
+
+  const regime = String(data?.markets?.regime_tag || "");
+  const firstBullet = (data?.morning_brief?.bullets || [])[0];
+  const topNews = data?.top_news || [];
+  const lead = firstBullet
+    ? truncatePreview(typeof firstBullet === "object" ? firstBullet.text : firstBullet, 160)
+    : topNews[0]
+    ? truncatePreview(topNews[0].summary || topNews[0].headline, 160)
+    : "Daily intelligence briefing covering world news, markets, global conflicts, and US politics.";
+  const items = topNews.slice(0, 3).map((st) => [
+    String(st.category || "NEWS").toUpperCase(),
+    truncatePreview(st.headline || "", 70),
+  ]);
+  return {
+    title: `Daily Briefing — ${readable}`,
+    description: lead,
+    url: pageUrl,
+    imageUrl: isArchive
+      ? `${workerOrigin}/og/briefing.svg?date=${encodeURIComponent(dateStr)}`
+      : `${SITE_ORIGIN}/briefing/og-latest.png?v=${encodeURIComponent(dateStr || "latest")}`,
+    kicker: `DAILY BRIEFING · ${readable.toUpperCase()}`,
+    heading: "Daily Briefing",
+    badge: regime ? `Markets: ${regime}` : "Morning Edition",
+    accent: "#a63a2b",
+    items,
+    footerRight: "News · Markets · Conflicts · US Politics",
+  };
+}
+
+function renderDynamicOgSvg(meta) {
+  const rows = (meta.items || [])
+    .slice(0, 3)
+    .map(([tag, line], i) => {
+      const y = 342 + i * 54;
+      return `
+    <rect x="64" y="${y - 24}" width="104" height="32" rx="5" fill="${meta.accent}" fill-opacity="0.1"/>
+    <text x="116" y="${y - 3}" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700" fill="${meta.accent}">${escapeXml(tag)}</text>
+    <text x="184" y="${y - 2}" font-family="-apple-system,BlinkMacSystemFont,Inter,sans-serif" font-size="21" font-weight="500" fill="#181a1f">${escapeXml(line)}</text>`;
+    })
+    .join("");
+
+  const sub = truncatePreview(meta.description, 108);
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#faf8f5"/>
+  <rect width="1200" height="10" fill="${meta.accent}"/>
+  <text x="64" y="82" font-family="ui-monospace,Menlo,monospace" font-size="18" font-weight="600" letter-spacing="1.4" fill="${meta.accent}">${escapeXml(meta.kicker)}</text>
+  <rect x="860" y="56" width="276" height="36" rx="18" fill="${meta.accent}" fill-opacity="0.1" stroke="${meta.accent}" stroke-opacity="0.25"/>
+  <text x="998" y="80" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="15" font-weight="600" fill="${meta.accent}">${escapeXml(truncatePreview(meta.badge, 26))}</text>
+  <text x="64" y="168" font-family="Georgia,Times New Roman,serif" font-size="64" font-weight="700" fill="#181a1f">${escapeXml(meta.heading)}</text>
+  <text x="64" y="220" font-family="-apple-system,BlinkMacSystemFont,Inter,sans-serif" font-size="22" fill="#4a505c">${escapeXml(sub)}</text>
+  <line x1="64" y1="274" x2="1136" y2="274" stroke="#e4dfd6" stroke-width="1"/>
+  ${rows}
+  <line x1="64" y1="538" x2="1136" y2="538" stroke="#e4dfd6" stroke-width="1"/>
+  <text x="64" y="578" font-family="ui-monospace,Menlo,monospace" font-size="16" font-weight="700" fill="#181a1f">colintan.dev</text>
+  <text x="1136" y="578" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="16" fill="#6f7684">${escapeXml(meta.footerRight)}</text>
+</svg>`;
+}
+
+async function handleDynamicOgSvg(kind, url) {
+  const requestedDate = url.searchParams.get("date") || "";
+  const fetched = await fetchEditionForPreview(kind, requestedDate);
+  if (!fetched) return new Response("Edition not found", { status: 404 });
+  const meta = buildEditionPreviewMeta(kind, fetched.data, url.origin, fetched.isArchive);
+  return new Response(renderDynamicOgSvg(meta), {
+    status: 200,
+    headers: {
+      "Content-Type": "image/svg+xml; charset=utf-8",
+      "Cache-Control": "public, max-age=3600",
+    },
+  });
+}
+
+async function handleHtmlRewriterPreview(request, url, kind, isExplicitPreviewRoute) {
+  const requestedDate = url.searchParams.get("date") || "";
+  const basePath = kind === "weekly" ? "weekly" : "briefing";
+  const canonicalTarget = ISO_DATE_RE.test(requestedDate)
+    ? `${SITE_ORIGIN}/${basePath}/?date=${encodeURIComponent(requestedDate)}`
+    : `${SITE_ORIGIN}/${basePath}/`;
+
+  const ua = request.headers.get("User-Agent") || "";
+  const forcePreview = url.searchParams.get("preview") === "1";
+  if (isExplicitPreviewRoute && !forcePreview && !PREVIEW_BOT_RE.test(ua)) {
+    return Response.redirect(canonicalTarget, 302);
+  }
+
+  const [originResp, fetched] = await Promise.all([
+    fetch(`${SITE_ORIGIN}/${basePath}/`, { cf: { cacheTtl: 120, cacheEverything: true } }),
+    fetchEditionForPreview(kind, requestedDate),
+  ]);
+  if (!originResp.ok) return originResp;
+  if (!fetched) return originResp;
+
+  const meta = buildEditionPreviewMeta(kind, fetched.data, url.origin, fetched.isArchive);
+  const rewritten = new HTMLRewriter()
+    .on("title", {
+      element(el) {
+        el.setInnerContent(meta.title);
+      },
+    })
+    .on('meta[name="description"]', {
+      element(el) {
+        el.setAttribute("content", meta.description);
+      },
+    })
+    .on('meta[property="og:title"]', {
+      element(el) {
+        el.setAttribute("content", meta.title);
+      },
+    })
+    .on('meta[property="og:description"]', {
+      element(el) {
+        el.setAttribute("content", meta.description);
+      },
+    })
+    .on('meta[property="og:url"]', {
+      element(el) {
+        el.setAttribute("content", meta.url);
+      },
+    })
+    .on('meta[property="og:image"]', {
+      element(el) {
+        el.setAttribute("content", meta.imageUrl);
+      },
+    })
+    .on('meta[name="twitter:title"]', {
+      element(el) {
+        el.setAttribute("content", meta.title);
+      },
+    })
+    .on('meta[name="twitter:description"]', {
+      element(el) {
+        el.setAttribute("content", meta.description);
+      },
+    })
+    .on('meta[name="twitter:image"]', {
+      element(el) {
+        el.setAttribute("content", meta.imageUrl);
+      },
+    })
+    .transform(originResp);
+
+  const headers = new Headers(rewritten.headers);
+  headers.set("Cache-Control", "public, max-age=300");
+  headers.set("X-Preview-Edition", fetched.data?.date || "latest");
+  return new Response(rewritten.body, { status: rewritten.status, headers });
+}
+
 export default {
   async scheduled(controller, env, ctx) {
     const cron = controller.cron || "";
@@ -783,6 +1032,25 @@ export default {
 
     if (url.pathname === "/health") {
       return jsonResponse({ ok: true, symbols: ALL_SYMBOLS_LIST.length, storage: "kv" }, 200, request);
+    }
+
+    if (url.pathname === "/og/briefing.svg") {
+      return handleDynamicOgSvg("daily", url);
+    }
+    if (url.pathname === "/og/weekly.svg") {
+      return handleDynamicOgSvg("weekly", url);
+    }
+    if (url.pathname === "/preview/briefing" || url.pathname === "/preview/briefing/") {
+      return handleHtmlRewriterPreview(request, url, "daily", true);
+    }
+    if (url.pathname === "/preview/weekly" || url.pathname === "/preview/weekly/") {
+      return handleHtmlRewriterPreview(request, url, "weekly", true);
+    }
+    if (url.pathname === "/briefing" || url.pathname === "/briefing/") {
+      return handleHtmlRewriterPreview(request, url, "daily", false);
+    }
+    if (url.pathname === "/weekly" || url.pathname === "/weekly/") {
+      return handleHtmlRewriterPreview(request, url, "weekly", false);
     }
 
     if (url.pathname === "/markets" || url.pathname === "/") {

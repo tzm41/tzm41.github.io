@@ -56,6 +56,6 @@ This validates the synthesis with Pydantic v2 and writes:
 
 ### 5. Commit and push to GitHub Pages
 ```bash
-git add weekly/data/ && git commit -m "chore(weekly): update weekly briefing ($(date -u +%Y-%m-%d))" && git pull --rebase origin master && git push origin master
+git add weekly/data/ weekly/index.html weekly/og-latest.png && git commit -m "chore(weekly): update weekly briefing ($(date -u +%Y-%m-%d))" && git pull --rebase origin master && git push origin master
 ```
 (When run alongside the Sunday Morning Briefing automation, stage both `briefing/data/` and `weekly/data/` in a single commit or separate clean commit before pushing.)

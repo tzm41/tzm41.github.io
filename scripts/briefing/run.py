@@ -51,6 +51,11 @@ def _write_briefing_files(briefing: DailyBriefing) -> Path:
     _prune_archive()
     record_shown_news(briefing.model_dump())
     rebuild_index()
+    try:
+        from ..common.og_preview import generate_daily_og
+        generate_daily_og(briefing.model_dump())
+    except Exception as exc:
+        print(f"[run] OG preview update skipped: {exc}")
     print(f"[run] Wrote {archive_file.relative_to(Path.cwd()) if archive_file.is_relative_to(Path.cwd()) else archive_file}")
     return archive_file
 

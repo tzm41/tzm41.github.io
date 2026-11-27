@@ -154,8 +154,7 @@ function collectEditionTexts(ed) {
 
 function renderHeader(ed) {
   els.editionDate.textContent = fmtReadableDate(ed.date);
-  const themeSuffix = ed.theme_title ? ` · Theme: ${ed.theme_title}` : "";
-  els.generatedMeta.textContent = `Published ${fmtLocalTimestamp(ed.generated_at)}${themeSuffix}`;
+  els.generatedMeta.textContent = `Published ${fmtLocalTimestamp(ed.generated_at)}`;
 }
 
 function renderBriefBullets(bullets = []) {

@@ -89,6 +89,11 @@ def _write_weekly_files(briefing: WeeklyBriefing) -> Path:
     _prune_archive()
     record_shown_weekly(briefing.model_dump())
     rebuild_index()
+    try:
+        from ..common.og_preview import generate_weekly_og
+        generate_weekly_og(briefing.model_dump())
+    except Exception as exc:
+        print(f"[weekly] OG preview update skipped: {exc}")
     rel = archive_file.relative_to(Path.cwd()) if archive_file.is_relative_to(Path.cwd()) else archive_file
     print(f"[weekly] Wrote {rel}")
     return archive_file

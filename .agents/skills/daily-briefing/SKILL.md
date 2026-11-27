@@ -39,7 +39,7 @@ Use this skill whenever the user asks to generate, refresh, or publish their dai
    - If any of today's synthesized news reports a **new head of state / head of government, election victory, inauguration, resignation, or leadership transition** for any country or territory in `briefing/data/country_leaders.json`, update that entry (and `updated_at`) in `briefing/data/country_leaders.json` and validate with `python3 -m json.tool briefing/data/country_leaders.json > /dev/null`.
 6. **Commit and push** to GitHub Pages:
    ```bash
-   git add briefing/data/
+   git add briefing/data/ briefing/index.html briefing/og-latest.png
    git commit -m "chore(briefing): update daily briefing ($(date -u +%Y-%m-%d))"
    git pull --rebase origin master
    git push origin master
