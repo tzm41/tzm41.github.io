@@ -1,56 +1,73 @@
 /**
- * Cloudflare Worker: briefing-markets-proxy
+ * Cloudflare Worker: briefing-markets-proxy (KV + Cron Triggers)
  *
- * Proxies Yahoo Finance 1D intraday quotes + sparklines (including extended hours)
- * for tzm41.github.io/briefing/ (and colintan.dev/briefing/).
+ * Stores and serves the full live market dataset (1D, 7D/5D, 30D sparklines,
+ * 11 GICS sectors, and CNN Fear & Greed) in Cloudflare KV (`MARKETS_KV`),
+ * completely replacing GitHub Actions pseudo-live market commits.
  *
- * Subrequest budget (Cloudflare Free tier = 50 subrequests/invocation):
- * - Uses 1 consolidated Edge Cache entry for all quotes (100s per-symbol TTL)
- *   and 1 consolidated Edge Cache entry for per-symbol 5-minute rate limits
- *   (max 3 upstream fetches per symbol every 5 minutes).
- * - Total subrequests for all 27 symbols <= 31 (well under 50).
+ * Cron schedule (all well under Cloudflare's 50-subrequest free-tier limit):
+ * - `* /5 * * * *`      : 1D intraday refresh for actively-trading symbols only (<= 29 subrequests)
+ * - `3 * /2 * * *`      : 5D hourly (16 symbols) + CNN Fear & Greed (18 subrequests)
+ * - `20 14,21 * * 1-5`  : 30D daily closes for all 27 symbols (29 subrequests)
+ *
+ * On-demand `GET /markets`:
+ * - Default: serves full `markets:latest` snapshot directly from KV (<50ms, 0 Yahoo calls).
+ * - `?force=1`: refreshes actively-trading symbols on demand (rate-limited to
+ *   <= 3 fetches per symbol every 5 minutes; returns HTTP 429 when exceeded so
+ *   the client cleanly falls back to public CORS relays).
  */
 
-const ALLOWED_SYMBOLS = new Set([
-  // Watchlist (9)
-  "^GSPC",
-  "^IXIC",
-  "^DJI",
-  "^RUT",
-  "^VIX",
-  "^TNX",
-  "CL=F",
-  "GC=F",
-  "BTC-USD",
-  // Magnificent 7 (7)
-  "AAPL",
-  "MSFT",
-  "GOOGL",
-  "AMZN",
-  "NVDA",
-  "META",
-  "TSLA",
-  // 11 GICS SPDR Sector ETFs
-  "XLK",
-  "XLF",
-  "XLV",
-  "XLE",
-  "XLI",
-  "XLY",
-  "XLP",
-  "XLU",
-  "XLRE",
-  "XLB",
-  "XLC",
-]);
+const WATCHLIST_CONFIG = [
+  { symbol: "^GSPC", name: "S&P 500", group: "Equity" },
+  { symbol: "^IXIC", name: "Nasdaq", group: "Equity" },
+  { symbol: "^DJI", name: "Dow Jones", group: "Equity" },
+  { symbol: "^RUT", name: "Russell 2000", group: "Equity" },
+  { symbol: "^VIX", name: "VIX", group: "Volatility" },
+  { symbol: "^TNX", name: "US 10Y Yield", group: "Rates" },
+  { symbol: "CL=F", name: "WTI Crude", group: "Commodities" },
+  { symbol: "GC=F", name: "Gold", group: "Commodities" },
+  { symbol: "BTC-USD", name: "Bitcoin", group: "Crypto" },
+];
 
-const ALL_SYMBOLS_LIST = [...ALLOWED_SYMBOLS];
-const SYMBOL_CACHE_TTL_MS = 100 * 1000; // 100s -> max 3 fetches per 5 min
+const BIG7_CONFIG = [
+  { symbol: "AAPL", name: "Apple", group: "Big 7" },
+  { symbol: "MSFT", name: "Microsoft", group: "Big 7" },
+  { symbol: "GOOGL", name: "Alphabet", group: "Big 7" },
+  { symbol: "AMZN", name: "Amazon", group: "Big 7" },
+  { symbol: "NVDA", name: "Nvidia", group: "Big 7" },
+  { symbol: "META", name: "Meta", group: "Big 7" },
+  { symbol: "TSLA", name: "Tesla", group: "Big 7" },
+];
+
+const SECTORS_CONFIG = [
+  { symbol: "XLK", name: "Technology" },
+  { symbol: "XLF", name: "Financials" },
+  { symbol: "XLV", name: "Health Care" },
+  { symbol: "XLE", name: "Energy" },
+  { symbol: "XLI", name: "Industrials" },
+  { symbol: "XLY", name: "Cons. Discret." },
+  { symbol: "XLP", name: "Cons. Staples" },
+  { symbol: "XLU", name: "Utilities" },
+  { symbol: "XLRE", name: "Real Estate" },
+  { symbol: "XLB", name: "Materials" },
+  { symbol: "XLC", name: "Comm. Services" },
+];
+
+const QUOTE_SYMBOLS = [...WATCHLIST_CONFIG, ...BIG7_CONFIG].map((c) => c.symbol);
+const SECTOR_SYMBOLS = SECTORS_CONFIG.map((c) => c.symbol);
+const ALL_SYMBOLS_LIST = [...QUOTE_SYMBOLS, ...SECTOR_SYMBOLS];
+const ALLOWED_SYMBOLS = new Set(ALL_SYMBOLS_LIST);
+
+const KV_KEY_LATEST = "markets:latest";
+const RL_CACHE_KEY = new Request("https://rl.briefing-markets.internal/v3/all");
 const RL_WINDOW_MS = 5 * 60 * 1000;
 const RL_MAX_FETCHES = 3;
 
-const QUOTES_CACHE_KEY = new Request("https://quote.briefing-markets.internal/v3/all");
-const RL_CACHE_KEY = new Request("https://rl.briefing-markets.internal/v2/all");
+const YF_HEADERS = {
+  "User-Agent":
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+  Accept: "application/json",
+};
 
 const NY_PARTS_FMT = new Intl.DateTimeFormat("en-US", {
   timeZone: "America/New_York",
@@ -85,8 +102,15 @@ function isUsMarketHolidayEt(y, m, d) {
     return fmt(dt);
   };
   return new Set([
-    obs(1, 1), nth(1, 1, 3), nth(2, 1, 3), last(5, 1),
-    obs(6, 19), obs(7, 4), nth(9, 1, 1), nth(11, 4, 4), obs(12, 25),
+    obs(1, 1),
+    nth(1, 1, 3),
+    nth(2, 1, 3),
+    last(5, 1),
+    obs(6, 19),
+    obs(7, 4),
+    nth(9, 1, 1),
+    nth(11, 4, 4),
+    obs(12, 25),
   ]).has(iso);
 }
 
@@ -141,13 +165,21 @@ function jsonResponse(body, status, request, extraHeaders = {}) {
   });
 }
 
-function parseYahooChart(symbol, payload) {
+function pctChange(cur, prev) {
+  if (!Number.isFinite(cur) || !Number.isFinite(prev) || prev === 0) return 0;
+  return Number((((cur - prev) / prev) * 100).toFixed(2));
+}
+
+function roundPrice(val, symbol) {
+  return Number(Number(val).toFixed(symbol === "^TNX" ? 3 : 2));
+}
+
+function parseYahoo1D(symbol, payload) {
   const result = payload?.chart?.result?.[0];
   if (!result) return null;
   const meta = result.meta || {};
   const rawTimestamps = Array.isArray(result.timestamp) ? result.timestamp : [];
   const rawCloses = result.indicators?.quote?.[0]?.close || [];
-
   const isRolling24h = symbol === "BTC-USD";
   const cutoffSec = isRolling24h ? Math.floor(Date.now() / 1000) - 86400 : 0;
 
@@ -176,10 +208,7 @@ function parseYahooChart(symbol, payload) {
       ? meta.regularMarketPrice
       : null;
   const price =
-    symbol === "^TNX" || symbol.startsWith("^")
-      ? regularPrice ?? lastBar
-      : lastBar ?? regularPrice;
-
+    symbol === "^TNX" || symbol.startsWith("^") ? regularPrice ?? lastBar : lastBar ?? regularPrice;
   const prevClose = isRolling24h
     ? sparkVals.length
       ? sparkVals[0]
@@ -193,45 +222,307 @@ function parseYahooChart(symbol, payload) {
     : null;
 
   if (price == null || !Number.isFinite(price)) return null;
-
-  const changePct =
-    prevClose && prevClose > 0 ? Number((((price - prevClose) / prevClose) * 100).toFixed(2)) : 0;
-
   return {
     symbol,
-    price: Number(price.toFixed(symbol === "^TNX" ? 3 : 2)),
-    change_pct: changePct,
+    price: roundPrice(price, symbol),
+    change_pct: pctChange(price, prevClose),
     sparkline_1d: sparkVals,
     sparkline_1d_times: sparkTimes,
-    market_state: meta.marketState || null,
   };
 }
 
-async function fetchYahooOne(symbol) {
-  const isRolling24h = symbol === "BTC-USD";
-  const rangeParams = isRolling24h
-    ? "range=2d&interval=15m"
-    : "range=1d&interval=5m&includePrePost=true";
+function parseYahooSeries(symbol, payload, formatDateOnly = false, maxPoints = 96) {
+  const result = payload?.chart?.result?.[0];
+  if (!result) return null;
+  const rawTimestamps = Array.isArray(result.timestamp) ? result.timestamp : [];
+  const rawCloses = result.indicators?.quote?.[0]?.close || [];
+  const valid = [];
+  for (let i = 0; i < rawTimestamps.length; i++) {
+    const v = rawCloses[i];
+    if (v == null || !Number.isFinite(Number(v))) continue;
+    const iso = new Date(rawTimestamps[i] * 1000).toISOString();
+    valid.push([formatDateOnly ? iso.slice(0, 10) : iso, Number(Number(v).toFixed(2))]);
+  }
+  const sliced = valid.slice(-maxPoints);
+  if (sliced.length < 2) return null;
+  return {
+    symbol,
+    values: sliced.map((x) => x[1]),
+    times: sliced.map((x) => x[0]),
+  };
+}
+
+async function fetchYahooChart(symbol, queryStr) {
   const yfUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(
     symbol
-  )}?${rangeParams}`;
+  )}?${queryStr}`;
   try {
-    const resp = await fetch(yfUrl, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
-        Accept: "application/json",
-      },
-    });
-    if (!resp.ok) return { symbol, quote: null, rateLimited: resp.status === 429 };
-    const payload = await resp.json();
-    return { symbol, quote: parseYahooChart(symbol, payload), rateLimited: false };
+    const resp = await fetch(yfUrl, { headers: YF_HEADERS });
+    if (!resp.ok) return { ok: false, status: resp.status, data: null };
+    return { ok: true, status: 200, data: await resp.json() };
   } catch {
-    return { symbol, quote: null, rateLimited: false };
+    return { ok: false, status: 0, data: null };
   }
 }
 
+async function fetchFearGreed() {
+  try {
+    const resp = await fetch("https://production.dataviz.cnn.io/index/fearandgreed/graphdata", {
+      headers: YF_HEADERS,
+    });
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    const fg = data?.fear_and_greed;
+    if (!fg || fg.score == null) return null;
+    return {
+      score: Number(Number(fg.score).toFixed(1)),
+      rating: String(fg.rating || "Neutral"),
+      previous_close: fg.previous_close != null ? Number(Number(fg.previous_close).toFixed(1)) : null,
+      previous_1_week: fg.previous_1_week != null ? Number(Number(fg.previous_1_week).toFixed(1)) : null,
+      previous_1_month: fg.previous_1_month != null ? Number(Number(fg.previous_1_month).toFixed(1)) : null,
+      previous_1_year: fg.previous_1_year != null ? Number(Number(fg.previous_1_year).toFixed(1)) : null,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function emptyState() {
+  return {
+    updated_at: new Date().toISOString(),
+    source: "cloudflare-kv",
+    health: "ok",
+    watchlist: WATCHLIST_CONFIG.map((c) => ({ ...c, price: 0, change_pct: 0, change_5d_pct: 0, change_30d_pct: 0, sparkline_1d: [], sparkline_1d_times: [], sparkline_5d: [], sparkline_5d_times: [], sparkline_30d: [], sparkline_30d_times: [] })),
+    big7: BIG7_CONFIG.map((c) => ({ ...c, price: 0, change_pct: 0, change_5d_pct: 0, change_30d_pct: 0, sparkline_1d: [], sparkline_1d_times: [], sparkline_5d: [], sparkline_5d_times: [], sparkline_30d: [], sparkline_30d_times: [] })),
+    sectors: SECTORS_CONFIG.map((c) => ({ ...c, change_pct: 0, change_5d_pct: 0, change_30d_pct: 0 })),
+    fear_greed: null,
+  };
+}
+
+async function loadState(env) {
+  try {
+    const stored = await env.MARKETS_KV.get(KV_KEY_LATEST, { type: "json" });
+    if (stored && Array.isArray(stored.watchlist) && stored.watchlist.length) {
+      return stored;
+    }
+  } catch {
+    // Fall through to seed
+  }
+  // One-time bootstrap seed from GitHub Pages static snapshot if KV is empty
+  try {
+    const seedResp = await fetch("https://tzm41.github.io/briefing/data/markets_live.json");
+    if (seedResp.ok) {
+      const seed = await seedResp.json();
+      if (seed && Array.isArray(seed.watchlist) && seed.watchlist.length) {
+        seed.source = "cloudflare-kv";
+        await env.MARKETS_KV.put(KV_KEY_LATEST, JSON.stringify(seed));
+        return seed;
+      }
+    }
+  } catch {
+    // Fall back to empty state
+  }
+  return emptyState();
+}
+
+async function saveState(env, state) {
+  state.updated_at = new Date().toISOString();
+  state.source = "cloudflare-kv";
+  await env.MARKETS_KV.put(KV_KEY_LATEST, JSON.stringify(state));
+}
+
+function apply1DUpdates(state, map1d) {
+  const patchList = (arr) =>
+    (arr || []).map((item) => {
+      const u = map1d[item.symbol];
+      if (!u) return item;
+      const s5 = Array.isArray(item.sparkline_5d) ? [...item.sparkline_5d] : [];
+      const s30 = Array.isArray(item.sparkline_30d) ? [...item.sparkline_30d] : [];
+      if (s5.length) s5[s5.length - 1] = u.price;
+      if (s30.length) s30[s30.length - 1] = u.price;
+      return {
+        ...item,
+        price: u.price,
+        change_pct: u.change_pct,
+        change_5d_pct: s5.length >= 2 ? pctChange(u.price, s5[0]) : item.change_5d_pct,
+        change_30d_pct: s30.length >= 2 ? pctChange(u.price, s30[0]) : item.change_30d_pct,
+        sparkline_1d: u.sparkline_1d.length >= 2 ? u.sparkline_1d : item.sparkline_1d,
+        sparkline_1d_times: u.sparkline_1d_times.length >= 2 ? u.sparkline_1d_times : item.sparkline_1d_times,
+        sparkline_5d: s5,
+        sparkline_30d: s30,
+      };
+    });
+
+  state.watchlist = patchList(state.watchlist);
+  state.big7 = patchList(state.big7);
+  state.sectors = (state.sectors || []).map((sec) => {
+    const u = map1d[sec.symbol];
+    return u ? { ...sec, change_pct: u.change_pct } : sec;
+  });
+}
+
+async function runIntradayRefresh(env, requestedSymbols = null) {
+  const state = await loadState(env);
+  const pool = requestedSymbols || ALL_SYMBOLS_LIST;
+  const active = pool.filter((sym) => isSymbolTradingNow(sym));
+  if (!active.length) return { state, fetchedCount: 0, rateLimited: false };
+
+  const results = await Promise.all(
+    active.map(async (sym) => {
+      const q = sym === "BTC-USD" ? "range=2d&interval=15m" : "range=1d&interval=5m&includePrePost=true";
+      const res = await fetchYahooChart(sym, q);
+      if (!res.ok) return { sym, parsed: null, rateLimited: res.status === 429 };
+      return { sym, parsed: parseYahoo1D(sym, res.data), rateLimited: false };
+    })
+  );
+
+  const map1d = {};
+  let rateLimited = false;
+  for (const r of results) {
+    if (r.parsed) map1d[r.sym] = r.parsed;
+    if (r.rateLimited) rateLimited = true;
+  }
+
+  const fetchedCount = Object.keys(map1d).length;
+  if (fetchedCount > 0) {
+    apply1DUpdates(state, map1d);
+    await saveState(env, state);
+  }
+  return { state, fetchedCount, rateLimited };
+}
+
+async function run5DAndFearGreedRefresh(env) {
+  const state = await loadState(env);
+  const [seriesResults, fg] = await Promise.all([
+    Promise.all(
+      QUOTE_SYMBOLS.map(async (sym) => {
+        const res = await fetchYahooChart(sym, "range=5d&interval=1h");
+        return res.ok ? parseYahooSeries(sym, res.data, false, 120) : null;
+      })
+    ),
+    fetchFearGreed(),
+  ]);
+
+  const map5d = {};
+  for (const s of seriesResults) {
+    if (s) map5d[s.symbol] = s;
+  }
+
+  const patch5d = (arr) =>
+    (arr || []).map((item) => {
+      const s = map5d[item.symbol];
+      if (!s) return item;
+      const latest = item.price || s.values[s.values.length - 1];
+      return {
+        ...item,
+        change_5d_pct: pctChange(latest, s.values[0]),
+        sparkline_5d: s.values,
+        sparkline_5d_times: s.times,
+      };
+    });
+
+  state.watchlist = patch5d(state.watchlist);
+  state.big7 = patch5d(state.big7);
+  if (fg) state.fear_greed = fg;
+  await saveState(env, state);
+}
+
+async function run30DRefresh(env) {
+  const state = await loadState(env);
+  const seriesResults = await Promise.all(
+    ALL_SYMBOLS_LIST.map(async (sym) => {
+      const res = await fetchYahooChart(sym, "range=45d&interval=1d");
+      return res.ok ? parseYahooSeries(sym, res.data, true, 30) : null;
+    })
+  );
+
+  const map30d = {};
+  for (const s of seriesResults) {
+    if (s) map30d[s.symbol] = s;
+  }
+
+  const patch30d = (arr) =>
+    (arr || []).map((item) => {
+      const s = map30d[item.symbol];
+      if (!s) return item;
+      const latest = item.price || s.values[s.values.length - 1];
+      return {
+        ...item,
+        change_30d_pct: pctChange(latest, s.values[0]),
+        sparkline_30d: s.values,
+        sparkline_30d_times: s.times,
+      };
+    });
+
+  state.watchlist = patch30d(state.watchlist);
+  state.big7 = patch30d(state.big7);
+  state.sectors = (state.sectors || []).map((sec) => {
+    const s = map30d[sec.symbol];
+    if (!s || s.values.length < 2) return sec;
+    const latest = s.values[s.values.length - 1];
+    const prev1d = s.values[s.values.length - 2];
+    const prev5d = s.values.length >= 6 ? s.values[s.values.length - 6] : s.values[0];
+    return {
+      ...sec,
+      change_pct: pctChange(latest, prev1d),
+      change_5d_pct: pctChange(latest, prev5d),
+      change_30d_pct: pctChange(latest, s.values[0]),
+    };
+  });
+
+  await saveState(env, state);
+}
+
+async function consumeRateLimit(cache, symbols) {
+  const now = Date.now();
+  let rlStore = {};
+  const existing = await cache.match(RL_CACHE_KEY);
+  if (existing) {
+    try {
+      rlStore = (await existing.json()) || {};
+    } catch {
+      rlStore = {};
+    }
+  }
+
+  const allowed = [];
+  let maxRetryAfter = 0;
+  for (const sym of symbols) {
+    const recent = Array.isArray(rlStore[sym])
+      ? rlStore[sym].filter((t) => typeof t === "number" && now - t < RL_WINDOW_MS)
+      : [];
+    if (recent.length >= RL_MAX_FETCHES) {
+      const oldest = Math.min(...recent);
+      maxRetryAfter = Math.max(maxRetryAfter, Math.max(1, Math.ceil((oldest + RL_WINDOW_MS - now) / 1000)));
+    } else {
+      recent.push(now);
+      rlStore[sym] = recent;
+      allowed.push(sym);
+    }
+  }
+
+  await cache.put(
+    RL_CACHE_KEY,
+    new Response(JSON.stringify(rlStore), {
+      headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=300" },
+    })
+  );
+  return { allowed, maxRetryAfter };
+}
+
 export default {
+  async scheduled(controller, env, ctx) {
+    const cron = controller.cron || "";
+    if (cron === "3 */2 * * *") {
+      ctx.waitUntil(run5DAndFearGreedRefresh(env));
+    } else if (cron === "20 14,21 * * 1-5") {
+      ctx.waitUntil(run30DRefresh(env));
+    } else {
+      // Default: */5 * * * * intraday refresh for actively-trading symbols
+      ctx.waitUntil(runIntradayRefresh(env));
+    }
+  },
+
   async fetch(request, env, ctx) {
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders(request) });
@@ -241,146 +532,49 @@ export default {
     }
 
     const url = new URL(request.url);
-    const cache = caches.default;
-
     if (url.pathname === "/health") {
-      return jsonResponse({ ok: true, symbols: ALL_SYMBOLS_LIST.length }, 200, request);
+      return jsonResponse({ ok: true, symbols: ALL_SYMBOLS_LIST.length, storage: "kv" }, 200, request);
     }
 
     if (url.pathname === "/markets" || url.pathname === "/") {
-      const rawParam = url.searchParams.get("symbols");
       const force = url.searchParams.get("force") === "1";
+      const rawParam = url.searchParams.get("symbols");
       const requested = rawParam
         ? rawParam
             .split(",")
             .map((s) => s.trim())
             .filter((s) => ALLOWED_SYMBOLS.has(s))
-        : ALL_SYMBOLS_LIST;
+        : null;
 
-      if (!requested.length) {
-        return jsonResponse({ error: "No valid symbols requested" }, 400, request);
-      }
-
-      const now = Date.now();
-      const [cachedQuotesResp, rlResp] = await Promise.all([
-        cache.match(QUOTES_CACHE_KEY),
-        cache.match(RL_CACHE_KEY),
-      ]);
-
-      let quoteStore = {};
-      if (cachedQuotesResp) {
-        try {
-          quoteStore = (await cachedQuotesResp.json()) || {};
-        } catch {
-          quoteStore = {};
-        }
-      }
-
-      let rlStore = {};
-      if (rlResp) {
-        try {
-          rlStore = (await rlResp.json()) || {};
-        } catch {
-          rlStore = {};
-        }
-      }
-
-      const quotes = {};
-      const toFetch = [];
-      let cacheHits = 0;
-      let rateLimitedCount = 0;
-      let maxRetryAfter = 0;
-
-      for (const sym of requested) {
-        const entry = quoteStore[sym];
-        const trading = isSymbolTradingNow(sym);
-        if (!trading) {
-          // Market closed for this symbol: serve cached snapshot if present, skip upstream fetch
-          if (entry?.quote) {
-            quotes[sym] = entry.quote;
-            cacheHits += 1;
+      if (force) {
+        const active = (requested || ALL_SYMBOLS_LIST).filter((sym) => isSymbolTradingNow(sym));
+        if (active.length) {
+          const rl = await consumeRateLimit(caches.default, active);
+          if (!rl.allowed.length) {
+            return jsonResponse(
+              {
+                error: "rate_limited",
+                message: "Cloudflare Worker per-symbol rate limit reached (max 3 fetches / 5 min).",
+                retry_after: rl.maxRetryAfter || 60,
+              },
+              429,
+              request,
+              { "Retry-After": String(rl.maxRetryAfter || 60) }
+            );
           }
-          continue;
-        }
-        if (!force && entry?.quote && typeof entry.ts === "number" && now - entry.ts < SYMBOL_CACHE_TTL_MS) {
-          quotes[sym] = entry.quote;
-          cacheHits += 1;
-          continue;
-        }
-        const recent = Array.isArray(rlStore[sym])
-          ? rlStore[sym].filter((t) => typeof t === "number" && now - t < RL_WINDOW_MS)
-          : [];
-        rlStore[sym] = recent;
-        if (recent.length >= RL_MAX_FETCHES) {
-          rateLimitedCount += 1;
-          const oldest = Math.min(...recent);
-          maxRetryAfter = Math.max(maxRetryAfter, Math.max(1, Math.ceil((oldest + RL_WINDOW_MS - now) / 1000)));
-        } else {
-          recent.push(now);
-          toFetch.push(sym);
+          const { state } = await runIntradayRefresh(env, rl.allowed);
+          return jsonResponse(state, 200, request, {
+            "Cache-Control": "public, max-age=0",
+            "X-RateLimit-Policy": `${RL_MAX_FETCHES};w=${RL_WINDOW_MS / 1000}`,
+          });
         }
       }
 
-      if (toFetch.length > 0) {
-        const fetched = await Promise.all(toFetch.map(fetchYahooOne));
-        for (const r of fetched) {
-          if (r.quote) {
-            quotes[r.symbol] = r.quote;
-            quoteStore[r.symbol] = { quote: r.quote, ts: now };
-          } else if (r.rateLimited) {
-            rateLimitedCount += 1;
-            maxRetryAfter = Math.max(maxRetryAfter, 60);
-          }
-        }
-
-        ctx.waitUntil(
-          Promise.all([
-            cache.put(
-              QUOTES_CACHE_KEY,
-              new Response(JSON.stringify(quoteStore), {
-                headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=300" },
-              })
-            ),
-            cache.put(
-              RL_CACHE_KEY,
-              new Response(JSON.stringify(rlStore), {
-                headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=300" },
-              })
-            ),
-          ])
-        );
-      }
-
-      const quoteCount = Object.keys(quotes).length;
-      if (quoteCount === 0 && rateLimitedCount > 0) {
-        return jsonResponse(
-          {
-            error: "rate_limited",
-            message: "Cloudflare Worker per-symbol rate limit reached (max 3 fetches / 5 min).",
-            retry_after: maxRetryAfter,
-          },
-          429,
-          request,
-          { "Retry-After": String(maxRetryAfter) }
-        );
-      }
-
-      return jsonResponse(
-        {
-          updated_at: new Date().toISOString(),
-          source: "cloudflare",
-          count: quoteCount,
-          cache_hits: cacheHits,
-          rate_limited_count: rateLimitedCount,
-          quotes,
-        },
-        200,
-        request,
-        {
-          "Cache-Control": `public, max-age=${force ? 0 : 60}`,
-          "X-RateLimit-Policy": `${RL_MAX_FETCHES};w=${RL_WINDOW_MS / 1000}`,
-        }
-      );
+      const state = await loadState(env);
+      return jsonResponse(state, 200, request, {
+        "Cache-Control": "public, max-age=60",
+        "X-RateLimit-Policy": `${RL_MAX_FETCHES};w=${RL_WINDOW_MS / 1000}`,
+      });
     }
 
     return jsonResponse({ error: "Not found" }, 404, request);

@@ -2013,7 +2013,7 @@ function updateArchiveButtons() {
 }
 
 const CF_MARKETS_PROXY_URL = "https://briefing-markets-proxy.tzm41.workers.dev/markets";
-const LIVE_CACHE_KEY = "briefing-live-markets-cache-v2";
+const LIVE_CACHE_KEY = "briefing-live-markets-cache-v3";
 const CF_RL_KEY = "briefing-cf-rl-v1";
 const LIVE_CACHE_TTL_MS = 100 * 1000; // 100s TTL -> max 3 fetches per 5 min
 const CF_RL_WINDOW_MS = 5 * 60 * 1000;
@@ -2348,33 +2348,60 @@ function applyMarketQuotesPatch(quotesMap, updatedAt, sourceTag = "") {
   updateMarketsLivePill(updatedAt, sourceTag);
 }
 
+function applyFullMarketsSnapshot(snap, sourceTag = "cloudflare") {
+  if (!state.briefing?.markets || !snap || !Array.isArray(snap.watchlist) || !snap.watchlist.length) {
+    return false;
+  }
+  state.briefing.markets = {
+    ...state.briefing.markets,
+    watchlist: snap.watchlist,
+    big7: Array.isArray(snap.big7) && snap.big7.length ? snap.big7 : state.briefing.markets.big7,
+    sectors: Array.isArray(snap.sectors) && snap.sectors.length ? snap.sectors : state.briefing.markets.sectors,
+    fear_greed: snap.fear_greed || state.briefing.markets.fear_greed,
+  };
+  applyMarketQuotesPatch({}, snap.updated_at || new Date().toISOString(), sourceTag);
+  return true;
+}
+
+async function fetchCloudflareKvMarkets(activeSymbols, force = false) {
+  if (force && activeSymbols.length && !canCallCloudflare(activeSymbols)) {
+    return { status: 429, data: null };
+  }
+  try {
+    if (force && activeSymbols.length) recordCloudflareFetch(activeSymbols);
+    const ctrl = new AbortController();
+    const timer = window.setTimeout(() => ctrl.abort(), 8000);
+    const url = force ? `${CF_MARKETS_PROXY_URL}?force=1` : CF_MARKETS_PROXY_URL;
+    const resp = await fetch(url, { signal: ctrl.signal, cache: "no-store" });
+    window.clearTimeout(timer);
+    if (!resp.ok) return { status: resp.status, data: null };
+    const data = await resp.json();
+    if (data && Array.isArray(data.watchlist) && data.watchlist.length) {
+      return { status: 200, data };
+    }
+    return { status: 500, data: null };
+  } catch {
+    return { status: 0, data: null };
+  }
+}
+
 async function refreshLiveMarkets(forceClientRefresh = false) {
   if (!state.viewingLatest || !state.briefing) {
     els.marketsLivePill?.classList.add("hidden");
     return;
   }
-  let staticUpdatedAt = "";
-  try {
-    const resp = await fetch(`${DATA_BASE}/markets_live.json`, { cache: "no-store" });
-    if (resp.ok) {
-      const live = await resp.json();
-      if (live && Array.isArray(live.watchlist) && live.watchlist.length) {
-        staticUpdatedAt = live.updated_at || "";
-        state.briefing.markets = {
-          ...state.briefing.markets,
-          watchlist: live.watchlist,
-          big7: Array.isArray(live.big7) && live.big7.length ? live.big7 : state.briefing.markets.big7,
-          sectors: Array.isArray(live.sectors) && live.sectors.length ? live.sectors : state.briefing.markets.sectors,
-          fear_greed: live.fear_greed || state.briefing.markets.fear_greed,
-        };
-        applyMarketQuotesPatch({}, staticUpdatedAt, "static");
-      }
-    }
-  } catch {
-    // Keep daily snapshot if markets_live.json is unavailable
+
+  const cached = readJsonStorage(LIVE_CACHE_KEY);
+  const cacheFresh =
+    cached?.snapshot &&
+    typeof cached.fetched_at_ms === "number" &&
+    Date.now() - cached.fetched_at_ms < LIVE_CACHE_TTL_MS;
+
+  if (!forceClientRefresh && cacheFresh) {
+    applyFullMarketsSnapshot(cached.snapshot, cached.source || "cloudflare");
+    return;
   }
 
-  // Only request symbols currently in an active trading session (e.g. BTC-USD on holidays/weekends)
   const allSymbols = [
     ...(state.briefing.markets?.watchlist || []),
     ...(state.briefing.markets?.big7 || []),
@@ -2382,30 +2409,50 @@ async function refreshLiveMarkets(forceClientRefresh = false) {
   ]
     .map((q) => q?.symbol)
     .filter(Boolean);
-  const symbols = allSymbols.filter((sym) => isSymbolTradingNow(sym));
-  if (!symbols.length) return;
+  const activeSymbols = allSymbols.filter((sym) => isSymbolTradingNow(sym));
 
-  const staticTs = Date.parse(staticUpdatedAt) || 0;
-  const cached = readJsonStorage(LIVE_CACHE_KEY);
-  const cacheTs = cached?.updated_at ? Date.parse(cached.updated_at) || 0 : 0;
-  const cacheFresh =
-    cached?.quotes &&
-    typeof cached.fetched_at_ms === "number" &&
-    Date.now() - cached.fetched_at_ms < LIVE_CACHE_TTL_MS;
-
-  if (!forceClientRefresh && cacheFresh && cacheTs >= staticTs) {
-    applyMarketQuotesPatch(cached.quotes, cached.updated_at, cached.source || "cloudflare");
+  // Primary: Cloudflare KV Worker (full 1D/7D/30D + sectors + Fear & Greed)
+  const cfRes = await fetchCloudflareKvMarkets(activeSymbols, forceClientRefresh);
+  if (cfRes.status === 200 && cfRes.data) {
+    writeJsonStorage(LIVE_CACHE_KEY, {
+      fetched_at_ms: Date.now(),
+      source: "cloudflare",
+      snapshot: cfRes.data,
+    });
+    applyFullMarketsSnapshot(cfRes.data, "cloudflare");
     return;
   }
 
-  if (forceClientRefresh || Date.now() - staticTs > LIVE_CACHE_TTL_MS) {
-    const livePatch = await fetchClientLiveQuotes(symbols, forceClientRefresh);
-    if (livePatch?.quotes && Object.keys(livePatch.quotes).length) {
-      writeJsonStorage(LIVE_CACHE_KEY, livePatch);
-      applyMarketQuotesPatch(livePatch.quotes, livePatch.updated_at, livePatch.source);
-    } else if (cached?.quotes && cacheTs > staticTs) {
-      // Keep newer browser-cached live snapshot if upstream fetch failed
-      applyMarketQuotesPatch(cached.quotes, cached.updated_at, cached.source || "cloudflare");
+  // Fallback: load cached KV or static markets_live.json baseline, then Option 3 public CORS relay for active symbols
+  if (cached?.snapshot) {
+    applyFullMarketsSnapshot(cached.snapshot, cached.source || "cloudflare");
+  } else {
+    try {
+      const resp = await fetch(`${DATA_BASE}/markets_live.json`, { cache: "no-store" });
+      if (resp.ok) {
+        const live = await resp.json();
+        applyFullMarketsSnapshot(live, "static");
+      }
+    } catch {
+      // Keep daily briefing snapshot
+    }
+  }
+
+  if (activeSymbols.length) {
+    const corsPatch = await fetchViaPublicCorsFallback(activeSymbols);
+    if (corsPatch?.quotes && Object.keys(corsPatch.quotes).length) {
+      applyMarketQuotesPatch(corsPatch.quotes, corsPatch.updated_at, "cors-fallback");
+      writeJsonStorage(LIVE_CACHE_KEY, {
+        fetched_at_ms: Date.now(),
+        source: "cors-fallback",
+        snapshot: {
+          updated_at: corsPatch.updated_at,
+          watchlist: state.briefing.markets.watchlist,
+          big7: state.briefing.markets.big7,
+          sectors: state.briefing.markets.sectors,
+          fear_greed: state.briefing.markets.fear_greed,
+        },
+      });
     }
   }
 }

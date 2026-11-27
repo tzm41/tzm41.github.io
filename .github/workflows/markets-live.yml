@@ -1,12 +1,8 @@
 name: Pseudo-Live Market Tickers
 
 on:
-  schedule:
-    # Every 30 minutes during US market hours (Mon-Fri, offset off :00/:30 to avoid GitHub cron drops)
-    - cron: "17,47 13-21 * * 1-5"
-    # Every 1 hour outside US market hours (weekday off-hours & weekends)
-    - cron: "17 0-12,22-23 * * 1-5"
-    - cron: "17 * * * 0,6"
+  # Migrated to Cloudflare Workers KV + Cron Triggers (briefing-markets-proxy).
+  # Keep manual dispatch only as an emergency backup.
   workflow_dispatch:
 
 permissions:
