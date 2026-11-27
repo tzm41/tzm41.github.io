@@ -12,7 +12,7 @@ import {
 } from "./utils.js";
 
 const SHARE_ORIGIN = "https://briefing-markets-proxy.tzm41.workers.dev";
-const SHARE_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 21L3.5 14.5L11.5 11.5L14.5 3.5Z"/><path d="M11.5 11.5L20.5 21" fill="none"/></svg>`;
+const SHARE_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3L3 10.5L11 13L13.5 21Z"/><path d="M11 13L21 3" fill="none"/></svg>`;
 const CHECK_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="19 8 10 17 5 12" fill="none"/></svg>`;
 
 function showToast(msg) {

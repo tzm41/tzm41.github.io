@@ -1191,7 +1191,7 @@ h3 {
 .geo-mobile-card.bm-card-revealed > .share-btn:not(.is-copied) {
   opacity: 0.78;
   pointer-events: auto;
-  transform: translateY(-9px);
+  transform: translateY(-7px);
 }
 
 .share-btn:hover,
@@ -1210,13 +1210,13 @@ h3 {
 .geo-mobile-card.bm-card-revealed > .share-btn:hover {
   opacity: 1;
   color: var(--accent);
-  transform: translateY(-2px);
+  transform: translateY(1px);
 }
 
 .share-btn.is-copied {
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(-2px);
+  transform: translateY(1px);
   color: var(--pos);
 }
 
