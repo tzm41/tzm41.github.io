@@ -94,21 +94,17 @@ def _render_html_to_png(html_doc: str, out_png: Path) -> bool:
 
 def _build_card_html(
     *,
-    kicker: str,
+    date_label: str,
     title: str,
-    subtitle: str,
     accent: str,
-    badge: str = "",
-    items: list[tuple[str, str]] | None = None,
-    footer_right: str = "colintan.dev",
+    items: list[str] | None = None,
 ) -> str:
-    badge_html = (
-        f'<span class="badge">{html.escape(badge)}</span>' if badge else ""
-    )
     rows_html = ""
-    for tag, line in (items or [])[:3]:
-        tag_html = f'<span class="tag">{html.escape(tag)}</span>' if tag else ""
-        rows_html += f'<div class="item">{tag_html}<span class="line">{html.escape(line)}</span></div>'
+    for line in (items or [])[:3]:
+        rows_html += (
+            f'<div class="item"><span class="dot"></span>'
+            f'<span class="line">{html.escape(line)}</span></div>'
+        )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -128,125 +124,88 @@ def _build_card_html(
   .frame {{
     width: 1200px;
     height: 630px;
-    padding: 52px 64px 44px;
+    padding: 46px 60px 36px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-top: 10px solid {accent};
-    background: radial-gradient(circle at 92% 12%, {accent}14 0%, transparent 45%), #faf8f5;
+    border-top: 12px solid {accent};
+    background: radial-gradient(circle at 92% 10%, {accent}14 0%, transparent 45%), #faf8f5;
   }}
-  .top-row {{
+  .header {{
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
-    gap: 16px;
-  }}
-  .kicker {{
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: {accent};
-  }}
-  .badge {{
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 16px;
-    font-weight: 600;
-    color: {accent};
-    background: {accent}16;
-    border: 1px solid {accent}38;
-    padding: 6px 14px;
-    border-radius: 999px;
-  }}
-  .hero {{
-    margin-top: 18px;
+    gap: 24px;
+    padding-bottom: 22px;
+    border-bottom: 2px solid #e4dfd6;
   }}
   h1 {{
     font-family: Georgia, "Times New Roman", serif;
     font-size: 64px;
     font-weight: 700;
     letter-spacing: -0.025em;
-    line-height: 1.06;
+    line-height: 1.05;
     color: #181a1f;
+    white-space: nowrap;
   }}
-  .subtitle {{
-    margin-top: 12px;
-    font-size: 23px;
-    line-height: 1.4;
-    color: #4a505c;
-    max-width: 1020px;
+  .date {{
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 25px;
+    font-weight: 600;
+    color: {accent};
+    white-space: nowrap;
   }}
   .items {{
-    margin-top: 24px;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    border-top: 1px solid #e4dfd6;
-    padding-top: 22px;
+    justify-content: center;
+    gap: 26px;
+    padding: 18px 0;
   }}
   .item {{
     display: flex;
-    align-items: baseline;
-    gap: 14px;
-    font-size: 21px;
-    line-height: 1.35;
-    color: #181a1f;
+    align-items: flex-start;
+    gap: 20px;
   }}
-  .tag {{
+  .dot {{
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: {accent};
     flex-shrink: 0;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: {accent};
-    background: {accent}15;
-    padding: 4px 10px;
-    border-radius: 5px;
-    min-width: 98px;
-    text-align: center;
+    margin-top: 15px;
   }}
   .line {{
-    font-weight: 500;
+    font-size: 35px;
+    font-weight: 600;
+    line-height: 1.24;
+    letter-spacing: -0.015em;
+    color: #181a1f;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }}
   .footer {{
-    margin-top: auto;
-    padding-top: 18px;
-    border-top: 1px solid #e4dfd6;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: 600;
     color: #6f7684;
-  }}
-  .brand {{
-    font-weight: 700;
-    color: #181a1f;
   }}
 </style>
 </head>
 <body>
   <div class="frame">
-    <div>
-      <div class="top-row">
-        <span class="kicker">{html.escape(kicker)}</span>
-        {badge_html}
-      </div>
-      <div class="hero">
-        <h1>{html.escape(title)}</h1>
-        <p class="subtitle">{html.escape(subtitle)}</p>
-      </div>
-      {f'<div class="items">{rows_html}</div>' if rows_html else ''}
+    <div class="header">
+      <h1>{html.escape(title)}</h1>
+      <span class="date">{html.escape(date_label)}</span>
     </div>
-    <div class="footer">
-      <span class="brand">colintan.dev</span>
-      <span>{html.escape(footer_right)}</span>
-    </div>
+    <div class="items">{rows_html}</div>
+    <div class="footer">colintan.dev</div>
   </div>
 </body>
 </html>
@@ -303,18 +262,14 @@ def generate_daily_og(briefing_dict: dict[str, Any]) -> None:
     """Generate `briefing/og-latest.png` and update `briefing/index.html` OG meta tags."""
     date_str = str(briefing_dict.get("date") or "")
     readable = _fmt_readable_date(date_str)
-    regime = str((briefing_dict.get("markets") or {}).get("regime_tag") or "")
     top_news = briefing_dict.get("top_news") or []
     bullets = (briefing_dict.get("morning_brief") or {}).get("bullets") or []
 
-    items: list[tuple[str, str]] = []
-    for st in top_news[:3]:
-        items.append((str(st.get("category") or "News"), _truncate(str(st.get("headline") or ""), 74)))
+    items: list[str] = [_truncate(str(st.get("headline") or ""), 84) for st in top_news[:3]]
     if not items:
         for b in bullets[:3]:
             txt = b.get("text") if isinstance(b, dict) else str(b)
-            cat = b.get("category", "Brief") if isinstance(b, dict) else "Brief"
-            items.append((str(cat), _truncate(str(txt or ""), 74)))
+            items.append(_truncate(str(txt or ""), 84))
 
     lead = ""
     if bullets:
@@ -326,13 +281,10 @@ def generate_daily_og(briefing_dict: dict[str, Any]) -> None:
         lead = "Daily intelligence briefing covering world news, markets, global conflicts, and US politics."
 
     card_html = _build_card_html(
-        kicker=f"Daily Briefing · {readable}",
+        date_label=readable,
         title="Daily Briefing",
-        subtitle=_truncate(lead, 125),
         accent="#a63a2b",
-        badge=f"Markets: {regime}" if regime else "Morning Edition",
         items=items,
-        footer_right="News · Markets · Conflicts · US Politics",
     )
     out_png = REPO_ROOT / "briefing" / "og-latest.png"
     _render_html_to_png(card_html, out_png)
@@ -342,7 +294,7 @@ def generate_daily_og(briefing_dict: dict[str, Any]) -> None:
         title=f"Daily Briefing — {readable}",
         description=lead,
         url=f"{SITE_ORIGIN}/briefing/",
-        image_url=f"{SITE_ORIGIN}/briefing/og-latest.png?v={date_str or 'latest'}",
+        image_url=f"{SITE_ORIGIN}/briefing/og-latest.png?v={date_str or 'latest'}-2",
     )
     print(f"[og_preview] Updated Daily Briefing OG card & meta ({date_str})")
 
@@ -351,14 +303,13 @@ def generate_weekly_og(weekly_dict: dict[str, Any]) -> None:
     """Generate `weekly/og-latest.png` and update `weekly/index.html` OG meta tags."""
     date_str = str(weekly_dict.get("date") or "")
     readable = _fmt_readable_date(date_str)
-    theme = str(weekly_dict.get("theme_title") or "Sunday Edition")
     digest = weekly_dict.get("digest") or []
 
-    items: list[tuple[str, str]] = []
-    for sec_key, label in [("science", "Science"), ("culture", "Culture"), ("history", "History")]:
+    items: list[str] = []
+    for sec_key in ("science", "culture", "history"):
         sec_items = (weekly_dict.get(sec_key) or {}).get("items") or []
         if sec_items:
-            items.append((label, _truncate(str(sec_items[0].get("headline") or ""), 74)))
+            items.append(_truncate(str(sec_items[0].get("headline") or ""), 84))
 
     lead = ""
     if digest:
@@ -368,13 +319,10 @@ def generate_weekly_og(weekly_dict: dict[str, Any]) -> None:
         lead = "Sunday weekly briefing curating science, culture, arts, history, and long-form essays."
 
     card_html = _build_card_html(
-        kicker=f"Weekly Briefing · {readable}",
+        date_label=readable,
         title="Weekly Briefing",
-        subtitle=_truncate(lead, 125),
         accent="#2c5d6b",
-        badge=theme,
         items=items,
-        footer_right="Science · Culture · History · Long Reads",
     )
     out_png = REPO_ROOT / "weekly" / "og-latest.png"
     _render_html_to_png(card_html, out_png)
@@ -384,7 +332,7 @@ def generate_weekly_og(weekly_dict: dict[str, Any]) -> None:
         title=f"Weekly Briefing — {readable}",
         description=lead,
         url=f"{SITE_ORIGIN}/weekly/",
-        image_url=f"{SITE_ORIGIN}/weekly/og-latest.png?v={date_str or 'latest'}",
+        image_url=f"{SITE_ORIGIN}/weekly/og-latest.png?v={date_str or 'latest'}-2",
     )
     print(f"[og_preview] Updated Weekly Briefing OG card & meta ({date_str})")
 
@@ -392,17 +340,14 @@ def generate_weekly_og(weekly_dict: dict[str, Any]) -> None:
 def generate_static_site_ogs() -> None:
     """Generate static OG cards & meta tags for Home (`/`) and Bookmarks (`/bookmarks/`)."""
     home_html = _build_card_html(
-        kicker="colintan.dev · Editions",
+        date_label="Daily & Weekly",
         title="Home Editions",
-        subtitle="Curated intelligence and curiosity — Daily Briefing for news & markets, Weekly Briefing for science, arts & history.",
         accent="#a63a2b",
-        badge="Daily & Weekly",
         items=[
-            ("Daily", "World news, live markets & sector heatmap, conflict trackers, and US politics"),
-            ("Weekly", "Science breakthroughs, culture & arts, deep history, and Around the World"),
-            ("Bookmarks", "Cross-device synced reading list across both editions"),
+            "Daily Briefing — World news, live markets, conflicts & US politics",
+            "Weekly Briefing — Science, culture, arts, history & long reads",
+            "Bookmarks — Synced reading list across devices",
         ],
-        footer_right="colintan.dev",
     )
     _render_html_to_png(home_html, REPO_ROOT / "og-home.png")
     update_html_og_tags(
@@ -410,20 +355,18 @@ def generate_static_site_ogs() -> None:
         title="Home Editions — colintan.dev",
         description="Daily Briefing (news, markets, global conflicts & US politics) and Weekly Briefing (science, culture, arts & history).",
         url=f"{SITE_ORIGIN}/",
-        image_url=f"{SITE_ORIGIN}/og-home.png?v=1",
+        image_url=f"{SITE_ORIGIN}/og-home.png?v=2",
     )
 
     bm_html = _build_card_html(
-        kicker="colintan.dev · Reading List",
-        title="Saved Bookmarks",
-        subtitle="Your saved Daily and Weekly stories, categorized by topic with automatic cloud sync across devices.",
+        date_label="Reading List",
+        title="Bookmarks",
         accent="#2c5d6b",
-        badge="Synced Reading List",
         items=[
-            ("Daily", "Retained for 60 days across Top News, Local News & Positive News"),
-            ("Weekly", "Retained for 52 weeks across Science, Culture, History & Around the World"),
+            "Saved stories across Daily Briefing and Weekly Briefing",
+            "Categorized by topic with cloud sync across devices",
+            "Daily retained 60 days · Weekly retained 52 weeks",
         ],
-        footer_right="colintan.dev/bookmarks/",
     )
     _render_html_to_png(bm_html, REPO_ROOT / "bookmarks" / "og-bookmarks.png")
     update_html_og_tags(
@@ -431,7 +374,7 @@ def generate_static_site_ogs() -> None:
         title="Bookmarks — colintan.dev",
         description="Saved stories across Daily Briefing and Weekly Briefing, categorized by topic with cross-device sync.",
         url=f"{SITE_ORIGIN}/bookmarks/",
-        image_url=f"{SITE_ORIGIN}/bookmarks/og-bookmarks.png?v=1",
+        image_url=f"{SITE_ORIGIN}/bookmarks/og-bookmarks.png?v=2",
     )
     print("[og_preview] Updated static Home & Bookmarks OG cards & meta")
 

@@ -880,30 +880,25 @@ function buildEditionPreviewMeta(kind, data, workerOrigin, isArchive) {
 function renderDynamicOgSvg(meta) {
   const rows = (meta.items || [])
     .slice(0, 3)
-    .map(([tag, line], i) => {
-      const y = 342 + i * 54;
+    .map(([, line], i) => {
+      const y = 248 + i * 114;
+      const clean = truncatePreview(line, 56);
       return `
-    <rect x="64" y="${y - 24}" width="104" height="32" rx="5" fill="${meta.accent}" fill-opacity="0.1"/>
-    <text x="116" y="${y - 3}" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700" fill="${meta.accent}">${escapeXml(tag)}</text>
-    <text x="184" y="${y - 2}" font-family="-apple-system,BlinkMacSystemFont,Inter,sans-serif" font-size="21" font-weight="500" fill="#181a1f">${escapeXml(line)}</text>`;
+    <circle cx="72" cy="${y - 10}" r="7" fill="${meta.accent}"/>
+    <text x="98" y="${y}" font-family="-apple-system,BlinkMacSystemFont,Inter,sans-serif" font-size="34" font-weight="600" fill="#181a1f">${escapeXml(clean)}</text>`;
     })
     .join("");
 
-  const sub = truncatePreview(meta.description, 108);
+  const dateText = meta.kicker.split("·")[1]?.trim() || "";
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#faf8f5"/>
-  <rect width="1200" height="10" fill="${meta.accent}"/>
-  <text x="64" y="82" font-family="ui-monospace,Menlo,monospace" font-size="18" font-weight="600" letter-spacing="1.4" fill="${meta.accent}">${escapeXml(meta.kicker)}</text>
-  <rect x="860" y="56" width="276" height="36" rx="18" fill="${meta.accent}" fill-opacity="0.1" stroke="${meta.accent}" stroke-opacity="0.25"/>
-  <text x="998" y="80" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-size="15" font-weight="600" fill="${meta.accent}">${escapeXml(truncatePreview(meta.badge, 26))}</text>
-  <text x="64" y="168" font-family="Georgia,Times New Roman,serif" font-size="64" font-weight="700" fill="#181a1f">${escapeXml(meta.heading)}</text>
-  <text x="64" y="220" font-family="-apple-system,BlinkMacSystemFont,Inter,sans-serif" font-size="22" fill="#4a505c">${escapeXml(sub)}</text>
-  <line x1="64" y1="274" x2="1136" y2="274" stroke="#e4dfd6" stroke-width="1"/>
+  <rect width="1200" height="12" fill="${meta.accent}"/>
+  <text x="60" y="114" font-family="Georgia,Times New Roman,serif" font-size="64" font-weight="700" fill="#181a1f">${escapeXml(meta.heading)}</text>
+  <text x="1140" y="110" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="25" font-weight="600" fill="${meta.accent}">${escapeXml(dateText)}</text>
+  <line x1="60" y1="146" x2="1140" y2="146" stroke="#e4dfd6" stroke-width="2"/>
   ${rows}
-  <line x1="64" y1="538" x2="1136" y2="538" stroke="#e4dfd6" stroke-width="1"/>
-  <text x="64" y="578" font-family="ui-monospace,Menlo,monospace" font-size="16" font-weight="700" fill="#181a1f">colintan.dev</text>
-  <text x="1136" y="578" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="16" fill="#6f7684">${escapeXml(meta.footerRight)}</text>
+  <text x="1140" y="586" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="20" font-weight="600" fill="#6f7684">colintan.dev</text>
 </svg>`;
 }
 
