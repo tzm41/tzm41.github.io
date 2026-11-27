@@ -44,7 +44,8 @@ Strict rules:
 5. In executive_brief bullets, summaries, why_it_matters, narratives, overviews, and framing_notes, wrap the 1–2 highest-signal phrases per sentence (the core outcome, decisive action, or key metric — roughly 15–25% of the sentence) in **double asterisks** for scannable bold highlighting, and wrap human person names in *single asterisks* for italics. Never bold entire sentences or headlines.
 6. Limit executive_brief to at most one item primarily about the stock market on US trading days; when us_market_open_today is false (US weekends or market holidays), omit US stock market updates from the brief entirely and focus all bullets on world, policy, conflict, tech, or science developments.
 7. Never re-feature stories already listed in recently_shown_headlines_3d unless a major new development has occurred since they were shown.
-8. Produce valid JSON matching the requested schema exactly."""
+8. Whenever a story or brief mentions an ambiguous acronym, homonym, or non-obvious bank/company/person/place (for example: `ABC` as Agricultural Bank of China `abchina.com` vs ABC News `abcnews.go.com`; `BOC` as Bank of China `boc.cn` vs Bank of Canada; `CMB` as China Merchants Bank `cmbchina.com` vs cosmic microwave background; `Georgia` as the U.S. state with `type="none"` vs the country; `Apple` as fruit with `type="none"` vs the company), populate `entities` (on the story and/or top-level) with its exact `mention`, `type`, `canonical_name`, `domain` (if company/bank), and `wiki_title`.
+9. Produce valid JSON matching the requested schema exactly."""
 
 
 def _build_prompt(
@@ -456,6 +457,7 @@ def merge_synthesis(
         ),
         positive_news=ai.positive_news,
         local_news=flagged_local,
+        entities=ai.entities,
     )
 
 

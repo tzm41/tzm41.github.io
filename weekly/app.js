@@ -99,6 +99,7 @@ const els = {
 
 const entityFormatter = createEntityFormatter({
   getPersonRe: () => state.personNameRe || DEFAULT_PERSON_NAME_RE,
+  getEntities: () => state.briefing?.entities || null,
   pillCompaniesInSummary: false,
 });
 const { formatEntitiesInPlain, highlightSummaryHtml } = entityFormatter;

@@ -87,7 +87,36 @@ export const COMPANY_LOGOS = {
   ASML: "asml.com", Oracle: "oracle.com", Netflix: "netflix.com", SpaceX: "spacex.com",
   Boeing: "boeing.com", Toyota: "toyota.com", Sony: "sony.com", Nintendo: "nintendo.com",
   Disney: "disney.com", Walmart: "walmart.com", Costco: "costco.com",
-  JPMorgan: "jpmorganchase.com", "Goldman Sachs": "goldmansachs.com", Palantir: "palantir.com",
+  // Major US & Chinese Banks & Central Banks
+  "JPMorgan Chase": "jpmorganchase.com", JPMorgan: "jpmorganchase.com", "JP Morgan": "jpmorganchase.com",
+  "Chase Bank": "jpmorganchase.com", 摩根大通: "jpmorganchase.com",
+  "Bank of America": "bankofamerica.com", BofA: "bankofamerica.com", 美国银行: "bankofamerica.com",
+  Citigroup: "citigroup.com", Citibank: "citigroup.com", Citi: "citigroup.com", 花旗银行: "citigroup.com", 花旗: "citigroup.com",
+  "Wells Fargo": "wellsfargo.com", 富国银行: "wellsfargo.com",
+  "Goldman Sachs": "goldmansachs.com", 高盛: "goldmansachs.com",
+  "Morgan Stanley": "morganstanley.com", 摩根士丹利: "morganstanley.com",
+  "U.S. Bancorp": "usbank.com", "U.S. Bank": "usbank.com", "US Bank": "usbank.com",
+  "PNC Financial": "pnc.com", "PNC Bank": "pnc.com",
+  "Truist Financial": "truist.com", Truist: "truist.com",
+  "Capital One": "capitalone.com",
+  "Charles Schwab": "schwab.com", Schwab: "schwab.com",
+  "BNY Mellon": "bny.com", "Bank of New York Mellon": "bny.com",
+  "State Street": "statestreet.com",
+  "Federal Reserve": "federalreserve.gov", 美联储: "federalreserve.gov",
+  "People's Bank of China": "pbc.gov.cn", PBOC: "pbc.gov.cn", PBoC: "pbc.gov.cn", 中国人民银行: "pbc.gov.cn",
+  "Industrial and Commercial Bank of China": "icbc.com.cn", ICBC: "icbc.com.cn", 中国工商银行: "icbc.com.cn", 工商银行: "icbc.com.cn", 工行: "icbc.com.cn",
+  "China Construction Bank": "ccb.com", CCB: "ccb.com", 中国建设银行: "ccb.com", 建设银行: "ccb.com", 建行: "ccb.com",
+  "Agricultural Bank of China": "abchina.com", 中国农业银行: "abchina.com", 农业银行: "abchina.com", 农行: "abchina.com",
+  "Bank of China": "boc.cn", BOC: "boc.cn", 中国银行: "boc.cn", 中行: "boc.cn",
+  "Bank of Communications": "bankcomm.com", BoCom: "bankcomm.com", 交通银行: "bankcomm.com", 交行: "bankcomm.com",
+  "Postal Savings Bank of China": "psbc.com", PSBC: "psbc.com", 中国邮政储蓄银行: "psbc.com", 邮储银行: "psbc.com",
+  "China Merchants Bank": "cmbchina.com", CMB: "cmbchina.com", 招商银行: "cmbchina.com", 招行: "cmbchina.com",
+  "China CITIC Bank": "citicbank.com", 中信银行: "citicbank.com",
+  "Ping An Bank": "bank.pingan.com", 平安银行: "bank.pingan.com",
+  "Shanghai Pudong Development Bank": "spdb.com.cn", SPDB: "spdb.com.cn", 浦发银行: "spdb.com.cn",
+  "Industrial Bank Co.": "cib.com.cn", 兴业银行: "cib.com.cn",
+  // Enterprise, Fintech, Pharma & Energy
+  Palantir: "palantir.com",
   Salesforce: "salesforce.com", Adobe: "adobe.com", Uber: "uber.com", Stripe: "stripe.com",
   Spotify: "spotify.com", IBM: "ibm.com", Cisco: "cisco.com", SoftBank: "softbank.jp",
   Cloudflare: "cloudflare.com", CrowdStrike: "crowdstrike.com", Snowflake: "snowflake.com",
@@ -95,7 +124,6 @@ export const COMPANY_LOGOS = {
   Mastercard: "mastercard.com", Pfizer: "pfizer.com", "Eli Lilly": "lilly.com",
   "Novo Nordisk": "novonordisk.com", ExxonMobil: "exxonmobil.com", Chevron: "chevron.com",
   "Saudi Aramco": "aramco.com",
-  "Agricultural Bank of China": "abchina.com", 中国农业银行: "abchina.com", 农行: "abchina.com",
   // Major News Networks & Media
   BBC: "bbc.com", CNN: "cnn.com", Reuters: "reuters.com", Bloomberg: "bloomberg.com",
   CNBC: "cnbc.com", "Fox News": "foxnews.com", "NBC News": "nbcnews.com", NBC: "nbcnews.com",
@@ -212,10 +240,20 @@ export function glueIconWithText(iconHtml, text) {
   return `<span class="icon-glue">${iconHtml}${escapeHtml(s.slice(0, sp))}</span>${escapeHtml(s.slice(sp))}`;
 }
 
-const BANKING_ABC_RE =
-  /\b(?:ICBC|CCB|BOC|PBOC|People's Bank|Big Four|Agricultural Bank|state-owned banks?|commercial banks?|major banks?|lending|loans?|yuan|renminbi|relending|banks?|banking)\b|农行|农业银行|四大行|四大商业银行/i;
+const BANKING_CTX_RE =
+  /\b(?:ICBC|CCB|BOC|PBOC|PBoC|PSBC|BoCom|CMB|People's Bank|Big Four|Agricultural Bank|Bank of China|Construction Bank|Merchants Bank|state-owned banks?|commercial banks?|major banks?|lending|loans?|yuan|renminbi|relending|banks?|banking|deposits?|mortgages?|credit|buyback)\b|农行|农业银行|工行|建行|中行|招行|交行|四大行|四大商业银行|银行|贷款|央行/i;
+const CANADA_BANK_CTX_RE = /\b(?:Canada|Canadian|Ottawa|Macklem|loonie|CAD)\b/i;
+const BC_INSURANCE_CTX_RE = /\b(?:British Columbia|Vancouver|auto insurance|driver'?s? licen[cs]e|car insurance)\b/i;
+const COSMOLOGY_CMB_CTX_RE =
+  /\b(?:cosmic microwave|microwave background|radiation|Big Bang|cosmolog(?:y|ical)|Planck|telescope|universe|redshift|astrophysic)\b/i;
 const NON_MEDIA_ABC_RE =
   /\b(?:Alcoholic Beverage|Australian Broadcasting|Activity-Based|ABC(?:'s)?\s+of\b|ABC\s+(?:islands|weapons|stores?|liquor|board|commission|license|permit|permittee))\b/i;
+const FRUIT_APPLE_CTX_RE = /\b(?:orchard|cider|apple\s+pie|harvest|apples|fruit|grove|blossom)\b/i;
+const NON_COMPANY_META_AFTER_RE = /^-(?:analysis|analyses|study|studies|learning|data|heuristic|model|narrative|fiction|commentary)\b/i;
+const COUNTRY_GEORGIA_CTX_RE =
+  /\b(?:Tbilisi|Caucasus|Georgian Dream|South Ossetia|Abkhazia|Black Sea|Post-Soviet|Salome Zourabichvili|Irakli Kobakhidze|EU accession|EU membership|NATO|Russia(?:n)?)\b/i;
+const PERSON_BRAND_JORDAN_CTX_RE =
+  /\b(?:Michael Jordan|Jim Jordan|Air Jordan|Jordan Brand|Rep\.\s+Jordan|Jordan Peele|Jordan Peterson|Jordan Spieth|Jordan Love)\b/i;
 const NATIVE_BEFORE_RE = /\bNative\s+$/i;
 const INDIGENOUS_INDIAN_CTX_RE =
   /\b(?:American|Native|Plains|Pueblo|Navajo|Cherokee|Sioux|Apache|Mohawk|Iroquois|Algonquin|Seminole|Lakota|Shawnee|Cheyenne|Comanche|Wampanoag)\s+Indians?\b|\bIndians?\s+(?:Tribes?|Tribal|Nations?|Reservations?|Territory|Affairs|Health Service|Country|Heritage|Boarding Schools?|Child Welfare|Gaming|Lands?)\b|\b(?:Indigenous|Native Americans?|First Nations|Bureau of Indian Affairs|Pilgrims|Thanksgiving)\b/i;
@@ -225,8 +263,93 @@ const PERSON_PREFIX_STRIP_RE =
   /^(?:President|Prime Minister|Attorney General|Secretary|Chairman|Mayor|Governor|Pope|King|Queen|Justice|Judge|CEO|Sen\.-elect|Sen\.|Rep\.|Gov\.|Dr\.)\s+/i;
 const NON_INDEX_DOW_AFTER_RE = /^\s+(?:Chemical|Inc\.?|Corning|DuPont|AgroSciences)\b/i;
 
-function renderPersonSpan(raw) {
-  const title = String(raw || "").trim().replace(PERSON_PREFIX_STRIP_RE, "").trim();
+/**
+ * Declarative heuristic disambiguation rules for ambiguous tokens.
+ * Evaluated against the full text (not just a bold/non-bold slice) whenever
+ * no explicit LLM-assigned EntityIdentity overrides the mention.
+ * Each rule returns:
+ *   - { type: "company", domain, wikiTitle? }
+ *   - { type: "place", placeId }
+ *   - { type: "none" }  (suppress false positive)
+ *   - null              (fall back to default lookup)
+ */
+const HEURISTIC_DISAMBIGUATORS = {
+  ABC: ({ ctx }) => {
+    if (BANKING_CTX_RE.test(ctx)) return { type: "company", domain: "abchina.com" };
+    if (NON_MEDIA_ABC_RE.test(ctx)) return { type: "none" };
+    return { type: "company", domain: "abcnews.go.com" };
+  },
+  BOC: ({ ctx }) => {
+    if (CANADA_BANK_CTX_RE.test(ctx)) return { type: "none" };
+    if (BANKING_CTX_RE.test(ctx)) return { type: "company", domain: "boc.cn" };
+    return { type: "none" };
+  },
+  CCB: ({ ctx }) => (BANKING_CTX_RE.test(ctx) ? { type: "company", domain: "ccb.com" } : { type: "none" }),
+  CMB: ({ ctx }) => {
+    if (COSMOLOGY_CMB_CTX_RE.test(ctx)) return { type: "none" };
+    if (BANKING_CTX_RE.test(ctx)) return { type: "company", domain: "cmbchina.com" };
+    return { type: "none" };
+  },
+  ICBC: ({ ctx }) => (BC_INSURANCE_CTX_RE.test(ctx) ? { type: "none" } : { type: "company", domain: "icbc.com.cn" }),
+  Apple: ({ ctx }) => (FRUIT_APPLE_CTX_RE.test(ctx) ? { type: "none" } : null),
+  Meta: ({ after }) => (NON_COMPANY_META_AFTER_RE.test(after) ? { type: "none" } : null),
+  American: ({ before }) => (NATIVE_BEFORE_RE.test(before) ? { type: "none" } : null),
+  Americans: ({ before }) => (NATIVE_BEFORE_RE.test(before) ? { type: "none" } : null),
+  Indian: ({ ctx }) => (INDIGENOUS_INDIAN_CTX_RE.test(ctx) ? { type: "none" } : null),
+  Indians: ({ ctx }) => (INDIGENOUS_INDIAN_CTX_RE.test(ctx) ? { type: "none" } : null),
+  European: ({ after }) => (EU_INSTITUTION_AFTER_RE.test(after) ? { type: "place", placeId: "eu" } : null),
+  Georgia: ({ ctx }) => (COUNTRY_GEORGIA_CTX_RE.test(ctx) ? { type: "place", placeId: "ge" } : null),
+  Jordan: ({ ctx }) => (PERSON_BRAND_JORDAN_CTX_RE.test(ctx) ? { type: "none" } : null),
+};
+
+/**
+ * Normalize an array of LLM-assigned EntityIdentity objects into a lookup Map keyed by mention.
+ */
+export function buildEntityIdentityMap(...entityLists) {
+  const map = new Map();
+  for (const list of entityLists) {
+    if (!Array.isArray(list)) continue;
+    for (const item of list) {
+      const mention = String(item?.mention || "").trim();
+      const type = String(item?.type || "").trim().toLowerCase();
+      if (!mention || !type) continue;
+      map.set(mention, {
+        mention,
+        type,
+        canonical_name: String(item.canonical_name || "").trim(),
+        domain: String(item.domain || "").trim().toLowerCase(),
+        country_code: String(item.country_code || "").trim().toLowerCase(),
+        wiki_title: String(item.wiki_title || "").trim(),
+      });
+    }
+  }
+  return map;
+}
+
+function buildMentionRegex(extraKeys = []) {
+  if (!extraKeys.length) return ENTITY_DECORATOR_RE;
+  const keys = [
+    ...new Set([
+      ...extraKeys,
+      ...Object.keys(COMPANY_LOGOS),
+      ...Object.keys(PLACE_ALIASES),
+      ...Object.keys(US_PARTY_TAGS),
+    ]),
+  ].sort((a, b) => b.length - a.length);
+  const parts = keys.map((k) => {
+    const esc = escapeRegex(k);
+    if (!/^[\x00-\x7F]+$/.test(k)) return esc;
+    const prefix = /^\w/.test(k) ? "\\b" : "";
+    const suffix = /\w$/.test(k) ? "\\b" : "";
+    return `${prefix}${esc}${suffix}`;
+  });
+  return new RegExp(`(${parts.join("|")})`, "g");
+}
+
+function renderPersonSpan(raw, wikiTitleOverride = "") {
+  const title =
+    String(wikiTitleOverride || "").trim() ||
+    String(raw || "").trim().replace(PERSON_PREFIX_STRIP_RE, "").trim();
   const attr = title ? ` class="person-mention" tabindex="0" data-wiki-title="${escapeHtml(title)}"` : "";
   return `<em${attr}>${escapeHtml(raw)}</em>`;
 }
@@ -235,50 +358,90 @@ export function createEntityFormatter({
   getPersonRe = () => DEFAULT_PERSON_NAME_RE,
   getTickerMap = () => null,
   getInlineTickerRe = () => null,
+  getEntities = () => null,
   formatTickerTip = () => "",
   deltaClass = () => "flat",
   pillCompaniesInSummary = true,
 } = {}) {
-  const decorateFlagsAndLogos = (segment, seen = new Set(), pillCompanies = false) => {
+  const resolveEntityMap = (opts) => {
+    const globalList = typeof getEntities === "function" ? getEntities() : null;
+    const localList = opts?.entities || null;
+    if ((!globalList || !globalList.length) && (!localList || !localList.length)) return null;
+    return buildEntityIdentityMap(globalList, localList);
+  };
+
+  const decorateFlagsAndLogos = (segment, seen = new Set(), pillCompanies = false, opts = {}) => {
     if (!segment) return "";
-    ENTITY_DECORATOR_RE.lastIndex = 0;
+    const entityMap = opts._entityMap ?? resolveEntityMap(opts);
+    const fullText = opts._fullText || segment;
+    const extraKeys = entityMap
+      ? [...entityMap.keys()].filter((k) => !COMPANY_LOGOS[k] && !PLACE_ALIASES[k] && !US_PARTY_TAGS[k])
+      : [];
+    const re = extraKeys.length ? buildMentionRegex(extraKeys) : ENTITY_DECORATOR_RE;
+    re.lastIndex = 0;
+
     let out = "";
     let last = 0;
-    for (const m of segment.matchAll(ENTITY_DECORATOR_RE)) {
+    for (const m of segment.matchAll(re)) {
       const token = m[0];
       const idx = m.index ?? 0;
       if (idx > last) out += escapeHtml(segment.slice(last, idx));
-      let domain = COMPANY_LOGOS[token];
-      if (token === "ABC") {
-        const ctx = segment.slice(Math.max(0, idx - 100), Math.min(segment.length, idx + 100));
-        if (BANKING_ABC_RE.test(ctx)) {
-          domain = "abchina.com";
-        } else if (NON_MEDIA_ABC_RE.test(ctx)) {
-          domain = undefined;
+
+      let domain;
+      let placeId;
+      let party;
+      let personWiki;
+      let companyWiki;
+
+      // Tier 1: Explicit LLM-assigned semantic identity takes highest precedence
+      const explicit = entityMap?.get(token) || null;
+      if (explicit) {
+        if (explicit.type === "company") {
+          domain = explicit.domain || COMPANY_LOGOS[explicit.canonical_name] || COMPANY_LOGOS[token];
+          companyWiki = explicit.wiki_title || "";
+        } else if (explicit.type === "person") {
+          personWiki = explicit.wiki_title || explicit.canonical_name || token;
+        } else if (explicit.type === "place") {
+          placeId = explicit.country_code || PLACE_ALIASES[explicit.canonical_name] || PLACE_ALIASES[token];
+        }
+        // explicit.type === "none" intentionally leaves all fields undefined
+      } else {
+        // Tier 2: Full-text-aware heuristic disambiguator + static registries
+        const rule = HEURISTIC_DISAMBIGUATORS[token];
+        let resolved = null;
+        if (rule) {
+          const before = segment.slice(Math.max(0, idx - 24), idx);
+          const after = segment.slice(idx + token.length, Math.min(segment.length, idx + token.length + 40));
+          resolved = rule({ ctx: fullText, segment, before, after });
+        }
+        if (resolved) {
+          if (resolved.type === "company") {
+            domain = resolved.domain;
+            companyWiki = resolved.wikiTitle || "";
+          } else if (resolved.type === "place") {
+            placeId = resolved.placeId;
+          }
+          // resolved.type === "none" intentionally leaves all fields undefined
+        } else {
+          domain = COMPANY_LOGOS[token];
+          placeId = PLACE_ALIASES[token];
+          party = US_PARTY_TAGS[token];
         }
       }
-      let placeId = PLACE_ALIASES[token];
-      if (placeId === "us" && (token === "American" || token === "Americans")) {
-        const before = segment.slice(Math.max(0, idx - 12), idx);
-        if (NATIVE_BEFORE_RE.test(before)) placeId = undefined;
-      } else if (placeId === "in" && (token === "Indian" || token === "Indians")) {
-        const ctx = segment.slice(Math.max(0, idx - 60), Math.min(segment.length, idx + 60));
-        if (INDIGENOUS_INDIAN_CTX_RE.test(ctx)) placeId = undefined;
-      } else if (placeId === "continent-europe" && token === "European") {
-        const after = segment.slice(idx + token.length, Math.min(segment.length, idx + token.length + 35));
-        if (EU_INSTITUTION_AFTER_RE.test(after)) placeId = "eu";
-      }
-      const party = US_PARTY_TAGS[token];
-      if (domain) {
+
+      if (personWiki) {
+        out += renderPersonSpan(token, personWiki);
+      } else if (domain) {
         const key = `logo:${domain}`;
         let logoHtml = "";
         if (!seen.has(key)) {
           seen.add(key);
           logoHtml = renderCompanyLogoImg(domain);
         }
+        const wikiAttr = companyWiki ? ` data-wiki-title="${escapeHtml(companyWiki)}"` : "";
         out += pillCompanies
-          ? `<span class="ticker-tag is-private" tabindex="0" data-company-domain="${escapeHtml(domain)}">${glueIconWithText(logoHtml, token)}</span>`
-          : `<span class="company-mention" tabindex="0" data-company-domain="${escapeHtml(domain)}">${glueIconWithText(logoHtml, token)}</span>`;
+          ? `<span class="ticker-tag is-private" tabindex="0" data-company-domain="${escapeHtml(domain)}"${wikiAttr}>${glueIconWithText(logoHtml, token)}</span>`
+          : `<span class="company-mention" tabindex="0" data-company-domain="${escapeHtml(domain)}"${wikiAttr}>${glueIconWithText(logoHtml, token)}</span>`;
       } else if (placeId) {
         const place = PLACE_META[placeId];
         let flagHtml = "";
@@ -309,8 +472,13 @@ export function createEntityFormatter({
     return out;
   };
 
-  const formatEntitiesInPlain = (segment, seen = new Set(), pillCompanies = false) => {
+  const formatEntitiesInPlain = (segment, seen = new Set(), pillCompanies = false, opts = {}) => {
     if (!segment) return "";
+    const runOpts = opts._prepared
+      ? opts
+      : { _prepared: true, _fullText: opts._fullText || segment, _entityMap: resolveEntityMap(opts) };
+    const entityMap = runOpts._entityMap;
+
     EXPLICIT_ITALIC_RE.lastIndex = 0;
     if (EXPLICIT_ITALIC_RE.test(segment)) {
       EXPLICIT_ITALIC_RE.lastIndex = 0;
@@ -318,11 +486,12 @@ export function createEntityFormatter({
       let last = 0;
       for (const m of segment.matchAll(EXPLICIT_ITALIC_RE)) {
         const idx = m.index ?? 0;
-        if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen, pillCompanies);
-        out += renderPersonSpan(m[1]);
+        if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen, pillCompanies, runOpts);
+        const explicit = entityMap?.get(m[1]);
+        out += renderPersonSpan(m[1], explicit?.type === "person" ? explicit.wiki_title || explicit.canonical_name : "");
         last = idx + m[0].length;
       }
-      if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen, pillCompanies);
+      if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen, pillCompanies, runOpts);
       return out;
     }
 
@@ -332,21 +501,24 @@ export function createEntityFormatter({
     let last = 0;
     for (const m of segment.matchAll(personRe)) {
       const idx = m.index ?? 0;
-      if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen, pillCompanies);
-      out += renderPersonSpan(m[0]);
+      const explicit = entityMap?.get(m[0]);
+      if (explicit && explicit.type !== "person") continue;
+      if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen, pillCompanies, runOpts);
+      out += renderPersonSpan(m[0], explicit?.wiki_title || explicit?.canonical_name || "");
       last = idx + m[0].length;
     }
-    if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen, pillCompanies);
+    if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen, pillCompanies, runOpts);
     return out;
   };
 
-  const escapeWithTickers = (segment, seen = new Set()) => {
+  const escapeWithTickers = (segment, seen = new Set(), opts = {}) => {
     if (!segment) return "";
     const tickerMap = getTickerMap();
     const tickerRe = getInlineTickerRe();
     if (!tickerMap?.size || !tickerRe) {
-      return formatEntitiesInPlain(segment, seen, pillCompaniesInSummary);
+      return formatEntitiesInPlain(segment, seen, pillCompaniesInSummary, opts);
     }
+    const entityMap = opts._entityMap;
     tickerRe.lastIndex = 0;
     let out = "";
     let lastIdx = 0;
@@ -355,14 +527,16 @@ export function createEntityFormatter({
       const info = tickerMap.get(token);
       if (!info) continue;
       const idx = match.index ?? 0;
+      const explicit = entityMap?.get(token);
+      if (explicit && explicit.type !== "company") continue;
       if (token === "Dow") {
         const after = segment.slice(idx + token.length, Math.min(segment.length, idx + token.length + 24));
         if (NON_INDEX_DOW_AFTER_RE.test(after)) continue;
       }
-      if (idx > lastIdx) out += formatEntitiesInPlain(segment.slice(lastIdx, idx), seen, pillCompaniesInSummary);
+      if (idx > lastIdx) out += formatEntitiesInPlain(segment.slice(lastIdx, idx), seen, pillCompaniesInSummary, opts);
       const cls = deltaClass(info.change_pct);
       const tip = formatTickerTip(info);
-      const domain = COMPANY_LOGOS[token] || COMPANY_LOGOS[info.name];
+      const domain = explicit?.domain || COMPANY_LOGOS[token] || COMPANY_LOGOS[info.name];
       let logoHtml = "";
       if (domain) {
         const key = `logo:${domain}`;
@@ -372,18 +546,24 @@ export function createEntityFormatter({
         }
       }
       const domainAttr = domain ? ` data-company-domain="${escapeHtml(domain)}"` : "";
-      out += `<span class="ticker-tag ${cls}" tabindex="0" data-ticker-sym="${escapeHtml(info.symbol)}" data-ticker-tip="${escapeHtml(tip)}"${domainAttr} title="${escapeHtml(tip)}">${logoHtml}${escapeHtml(token)}</span>`;
+      const wikiAttr = explicit?.wiki_title ? ` data-wiki-title="${escapeHtml(explicit.wiki_title)}"` : "";
+      out += `<span class="ticker-tag ${cls}" tabindex="0" data-ticker-sym="${escapeHtml(info.symbol)}" data-ticker-tip="${escapeHtml(tip)}"${domainAttr}${wikiAttr} title="${escapeHtml(tip)}">${logoHtml}${escapeHtml(token)}</span>`;
       lastIdx = idx + token.length;
     }
-    if (lastIdx < segment.length) out += formatEntitiesInPlain(segment.slice(lastIdx), seen, pillCompaniesInSummary);
+    if (lastIdx < segment.length) out += formatEntitiesInPlain(segment.slice(lastIdx), seen, pillCompaniesInSummary, opts);
     return out;
   };
 
-  const highlightSummaryHtml = (text) => {
+  const highlightSummaryHtml = (text, opts = {}) => {
     const raw = String(text ?? "");
     if (!raw) return "";
 
     const seen = new Set();
+    const runOpts = {
+      _prepared: true,
+      _fullText: raw.replace(/\*\*/g, ""),
+      _entityMap: resolveEntityMap(opts),
+    };
     EXPLICIT_BOLD_RE.lastIndex = 0;
     const hasExplicit = EXPLICIT_BOLD_RE.test(raw);
     const re = hasExplicit ? EXPLICIT_BOLD_RE : FALLBACK_HIGHLIGHT_RE;
@@ -393,12 +573,12 @@ export function createEntityFormatter({
     let lastIdx = 0;
     for (const match of raw.matchAll(re)) {
       const idx = match.index ?? 0;
-      if (idx > lastIdx) out += escapeWithTickers(raw.slice(lastIdx, idx), seen);
+      if (idx > lastIdx) out += escapeWithTickers(raw.slice(lastIdx, idx), seen, runOpts);
       const inner = hasExplicit ? match[1] : match[0];
-      out += `<strong>${escapeWithTickers(inner, seen)}</strong>`;
+      out += `<strong>${escapeWithTickers(inner, seen, runOpts)}</strong>`;
       lastIdx = idx + match[0].length;
     }
-    if (lastIdx < raw.length) out += escapeWithTickers(raw.slice(lastIdx), seen);
+    if (lastIdx < raw.length) out += escapeWithTickers(raw.slice(lastIdx), seen, runOpts);
     return out;
   };
 
@@ -418,6 +598,31 @@ export const COMPANY_WIKI_OVERRIDES = {
   "ups.com": "United_Parcel_Service",
   "abcnews.go.com": "ABC_News",
   "abchina.com": "Agricultural_Bank_of_China",
+  "icbc.com.cn": "Industrial_and_Commercial_Bank_of_China",
+  "ccb.com": "China_Construction_Bank",
+  "boc.cn": "Bank_of_China",
+  "bankcomm.com": "Bank_of_Communications",
+  "psbc.com": "Postal_Savings_Bank_of_China",
+  "cmbchina.com": "China_Merchants_Bank",
+  "citicbank.com": "China_CITIC_Bank",
+  "bank.pingan.com": "Ping_An_Bank",
+  "spdb.com.cn": "Shanghai_Pudong_Development_Bank",
+  "cib.com.cn": "Industrial_Bank_(China)",
+  "pbc.gov.cn": "People's_Bank_of_China",
+  "jpmorganchase.com": "JPMorgan_Chase",
+  "bankofamerica.com": "Bank_of_America",
+  "citigroup.com": "Citigroup",
+  "wellsfargo.com": "Wells_Fargo",
+  "goldmansachs.com": "Goldman_Sachs",
+  "morganstanley.com": "Morgan_Stanley",
+  "usbank.com": "U.S._Bancorp",
+  "pnc.com": "PNC_Financial_Services",
+  "truist.com": "Truist_Financial",
+  "capitalone.com": "Capital_One",
+  "schwab.com": "Charles_Schwab_Corporation",
+  "bny.com": "BNY_Mellon",
+  "statestreet.com": "State_Street_Corporation",
+  "federalreserve.gov": "Federal_Reserve",
   "reuters.com": "Reuters",
   "foxnews.com": "Fox_News",
   "britishairways.com": "British_Airways",
@@ -430,6 +635,10 @@ export const COMPANY_WIKI_OVERRIDES = {
 
 export function buildEntityWikiUrl(el, getCompanyFacts = () => null) {
   if (!el) return "";
+  const explicitTitle = el.dataset.wikiTitle;
+  if (explicitTitle) {
+    return `https://en.wikipedia.org/wiki/${encodeURIComponent(explicitTitle.replace(/ /g, "_"))}`;
+  }
   const domain = el.dataset.companyDomain;
   if (domain) {
     if (COMPANY_WIKI_OVERRIDES[domain]) {
@@ -438,10 +647,6 @@ export function buildEntityWikiUrl(el, getCompanyFacts = () => null) {
     const fact = getCompanyFacts()?.companies?.[domain];
     const clean = (fact?.name || el.textContent || "").replace(/\s*\([^)]*\)\s*/g, "").trim();
     return clean ? `https://en.wikipedia.org/wiki/${encodeURIComponent(clean.replace(/ /g, "_"))}` : "";
-  }
-  const title = el.dataset.wikiTitle;
-  if (title) {
-    return `https://en.wikipedia.org/wiki/${encodeURIComponent(title.replace(/ /g, "_"))}`;
   }
   return "";
 }

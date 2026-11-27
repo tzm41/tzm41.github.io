@@ -186,6 +186,7 @@ def apply_synthesis(raw_path_str: str, synthesis_path_str: str, dry_run: bool = 
         long_reads=synthesis.long_reads,
         week_in_brief=synthesis.week_in_brief,
         source_health=health,
+        entities=synthesis.entities,
     )
 
     if dry_run:

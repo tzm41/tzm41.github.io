@@ -50,6 +50,34 @@ class SourceLink(BaseModel):
     url: str
 
 
+EntityType = Literal["company", "person", "place", "none"]
+
+
+class EntityIdentity(BaseModel):
+    mention: str = Field(
+        description="Exact surface text as it appears in the story/briefing (e.g., 'ABC', 'BOC', 'Georgia', 'Apple')."
+    )
+    type: EntityType = Field(
+        description="Semantic identity type: 'company' (for companies, banks, institutions), 'person', 'place', or 'none' to suppress false-positive auto-tagging."
+    )
+    canonical_name: str = Field(
+        default="",
+        description="Full disambiguated canonical name (e.g., 'Agricultural Bank of China', 'Bank of China', 'Georgia (U.S. state)').",
+    )
+    domain: str = Field(
+        default="",
+        description="Primary web domain for logo/fact lookup when type='company' (e.g., 'abchina.com', 'icbc.com.cn', 'jpmorganchase.com').",
+    )
+    country_code: str = Field(
+        default="",
+        description="2-letter lowercase ISO code when type='place' (e.g., 'ge', 'cn', 'us').",
+    )
+    wiki_title: str = Field(
+        default="",
+        description="Exact English Wikipedia article title for direct linking (e.g., 'Agricultural_Bank_of_China').",
+    )
+
+
 class NewsStory(BaseModel):
     id: str = ""
     category: NewsCategory
@@ -60,6 +88,10 @@ class NewsStory(BaseModel):
     sentiment: StorySentiment = "neutral"
     continued_from_prior: bool = False
     is_afternoon: bool = False
+    entities: list[EntityIdentity] = Field(
+        default_factory=list,
+        description="Optional semantically disambiguated entity identities for ambiguous acronyms, homonyms, banks, companies, people, or places mentioned in this story.",
+    )
 
     @model_validator(mode="after")
     def _ensure_id(self) -> NewsStory:
@@ -249,6 +281,10 @@ class DailyBriefing(BaseModel):
     us_politics: PoliticsSection
     positive_news: list[NewsStory] | NewsStory | None = None
     local_news: list[LocalNewsRegion] = Field(default_factory=list)
+    entities: list[EntityIdentity] = Field(
+        default_factory=list,
+        description="Edition-wide semantically disambiguated entity identities for ambiguous acronyms, homonyms, or newly-mentioned entities across briefs and narratives.",
+    )
 
     @model_validator(mode="after")
     def _dedupe_section_ids(self) -> DailyBriefing:
@@ -300,4 +336,8 @@ class GeminiBriefingSynthesis(BaseModel):
     local_news: list[LocalNewsRegion] = Field(
         default_factory=list,
         description="Local news grouped by region id/name from local_news_candidates (3 to 5 top local stories per region with 2-3 sentence summaries, why_it_matters, and verbatim source URLs). Assign each story a specific local topic category (e.g., Weather, Transit, Housing, Sports, Community, Public Safety, Finance, Trade, Tech, Industry, Policy, Culture, Health, Education, Economy) — never generic 'World' or the region name. For non-English regions like 'china', write `stories` in Simplified Chinese and provide the matching English translation in `stories_en` with matching categories.",
+    )
+    entities: list[EntityIdentity] = Field(
+        default_factory=list,
+        description="Edition-wide semantically disambiguated entities for ambiguous abbreviations/homonyms (e.g., ABC -> Agricultural Bank of China 'abchina.com' vs ABC News 'abcnews.go.com'; BOC -> Bank of China 'boc.cn' vs Bank of Canada; Georgia US state -> type='none' vs country; CMB -> China Merchants Bank vs Cosmic Microwave Background).",
     )

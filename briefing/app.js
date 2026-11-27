@@ -257,6 +257,7 @@ const { formatEntitiesInPlain, highlightSummaryHtml } = createEntityFormatter({
   getPersonRe: () => state.personNameRe,
   getTickerMap: () => state.tickerMap,
   getInlineTickerRe: () => state.inlineTickerRe,
+  getEntities: () => state.briefing?.entities || null,
   formatTickerTip,
   deltaClass,
   pillCompaniesInSummary: true,

@@ -42,6 +42,7 @@ Read `/tmp/raw_weekly.json`, inspect the `instructions`, `synthesis_schema`, and
 - Every story in `science`, `culture`, `history`, and `long_reads` must be grounded in `/tmp/raw_weekly.json` with **verbatim source URLs**.
 - Avoid repeating any story, place, dish, or quote from `recently_shown_3_editions` (the rolling 3-edition memory).
 - Wrap the single most illuminating takeaway in `**double asterisks**` and wrap human names in `*single asterisks*` so the UI renders bold highlights and person/Wikipedia links cleanly.
+- When an item or digest contains an ambiguous acronym or homonym (e.g., `CMB` as cosmic microwave background vs China Merchants Bank, `Apple` as fruit, `Georgia` as U.S. state), populate `entities` (`{mention, type, canonical_name, domain, wiki_title}`) on the item or top-level `WeeklySynthesis` so the UI disambiguates it semantically.
 
 ### 4. Validate and publish JSON artifacts
 ```bash

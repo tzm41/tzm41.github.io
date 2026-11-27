@@ -27,6 +27,18 @@ class SourceLink(BaseModel):
     url: str
 
 
+EntityType = Literal["company", "person", "place", "none"]
+
+
+class EntityIdentity(BaseModel):
+    mention: str = Field(description="Exact surface text as it appears in the item/edition.")
+    type: EntityType = Field(description="Semantic entity type: 'company', 'person', 'place', or 'none' to suppress false-positive auto-tagging.")
+    canonical_name: str = Field(default="", description="Full disambiguated canonical name.")
+    domain: str = Field(default="", description="Primary web domain for logo lookup when type='company'.")
+    country_code: str = Field(default="", description="2-letter lowercase ISO code when type='place'.")
+    wiki_title: str = Field(default="", description="Exact English Wikipedia article title.")
+
+
 class WeeklyDigestBullet(BaseModel):
     text: str = Field(
         description="Concise 1-2 sentence weekly synthesis bullet with **bold** key insight and *italic* person names."
@@ -50,6 +62,10 @@ class WeeklyLearningItem(BaseModel):
     takeaway: str = Field(default="", description="1 concise sentence explaining why this discovery/work matters or what mental model it shifts.")
     sentiment: SentimentTag = "positive"
     sources: list[SourceLink] = Field(default_factory=list)
+    entities: list[EntityIdentity] = Field(
+        default_factory=list,
+        description="Optional semantically disambiguated entity identities for ambiguous acronyms/homonyms mentioned in this item.",
+    )
 
     @model_validator(mode="after")
     def _ensure_id(self) -> WeeklyLearningItem:
@@ -106,6 +122,10 @@ class LongReadItem(BaseModel):
     headline: str
     summary: str = Field(description="2-3 sentences summarizing the essay's central argument and why it is worth reading.")
     sources: list[SourceLink] = Field(default_factory=list)
+    entities: list[EntityIdentity] = Field(
+        default_factory=list,
+        description="Optional semantically disambiguated entity identities for ambiguous acronyms/homonyms mentioned in this essay.",
+    )
 
     @model_validator(mode="after")
     def _ensure_id(self) -> LongReadItem:
@@ -143,6 +163,10 @@ class WeeklySynthesis(BaseModel):
     )
     long_reads: list[LongReadItem] = Field(description="4-5 curated long-form essays or deep dives worth lingering over.")
     week_in_brief: list[PulseBullet] = Field(description="3-4 concise bullets recapping major world/macro developments from the past week, keeping politics/markets light.")
+    entities: list[EntityIdentity] = Field(
+        default_factory=list,
+        description="Edition-wide semantically disambiguated entity identities for ambiguous acronyms, homonyms, or scientific/cultural terms (e.g., CMB -> cosmic microwave background with type='none'; Apple the fruit -> type='none').",
+    )
 
 
 class WeeklyBriefing(BaseModel):
@@ -162,6 +186,7 @@ class WeeklyBriefing(BaseModel):
     long_reads: list[LongReadItem]
     week_in_brief: list[PulseBullet]
     source_health: WeeklySourceHealth
+    entities: list[EntityIdentity] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def _dedupe_section_ids(self) -> WeeklyBriefing:

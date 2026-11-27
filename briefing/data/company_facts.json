@@ -1369,6 +1369,211 @@
       "leader": "Gu Shu (Chairman)",
       "public": true,
       "symbol": "1288.HK"
+    },
+    "icbc.com.cn": {
+      "name": "Industrial and Commercial Bank of China (ICBC)",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$310B",
+      "leader": "Liao Lin (Chairman)",
+      "public": true,
+      "symbol": "1398.HK"
+    },
+    "ccb.com": {
+      "name": "China Construction Bank (CCB)",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$230B",
+      "leader": "Zhang Jinliang (Chairman)",
+      "public": true,
+      "symbol": "0939.HK"
+    },
+    "boc.cn": {
+      "name": "Bank of China (BOC)",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$200B",
+      "leader": "Ge Haijiao (Chairman)",
+      "public": true,
+      "symbol": "3988.HK"
+    },
+    "bankcomm.com": {
+      "name": "Bank of Communications",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$75B",
+      "leader": "Ren Deqi (Chairman)",
+      "public": true,
+      "symbol": "3328.HK"
+    },
+    "psbc.com": {
+      "name": "Postal Savings Bank of China",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$70B",
+      "leader": "Zheng Guoyu (Chairman)",
+      "public": true,
+      "symbol": "1658.HK"
+    },
+    "cmbchina.com": {
+      "name": "China Merchants Bank",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$135B",
+      "leader": "Miao Jianmin (Chairman)",
+      "public": true,
+      "symbol": "3968.HK"
+    },
+    "citicbank.com": {
+      "name": "China CITIC Bank",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$50B",
+      "leader": "Fang Heying (Chairman)",
+      "public": true,
+      "symbol": "0998.HK"
+    },
+    "bank.pingan.com": {
+      "name": "Ping An Bank",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$32B",
+      "leader": "Xie Yonglin (Chairman)",
+      "public": true,
+      "symbol": "000001.SZ"
+    },
+    "spdb.com.cn": {
+      "name": "Shanghai Pudong Development Bank",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$42B",
+      "leader": "Zhang Weizhong (Chairman)",
+      "public": true,
+      "symbol": "600000.SS"
+    },
+    "cib.com.cn": {
+      "name": "Industrial Bank Co.",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$55B",
+      "leader": "Lyu Jiajin (Chairman)",
+      "public": true,
+      "symbol": "601166.SS"
+    },
+    "pbc.gov.cn": {
+      "name": "People's Bank of China (PBOC)",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "Central bank",
+      "leader": "Pan Gongsheng (Governor)",
+      "public": false
+    },
+    "bankofamerica.com": {
+      "name": "Bank of America",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$340B",
+      "leader": "Brian Moynihan (CEO)",
+      "public": true,
+      "symbol": "BAC"
+    },
+    "citigroup.com": {
+      "name": "Citigroup",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$145B",
+      "leader": "Jane Fraser (CEO)",
+      "public": true,
+      "symbol": "C"
+    },
+    "wellsfargo.com": {
+      "name": "Wells Fargo",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$240B",
+      "leader": "Charlie Scharf (CEO)",
+      "public": true,
+      "symbol": "WFC"
+    },
+    "morganstanley.com": {
+      "name": "Morgan Stanley",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$215B",
+      "leader": "Ted Pick (CEO)",
+      "public": true,
+      "symbol": "MS"
+    },
+    "usbank.com": {
+      "name": "U.S. Bancorp",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$75B",
+      "leader": "Gunjan Kedia (CEO)",
+      "public": true,
+      "symbol": "USB"
+    },
+    "pnc.com": {
+      "name": "PNC Financial Services",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$78B",
+      "leader": "Bill Demchak (CEO)",
+      "public": true,
+      "symbol": "PNC"
+    },
+    "truist.com": {
+      "name": "Truist Financial",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$58B",
+      "leader": "Bill Rogers (CEO)",
+      "public": true,
+      "symbol": "TFC"
+    },
+    "capitalone.com": {
+      "name": "Capital One",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$115B",
+      "leader": "Richard Fairbank (CEO)",
+      "public": true,
+      "symbol": "COF"
+    },
+    "schwab.com": {
+      "name": "Charles Schwab",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$155B",
+      "leader": "Rick Wurster (CEO)",
+      "public": true,
+      "symbol": "SCHW"
+    },
+    "bny.com": {
+      "name": "BNY Mellon",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$65B",
+      "leader": "Robin Vince (CEO)",
+      "public": true,
+      "symbol": "BK"
+    },
+    "statestreet.com": {
+      "name": "State Street",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$28B",
+      "leader": "Ron O'Hanley (CEO)",
+      "public": true,
+      "symbol": "STT"
+    },
+    "federalreserve.gov": {
+      "name": "Federal Reserve",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Central bank",
+      "leader": "Jerome Powell (Chair)",
+      "public": false
     }
   }
 }

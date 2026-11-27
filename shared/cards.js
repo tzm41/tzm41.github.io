@@ -217,8 +217,9 @@ export function renderDailyStoryCard(
   const rightSlot =
     metaRightHtml || (toggleBtn ? `<div class="news-meta-actions">${toggleBtn}</div>` : "");
   const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
+  const entityOpts = story.entities?.length ? { entities: story.entities } : {};
   const calloutHtml = story.why_it_matters
-    ? `<div class="why-box"><strong>Why it matters:</strong> ${formatter.highlightSummaryHtml(story.why_it_matters)}</div>`
+    ? `<div class="why-box"><strong>Why it matters:</strong> ${formatter.highlightSummaryHtml(story.why_it_matters, entityOpts)}</div>`
     : "";
 
   return renderCardShell({
@@ -230,8 +231,8 @@ export function renderDailyStoryCard(
     sentimentHtml,
     metaExtraHtml: `${editionBadge}${continuedBadge}`,
     metaRightHtml: rightSlot,
-    headlineHtml: formatter.formatEntitiesInPlain(story.headline),
-    summaryHtml: `<p class="news-summary">${formatter.highlightSummaryHtml(story.summary)}</p>`,
+    headlineHtml: formatter.formatEntitiesInPlain(story.headline, new Set(), false, entityOpts),
+    summaryHtml: `<p class="news-summary">${formatter.highlightSummaryHtml(story.summary, entityOpts)}</p>`,
     calloutHtml,
     sourcesHtml,
     footerHtml,
@@ -254,9 +255,10 @@ export function renderWeeklyStoryCard(
     innerOnly = false,
   } = {}
 ) {
+  const entityOpts = item.entities?.length ? { entities: item.entities } : {};
   const isLongRead = section === "long_reads";
   const headlineUrl = safeUrl(item.sources?.[0]?.url);
-  const headlineText = formatter.formatEntitiesInPlain(item.headline);
+  const headlineText = formatter.formatEntitiesInPlain(item.headline, new Set(), false, entityOpts);
   const headlineHtml =
     headlineUrl !== "#"
       ? `<a href="${headlineUrl}" target="_blank" rel="noopener noreferrer">${headlineText}</a>`
@@ -277,7 +279,7 @@ export function renderWeeklyStoryCard(
 
   const calloutHtml =
     !isLongRead && item.takeaway
-      ? `<p class="weekly-takeaway"><span class="weekly-takeaway-label">Takeaway</span>${formatter.highlightSummaryHtml(item.takeaway)}</p>`
+      ? `<p class="weekly-takeaway"><span class="weekly-takeaway-label">Takeaway</span>${formatter.highlightSummaryHtml(item.takeaway, entityOpts)}</p>`
       : "";
 
   const resolvedBadge =
@@ -292,7 +294,7 @@ export function renderWeeklyStoryCard(
     sentimentHtml,
     metaRightHtml,
     headlineHtml,
-    summaryHtml: `<p class="news-summary">${formatter.highlightSummaryHtml(item.summary)}</p>`,
+    summaryHtml: `<p class="news-summary">${formatter.highlightSummaryHtml(item.summary, entityOpts)}</p>`,
     calloutHtml,
     sourcesHtml,
     footerHtml,
