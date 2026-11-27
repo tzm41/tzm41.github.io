@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-26T20:07:32Z",
+  "updated_at": "2026-11-27T04:20:09Z",
   "companies": {
     "nvidia.com": {
       "name": "Nvidia",
@@ -245,7 +245,7 @@
       "name": "TSMC",
       "country": "Taiwan",
       "country_code": "tw",
-      "valuation": "~$1.72T",
+      "valuation": "~$1.74T",
       "leader": "C.C. Wei (Chairman & CEO)",
       "public": true,
       "symbol": "2330.TW"
@@ -254,7 +254,7 @@
       "name": "Samsung Electronics",
       "country": "South Korea",
       "country_code": "kr",
-      "valuation": "~$803B",
+      "valuation": "~$836B",
       "leader": "Jun Young-hyun (Co-CEO)",
       "public": true,
       "symbol": "005930.KS"
@@ -279,7 +279,7 @@
       "name": "Alibaba",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$210B",
+      "valuation": "~$218B",
       "leader": "Eddie Wu (CEO)",
       "public": true,
       "symbol": "9988.HK"
@@ -288,7 +288,7 @@
       "name": "Tencent",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$393B",
+      "valuation": "~$398B",
       "leader": "Ma Huateng / Pony Ma (CEO)",
       "public": true,
       "symbol": "0700.HK"
@@ -306,7 +306,7 @@
       "name": "Xiaomi",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$88B",
+      "valuation": "~$89B",
       "leader": "Lei Jun (Founder & CEO)",
       "public": true,
       "symbol": "1810.HK"
@@ -315,7 +315,7 @@
       "name": "BYD",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$66B",
+      "valuation": "~$67B",
       "leader": "Wang Chuanfu (Chairman & CEO)",
       "public": true,
       "symbol": "1211.HK"
@@ -333,7 +333,7 @@
       "name": "Meituan",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$50B",
+      "valuation": "~$52B",
       "leader": "Wang Xing (CEO)",
       "public": true,
       "symbol": "3690.HK"
@@ -342,7 +342,7 @@
       "name": "JD.com",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$35B",
+      "valuation": "~$36B",
       "leader": "Sandy Xu (CEO)",
       "public": true,
       "symbol": "9618.HK"
@@ -441,7 +441,7 @@
       "name": "Toyota",
       "country": "Japan",
       "country_code": "jp",
-      "valuation": "~$258B",
+      "valuation": "~$259B",
       "leader": "Kenta Kon (CEO)",
       "public": true,
       "symbol": "7203.T"
@@ -450,7 +450,7 @@
       "name": "Sony",
       "country": "Japan",
       "country_code": "jp",
-      "valuation": "~$169B",
+      "valuation": "~$167B",
       "leader": "Hiroki Totoki (CEO)",
       "public": true,
       "symbol": "6758.T"
@@ -584,7 +584,7 @@
       "name": "SoftBank Group",
       "country": "Japan",
       "country_code": "jp",
-      "valuation": "~$107B",
+      "valuation": "~$110B",
       "leader": "Masayoshi Son (CEO)",
       "public": true,
       "symbol": "9984.T"
