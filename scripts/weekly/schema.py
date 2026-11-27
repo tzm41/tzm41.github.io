@@ -63,14 +63,18 @@ class HistoryMilestone(BaseModel):
 
 class GeoFact(BaseModel):
     id: str
-    place: str = Field(description="Name of the geological landmark or site, e.g. 'Danakil Depression'.")
-    region: str = Field(description="Country or region label, e.g. 'Ethiopia' or 'Western Australia'.")
-    country_code: str = Field(default="", description="Optional 2-letter lowercase ISO country code for flag display, e.g. 'et', 'au', 'is'.")
+    kind: Literal["geology", "cuisine"] = Field(
+        default="geology",
+        description="Pin type: 'geology' for geological wonders or 'cuisine' for iconic regional dishes/culinary traditions.",
+    )
+    place: str = Field(description="Name of the geological landmark, city, or dish origin, e.g. 'Danakil Depression' or 'Oaxaca'.")
+    region: str = Field(description="Country or region label, e.g. 'Ethiopia' or 'Mexico'.")
+    country_code: str = Field(default="", description="Optional 2-letter lowercase ISO country code for flag display, e.g. 'et', 'au', 'mx'.")
     lat: float = Field(description="Latitude in decimal degrees (-60 to 82).")
     lon: float = Field(description="Longitude in decimal degrees (-180 to 180).")
-    feature_type: str = Field(description="Short geological discipline tag such as Tectonics, Volcanology, Karst, Glaciology, Geomorphology, Deep Time.")
-    title: str = Field(description="Punchy 4-9 word title capturing the geological wonder.")
-    fact: str = Field(description="2-3 engaging sentences explaining the geological fun fact, using **bold** for the key scientific mechanism or number.")
+    feature_type: str = Field(description="Short discipline tag: e.g. Tectonics, Volcanology, Karst, Deep Time (for geology) or Regional Dish, Street Food, Fermentation, Pastry, Culinary Heritage (for cuisine).")
+    title: str = Field(description="Punchy 4-9 word title capturing the geological wonder or iconic dish.")
+    fact: str = Field(description="2-3 engaging sentences explaining the geological fun fact or culinary history/technique, using **bold** for the key mechanism, ingredients, or number.")
     wiki_title: str = Field(default="", description="Optional exact English Wikipedia article title for further reading.")
 
 
@@ -108,7 +112,7 @@ class WeeklySynthesis(BaseModel):
     this_week_in_history: list[HistoryMilestone] = Field(description="4 notable historical, scientific, or artistic anniversaries falling within this calendar week.")
     around_the_world: list[GeoFact] = Field(
         default_factory=list,
-        description="6 geographically diverse geological fun facts (spanning North America, South America, Europe, Africa, Asia, and Oceania) with accurate lat/lon coordinates.",
+        description="10-11 geographically diverse pins across all inhabited continents: 6 geological fun facts (kind='geology') and 4-5 iconic regional dishes/cuisines (kind='cuisine') with accurate lat/lon coordinates.",
     )
     long_reads: list[LongReadItem] = Field(description="4-5 curated long-form essays or deep dives worth lingering over.")
     week_in_brief: list[PulseBullet] = Field(description="3-4 concise bullets recapping major world/macro developments from the past week, keeping politics/markets light.")

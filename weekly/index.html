@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../briefing/styles.css?v=59">
-  <link rel="stylesheet" href="./styles.css?v=3">
+  <link rel="stylesheet" href="./styles.css?v=4">
 </head>
 <body class="weekly-page">
   <header class="masthead" id="top">
@@ -159,13 +159,18 @@
       </div>
     </section>
 
-    <!-- 5. Around the World — Geological Wonders Map -->
+    <!-- 5. Around the World — Geology & Cuisine Map -->
     <section id="around-world" class="section">
       <div class="section-header">
         <div>
           <h2>Around the World</h2>
         </div>
         <div class="section-actions">
+          <div class="segmented" id="world-kind-filter" role="group" aria-label="Filter map pins">
+            <button type="button" class="seg-btn active" data-kind="all" aria-pressed="true">All</button>
+            <button type="button" class="seg-btn" data-kind="geology" aria-pressed="false">Geology</button>
+            <button type="button" class="seg-btn" data-kind="cuisine" aria-pressed="false">Cuisine</button>
+          </div>
           <button type="button" class="collapse-btn" id="btn-toggle-world" aria-expanded="true" aria-controls="around-world-body">
             <span class="collapse-label">Collapse</span>
             <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
@@ -173,15 +178,15 @@
         </div>
       </div>
       <div id="around-world-body">
-        <p class="section-narrative" id="world-narrative">Hover or tap any pin to uncover a geological wonder from across the globe.</p>
+        <p class="section-narrative" id="world-narrative">Hover or tap any pin to explore geological wonders and iconic regional dishes from across the globe.</p>
         <div class="world-map-card" id="world-map-card">
           <div class="world-map-stage" id="world-map-stage">
             <div class="world-map-canvas" id="world-map-svg" aria-hidden="true"></div>
-            <div class="world-map-pins" id="world-map-pins" role="group" aria-label="Geological wonder map pins"></div>
+            <div class="world-map-pins" id="world-map-pins" role="group" aria-label="Geological wonders and regional cuisine map pins"></div>
             <div class="geo-fact-popover hidden" id="world-map-popover" role="dialog" aria-live="polite"></div>
           </div>
           <div class="geo-mobile-card hidden" id="world-map-mobile-slot" aria-live="polite"></div>
-          <div class="world-map-legend" id="world-map-legend" aria-label="Featured geological locations"></div>
+          <div class="world-map-legend" id="world-map-legend" aria-label="Featured geological wonders and regional dishes"></div>
         </div>
       </div>
     </section>
@@ -233,6 +238,6 @@
     </div>
   </footer>
 
-  <script type="module" src="./app.js?v=5"></script>
+  <script type="module" src="./app.js?v=6"></script>
 </body>
 </html>

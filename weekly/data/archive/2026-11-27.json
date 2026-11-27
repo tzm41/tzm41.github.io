@@ -290,6 +290,7 @@
   "around_the_world": [
     {
       "id": "geo-yellowstone",
+      "kind": "geology",
       "place": "Grand Prismatic Spring",
       "region": "Wyoming, USA",
       "country_code": "us",
@@ -302,6 +303,7 @@
     },
     {
       "id": "geo-salar-uyuni",
+      "kind": "geology",
       "place": "Salar de Uyuni",
       "region": "Bolivia",
       "country_code": "bo",
@@ -314,6 +316,7 @@
     },
     {
       "id": "geo-giants-causeway",
+      "kind": "geology",
       "place": "Giant's Causeway",
       "region": "Northern Ireland, UK",
       "country_code": "gb",
@@ -326,6 +329,7 @@
     },
     {
       "id": "geo-richat-structure",
+      "kind": "geology",
       "place": "Richat Structure",
       "region": "Mauritania",
       "country_code": "mr",
@@ -338,6 +342,7 @@
     },
     {
       "id": "geo-zhangye-danxia",
+      "kind": "geology",
       "place": "Zhangye Danxia",
       "region": "Gansu, China",
       "country_code": "cn",
@@ -350,6 +355,7 @@
     },
     {
       "id": "geo-shark-bay",
+      "kind": "geology",
       "place": "Hamelin Pool Stromatolites",
       "region": "Western Australia",
       "country_code": "au",
@@ -359,6 +365,71 @@
       "title": "Living Rock Reefs From Earth's First Oxygen Revolution",
       "fact": "Because Hamelin Pool is **twice as salty as ordinary seawater**, grazing marine animals cannot survive there — allowing ancient cyanobacterial colonies called stromatolites to build layered limestone mounds undisturbed. Similar microbial reefs helped **oxygenate Earth's atmosphere more than 2.4 billion years ago**.",
       "wiki_title": "Hamelin Pool Marine Nature Reserve"
+    },
+    {
+      "id": "food-oaxaca-mole",
+      "kind": "cuisine",
+      "place": "Oaxaca · Mole Negro",
+      "region": "Mexico",
+      "country_code": "mx",
+      "lat": 17.073,
+      "lon": -96.726,
+      "feature_type": "Regional Dish",
+      "title": "Thirty Toasted Ingredients Simmered Into Velvet",
+      "fact": "Known as the most complex of Oaxaca's seven traditional moles, **mole negro blends over 30 toasted chilies, charred tortillas, nuts, warm spices, and dark Mexican chocolate** into a deeply smoky sauce. Its technique bridges pre-Hispanic Mesoamerican chili pastes with ingredients carried across colonial trade routes.",
+      "wiki_title": "Mole (sauce)"
+    },
+    {
+      "id": "food-naples-pizza",
+      "kind": "cuisine",
+      "place": "Naples · Pizza Napoletana",
+      "region": "Italy",
+      "country_code": "it",
+      "lat": 40.852,
+      "lon": 14.268,
+      "feature_type": "Culinary Heritage",
+      "title": "Volcanic Tomatoes and a 90-Second Wood-Fired Bake",
+      "fact": "Recognized by UNESCO as Intangible Cultural Heritage, authentic Neapolitan pizza pairs **San Marzano tomatoes grown in Mount Vesuvius's mineral-rich volcanic soil** with buffalo mozzarella and long-fermented dough. Baked at roughly **485 °C for just 60 to 90 seconds**, the crust blisters into an airy leopard-spotted rim.",
+      "wiki_title": "Neapolitan pizza"
+    },
+    {
+      "id": "food-addis-injera",
+      "kind": "cuisine",
+      "place": "Addis Ababa · Injera & Wot",
+      "region": "Ethiopia",
+      "country_code": "et",
+      "lat": 9.032,
+      "lon": 38.747,
+      "feature_type": "Fermentation",
+      "title": "A Three-Day Sourdough Flatbread That Doubles as Plate and Utensil",
+      "fact": "Made from tiny iron-rich **teff grains native to the Ethiopian Highlands**, injera batter ferments for up to three days before hitting a clay mitad griddle to form thousands of sauce-catching bubbles. Communal platters of spiced berbere wot stews are served directly on top so diners tear and scoop together.",
+      "wiki_title": "Injera"
+    },
+    {
+      "id": "food-bangkok-tomyum",
+      "kind": "cuisine",
+      "place": "Bangkok · Tom Yum Goong",
+      "region": "Thailand",
+      "country_code": "th",
+      "lat": 13.756,
+      "lon": 100.502,
+      "feature_type": "Aromatics",
+      "title": "Aromatic Balance of Sour, Heat, Salt, and Citrus Leaf",
+      "fact": "Rather than relying on long-simmered stocks, central Thailand's signature prawn soup builds electric depth in minutes by bruising **lemongrass, galangal root, makrut lime leaves, bird's-eye chilies, and fish sauce** right before serving. The broth exemplifies Thai cuisine's pursuit of sharp sensory contrast in every spoonful.",
+      "wiki_title": "Tom yum"
+    },
+    {
+      "id": "food-osaka-takoyaki",
+      "kind": "cuisine",
+      "place": "Osaka · Takoyaki",
+      "region": "Japan",
+      "country_code": "jp",
+      "lat": 34.694,
+      "lon": 135.502,
+      "feature_type": "Street Food",
+      "title": "Cast-Iron Octopus Spheres Powered by Kombu Dashi",
+      "fact": "Invented in 1935 Osaka by street vendor *Tomekichi Endo*, takoyaki turns a whisper-thin **kombu kelp and bonito dashi batter** into crisp-shelled, custardy spheres around diced octopus and pickled ginger. Skilled cooks flip each sphere mid-bake with metal picks in molded cast-iron pans before finishing with bonito flakes that dance in the steam.",
+      "wiki_title": "Takoyaki"
     }
   ],
   "long_reads": [

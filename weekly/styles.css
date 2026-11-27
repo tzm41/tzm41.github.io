@@ -229,6 +229,8 @@
   --geo-grid: rgba(44, 93, 107, 0.12);
   --geo-pin: #a63a2b;
   --geo-pin-ring: rgba(166, 58, 43, 0.22);
+  --cuisine-pin: #c47d14;
+  --cuisine-pin-ring: rgba(196, 125, 20, 0.25);
 }
 
 [data-theme="dark"] {
@@ -238,6 +240,8 @@
   --geo-grid: rgba(106, 183, 204, 0.13);
   --geo-pin: #e06d53;
   --geo-pin-ring: rgba(224, 109, 83, 0.28);
+  --cuisine-pin: #f0b354;
+  --cuisine-pin-ring: rgba(240, 179, 84, 0.28);
 }
 
 .world-map-card {
@@ -337,6 +341,61 @@
   border: 2px solid var(--surface);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
   transition: transform 0.16s ease, background 0.16s ease;
+}
+
+.geo-pin.is-cuisine .geo-pin-core {
+  background: var(--cuisine-pin);
+  border-radius: 3px;
+  transform: rotate(45deg);
+}
+
+.geo-pin.is-cuisine .geo-pin-halo {
+  background: var(--cuisine-pin-ring);
+}
+
+.geo-pin.is-cuisine:hover .geo-pin-core,
+.geo-pin.is-cuisine:focus-visible .geo-pin-core,
+.geo-pin.is-cuisine.is-active .geo-pin-core {
+  transform: rotate(45deg) scale(1.28);
+  background: var(--accent);
+}
+
+.geo-fact-popover.is-cuisine {
+  border-top-color: var(--cuisine-pin);
+}
+
+.geo-mobile-card.is-cuisine {
+  border-left-color: var(--cuisine-pin);
+}
+
+.geo-fact-tags {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.geo-kind-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--geo-pin-ring);
+  color: var(--geo-pin);
+}
+
+.geo-kind-badge.is-cuisine {
+  background: var(--cuisine-pin-ring);
+  color: var(--cuisine-pin);
+}
+
+.geo-chip-dot.is-cuisine {
+  background: var(--cuisine-pin);
+  border-radius: 1.5px;
+  transform: rotate(45deg);
 }
 
 .geo-pin:hover,

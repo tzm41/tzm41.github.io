@@ -60,6 +60,7 @@ const els = {
   milestonesNote: document.getElementById("milestones-note"),
   historyTimeline: document.getElementById("history-timeline"),
   aroundWorldSection: document.getElementById("around-world"),
+  worldKindFilter: document.getElementById("world-kind-filter"),
   worldMapStage: document.getElementById("world-map-stage"),
   worldMapSvg: document.getElementById("world-map-svg"),
   worldMapPins: document.getElementById("world-map-pins"),
@@ -327,8 +328,15 @@ let activeGeoId = null;
 let pinnedGeoId = null;
 let geoHideTimer = null;
 let currentGeoItems = [];
+let worldKindFilter = "all";
+
+function itemGeoKind(item) {
+  return item?.kind === "cuisine" ? "cuisine" : "geology";
+}
 
 function buildGeoCardHtml(item, showClose = true) {
+  const kind = itemGeoKind(item);
+  const kindLabel = kind === "cuisine" ? "Cuisine" : "Geology";
   const flagHtml = item.country_code ? renderCountryFlagImg(item.country_code.toLowerCase()) : "";
   const coords = fmtCoords(Number(item.lat ?? 0), Number(item.lon ?? 0));
   const wikiTitle = item.wiki_title || item.place || "";
@@ -343,12 +351,15 @@ function buildGeoCardHtml(item, showClose = true) {
         <span>&middot; ${escapeHtml(item.region || "")}</span>
         <span class="geo-fact-coords">(${escapeHtml(coords)})</span>
       </div>
-      ${showClose ? `<button type="button" class="geo-fact-close" aria-label="Close geological fact">&times;</button>` : ""}
+      ${showClose ? `<button type="button" class="geo-fact-close" aria-label="Close card">&times;</button>` : ""}
     </div>
     <h4 class="geo-fact-title">${formatEntitiesInPlain(item.title)}</h4>
     <p class="geo-fact-body">${highlightSummaryHtml(item.fact)}</p>
     <div class="geo-fact-foot">
-      ${renderHashedTag(item.feature_type || "Geology")}
+      <div class="geo-fact-tags">
+        <span class="geo-kind-badge is-${kind}">${kindLabel}</span>
+        ${renderHashedTag(item.feature_type || kindLabel)}
+      </div>
       ${wikiUrl ? `<a class="geo-fact-wiki" href="${wikiUrl}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a>` : ""}
     </div>
   `;
@@ -384,6 +395,8 @@ function showGeoCard(item, { pin = false } = {}) {
   setGeoActiveState(item.id);
 
   // Desktop floating popover
+  const isCuisine = itemGeoKind(item) === "cuisine";
+  els.worldMapPopover.classList.toggle("is-cuisine", isCuisine);
   els.worldMapPopover.innerHTML = buildGeoCardHtml(item, true);
   els.worldMapPopover.classList.remove("hidden");
 
@@ -408,6 +421,7 @@ function showGeoCard(item, { pin = false } = {}) {
 
   // Mobile docked card below map
   if (els.worldMapMobileSlot) {
+    els.worldMapMobileSlot.classList.toggle("is-cuisine", isCuisine);
     els.worldMapMobileSlot.innerHTML = buildGeoCardHtml(item, true);
     els.worldMapMobileSlot.classList.remove("hidden");
   }
@@ -525,6 +539,70 @@ function bindWorldMapEvents() {
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && (activeGeoId || pinnedGeoId)) hideGeoCard(true);
   });
+
+  els.worldKindFilter?.addEventListener("click", (e) => {
+    const btn = e.target.closest?.(".seg-btn");
+    if (!btn) return;
+    const next = btn.dataset.kind || "all";
+    if (next === worldKindFilter) return;
+    worldKindFilter = next;
+    els.worldKindFilter.querySelectorAll(".seg-btn").forEach((b) => {
+      const active = b.dataset.kind === worldKindFilter;
+      b.classList.toggle("active", active);
+      b.setAttribute("aria-pressed", String(active));
+    });
+    hideGeoCard(true);
+    renderWorldPinsAndLegend();
+  });
+}
+
+function renderWorldPinsAndLegend() {
+  const filtered =
+    worldKindFilter === "all"
+      ? currentGeoItems
+      : currentGeoItems.filter((item) => itemGeoKind(item) === worldKindFilter);
+
+  if (els.worldMapPins) {
+    els.worldMapPins.innerHTML = filtered
+      .map((item) => {
+        const kind = itemGeoKind(item);
+        const [x, y] = projectWorld(Number(item.lon ?? 0), Number(item.lat ?? 0));
+        const leftPct = Math.max(2, Math.min(98, (x / WORLD_MAP_W) * 100));
+        const topPct = Math.max(4, Math.min(96, (y / WORLD_MAP_H) * 100));
+        const label = `${item.place}, ${item.region} — ${item.title}`;
+        return `
+          <button
+            type="button"
+            class="geo-pin is-${kind}"
+            data-geo-id="${escapeHtml(item.id)}"
+            style="left:${leftPct.toFixed(2)}%;top:${topPct.toFixed(2)}%;"
+            aria-label="${escapeHtml(label)}"
+            aria-pressed="false"
+            title="${escapeHtml(item.place)}"
+          >
+            <span class="geo-pin-halo" aria-hidden="true"></span>
+            <span class="geo-pin-core" aria-hidden="true"></span>
+          </button>
+        `;
+      })
+      .join("");
+  }
+
+  if (els.worldMapLegend) {
+    els.worldMapLegend.innerHTML = filtered
+      .map((item) => {
+        const kind = itemGeoKind(item);
+        const flagHtml = item.country_code ? renderCountryFlagImg(item.country_code.toLowerCase()) : "";
+        return `
+          <button type="button" class="geo-chip" data-geo-id="${escapeHtml(item.id)}">
+            <span class="geo-chip-dot is-${kind}" aria-hidden="true"></span>
+            ${flagHtml}
+            <span>${escapeHtml(item.place)}</span>
+          </button>
+        `;
+      })
+      .join("");
+  }
 }
 
 function renderAroundTheWorld(ed) {
@@ -550,46 +628,7 @@ function renderAroundTheWorld(ed) {
       });
   }
 
-  if (els.worldMapPins) {
-    els.worldMapPins.innerHTML = items
-      .map((item) => {
-        const [x, y] = projectWorld(Number(item.lon ?? 0), Number(item.lat ?? 0));
-        const leftPct = Math.max(2, Math.min(98, (x / WORLD_MAP_W) * 100));
-        const topPct = Math.max(4, Math.min(96, (y / WORLD_MAP_H) * 100));
-        const label = `${item.place}, ${item.region} — ${item.title}`;
-        return `
-          <button
-            type="button"
-            class="geo-pin"
-            data-geo-id="${escapeHtml(item.id)}"
-            style="left:${leftPct.toFixed(2)}%;top:${topPct.toFixed(2)}%;"
-            aria-label="${escapeHtml(label)}"
-            aria-pressed="false"
-            title="${escapeHtml(item.place)}"
-          >
-            <span class="geo-pin-halo" aria-hidden="true"></span>
-            <span class="geo-pin-core" aria-hidden="true"></span>
-          </button>
-        `;
-      })
-      .join("");
-  }
-
-  if (els.worldMapLegend) {
-    els.worldMapLegend.innerHTML = items
-      .map((item) => {
-        const flagHtml = item.country_code ? renderCountryFlagImg(item.country_code.toLowerCase()) : "";
-        return `
-          <button type="button" class="geo-chip" data-geo-id="${escapeHtml(item.id)}">
-            <span class="geo-chip-dot" aria-hidden="true"></span>
-            ${flagHtml}
-            <span>${escapeHtml(item.place)}</span>
-          </button>
-        `;
-      })
-      .join("");
-  }
-
+  renderWorldPinsAndLegend();
   bindWorldMapEvents();
 }
 
