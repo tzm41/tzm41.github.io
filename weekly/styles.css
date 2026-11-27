@@ -12,30 +12,6 @@
   --accent-soft: rgba(106, 183, 204, 0.15);
 }
 
-/* Deterministic hashed category tag colors (48 perceptually uniform OKLCH hues) */
-.cat-pill.tag-hashed {
-  --tag-fg: hsl(var(--tag-h, 200) 56% 34%);
-  border: 1px solid color-mix(in srgb, var(--tag-fg) 25%, transparent);
-  background: color-mix(in srgb, var(--tag-fg) 10%, transparent);
-  color: var(--tag-fg);
-}
-
-[data-theme="dark"] .cat-pill.tag-hashed {
-  --tag-fg: hsl(var(--tag-h, 200) 74% 72%);
-  border-color: color-mix(in srgb, var(--tag-fg) 30%, transparent);
-  background: color-mix(in srgb, var(--tag-fg) 15%, transparent);
-}
-
-@supports (color: oklch(0.5 0.1 0)) {
-  .cat-pill.tag-hashed {
-    --tag-fg: oklch(0.45 0.135 var(--tag-h, 200));
-  }
-
-  [data-theme="dark"] .cat-pill.tag-hashed {
-    --tag-fg: oklch(0.78 0.13 var(--tag-h, 200));
-  }
-}
-
 /* Quote / Idea of the Week callout */
 .quote-card {
   margin-top: 14px;
@@ -420,6 +396,7 @@
 /* Hover / Tap Geological Fun Fact Popover */
 .geo-fact-popover {
   position: absolute;
+  overflow: hidden;
   z-index: 20;
   width: min(340px, calc(100% - 20px));
   background: var(--surface);
@@ -427,9 +404,14 @@
   border: 1px solid var(--border-strong);
   border-top: 3px solid var(--accent);
   border-radius: var(--radius);
-  padding: 13px 15px 12px;
+  padding: 16px 15px 12px;
   box-shadow: var(--shadow-md);
   pointer-events: auto;
+}
+
+.geo-fact-popover > .bookmark-btn,
+.geo-mobile-card > .bookmark-btn {
+  right: 46px;
 }
 
 .geo-fact-head {
@@ -528,12 +510,14 @@
 
 /* Mobile docked fun-fact card below map */
 .geo-mobile-card {
+  position: relative;
+  overflow: hidden;
   margin-top: 12px;
   background: var(--surface-subtle);
   border: 1px solid var(--border);
   border-left: 3px solid var(--accent);
   border-radius: var(--radius-sm);
-  padding: 13px 14px;
+  padding: 16px 14px 13px;
 }
 
 /* Quick-jump location chips below map */

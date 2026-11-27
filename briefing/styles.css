@@ -1112,6 +1112,8 @@ h3 {
 }
 
 .news-card {
+  position: relative;
+  overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -1211,57 +1213,71 @@ h3 {
   flex-shrink: 0;
 }
 
-/* ---------- Bookmark Button & Auth Masthead ---------- */
+/* ---------- Top-Edge Bookmark Ribbon & Auth Masthead ---------- */
 
 .bookmark-btn {
+  position: absolute;
+  top: 0;
+  right: 14px;
+  z-index: 5;
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 28px;
   height: 28px;
   padding: 0;
   background: transparent;
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
+  border: 0;
+  border-radius: 0;
   color: var(--ink-muted);
   cursor: pointer;
   flex-shrink: 0;
-  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-100%);
+  transition: opacity 0.18s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), color 0.15s ease;
 }
 
-.bookmark-btn:hover {
-  background: var(--surface-subtle);
-  border-color: var(--border);
-  color: var(--ink);
-}
-
-.bookmark-btn:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
+.bookmark-btn::after {
+  content: "";
+  position: absolute;
+  inset: -4px -8px -10px -8px;
 }
 
 .bookmark-btn svg {
-  width: 15px;
-  height: 15px;
+  width: 19px;
+  height: 25px;
   display: block;
-  fill: none;
+  fill: var(--surface);
   stroke: currentColor;
-  stroke-width: 1.85;
+  stroke-width: 1.75;
   stroke-linecap: round;
   stroke-linejoin: round;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
+}
+
+.news-card:hover > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
+.news-card:focus-within > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
+.news-card.bm-card-revealed > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
+.positive-card:hover > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
+.positive-card:focus-within > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
+.positive-card.bm-card-revealed > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
+.geo-fact-popover:hover > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
+.geo-fact-popover:focus-within > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
+.geo-fact-popover.bm-card-revealed > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
+.geo-mobile-card:hover > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
+.geo-mobile-card:focus-within > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
+.geo-mobile-card.bm-card-revealed > .bookmark-btn:not(.is-saved):not(.is-bookmarked) {
+  opacity: 0.78;
+  pointer-events: auto;
+  transform: translateY(-10px);
 }
 
 .bookmark-btn.is-saved,
 .bookmark-btn.is-bookmarked {
-  color: var(--accent);
-  background: var(--accent-soft);
-  border-color: color-mix(in srgb, var(--accent) 28%, transparent);
-}
-
-.bookmark-btn.is-saved:hover,
-.bookmark-btn.is-bookmarked:hover {
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
-  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-10px);
   color: var(--accent);
 }
 
@@ -1270,6 +1286,38 @@ h3 {
 .bookmark-btn.is-bookmarked svg,
 .bookmark-btn.is-bookmarked svg path {
   fill: currentColor;
+}
+
+.bookmark-btn:hover,
+.bookmark-btn:focus-visible {
+  opacity: 1;
+  color: var(--accent);
+  transform: translateY(-4px);
+}
+
+.news-card:hover > .bookmark-btn:hover,
+.news-card:focus-within > .bookmark-btn:focus-visible,
+.news-card.bm-card-revealed > .bookmark-btn:hover,
+.positive-card:hover > .bookmark-btn:hover,
+.positive-card:focus-within > .bookmark-btn:focus-visible,
+.positive-card.bm-card-revealed > .bookmark-btn:hover,
+.geo-fact-popover:hover > .bookmark-btn:hover,
+.geo-fact-popover:focus-within > .bookmark-btn:focus-visible,
+.geo-fact-popover.bm-card-revealed > .bookmark-btn:hover,
+.geo-mobile-card:hover > .bookmark-btn:hover,
+.geo-mobile-card:focus-within > .bookmark-btn:focus-visible,
+.geo-mobile-card.bm-card-revealed > .bookmark-btn:hover,
+.bookmark-btn.is-saved:hover,
+.bookmark-btn.is-bookmarked:hover {
+  opacity: 1;
+  color: var(--accent);
+  transform: translateY(-4px);
+}
+
+.bookmark-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-radius: 3px;
 }
 
 .auth-mount {
@@ -1463,6 +1511,30 @@ h3 {
   border-radius: 4px;
   background: var(--surface-subtle);
   color: var(--ink-secondary);
+}
+
+/* Deterministic hashed category tag colors (48 perceptually uniform OKLCH hues) */
+.cat-pill.tag-hashed {
+  --tag-fg: hsl(var(--tag-h, 200) 56% 34%);
+  border: 1px solid color-mix(in srgb, var(--tag-fg) 25%, transparent);
+  background: color-mix(in srgb, var(--tag-fg) 10%, transparent);
+  color: var(--tag-fg);
+}
+
+[data-theme="dark"] .cat-pill.tag-hashed {
+  --tag-fg: hsl(var(--tag-h, 200) 74% 72%);
+  border-color: color-mix(in srgb, var(--tag-fg) 30%, transparent);
+  background: color-mix(in srgb, var(--tag-fg) 15%, transparent);
+}
+
+@supports (color: oklch(0.5 0.1 0)) {
+  .cat-pill.tag-hashed {
+    --tag-fg: oklch(0.45 0.135 var(--tag-h, 200));
+  }
+
+  [data-theme="dark"] .cat-pill.tag-hashed {
+    --tag-fg: oklch(0.78 0.13 var(--tag-h, 200));
+  }
 }
 
 .news-card h3 {
@@ -2440,6 +2512,8 @@ h3 {
 }
 
 .positive-card {
+  position: relative;
+  overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
   border-top: 3px solid var(--pos);
@@ -2451,7 +2525,7 @@ h3 {
   box-shadow: var(--shadow-sm);
 }
 
-.positive-card .cat-pill {
+.positive-card .cat-pill:not(.tag-hashed) {
   background: var(--pos-soft);
   color: var(--pos);
 }

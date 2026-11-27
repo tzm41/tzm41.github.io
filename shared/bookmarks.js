@@ -607,7 +607,7 @@ export function mergeFromRemote(
 
 /* ---------- DOM Button Helpers ---------- */
 
-const BOOKMARK_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.5L5 21V4a1 1 0 0 1 1-1z"/></svg>`;
+const BOOKMARK_SVG = `<svg viewBox="0 0 24 26" aria-hidden="true"><path d="M4.5 0h15v23.5l-7.5-4.8-7.5 4.8V0z"/></svg>`;
 
 export function renderBookmarkButton(key, { saved = false, label = "story", extraClass = "" } = {}) {
   const safeKey = escapeAttr(key);
@@ -686,8 +686,51 @@ export function bindBookmarkToggle(
     }
   };
 
+  const CARD_SELECTOR = ".news-card, .positive-card, .geo-fact-popover, .geo-mobile-card";
+  let revealedCard = null;
+
+  const setRevealedCard = (card) => {
+    if (revealedCard && revealedCard !== card) {
+      revealedCard.classList.remove("bm-card-revealed");
+    }
+    revealedCard = card || null;
+    if (revealedCard) {
+      revealedCard.classList.add("bm-card-revealed");
+    }
+  };
+
+  const revealHandler = (e) => {
+    if (e.pointerType !== "touch" && e.pointerType !== "pen") return;
+    const target = e.target;
+    if (target?.closest?.(".bookmark-btn")) return;
+    const card = target?.closest?.(CARD_SELECTOR);
+    if (card && root.contains(card)) {
+      setRevealedCard(card);
+    } else {
+      setRevealedCard(null);
+    }
+  };
+
+  const outsideClickHandler = (e) => {
+    if (!revealedCard) return;
+    if (!revealedCard.contains(e.target)) {
+      setRevealedCard(null);
+    }
+  };
+
   root.addEventListener("click", handler);
-  return () => root.removeEventListener("click", handler);
+  if (typeof document !== "undefined") {
+    document.addEventListener("pointerdown", revealHandler, { passive: true });
+    document.addEventListener("click", outsideClickHandler, { passive: true });
+  }
+  return () => {
+    root.removeEventListener("click", handler);
+    if (typeof document !== "undefined") {
+      document.removeEventListener("pointerdown", revealHandler);
+      document.removeEventListener("click", outsideClickHandler);
+    }
+    setRevealedCard(null);
+  };
 }
 
 /* ---------- Cross-Tab Storage Reconciliation ---------- */

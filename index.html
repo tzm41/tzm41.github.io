@@ -385,85 +385,32 @@
 
     .bookmarks-bar {
       width: 100%;
-      min-height: 58px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 13px 20px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .bookmarks-bar-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .bookmarks-bar-icon {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-      color: var(--accent);
-    }
-
-    .bookmarks-bar-copy {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-
-    .bookmarks-bar-label {
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--ink);
-      line-height: 1.25;
-    }
-
-    .bookmarks-bar-caption {
-      font-size: 12.5px;
-      color: var(--ink-muted);
-      line-height: 1.35;
-    }
-
-    .bookmarks-bar-right {
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-      flex-shrink: 0;
-    }
-
-    .bookmarks-bar-count {
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      font-weight: 500;
-      color: var(--ink-muted);
-      white-space: nowrap;
+      justify-content: center;
     }
 
     .bookmarks-bar-cta {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-family: var(--font-mono);
-      font-size: 12px;
+      justify-content: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 20px;
+      font-family: var(--font-sans);
+      font-size: 14px;
       font-weight: 600;
-      color: var(--accent);
+      color: var(--ink);
+      box-shadow: var(--shadow-sm);
       white-space: nowrap;
-      transition: opacity 0.15s ease;
+      transition: border-color 0.15s ease, color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
     }
 
     .bookmarks-bar-cta:hover {
-      opacity: 0.8;
+      border-color: var(--border-strong);
+      color: var(--accent);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
     }
 
     .nav-card {
@@ -542,10 +489,6 @@
         padding: 24px 18px 20px;
       }
 
-      .bookmarks-bar {
-        padding: 13px 16px;
-      }
-
       h1,
       h2 {
         font-size: 27px;
@@ -590,21 +533,9 @@
         </section>
       </div>
 
-      <section class="bookmarks-bar" aria-label="Saved Bookmarks">
-        <div class="bookmarks-bar-left">
-          <svg class="bookmarks-bar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-          </svg>
-          <div class="bookmarks-bar-copy">
-            <span class="bookmarks-bar-label">Saved Bookmarks</span>
-            <span class="bookmarks-bar-caption">Daily stories retained 60 days &middot; Weekly retained 52 weeks</span>
-          </div>
-        </div>
-        <div class="bookmarks-bar-right">
-          <span class="bookmarks-bar-count hidden" id="home-bookmarks-count"></span>
-          <a class="bookmarks-bar-cta" href="/bookmarks/">Open Bookmarks &rarr;</a>
-        </div>
-      </section>
+      <div class="bookmarks-bar">
+        <a class="bookmarks-bar-cta" href="/bookmarks/">Open Bookmarks &rarr;</a>
+      </div>
     </div>
   </main>
 
@@ -650,52 +581,13 @@
           }
         });
       }
-
-      try {
-        const raw = localStorage.getItem("briefing-bookmarks-v1");
-        const countEl = document.getElementById("home-bookmarks-count");
-        if (raw && countEl) {
-          const parsed = JSON.parse(raw);
-          const list = Array.isArray(parsed)
-            ? parsed
-            : Array.isArray(parsed?.items)
-            ? parsed.items
-            : parsed && typeof parsed === "object" && parsed.records && typeof parsed.records === "object"
-            ? Object.values(parsed.records)
-            : [];
-          if (list.length > 0) {
-            countEl.textContent = `${list.length} saved`;
-            countEl.classList.remove("hidden");
-          }
-        }
-      } catch {
-        // Ignore storage / parse errors
-      }
     })();
   </script>
 
   <script type="module">
-    import { getBookmarkStats, onBookmarksChange } from "./shared/bookmarks.js?v=1";
     import { initAuth, setPreference } from "./shared/auth.js?v=2";
 
-    const countEl = document.getElementById("home-bookmarks-count");
     const switcher = document.getElementById("theme-switcher");
-
-    function syncHomeBookmarksCount() {
-      if (!countEl) return;
-      const stats = getBookmarkStats();
-      if (stats.total > 0) {
-        const exp = stats.expiringSoon > 0 ? ` · ${stats.expiringSoon} expiring` : "";
-        countEl.textContent = `${stats.total} saved${exp}`;
-        countEl.classList.remove("hidden");
-      } else {
-        countEl.textContent = "";
-        countEl.classList.add("hidden");
-      }
-    }
-
-    syncHomeBookmarksCount();
-    onBookmarksChange(syncHomeBookmarksCount);
 
     switcher?.addEventListener("click", (e) => {
       const btn = e.target.closest(".seg-btn");

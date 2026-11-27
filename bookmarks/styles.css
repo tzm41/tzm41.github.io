@@ -156,49 +156,6 @@
   background: var(--surface-subtle);
 }
 
-/* Bookmark Toggle Button (28x28) */
-.bookmark-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  flex-shrink: 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface-subtle);
-  color: var(--ink-muted);
-  cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease, transform 0.12s ease;
-}
-
-.bookmark-btn:hover {
-  border-color: var(--border-strong);
-  color: var(--ink);
-}
-
-.bookmark-btn svg {
-  width: 14px;
-  height: 14px;
-  display: block;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.bookmark-btn.is-saved {
-  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
-  background: var(--accent-soft);
-  color: var(--accent);
-}
-
-.bookmark-btn.is-saved svg {
-  fill: currentColor;
-}
-
 /* Card Origin Header Row */
 .bm-origin-row {
   display: flex;
@@ -289,30 +246,6 @@
 .bm-lang-btn.active {
   background: var(--ink);
   color: var(--bg);
-}
-
-/* Weekly & Around the World Card Accents (matching /weekly/styles.css) */
-.cat-pill.tag-hashed {
-  --tag-fg: hsl(var(--tag-h, 200) 56% 34%);
-  border: 1px solid color-mix(in srgb, var(--tag-fg) 25%, transparent);
-  background: color-mix(in srgb, var(--tag-fg) 10%, transparent);
-  color: var(--tag-fg);
-}
-
-[data-theme="dark"] .cat-pill.tag-hashed {
-  --tag-fg: hsl(var(--tag-h, 200) 74% 72%);
-  border-color: color-mix(in srgb, var(--tag-fg) 30%, transparent);
-  background: color-mix(in srgb, var(--tag-fg) 15%, transparent);
-}
-
-@supports (color: oklch(0.5 0.1 0)) {
-  .cat-pill.tag-hashed {
-    --tag-fg: oklch(0.45 0.135 var(--tag-h, 200));
-  }
-
-  [data-theme="dark"] .cat-pill.tag-hashed {
-    --tag-fg: oklch(0.78 0.13 var(--tag-h, 200));
-  }
 }
 
 .discipline-tag,

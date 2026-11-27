@@ -14,6 +14,7 @@ import {
   initScrollSpy,
   createCollapsibleManager,
   renderSourceChip,
+  renderHashedTag,
   initSourceBiasPopover,
   SENTIMENT_LABELS,
   inferSentimentFromText,
@@ -36,7 +37,7 @@ import {
   syncBookmarkButtons,
   bindBookmarkToggle,
   onBookmarksChange,
-} from "../shared/bookmarks.js?v=1";
+} from "../shared/bookmarks.js?v=2";
 import {
   initAuth,
   getLocalPreferences,
@@ -573,7 +574,7 @@ function renderBriefBullets(bullets = []) {
         <li>
           <span class="exec-meta">
             ${renderSentimentRing(sentiment)}
-            <span class="cat-pill">${escapeHtml(category)}</span>
+            ${renderHashedTag(category)}
           </span>
           <span class="exec-text">${highlightSummaryHtml(text)}</span>
         </li>
@@ -731,17 +732,15 @@ function renderNewsCard(story, badgeLabel, continued, showEditionTag = false, bo
 
   return `
     <article class="news-card${continued ? " is-collapsed" : ""}">
+      ${bookmarkBtn}
       <div class="news-meta">
         <div class="news-card-badges">
-          <span class="cat-pill">${escapeHtml(badgeLabel)}</span>
+          ${renderHashedTag(badgeLabel)}
           ${renderSentimentRing(sentiment)}
           ${editionBadge}
           ${continuedBadge}
         </div>
-        <div class="news-meta-actions">
-          ${toggleBtn}
-          ${bookmarkBtn}
-        </div>
+        ${toggleBtn ? `<div class="news-meta-actions">${toggleBtn}</div>` : ""}
       </div>
       <h3>${formatEntitiesInPlain(story.headline)}</h3>
       <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
@@ -1182,13 +1181,11 @@ function renderPositiveNews(positiveNews) {
       });
       return `
         <article class="positive-card">
+          ${bookmarkBtn}
           <div class="news-meta">
             <div class="news-card-badges">
-              <span class="cat-pill">${escapeHtml(story.category || "Progress")}</span>
+              ${renderHashedTag(story.category || "Progress")}
               ${renderSentimentRing(posSentiment)}
-            </div>
-            <div class="news-meta-actions">
-              ${bookmarkBtn}
             </div>
           </div>
           <h3>${formatEntitiesInPlain(story.headline)}</h3>

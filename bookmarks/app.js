@@ -36,7 +36,7 @@ import {
   renderBookmarkButton,
   bindBookmarkToggle,
   onBookmarksChange,
-} from "../shared/bookmarks.js?v=1";
+} from "../shared/bookmarks.js?v=2";
 import { initAuth, setPreference } from "../shared/auth.js?v=2";
 
 const BRIEFING_DATA = "../briefing/data";
@@ -45,7 +45,7 @@ const PAGE_SIZE = 24;
 const HYDRATE_CONCURRENCY = 5;
 
 const state = {
-  filter: "all", // "all" | "daily" | "weekly" | "around_the_world" | "expiring"
+  filter: "all", // "all" | "expiring" | "type:<normalized>"
   sort: "saved_desc", // "saved_desc" | "date_desc" | "expiry_asc"
   visibleLimit: PAGE_SIZE,
   indicesLoaded: false,
@@ -131,13 +131,44 @@ function sectionDisplayLabel(record) {
   return map[record.section] || record.section;
 }
 
+function getBookmarkType(entry) {
+  const { record, extracted } = entry;
+  if (record.section === "around_the_world") {
+    const kind = (extracted?.item?.kind || record.kind) === "cuisine" ? "cuisine" : "geology";
+    return kind === "cuisine" ? "Cuisine" : "Geology";
+  }
+  if (record.edition === "daily") {
+    if (record.section === "local_news") {
+      return String(extracted?.regionName || record.badge || "Local").trim() || "Local";
+    }
+    if (record.section === "positive_news") {
+      return String(extracted?.story?.category || record.badge || "Progress").trim() || "Progress";
+    }
+    return String(extracted?.story?.category || record.badge || "News").trim() || "News";
+  }
+  if (record.edition === "weekly") {
+    if (record.section === "long_reads") {
+      return String(extracted?.item?.topic || record.badge || "Essay").trim() || "Essay";
+    }
+    return (
+      String(extracted?.item?.category || record.badge || sectionDisplayLabel(record)).trim() ||
+      "Learning"
+    );
+  }
+  return String(record.badge || "Saved").trim() || "Saved";
+}
+
+function normalizeTypeKey(label) {
+  return String(label || "").trim().toLowerCase();
+}
+
 function ttlBarClass(status) {
   if (status === "expired") return "is-expired";
   if (status === "expiring_soon") return "is-warn";
   return "is-active";
 }
 
-function renderOriginRowHtml(record, key) {
+function renderOriginRowHtml(record) {
   const isWeekly = record.edition === "weekly";
   const edBadgeCls = isWeekly ? "is-weekly" : "is-daily";
   const edLabel = isWeekly ? "Weekly" : "Daily";
@@ -149,7 +180,6 @@ function renderOriginRowHtml(record, key) {
         <span class="bm-edition-badge ${edBadgeCls}">${edLabel}</span>
         <a class="bm-origin-link" href="${escapeHtml(href)}">${escapeHtml(dateLabel)} &middot; ${escapeHtml(sectionDisplayLabel(record))}</a>
       </div>
-      ${renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" })}
     </div>
   `;
 }
@@ -182,7 +212,8 @@ function buildPreviewCardHtml(entry) {
     safeHref !== "#"
       ? `<a href="${safeHref}" target="_blank" rel="noopener noreferrer">${escapeHtml(record.title || "Saved story")}</a>`
       : escapeHtml(record.title || "Saved story");
-  const badgeHtml = record.badge ? `<span class="cat-pill">${escapeHtml(record.badge)}</span>` : "";
+  const typeLabel = getBookmarkType(entry);
+  const badgeHtml = typeLabel ? renderHashedTag(typeLabel) : "";
   const sourceChip =
     record.source && safeHref !== "#"
       ? renderSourceChip({ name: record.source, url: record.url })
@@ -191,7 +222,8 @@ function buildPreviewCardHtml(entry) {
       : "";
 
   return `
-    ${renderOriginRowHtml(record, key)}
+    ${renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" })}
+    ${renderOriginRowHtml(record)}
     ${badgeHtml ? `<div class="news-meta"><div class="news-card-badges">${badgeHtml}</div></div>` : ""}
     <h3>${titleHtml}</h3>
     <div class="bm-shimmer-group" aria-hidden="true">
@@ -211,7 +243,8 @@ function buildFallbackCardHtml(entry, noteText = "") {
     safeHref !== "#"
       ? `<a href="${safeHref}" target="_blank" rel="noopener noreferrer">${escapeHtml(record.title || "Saved story")}</a>`
       : escapeHtml(record.title || "Saved story");
-  const badgeHtml = record.badge ? `<span class="cat-pill">${escapeHtml(record.badge)}</span>` : "";
+  const typeLabel = getBookmarkType(entry);
+  const badgeHtml = typeLabel ? renderHashedTag(typeLabel) : "";
   const sourceChip =
     safeHref !== "#"
       ? renderSourceChip({ name: record.source || "Open original article", url: record.url })
@@ -226,7 +259,8 @@ function buildFallbackCardHtml(entry, noteText = "") {
       : "Full archived card details were unavailable; showing saved headline and source link.");
 
   return `
-    ${renderOriginRowHtml(record, key)}
+    ${renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" })}
+    ${renderOriginRowHtml(record)}
     ${badgeHtml ? `<div class="news-meta"><div class="news-card-badges">${badgeHtml}</div></div>` : ""}
     <h3>${titleHtml}</h3>
     <p class="bm-fallback-note">${escapeHtml(fallbackNote)}</p>
@@ -250,7 +284,10 @@ function buildRichCardHtml(entry) {
   const { key, record, ttl, extracted } = entry;
   if (!extracted) return buildFallbackCardHtml(entry);
 
-  // 1. Daily: top_news
+  const bookmarkBtn = renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" });
+  const typeLabel = getBookmarkType(entry);
+
+  // 1. Daily: top_news (hide morning/afternoon tags on Bookmarks page)
   if (record.edition === "daily" && record.section === "top_news") {
     const story = extracted.story;
     const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
@@ -261,18 +298,15 @@ function buildRichCardHtml(entry) {
       story.sentiment && SENTIMENT_LABELS[story.sentiment] && story.sentiment !== "neutral"
         ? story.sentiment
         : inferSentimentFromText(`${story.headline || ""} ${story.summary || ""}`);
-    const editionPill = story.is_afternoon
-      ? `<span class="afternoon-pill" title="Added in Afternoon Update">Afternoon</span>`
-      : `<span class="morning-pill" title="Published in Morning Briefing">Morning</span>`;
     const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
 
     return `
-      ${renderOriginRowHtml(record, key)}
+      ${bookmarkBtn}
+      ${renderOriginRowHtml(record)}
       <div class="news-meta">
         <div class="news-card-badges">
-          <span class="cat-pill">${escapeHtml(story.category || record.badge || "News")}</span>
+          ${renderHashedTag(typeLabel)}
           ${renderSentimentRing(sentiment)}
-          ${editionPill}
         </div>
       </div>
       <h3>${formatEntitiesInPlain(story.headline)}</h3>
@@ -309,10 +343,11 @@ function buildRichCardHtml(entry) {
       : "";
 
     return `
-      ${renderOriginRowHtml(record, key)}
+      ${bookmarkBtn}
+      ${renderOriginRowHtml(record)}
       <div class="news-meta">
         <div class="news-card-badges">
-          <span class="cat-pill">${escapeHtml(extracted.regionName || record.badge || "Local")}</span>
+          ${renderHashedTag(typeLabel)}
           ${renderSentimentRing(sentiment)}
         </div>
         ${langToggleHtml}
@@ -339,10 +374,11 @@ function buildRichCardHtml(entry) {
     const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
 
     return `
-      ${renderOriginRowHtml(record, key)}
+      ${bookmarkBtn}
+      ${renderOriginRowHtml(record)}
       <div class="news-meta">
         <div class="news-card-badges">
-          <span class="cat-pill">${escapeHtml(story.category || "Progress")}</span>
+          ${renderHashedTag(typeLabel)}
           ${renderSentimentRing(posSentiment)}
         </div>
       </div>
@@ -354,7 +390,7 @@ function buildRichCardHtml(entry) {
     `;
   }
 
-  // 4. Weekly: science / culture / history
+  // 4. Weekly: science / culture / history (type tag on left, hide right-side subtype tag)
   if (
     record.edition === "weekly" &&
     (record.section === "science" || record.section === "culture" || record.section === "history")
@@ -371,21 +407,18 @@ function buildRichCardHtml(entry) {
         : formatEntitiesInPlain(item.headline);
     const sourcesHtml = (item.sources || []).slice(0, 3).map(renderSourceChip).join("");
     const ringHtml = renderSentimentRing(item.sentiment, `${item.headline || ""} ${item.summary || ""}`);
-    const disciplineHtml = item.discipline
-      ? `<span class="discipline-tag">${escapeHtml(item.discipline)}</span>`
-      : "";
     const takeawayHtml = item.takeaway
       ? `<p class="weekly-takeaway"><span class="weekly-takeaway-label">Takeaway</span>${highlightSummaryHtml(item.takeaway)}</p>`
       : "";
 
     return `
-      ${renderOriginRowHtml(record, key)}
+      ${bookmarkBtn}
+      ${renderOriginRowHtml(record)}
       <div class="news-meta">
         <div class="news-card-badges">
-          ${renderHashedTag(item.category || "Learning")}
+          ${renderHashedTag(typeLabel)}
           ${ringHtml}
         </div>
-        ${disciplineHtml}
       </div>
       <h3>${headlineHtml}</h3>
       <p class="news-summary">${highlightSummaryHtml(item.summary)}</p>
@@ -395,7 +428,7 @@ function buildRichCardHtml(entry) {
     `;
   }
 
-  // 5. Weekly: long_reads
+  // 5. Weekly: long_reads (type tag on left, unified style)
   if (record.edition === "weekly" && record.section === "long_reads") {
     const lr = extracted.item;
     const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
@@ -408,17 +441,14 @@ function buildRichCardHtml(entry) {
         ? `<a href="${headlineUrl}" target="_blank" rel="noopener noreferrer">${formatEntitiesInPlain(lr.headline)}</a>`
         : formatEntitiesInPlain(lr.headline);
     const sourcesHtml = (lr.sources || []).slice(0, 3).map(renderSourceChip).join("");
-    const timeHtml = lr.reading_time
-      ? `<span class="reading-time-tag">${escapeHtml(lr.reading_time)}</span>`
-      : "";
 
     return `
-      ${renderOriginRowHtml(record, key)}
+      ${bookmarkBtn}
+      ${renderOriginRowHtml(record)}
       <div class="news-meta">
         <div class="news-card-badges">
-          ${renderHashedTag(lr.topic || "Essay")}
+          ${renderHashedTag(typeLabel)}
         </div>
-        ${timeHtml}
       </div>
       <h3>${headlineHtml}</h3>
       <p class="news-summary">${highlightSummaryHtml(lr.summary)}</p>
@@ -427,11 +457,9 @@ function buildRichCardHtml(entry) {
     `;
   }
 
-  // 6. Weekly: around_the_world (geology / cuisine)
+  // 6. Weekly: around_the_world (hashed Geology / Cuisine type tag on left, hide feature subtype)
   if (record.edition === "weekly" && record.section === "around_the_world") {
     const item = extracted.item;
-    const kind = item.kind === "cuisine" ? "cuisine" : "geology";
-    const kindLabel = kind === "cuisine" ? "Cuisine" : "Geology";
     const flagHtml = item.country_code ? renderCountryFlagImg(item.country_code.toLowerCase()) : "";
     const coords = fmtCoords(Number(item.lat ?? 0), Number(item.lon ?? 0));
     const wikiTitle = item.wiki_title || item.place || "";
@@ -444,11 +472,11 @@ function buildRichCardHtml(entry) {
     );
 
     return `
-      ${renderOriginRowHtml(record, key)}
+      ${bookmarkBtn}
+      ${renderOriginRowHtml(record)}
       <div class="news-meta">
         <div class="news-card-badges">
-          <span class="geo-kind-badge is-${kind}">${kindLabel}</span>
-          ${renderHashedTag(item.feature_type || kindLabel)}
+          ${renderHashedTag(typeLabel)}
         </div>
       </div>
       <div class="geo-fact-loc-row">
@@ -563,10 +591,10 @@ function refreshAllEntryTtls() {
 
 function matchesFilter(entry, filter) {
   if (filter === "all") return true;
-  if (filter === "daily") return entry.record.edition === "daily";
-  if (filter === "weekly") return entry.record.edition === "weekly";
-  if (filter === "around_the_world") return entry.record.section === "around_the_world";
   if (filter === "expiring") return entry.ttl.status === "expiring_soon";
+  if (filter.startsWith("type:")) {
+    return normalizeTypeKey(getBookmarkType(entry)) === filter.slice(5);
+  }
   return true;
 }
 
@@ -588,16 +616,18 @@ function compareEntries(a, b) {
 
 function updateCountsAndBanners() {
   const all = [...state.cardCache.values()];
-  let daily = 0;
-  let weekly = 0;
-  let world = 0;
+  const typeCounts = new Map(); // normKey -> { label, count }
   let expiring = 0;
   let expired = 0;
 
   for (const e of all) {
-    if (e.record.edition === "daily") daily += 1;
-    else if (e.record.edition === "weekly") weekly += 1;
-    if (e.record.section === "around_the_world") world += 1;
+    const typeLabel = getBookmarkType(e);
+    const normKey = normalizeTypeKey(typeLabel);
+    if (normKey) {
+      const prev = typeCounts.get(normKey);
+      if (prev) prev.count += 1;
+      else typeCounts.set(normKey, { label: typeLabel, count: 1 });
+    }
     if (e.ttl.status === "expiring_soon") expiring += 1;
     else if (e.ttl.status === "expired") expired += 1;
   }
@@ -606,23 +636,41 @@ function updateCountsAndBanners() {
     els.countLabel.textContent = `${all.length} saved`;
   }
 
-  const countMap = {
-    all: all.length,
-    daily,
-    weekly,
-    around_the_world: world,
-    expiring,
-  };
-
-  for (const [name, val] of Object.entries(countMap)) {
-    const span = els.filterBar?.querySelector(`[data-count-for="${name}"]`);
-    if (span) span.textContent = String(val);
+  // Auto-reset active filter if the selected type or expiring bucket became empty
+  if (state.filter.startsWith("type:") && !typeCounts.has(state.filter.slice(5))) {
+    state.filter = "all";
+  } else if (state.filter === "expiring" && expiring === 0) {
+    state.filter = "all";
   }
 
-  const expiringTab = els.filterBar?.querySelector('[data-filter="expiring"]');
-  if (expiringTab) {
-    const showExpTab = expiring > 0 || state.filter === "expiring";
-    expiringTab.classList.toggle("hidden", !showExpTab);
+  if (els.filterBar) {
+    const sortedTypes = [...typeCounts.entries()].sort((a, b) => {
+      if (b[1].count !== a[1].count) return b[1].count - a[1].count;
+      return a[1].label.localeCompare(b[1].label);
+    });
+
+    const tabs = [
+      { id: "all", label: "All", count: all.length },
+      ...sortedTypes.map(([normKey, info]) => ({
+        id: `type:${normKey}`,
+        label: info.label,
+        count: info.count,
+      })),
+    ];
+    if (expiring > 0) {
+      tabs.push({ id: "expiring", label: "Expiring Soon", count: expiring });
+    }
+
+    els.filterBar.innerHTML = tabs
+      .map((tab) => {
+        const active = state.filter === tab.id;
+        return `
+          <button type="button" class="bm-filter-tab${active ? " active" : ""}" data-filter="${escapeHtml(tab.id)}" role="tab" aria-selected="${active ? "true" : "false"}">
+            <span>${escapeHtml(tab.label)}</span><span class="bm-tab-count">${tab.count}</span>
+          </button>
+        `;
+      })
+      .join("");
   }
 
   els.btnClearExpired?.classList.toggle("hidden", expired === 0);
@@ -849,6 +897,7 @@ async function hydrateArchiveGroup(edition, date) {
     // Immediately drop reference to the full ~139 KB archive JSON
     fullJson = null;
     state.fetchedArchives.add(archiveKey);
+    updateCountsAndBanners();
   } catch {
     for (const entry of state.cardCache.values()) {
       if (entry.record.edition !== edition || entry.record.date !== date) continue;

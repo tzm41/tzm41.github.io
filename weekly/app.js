@@ -34,7 +34,7 @@ import {
   syncBookmarkButtons,
   bindBookmarkToggle,
   onBookmarksChange,
-} from "../shared/bookmarks.js?v=1";
+} from "../shared/bookmarks.js?v=2";
 import {
   initAuth,
   getLocalPreferences,
@@ -162,7 +162,7 @@ function renderBriefBullets(bullets = []) {
         <li>
           <span class="exec-meta">
             ${renderSentimentRing(sentiment, text)}
-            <span class="cat-pill">${escapeHtml(category)}</span>
+            ${renderHashedTag(category)}
           </span>
           <span class="exec-text">${highlightSummaryHtml(text)}</span>
         </li>
@@ -259,15 +259,13 @@ function renderLearningCard(item, sectionName) {
 
   return `
     <article class="news-card">
+      ${bookmarkBtn}
       <div class="news-meta">
         <div class="news-card-badges">
           ${renderHashedTag(item.category || "Learning")}
           ${ringHtml}
         </div>
-        <div class="weekly-card-top-right">
-          ${disciplineHtml}
-          ${bookmarkBtn}
-        </div>
+        ${disciplineHtml ? `<div class="weekly-card-top-right">${disciplineHtml}</div>` : ""}
       </div>
       <h3>${headlineHtml}</h3>
       <p class="news-summary">${highlightSummaryHtml(item.summary)}</p>
@@ -414,11 +412,12 @@ function buildGeoCardHtml(item, showClose = true) {
     region: null,
     kind,
     title: bookmarkTitle,
-    badge: item.feature_type || kindLabel,
+    badge: kindLabel,
     source: wikiUrl ? "Wikipedia" : item.region || "",
     url: wikiUrl,
   });
   return `
+    ${bookmarkBtn}
     <div class="geo-fact-head">
       <div class="geo-fact-loc-row">
         ${flagHtml}
@@ -426,10 +425,7 @@ function buildGeoCardHtml(item, showClose = true) {
         <span>&middot; ${escapeHtml(item.region || "")}</span>
         <span class="geo-fact-coords">(${escapeHtml(coords)})</span>
       </div>
-      <div class="geo-fact-head-actions">
-        ${bookmarkBtn}
-        ${showClose ? `<button type="button" class="geo-fact-close" aria-label="Close card">&times;</button>` : ""}
-      </div>
+      ${showClose ? `<div class="geo-fact-head-actions"><button type="button" class="geo-fact-close" aria-label="Close card">&times;</button></div>` : ""}
     </div>
     <h4 class="geo-fact-title">${formatEntitiesInPlain(item.title)}</h4>
     <p class="geo-fact-body">${highlightSummaryHtml(item.fact)}</p>
@@ -745,14 +741,12 @@ function renderLongReads(ed) {
       });
       return `
         <article class="news-card">
+          ${bookmarkBtn}
           <div class="news-meta">
             <div class="news-card-badges">
               ${renderHashedTag(lr.topic || "Essay")}
             </div>
-            <div class="weekly-card-top-right">
-              ${timeHtml}
-              ${bookmarkBtn}
-            </div>
+            ${timeHtml ? `<div class="weekly-card-top-right">${timeHtml}</div>` : ""}
           </div>
           <h3>${headlineHtml}</h3>
           <p class="news-summary">${highlightSummaryHtml(lr.summary)}</p>
