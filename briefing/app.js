@@ -2,7 +2,7 @@
  * Daily Briefing Dashboard — Client Application (Zero-Build ES Module)
  */
 
-import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=12";
+import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js?v=13";
 
 const DATA_BASE = "./data";
 
@@ -21,6 +21,7 @@ const state = {
   localLang: "en",
   localExpanded: false,
   companyFacts: null,
+  countryLeaders: null,
 };
 
 const els = {
@@ -3111,7 +3112,11 @@ async function bootstrap() {
   initSparklineHover();
   initSourceBiasPopover();
   initFloatingTooltips();
-  initCountryMapTooltip(escapeHtml, renderCountryFlagImg);
+  initCountryMapTooltip(
+    escapeHtml,
+    renderCountryFlagImg,
+    (code) => state.countryLeaders?.leaders?.[code] || null
+  );
 
   // Mobile KPI strip collapse toggle (collapsed by default on narrow screens)
   const setKpiOpen = (open) => {
@@ -3359,7 +3364,7 @@ async function bootstrap() {
     }
   });
 
-  // Fetch company facts metadata & archive manifest in parallel
+  // Fetch company facts, country leaders & archive manifest in parallel
   const factsPromise = fetch(`${DATA_BASE}/company_facts.json`, { cache: "no-store" })
     .then((r) => (r.ok ? r.json() : null))
     .then((facts) => {
@@ -3368,6 +3373,13 @@ async function bootstrap() {
       if (els.companyFactsMeta && facts.updated_at) {
         els.companyFactsMeta.textContent = ` · Company facts updated ${fmtLocalTimestamp(facts.updated_at)}.`;
       }
+    })
+    .catch(() => {});
+
+  const leadersPromise = fetch(`${DATA_BASE}/country_leaders.json`, { cache: "no-store" })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((leaders) => {
+      if (leaders) state.countryLeaders = leaders;
     })
     .catch(() => {});
 
@@ -3385,7 +3397,7 @@ async function bootstrap() {
     })
     .catch(() => {});
 
-  await Promise.all([factsPromise, indexPromise]);
+  await Promise.all([factsPromise, leadersPromise, indexPromise]);
 
   const requested = new URLSearchParams(window.location.search).get("date");
   const initialDate =

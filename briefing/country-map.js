@@ -480,80 +480,6 @@ export const PLACE_ALIASES = {};
 export const COUNTRY_META = {};
 export const COUNTRY_FLAGS = {};
 
-// Heads of state / government for major countries & EU
-const COUNTRY_LEADERS = {
-  us: "Donald Trump (President)",
-  ca: "Mark Carney (PM)",
-  mx: "Claudia Sheinbaum (President)",
-  br: "Luiz Inácio Lula da Silva (President)",
-  ar: "Javier Milei (President)",
-  co: "Gustavo Petro (President)",
-  cl: "Gabriel Boric (President)",
-  ve: "Nicolás Maduro (President)",
-  cu: "Miguel Díaz-Canel (President)",
-  eu: "Ursula von der Leyen (EC President)",
-  gb: "Keir Starmer (PM)",
-  ie: "Micheál Martin (Taoiseach)",
-  fr: "Emmanuel Macron (President)",
-  de: "Friedrich Merz (Chancellor)",
-  it: "Giorgia Meloni (PM)",
-  es: "Pedro Sánchez (PM)",
-  pt: "Luís Montenegro (PM)",
-  nl: "Dick Schoof (PM)",
-  be: "Bart De Wever (PM)",
-  ch: "Karin Keller-Sutter (President)",
-  at: "Christian Stocker (Chancellor)",
-  pl: "Donald Tusk (PM)",
-  cz: "Petr Fiala (PM)",
-  hu: "Viktor Orbán (PM)",
-  ro: "Ilie Bolojan (PM)",
-  gr: "Kyriakos Mitsotakis (PM)",
-  se: "Ulf Kristersson (PM)",
-  no: "Jonas Gahr Støre (PM)",
-  fi: "Alexander Stubb (President)",
-  dk: "Mette Frederiksen (PM)",
-  ua: "Volodymyr Zelenskyy (President)",
-  by: "Alexander Lukashenko (President)",
-  rs: "Aleksandar Vučić (President)",
-  ru: "Vladimir Putin (President)",
-  tr: "Recep Tayyip Erdoğan (President)",
-  cn: "Xi Jinping (President)",
-  tw: "Lai Ching-te (President)",
-  hk: "John Lee (Chief Executive)",
-  jp: "Sanae Takaichi (PM)",
-  kr: "Lee Jae-myung (President)",
-  kp: "Kim Jong Un (Supreme Leader)",
-  in: "Narendra Modi (PM)",
-  pk: "Shehbaz Sharif (PM)",
-  bd: "Muhammad Yunus (Chief Adviser)",
-  id: "Prabowo Subianto (President)",
-  vn: "Tô Lâm (General Secretary)",
-  th: "Paetongtarn Shinawatra (PM)",
-  my: "Anwar Ibrahim (PM)",
-  sg: "Lawrence Wong (PM)",
-  ph: "Ferdinand Marcos Jr. (President)",
-  il: "Benjamin Netanyahu (PM)",
-  ps: "Mahmoud Abbas (President)",
-  ir: "Masoud Pezeshkian (President)",
-  sa: "Mohammed bin Salman (Crown Prince & PM)",
-  ae: "Mohamed bin Zayed (President)",
-  qa: "Tamim bin Hamad Al Thani (Emir)",
-  eg: "Abdel Fattah el-Sisi (President)",
-  jo: "King Abdullah II (King)",
-  sy: "Ahmed al-Sharaa (President)",
-  iq: "Mohammed Shia' al-Sudani (PM)",
-  lb: "Joseph Aoun (President)",
-  za: "Cyril Ramaphosa (President)",
-  ng: "Bola Tinubu (President)",
-  ke: "William Ruto (President)",
-  et: "Abiy Ahmed (PM)",
-  ma: "King Mohammed VI (King)",
-  dz: "Abdelmadjid Tebboune (President)",
-  au: "Anthony Albanese (PM)",
-  nz: "Christopher Luxon (PM)",
-  va: "Pope Leo XIV (Pope)",
-};
-
 // 1. Countries
 for (const [code, [name, capital, continent, iso, aliases, dot]] of Object.entries(RAW_COUNTRIES)) {
   const entry = {
@@ -565,7 +491,6 @@ for (const [code, [name, capital, continent, iso, aliases, dot]] of Object.entri
     regionLabel: (CONTINENT_META[continent] || CONTINENT_META.world).label,
     continent,
     iso,
-    ...(COUNTRY_LEADERS[code] ? { leader: COUNTRY_LEADERS[code] } : {}),
     ...(dot ? { dot } : {}),
   };
   COUNTRY_META[code] = entry;
@@ -961,7 +886,7 @@ function buildPlaceWikiUrl(placeId, meta) {
   return `https://en.wikipedia.org/wiki/${encodeURIComponent(String(title).replace(/ /g, "_"))}`;
 }
 
-export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
+export function initCountryMapTooltip(escapeHtml, renderFlagImg, getLeader = null) {
   const card = document.createElement("div");
   card.className = "country-map-tip hidden";
   card.setAttribute("role", "tooltip");
@@ -1011,8 +936,9 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg) {
       includeWikiLink && wikiUrl
         ? `<div class="tip-wiki-row"><a class="tip-wiki-link" href="${wikiUrl}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a></div>`
         : "";
-    const leaderHtml = meta.leader
-      ? `<div class="cmap-leader"><span class="cmap-leader-k">Leader</span><span class="cmap-leader-v">${escapeHtml(meta.leader)}</span></div>`
+    const leaderText = (typeof getLeader === "function" ? getLeader(placeId) : null) || meta.leader || "";
+    const leaderHtml = leaderText
+      ? `<div class="cmap-leader"><span class="cmap-leader-k">Leader</span><span class="cmap-leader-v">${escapeHtml(leaderText)}</span></div>`
       : "";
     const footerHtml = isCity
       ? `<div class="cmap-title is-city">
