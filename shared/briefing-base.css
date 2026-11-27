@@ -1423,8 +1423,16 @@ h3 {
   }
 }
 
+.label-short {
+  display: none;
+}
+
 @media (max-width: 768px) {
-  .title-suffix {
+  .label-full {
     display: none;
+  }
+
+  .label-short {
+    display: inline;
   }
 }

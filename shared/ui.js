@@ -132,6 +132,78 @@ export function syncButtonGroup(containerOrNodes, isActiveFn, ariaAttr = "aria-p
   }
 }
 
+/* ---------- Shared Responsive Masthead Title & Top Nav ---------- */
+
+const MASTHEAD_PAGES = {
+  home: {
+    label: "colintan.dev",
+    shortLabel: "colintan.dev",
+    href: "../index.html",
+    title: "Back to main site",
+    prefix: "&larr; ",
+  },
+  daily: {
+    label: "Daily Briefing",
+    shortLabel: "Daily",
+    href: "../briefing/?date=latest",
+    title: "Open Daily Briefing",
+    suffix: " &rarr;",
+  },
+  weekly: {
+    label: "Weekly Briefing",
+    shortLabel: "Weekly",
+    href: "../weekly/?date=latest",
+    title: "Open Weekly Briefing",
+    suffix: " &rarr;",
+  },
+  bookmarks: {
+    label: "Bookmarks",
+    shortLabel: "Bookmarks",
+    href: "../bookmarks/",
+    title: "Open Saved Bookmarks",
+    countId: "nav-bookmarks-count",
+  },
+};
+
+const MASTHEAD_CRUMBS = {
+  daily: ["home", "weekly", "bookmarks"],
+  weekly: ["home", "daily", "bookmarks"],
+  bookmarks: ["home", "daily", "weekly"],
+};
+
+export function renderResponsiveLabel(fullLabel, shortLabel = fullLabel) {
+  const safeFull = escapeHtml(fullLabel);
+  if (!shortLabel || shortLabel === fullLabel) return safeFull;
+  return `<span class="label-full">${safeFull}</span><span class="label-short" aria-hidden="true">${escapeHtml(shortLabel)}</span>`;
+}
+
+/**
+ * Hydrate the shared masthead breadcrumb row and responsive <h1> title
+ * so all pages share one canonical full/narrow-screen shrinking implementation.
+ */
+export function initMasthead({
+  currentPage,
+  crumbRowEl = document.querySelector(".masthead-crumb-row"),
+  titleEl = document.querySelector(".masthead .title-row h1"),
+} = {}) {
+  const page = MASTHEAD_PAGES[currentPage];
+  if (titleEl && page) {
+    titleEl.innerHTML = renderResponsiveLabel(page.label, page.shortLabel);
+  }
+  const crumbKeys = MASTHEAD_CRUMBS[currentPage];
+  if (crumbRowEl && crumbKeys) {
+    crumbRowEl.innerHTML = crumbKeys
+      .map((key) => {
+        const item = MASTHEAD_PAGES[key];
+        const countHtml = item.countId
+          ? `<span class="crumb-count hidden" id="${escapeHtml(item.countId)}"></span>`
+          : "";
+        return `<a href="${escapeHtml(item.href)}" class="back-home" title="${escapeHtml(item.title)}">${item.prefix || ""}${renderResponsiveLabel(item.label, item.shortLabel)}${countHtml}${item.suffix || ""}</a>`;
+      })
+      .join('<span class="crumb-sep" aria-hidden="true">&middot;</span>');
+  }
+}
+
 export function renderSourceHealth(el, entries = []) {
   if (!el) return;
   el.innerHTML = entries

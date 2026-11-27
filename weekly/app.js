@@ -12,6 +12,7 @@ import {
 } from "../shared/utils.js";
 import {
   initTheme,
+  initMasthead,
   initScrollSpy,
   createCollapsibleManager,
   showToast,
@@ -741,6 +742,8 @@ async function bootstrap() {
     applyWorldKindFilter(initialPrefs.world_kind_filter, { rerender: false });
   }
 
+  initMasthead({ currentPage: "weekly" });
+  els.navBookmarksCount = document.getElementById("nav-bookmarks-count");
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
     setPreference("theme", pref);
   });

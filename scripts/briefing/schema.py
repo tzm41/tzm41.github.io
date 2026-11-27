@@ -210,6 +210,7 @@ class SourceHealth(BaseModel):
     markets: HealthStatus = "ok"
     conflicts: HealthStatus = "ok"
     politics: HealthStatus = "ok"
+    local_news: HealthStatus = "ok"
 
 
 class ExecutiveBriefItem(BaseModel):

@@ -12,6 +12,7 @@ import {
 } from "../shared/utils.js";
 import {
   initTheme,
+  initMasthead,
   initScrollSpy,
   createCollapsibleManager,
   renderSourceChip,
@@ -281,13 +282,21 @@ const marketsCtrl = createMarketsController({
 });
 const { renderMarkets, renderSectorHeatmap, refreshLiveMarkets, initSparklineHover } = marketsCtrl;
 
-function renderSourceHealth(health = {}) {
+function resolveLocalHealth(health, localRegions) {
+  if (health?.local_news) return health.local_news;
+  if (!Array.isArray(localRegions) || !localRegions.length) return "failed";
+  const nonEmpty = localRegions.filter((r) => (r?.stories || []).length > 0).length;
+  if (nonEmpty === localRegions.length) return "ok";
+  return nonEmpty > 0 ? "partial" : "failed";
+}
+
+function renderSourceHealth(health = {}, localRegions = []) {
   renderSourceHealthStrip(els.sourceHealth, [
     ["News", health.news],
     ["Markets", health.markets],
     ["Conflicts", health.conflicts],
     ["Politics", health.politics],
-    ["Local", health.local_news],
+    ["Local", resolveLocalHealth(health, localRegions)],
   ]);
 }
 
@@ -765,7 +774,7 @@ function renderAll(briefing) {
     ""
   );
   els.generatedMeta.textContent = `Updated ${fmtLocalTimestamp(latestUpdateTs)}`;
-  renderSourceHealth(briefing.source_health);
+  renderSourceHealth(briefing.source_health, briefing.local_news);
   renderKpiStrip(briefing);
   renderExecutiveBrief(briefing);
   renderNews(briefing.top_news);
@@ -878,6 +887,8 @@ async function bootstrap() {
     state.marketTimeframe = initialPrefs.market_tf;
   }
 
+  initMasthead({ currentPage: "daily" });
+  els.navBookmarksCount = document.getElementById("nav-bookmarks-count");
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
     setPreference("theme", pref);
     if (state.briefing) renderSectorHeatmap(state.briefing.markets);

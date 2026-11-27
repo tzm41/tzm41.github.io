@@ -176,11 +176,18 @@ async def run_pipeline(
             )
     recent_headlines_3d = format_memory_headlines(memory_3d)
 
+    local_non_empty = sum(1 for r in (raw_local or []) if isinstance(r, dict) and r.get("articles"))
+    local_h = (
+        "ok"
+        if raw_local and local_non_empty == len(raw_local)
+        else ("partial" if local_non_empty > 0 else "failed")
+    )
     health = SourceHealth(
         news=news_h,  # type: ignore[arg-type]
         markets=mkt_h,  # type: ignore[arg-type]
         conflicts=conf_h,  # type: ignore[arg-type]
         politics=pol_h,  # type: ignore[arg-type]
+        local_news=local_h,  # type: ignore[arg-type]
     )
     print(
         f"[run] Fetch complete — news={len(raw_news)} ({health.news}), "

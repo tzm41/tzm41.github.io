@@ -8,7 +8,7 @@
  */
 
 import { escapeHtml, safeUrl, fmtShortDate, fetchJson } from "../shared/utils.js";
-import { initTheme, renderSourceChip, syncButtonGroup } from "../shared/ui.js";
+import { initTheme, initMasthead, renderSourceChip, syncButtonGroup } from "../shared/ui.js";
 import {
   initEntityOverlays,
   loadSharedEntityData,
@@ -938,6 +938,7 @@ function renderFooterSyncIndicator(syncState = getSyncState()) {
 
 async function bootstrap() {
   // 1. UI primitives & auth (zero cold-load requests when signed out)
+  initMasthead({ currentPage: "bookmarks" });
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
     setPreference("theme", pref);
   });
