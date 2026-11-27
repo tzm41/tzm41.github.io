@@ -951,13 +951,15 @@ function computeSparklineLayout(values, times, tf, symbol) {
         return { xs, closeX: null, isExtended: mins.map(() => false) };
       }
       const startMin = minMin < 570 ? Math.min(minMin, 240) : 570; // 9:30 AM ET (or 4:00 AM if pre-market)
+      const hasPreMarket = minMin < 570;
       const hasAfterHours = maxMin > 960;
       const endMin = hasAfterHours ? 1200 : 960; // equities 4:00 / 8:00 PM ET
       const spanMin = Math.max(60, endMin - startMin);
       const xs = mins.map((m) => Math.max(0, Math.min(w, ((m - startMin) / spanMin) * w)));
+      const openX = hasPreMarket ? ((570 - startMin) / spanMin) * w : null;
       const closeX = hasAfterHours ? ((960 - startMin) / spanMin) * w : null;
       const isExtended = mins.map((m) => m > 960 || m < 570);
-      return { xs, closeX, isExtended };
+      return { xs, openX, closeX, isExtended };
     }
   }
 
@@ -1001,25 +1003,27 @@ function buildSparklineSvg(
       ? `${arr[0][0].toFixed(1)},${h} ${toPoly(arr)} ${arr[arr.length - 1][0].toFixed(1)},${h}`
       : "";
 
-  const firstExtIdx = isExt.findIndex(Boolean);
   let shapesHtml = "";
-  if (firstExtIdx > 0 && isExt.slice(firstExtIdx).every(Boolean)) {
-    const regCoords = coords.slice(0, firstExtIdx);
-    const extCoords = coords.slice(firstExtIdx - 1);
-    shapesHtml = `
-      <polygon points="${toArea(regCoords)}" fill="${color}" fill-opacity="0.12"></polygon>
-      <polyline points="${toPoly(regCoords)}" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
-      <polygon points="${toArea(extCoords)}" fill="${color}" fill-opacity="0.05"></polygon>
-      <polyline points="${toPoly(extCoords)}" fill="none" stroke="${color}" stroke-opacity="0.45" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
-    `;
-  } else {
-    const dim = isExt.every(Boolean);
-    shapesHtml = `
-      <polygon points="${toArea(coords)}" fill="${color}" fill-opacity="${dim ? "0.06" : "0.12"}"></polygon>
-      <polyline points="${toPoly(coords)}" fill="none" stroke="${color}" stroke-opacity="${dim ? "0.5" : "1"}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
-    `;
+  let runStart = 0;
+  while (runStart < coords.length) {
+    const ext = Boolean(isExt[runStart]);
+    let runEnd = runStart + 1;
+    while (runEnd < coords.length && Boolean(isExt[runEnd]) === ext) runEnd += 1;
+    const segStart = runStart > 0 ? runStart - 1 : runStart;
+    const seg = coords.slice(segStart, runEnd);
+    if (seg.length >= 2) {
+      shapesHtml += `
+        <polygon points="${toArea(seg)}" fill="${color}" fill-opacity="${ext ? "0.05" : "0.12"}"></polygon>
+        <polyline points="${toPoly(seg)}" fill="none" stroke="${color}" stroke-opacity="${ext ? "0.45" : "1"}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
+      `;
+    }
+    runStart = runEnd;
   }
 
+  const openLineHtml =
+    layout?.openX != null
+      ? `<line class="spark-close-line" x1="${layout.openX.toFixed(1)}" y1="0" x2="${layout.openX.toFixed(1)}" y2="${h}"></line>`
+      : "";
   const closeLineHtml =
     layout?.closeX != null
       ? `<line class="spark-close-line" x1="${layout.closeX.toFixed(1)}" y1="0" x2="${layout.closeX.toFixed(1)}" y2="${h}"></line>`
@@ -1028,7 +1032,7 @@ function buildSparklineSvg(
   if (!interactive) {
     return `
       <svg class="${className}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
-        ${closeLineHtml}
+        ${openLineHtml}${closeLineHtml}
         ${shapesHtml}
       </svg>
     `;
@@ -1036,7 +1040,7 @@ function buildSparklineSvg(
 
   return `
     <svg class="${className}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
-      ${closeLineHtml}
+      ${openLineHtml}${closeLineHtml}
       ${shapesHtml}
       <line class="spark-guide" x1="0" y1="0" x2="0" y2="${h}"></line>
     </svg>
@@ -2199,24 +2203,57 @@ async function fetchClientLiveQuotes(symbols, force = false) {
   return fetchViaPublicCorsFallback(symbols);
 }
 
+function getLatestEquityBarIso(markets) {
+  let latestMs = 0;
+  let latestIso = "";
+  const eqItems = [
+    ...(markets?.big7 || []),
+    ...(markets?.watchlist || []).filter((q) =>
+      ["^GSPC", "^IXIC", "^DJI", "^RUT"].includes(q?.symbol)
+    ),
+  ];
+  for (const item of eqItems) {
+    const times = item?.sparkline_1d_times;
+    if (!Array.isArray(times) || !times.length) continue;
+    const raw = times[times.length - 1];
+    const ms = Date.parse(raw);
+    if (!Number.isNaN(ms) && ms > latestMs) {
+      latestMs = ms;
+      latestIso = raw;
+    }
+  }
+  return latestIso;
+}
+
 function updateMarketsLivePill(updatedAt, sourceTag = "") {
   if (!els.marketsLivePill || !updatedAt) return;
-  const dt = new Date(updatedAt);
+  const latestEqIso = getLatestEquityBarIso(state.briefing?.markets);
+  const todayEt = NY_DATE_FMT.format(new Date());
+  const eqEt = latestEqIso ? NY_DATE_FMT.format(new Date(latestEqIso)) : "";
+  const marketClosedToday = Boolean(eqEt && eqEt < todayEt);
+
+  const effectiveIso = marketClosedToday ? latestEqIso : updatedAt;
+  const dt = new Date(effectiveIso);
   const timeStr = Number.isNaN(dt.getTime())
-    ? updatedAt
+    ? effectiveIso
+    : marketClosedToday
+    ? dt.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })
     : dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
   const ageMin = Number.isNaN(dt.getTime()) ? 999 : Math.max(0, (Date.now() - dt.getTime()) / 60000);
-  const freshness = ageMin < 45 ? "fresh" : ageMin < 180 ? "aging" : "stale";
+  const freshness = marketClosedToday ? "aging" : ageMin < 45 ? "fresh" : ageMin < 180 ? "aging" : "stale";
   const ageLabel =
     ageMin < 1 ? "just now" : ageMin < 60 ? `${Math.round(ageMin)}m ago` : `${Math.round(ageMin / 60)}h ago`;
-  const srcNote =
-    sourceTag === "cloudflare"
-      ? " · live"
-      : sourceTag === "cors-fallback"
-      ? " · live (fallback)"
-      : "";
+  const srcNote = marketClosedToday
+    ? " · US market closed today"
+    : sourceTag === "cloudflare"
+    ? " · live"
+    : sourceTag === "cors-fallback"
+    ? " · live (fallback)"
+    : "";
   els.marketsLivePill.innerHTML = `<span class="live-dot ${freshness}" aria-hidden="true"></span>${escapeHtml(timeStr)}`;
-  els.marketsLivePill.title = `${freshness} · ${ageLabel}${srcNote}`;
+  els.marketsLivePill.title = marketClosedToday
+    ? `Market closed · last session ${timeStr}`
+    : `${freshness} · ${ageLabel}${srcNote}`;
   els.marketsLivePill.classList.remove("hidden");
 }
 
