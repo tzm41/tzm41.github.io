@@ -1026,7 +1026,7 @@ export default {
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders(request) });
     }
-    if (request.method !== "GET") {
+    if (request.method !== "GET" && request.method !== "HEAD") {
       return jsonResponse({ error: "Method not allowed" }, 405, request);
     }
 
