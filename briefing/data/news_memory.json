@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-26T21:07:34Z",
+  "updated_at": "2026-11-27T01:01:13Z",
   "window_days": 3,
   "items": [
     {
@@ -23,6 +23,46 @@
     {
       "date": "2026-11-26",
       "section": "top_news",
+      "id": "kuwait-strike-kills-italians-iran",
+      "headline": "Strike in Kuwait Kills Two Italian Technicians as Iran Denies Responsibility",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/c39w9y5dx4k5o",
+        "https://www.aljazeera.com/news/liveblog/2026/11/27/iran-war-live-irans-araghchi-calls-deadly-kuwait-attack-suspicious"
+      ],
+      "tokens": [
+        "denies",
+        "iran",
+        "italian",
+        "kills",
+        "kuwait",
+        "responsibility",
+        "strike",
+        "technicians"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
+      "id": "nvidia-pauses-southeast-asia-shipments",
+      "headline": "Nvidia Pauses AI Chip Shipments to Southeast Asia Amid Export Curbs",
+      "urls": [
+        "https://techcrunch.com/2026/11/26/nvidia-hits-pause-on-chip-shipments-to-southeast-asia",
+        "https://news.google.com/rss/articles/CBMikgFBVV95cUxOd3BvSkxTQnd6ZVRTQUJ4RHBUY3l5M0J1aW1yTl9zUVFNaE1tUjlrVG1MeE9lVlNTMTVrOFFPUjA3R0RnWktyNERHcGhnWk9YYlQ3RXRRVXQtUXhCZDg3d3Foa2dxZndDSTU5UW51eU1ZSW91Nk45bFFZVjk2YzU0MGtwal9zbldIVU93NkpDLTFXdw"
+      ],
+      "tokens": [
+        "asia",
+        "chip",
+        "curbs",
+        "export",
+        "nvidia",
+        "pauses",
+        "shipments",
+        "southeast"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
       "id": "norse-atlantic-suspends-flights",
       "headline": "Norse Atlantic Suspends All Flights Amid Urgent Funding Plea",
       "urls": [
@@ -36,6 +76,26 @@
         "plea",
         "suspends",
         "urgent"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
+      "id": "thanksgiving-storms-power-outages-travel",
+      "headline": "Major Thanksgiving Storms Cut Power to Nearly 1 Million, Disrupt U.S. Travel",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/ckm2mz3prq77o",
+        "https://thehill.com/policy/energy-environment/6244928-thanksgiving-storm-flight-delays-power-outages"
+      ],
+      "tokens": [
+        "disrupt",
+        "major",
+        "million",
+        "nearly",
+        "power",
+        "storms",
+        "thanksgiving",
+        "travel"
       ]
     },
     {
@@ -145,6 +205,26 @@
         "reaches",
         "twice",
         "yearly"
+      ]
+    },
+    {
+      "date": "2026-11-26",
+      "section": "top_news",
+      "id": "argentina-central-bank-money-printing-ban",
+      "headline": "Argentina Bars Central Bank From Printing Money to Fund Government Spending",
+      "urls": [
+        "https://www.aljazeera.com/news/2026/11/27/argentina-bars-central-bank-from-printing-money-to-fund-government-spending"
+      ],
+      "tokens": [
+        "argentina",
+        "bank",
+        "bars",
+        "central",
+        "fund",
+        "government",
+        "money",
+        "printing",
+        "spending"
       ]
     },
     {

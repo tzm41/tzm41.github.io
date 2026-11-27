@@ -1,6 +1,6 @@
 {
   "date": "2026-11-26",
-  "generated_at": "2026-11-26T15:01:30Z",
+  "generated_at": "2026-11-27T01:01:13Z",
   "synthesis_mode": "gemini",
   "source_health": {
     "news": "ok",
@@ -38,7 +38,108 @@
       }
     ]
   },
+  "afternoon_brief": {
+    "generated_at": "2026-11-27T01:01:13Z",
+    "bullets": [
+      {
+        "text": "U.S. equities held a **mixed close** with the **Nasdaq (-0.62%)** and **S&P 500 (-0.25%)** trailing the **Dow (+0.33%)** and **Russell 2000 (+0.71%)**, while **WTI crude climbed 1.83% to $85.21**, **gold rose 1.42% to $3,586.10**, and the **VIX eased 5.27% to 26.80**.",
+        "category": "Economy",
+        "sentiment": "neutral"
+      },
+      {
+        "text": "**Nvidia paused AI chip shipments to Southeast Asia** and instructed buyers to rule out Chinese renters, halting **billions in data center deals** under U.S. export curbs.",
+        "category": "Tech",
+        "sentiment": "negative"
+      },
+      {
+        "text": "Severe **Thanksgiving coastal storms knocked out power to nearly 1 million U.S. customers**, grounded flights at Reagan National Airport, and forced the **postponement of the Macy's Thanksgiving Day Parade**.",
+        "category": "World",
+        "sentiment": "negative"
+      },
+      {
+        "text": "A **strike in Kuwait killed two Italian Rheinmetall technicians**, which Iranian Foreign Minister *Abbas Araghchi* called \"suspicious,\" while Ukrainian President *Volodymyr Zelensky* told the BBC the U.S. is **not pushing Russia hard enough**.",
+        "category": "World",
+        "sentiment": "very_negative"
+      }
+    ]
+  },
   "top_news": [
+    {
+      "id": "nvidia-pauses-southeast-asia-shipments",
+      "category": "Tech",
+      "headline": "Nvidia Pauses AI Chip Shipments to Southeast Asia Amid Export Curbs",
+      "summary": "Nvidia has instructed partners to pause AI chip shipments to Southeast Asia and told buyers they must rule out Chinese renters to purchase GPUs. The move has stalled billions of dollars in regional data center deals as U.S. semiconductor restrictions tighten.",
+      "why_it_matters": "Southeast Asia has been a major growth hub for AI infrastructure, and stricter enforcement of U.S. chip curbs directly threatens Nvidia's regional demand and cloud capacity expansion.",
+      "sources": [
+        {
+          "name": "TechCrunch AI",
+          "url": "https://techcrunch.com/2026/11/26/nvidia-hits-pause-on-chip-shipments-to-southeast-asia/"
+        },
+        {
+          "name": "Google News Business",
+          "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOd3BvSkxTQnd6ZVRTQUJ4RHBUY3l5M0J1aW1yTl9zUVFNaE1tUjlrVG1MeE9lVlNTMTVrOFFPUjA3R0RnWktyNERHcGhnWk9YYlQ3RXRRVXQtUXhCZDg3d3Foa2dxZndDSTU5UW51eU1ZSW91Nk45bFFZVjk2YzU0MGtwal9zbldIVU93NkpDLTFXdw?oc=5"
+        }
+      ],
+      "sentiment": "negative",
+      "continued_from_prior": false,
+      "is_afternoon": true
+    },
+    {
+      "id": "thanksgiving-storms-power-outages-travel",
+      "category": "World",
+      "headline": "Major Thanksgiving Storms Cut Power to Nearly 1 Million, Disrupt U.S. Travel",
+      "summary": "Powerful coastal storms battered both U.S. coasts on Thanksgiving, bringing heavy rain, flooding, and high winds that left nearly one million customers without electricity by Thursday evening. The severe weather grounded flights at Washington's Reagan National Airport and forced the postponement of the Macy's Thanksgiving Day Parade.",
+      "why_it_matters": "Widespread power outages and flight disruptions are complicating holiday travel for an estimated 81.5 million Americans and straining East Coast infrastructure.",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/ckm2mz3prq77o?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "name": "The Hill",
+          "url": "https://thehill.com/policy/energy-environment/6244928-thanksgiving-storm-flight-delays-power-outages/"
+        }
+      ],
+      "sentiment": "negative",
+      "continued_from_prior": false,
+      "is_afternoon": true
+    },
+    {
+      "id": "kuwait-strike-kills-italians-iran",
+      "category": "World",
+      "headline": "Strike in Kuwait Kills Two Italian Technicians as Iran Denies Responsibility",
+      "summary": "Two Italian technicians working for German defense firm Rheinmetall were killed in a strike in Kuwait, according to Italy's foreign ministry. Iranian Foreign Minister Abbas Araghchi denied responsibility, calling the deadly incident \"suspicious\" and a \"pre-cooked recipe\" for war.",
+      "why_it_matters": "The deaths of European defense contractors in the Gulf heighten the risk of broader regional escalation and further rattle energy markets.",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/c39w9y5dx4k5o?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.aljazeera.com/news/liveblog/2026/11/27/iran-war-live-irans-araghchi-calls-deadly-kuwait-attack-suspicious?traffic_source=rss"
+        }
+      ],
+      "sentiment": "very_negative",
+      "continued_from_prior": false,
+      "is_afternoon": true
+    },
+    {
+      "id": "argentina-central-bank-money-printing-ban",
+      "category": "Economy",
+      "headline": "Argentina Bars Central Bank From Printing Money to Fund Government Spending",
+      "summary": "Argentina enacted a measure prohibiting its central bank from printing money to finance government spending, reinforcing fiscal discipline efforts. Separately, the country's Senate advanced a proposal to suspend primary elections ahead of the 2027 presidential race.",
+      "why_it_matters": "Cutting off monetary financing of the fiscal deficit is a pivotal structural shift aimed at anchoring inflation expectations in South America's second-largest economy.",
+      "sources": [
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.aljazeera.com/news/2026/11/27/argentina-bars-central-bank-from-printing-money-to-fund-government-spending?traffic_source=rss"
+        }
+      ],
+      "sentiment": "slightly_positive",
+      "continued_from_prior": false,
+      "is_afternoon": true
+    },
     {
       "id": "spacex-orbital-data-centers",
       "category": "Tech",
@@ -185,7 +286,7 @@
     }
   ],
   "markets": {
-    "narrative": "Equities closed **mixed under lingering tech pressure**, with the **Nasdaq (-0.62%)** and **S&P 500 (-0.25%)** weighed down by **Nvidia (-2.68%)** and **Amazon (-2.19%)**, while **Meta (+3.83%)** rallied and rotational buying lifted the **Dow (+0.33%)** and **Russell 2000 (+0.71%)**. Safe-haven **gold jumped 1.89% to $3,602.70** and **WTI crude rose 1.05% to $84.56** as the **10-year yield eased to 4.85%**, while the **VIX slipped 4.49% to 27.02** even as Fear & Greed remained in **Extreme Fear (15.0)**.",
+    "narrative": "Equities finished **mixed** as **Nvidia (-2.68%)** and **Amazon (-2.19%)** dragged the **Nasdaq (-0.62%)** and **S&P 500 (-0.25%)** lower, while **Meta (+3.83%)** and **Materials (+2.07%)** helped lift the **Dow (+0.33%)** and **Russell 2000 (+0.71%)**. In extended commodities and rates trading, **WTI crude climbed 1.83% to $85.21** and **gold held up 1.42% at $3,586.10** amid Middle East tensions, while the **10-year yield stood at 4.85%** and the **VIX fell 5.27% to 26.80** despite **Extreme Fear (15.0)**.",
     "regime_tag": "Mixed",
     "watchlist": [
       {
