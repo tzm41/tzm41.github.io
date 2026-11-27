@@ -2,13 +2,13 @@
  * Cloudflare Worker: briefing-markets-proxy
  *
  * Proxies Yahoo Finance 1D intraday quotes + sparklines (including extended hours)
- * for the tzm41.github.io/briefing/ dashboard.
+ * for tzm41.github.io/briefing/ (and colintan.dev/briefing/).
  *
- * Rate limiting:
- * - At most 3 upstream Yahoo Finance fetches per symbol every 5 minutes (300s),
- *   enforced via Cloudflare Edge Cache (100s per-symbol TTL) + a 5-minute
- *   sliding-window counter per symbol. Returns HTTP 429 when limit is exceeded
- *   so the client can cleanly fall back to a public CORS proxy.
+ * Subrequest budget (Cloudflare Free tier = 50 subrequests/invocation):
+ * - Uses 1 consolidated Edge Cache entry for all quotes (100s per-symbol TTL)
+ *   and 1 consolidated Edge Cache entry for per-symbol 5-minute rate limits
+ *   (max 3 upstream fetches per symbol every 5 minutes).
+ * - Total subrequests for all 27 symbols <= 31 (well under 50).
  */
 
 const ALLOWED_SYMBOLS = new Set([
@@ -45,14 +45,19 @@ const ALLOWED_SYMBOLS = new Set([
 ]);
 
 const ALL_SYMBOLS_LIST = [...ALLOWED_SYMBOLS];
-const SYMBOL_CACHE_TTL_SEC = 100; // 300s / 3 = 100s -> max 3 fetches per 5 min
+const SYMBOL_CACHE_TTL_MS = 100 * 1000; // 100s -> max 3 fetches per 5 min
 const RL_WINDOW_MS = 5 * 60 * 1000;
 const RL_MAX_FETCHES = 3;
+
+const QUOTES_CACHE_KEY = new Request("https://quote.briefing-markets.internal/v2/all");
+const RL_CACHE_KEY = new Request("https://rl.briefing-markets.internal/v2/all");
 
 function corsHeaders(request) {
   const origin = request.headers.get("Origin") || "";
   const allowed =
     origin === "https://tzm41.github.io" ||
+    origin === "https://colintan.dev" ||
+    origin === "https://www.colintan.dev" ||
     /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
   return {
     "Access-Control-Allow-Origin": allowed ? origin : "https://tzm41.github.io",
@@ -98,7 +103,6 @@ function parseYahooChart(symbol, payload) {
     typeof meta.regularMarketPrice === "number" && Number.isFinite(meta.regularMarketPrice)
       ? meta.regularMarketPrice
       : null;
-  // Prefer extended-hours last bar if available for equities, else regularMarketPrice
   const price =
     symbol === "^TNX" || symbol.startsWith("^")
       ? regularPrice ?? lastBar
@@ -128,64 +132,10 @@ function parseYahooChart(symbol, payload) {
   };
 }
 
-async function checkAndConsumeSymbolRateLimit(cache, symbol) {
-  const rlKey = new Request(`https://rl.briefing-markets.internal/v1/${encodeURIComponent(symbol)}`);
-  const now = Date.now();
-  let timestamps = [];
-  const existing = await cache.match(rlKey);
-  if (existing) {
-    try {
-      const data = await existing.json();
-      if (Array.isArray(data?.timestamps)) {
-        timestamps = data.timestamps.filter((t) => typeof t === "number" && now - t < RL_WINDOW_MS);
-      }
-    } catch {
-      timestamps = [];
-    }
-  }
-
-  if (timestamps.length >= RL_MAX_FETCHES) {
-    const oldest = Math.min(...timestamps);
-    const retryAfter = Math.max(1, Math.ceil((oldest + RL_WINDOW_MS - now) / 1000));
-    return { allowed: false, remaining: 0, retryAfter };
-  }
-
-  timestamps.push(now);
-  await cache.put(
-    rlKey,
-    new Response(JSON.stringify({ timestamps }), {
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": `public, max-age=${Math.ceil(RL_WINDOW_MS / 1000)}`,
-      },
-    })
-  );
-  return { allowed: true, remaining: Math.max(0, RL_MAX_FETCHES - timestamps.length), retryAfter: 0 };
-}
-
-async function fetchSymbolQuote(cache, symbol, bypassQuoteCache = false) {
-  const cacheKey = new Request(
-    `https://quote.briefing-markets.internal/v1/${encodeURIComponent(symbol)}`
-  );
-
-  if (!bypassQuoteCache) {
-    const cached = await cache.match(cacheKey);
-    if (cached) {
-      const data = await cached.json();
-      return { quote: data, cached: true, rateLimited: false, retryAfter: 0 };
-    }
-  }
-
-  const rl = await checkAndConsumeSymbolRateLimit(cache, symbol);
-  if (!rl.allowed) {
-    // Even if bypass was requested, serve stale cached value only if not bypassing; otherwise signal 429
-    return { quote: null, cached: false, rateLimited: true, retryAfter: rl.retryAfter };
-  }
-
+async function fetchYahooOne(symbol) {
   const yfUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(
     symbol
   )}?range=1d&interval=5m&includePrePost=true`;
-
   try {
     const resp = await fetch(yfUrl, {
       headers: {
@@ -194,32 +144,16 @@ async function fetchSymbolQuote(cache, symbol, bypassQuoteCache = false) {
         Accept: "application/json",
       },
     });
-    if (!resp.ok) {
-      return { quote: null, cached: false, rateLimited: resp.status === 429, retryAfter: 60 };
-    }
+    if (!resp.ok) return { symbol, quote: null, rateLimited: resp.status === 429 };
     const payload = await resp.json();
-    const parsed = parseYahooChart(symbol, payload);
-    if (!parsed) {
-      return { quote: null, cached: false, rateLimited: false, retryAfter: 0 };
-    }
-
-    await cache.put(
-      cacheKey,
-      new Response(JSON.stringify(parsed), {
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": `public, max-age=${SYMBOL_CACHE_TTL_SEC}`,
-        },
-      })
-    );
-    return { quote: parsed, cached: false, rateLimited: false, retryAfter: 0 };
+    return { symbol, quote: parseYahooChart(symbol, payload), rateLimited: false };
   } catch {
-    return { quote: null, cached: false, rateLimited: false, retryAfter: 0 };
+    return { symbol, quote: null, rateLimited: false };
   }
 }
 
 export default {
-  async fetch(request) {
+  async fetch(request, env, ctx) {
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders(request) });
     }
@@ -248,22 +182,85 @@ export default {
         return jsonResponse({ error: "No valid symbols requested" }, 400, request);
       }
 
-      const results = await Promise.all(
-        requested.map((sym) => fetchSymbolQuote(cache, sym, force))
-      );
+      const now = Date.now();
+      const [cachedQuotesResp, rlResp] = await Promise.all([
+        cache.match(QUOTES_CACHE_KEY),
+        cache.match(RL_CACHE_KEY),
+      ]);
+
+      let quoteStore = {};
+      if (cachedQuotesResp) {
+        try {
+          quoteStore = (await cachedQuotesResp.json()) || {};
+        } catch {
+          quoteStore = {};
+        }
+      }
+
+      let rlStore = {};
+      if (rlResp) {
+        try {
+          rlStore = (await rlResp.json()) || {};
+        } catch {
+          rlStore = {};
+        }
+      }
 
       const quotes = {};
+      const toFetch = [];
+      let cacheHits = 0;
       let rateLimitedCount = 0;
       let maxRetryAfter = 0;
-      let cacheHits = 0;
 
-      for (const r of results) {
-        if (r.quote) quotes[r.quote.symbol] = r.quote;
-        if (r.cached) cacheHits += 1;
-        if (r.rateLimited) {
-          rateLimitedCount += 1;
-          maxRetryAfter = Math.max(maxRetryAfter, r.retryAfter || 60);
+      for (const sym of requested) {
+        const entry = quoteStore[sym];
+        if (!force && entry?.quote && typeof entry.ts === "number" && now - entry.ts < SYMBOL_CACHE_TTL_MS) {
+          quotes[sym] = entry.quote;
+          cacheHits += 1;
+          continue;
         }
+        const recent = Array.isArray(rlStore[sym])
+          ? rlStore[sym].filter((t) => typeof t === "number" && now - t < RL_WINDOW_MS)
+          : [];
+        rlStore[sym] = recent;
+        if (recent.length >= RL_MAX_FETCHES) {
+          rateLimitedCount += 1;
+          const oldest = Math.min(...recent);
+          maxRetryAfter = Math.max(maxRetryAfter, Math.max(1, Math.ceil((oldest + RL_WINDOW_MS - now) / 1000)));
+        } else {
+          recent.push(now);
+          toFetch.push(sym);
+        }
+      }
+
+      if (toFetch.length > 0) {
+        const fetched = await Promise.all(toFetch.map(fetchYahooOne));
+        for (const r of fetched) {
+          if (r.quote) {
+            quotes[r.symbol] = r.quote;
+            quoteStore[r.symbol] = { quote: r.quote, ts: now };
+          } else if (r.rateLimited) {
+            rateLimitedCount += 1;
+            maxRetryAfter = Math.max(maxRetryAfter, 60);
+          }
+        }
+
+        ctx.waitUntil(
+          Promise.all([
+            cache.put(
+              QUOTES_CACHE_KEY,
+              new Response(JSON.stringify(quoteStore), {
+                headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=300" },
+              })
+            ),
+            cache.put(
+              RL_CACHE_KEY,
+              new Response(JSON.stringify(rlStore), {
+                headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=300" },
+              })
+            ),
+          ])
+        );
       }
 
       const quoteCount = Object.keys(quotes).length;
