@@ -331,6 +331,12 @@ const BASE_PERSON_NAMES = [
   "Hillary Clinton",
   "Pope Leo XIV",
   "Pope Francis",
+  "King Charles III",
+  "King Charles",
+  "King Salman",
+  "King Abdullah II",
+  "King Felipe VI",
+  "Queen Camilla",
   // Tech & Business Leaders
   "Elon Musk",
   "Musk",
@@ -397,7 +403,7 @@ const BASE_PERSON_NAMES = [
 const PERSON_NAME_WORD = `(?!${NON_PERSON_TITLE_WORD})[A-ZÀ-Ý][a-zà-ÿ'-]+`;
 
 const PERSON_TITLE_PREFIX_PATTERN =
-  `(?:President|Prime Minister|Pope|King|Queen|Sen\\.-elect|Sen\\.|Rep\\.|Gov\\.|Dr\\.)\\s+${PERSON_NAME_WORD}(?:\\s+${PERSON_NAME_WORD}){0,2}|(?:Attorney General|Secretary|Chairman|Mayor|Governor|Justice|Judge|CEO)\\s+${PERSON_NAME_WORD}\\s+${PERSON_NAME_WORD}(?:\\s+${PERSON_NAME_WORD})?`;
+  `(?:President|Prime Minister|Pope|Sen\\.-elect|Sen\\.|Rep\\.|Gov\\.|Dr\\.)\\s+${PERSON_NAME_WORD}(?:\\s+${PERSON_NAME_WORD}){0,2}|(?:Attorney General|Secretary|Chairman|Mayor|Governor|Justice|Judge|CEO)\\s+${PERSON_NAME_WORD}\\s+${PERSON_NAME_WORD}(?:\\s+${PERSON_NAME_WORD})?`;
 
 function compilePersonNameRegex(names) {
   const unique = [...new Set(names.filter(Boolean))].sort((a, b) => b.length - a.length);
