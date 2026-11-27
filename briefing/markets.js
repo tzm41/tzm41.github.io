@@ -267,16 +267,16 @@ const NY_DATE_FMT = new Intl.DateTimeFormat("en-CA", {
   day: "2-digit",
 });
 
-function getPriorSessionBadge(times, tf) {
+function getPriorSessionBadge(times, tf, state) {
   if (tf !== "1d" || !Array.isArray(times) || !times.length) return null;
   const lastRaw = times[times.length - 1];
   if (!lastRaw) return null;
   const lastDt = new Date(lastRaw);
   if (Number.isNaN(lastDt.getTime())) return null;
   const lastEt = NY_DATE_FMT.format(lastDt);
-  const refEt = state.viewingLatest
+  const refEt = state?.viewingLatest
     ? NY_DATE_FMT.format(new Date())
-    : String(state.briefing?.date || "").slice(0, 10);
+    : String(state?.briefing?.date || "").slice(0, 10);
   if (!refEt || lastEt >= refEt) return null;
   const diffDays = Math.round((Date.parse(`${refEt}T00:00:00Z`) - Date.parse(`${lastEt}T00:00:00Z`)) / 86400000);
   const shortDate = lastDt.toLocaleDateString(undefined, {
@@ -538,7 +538,7 @@ export function createMarketsController({
         const isExpanded = state.expandedQuoteSymbol === q.symbol;
         const hi = series.length ? fmtPrice(Math.max(...series), q.symbol) : "—";
         const lo = series.length ? fmtPrice(Math.min(...series), q.symbol) : "—";
-        const prevBadge = getPriorSessionBadge(times, tf);
+        const prevBadge = getPriorSessionBadge(times, tf, state);
         const prevBadgeHtml = prevBadge
           ? `<span class="quote-prev-badge" tabindex="0" data-tooltip="${escapeHtml(prevBadge.title)}">${escapeHtml(prevBadge.label)}</span>`
           : "";
