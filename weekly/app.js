@@ -681,19 +681,17 @@ async function fetchJson(url) {
 
 function populateDateSelect(index) {
   const dates = index?.dates || [];
-  const editionsByDate = new Map((index?.editions || []).map((e) => [e.date, e]));
   els.dateSelect.innerHTML = "";
 
   const latestOpt = document.createElement("option");
   latestOpt.value = "latest";
-  latestOpt.textContent = dates.length ? `Latest (${dates[0]})` : "Latest";
+  latestOpt.textContent = "Latest";
   els.dateSelect.appendChild(latestOpt);
 
   for (const d of dates) {
     const opt = document.createElement("option");
     opt.value = d;
-    const meta = editionsByDate.get(d);
-    opt.textContent = meta?.week_label ? `${d} · ${meta.week_label}` : d;
+    opt.textContent = d;
     els.dateSelect.appendChild(opt);
   }
 }
