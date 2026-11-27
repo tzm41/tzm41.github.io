@@ -13,7 +13,7 @@ import {
   onBookmarksChange,
   registerSyncAdapter,
 } from "./bookmarks.js";
-import { escapeHtml } from "./ui.js";
+import { escapeHtml } from "./utils.js";
 
 export const API_BASE = "https://briefing-markets-proxy.tzm41.workers.dev";
 export const GOOGLE_CLIENT_ID =
@@ -877,39 +877,6 @@ function closePopovers() {
   widgetMountEl.querySelector(".auth-avatar-btn")?.setAttribute("aria-expanded", "false");
 }
 
-/* ---------- Scoped Zero-Specificity Fallback Styles ---------- */
-
-function ensureFallbackStyles() {
-  if (typeof document === "undefined" || document.getElementById("auth-widget-fallback-css")) return;
-  const style = document.createElement("style");
-  style.id = "auth-widget-fallback-css";
-  style.textContent = `
-:where(.auth-widget) { position: relative; display: inline-flex; align-items: center; }
-:where(.auth-signin-btn) { gap: 6px; }
-:where(.auth-avatar-btn) { width: 32px; height: 32px; padding: 3px; border-radius: 50%; border: 1px solid var(--border-strong, #cfc8bc); background: var(--surface, #fff); color: var(--ink, #181a1f); font-family: var(--font-mono, monospace); font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; transition: border-color .15s ease; }
-:where(.auth-avatar-btn:hover) { border-color: var(--accent, #a63a2b); }
-:where(.auth-avatar-img) { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; transition: filter .15s ease; }
-:where([data-theme="dark"] .auth-avatar-img) { filter: brightness(0.84) contrast(0.96); }
-:where([data-theme="dark"] .auth-avatar-btn:hover .auth-avatar-img) { filter: brightness(0.94); }
-:where(.auth-popover, .auth-menu) { position: absolute; top: calc(100% + 8px); right: 0; z-index: 90; width: 268px; max-width: calc(100vw - 24px); background: var(--surface, #fff); color: var(--ink, #181a1f); border: 1px solid var(--border-strong, #cfc8bc); border-radius: var(--radius, 8px); box-shadow: var(--shadow-md, 0 4px 14px rgba(0,0,0,.1)); padding: 12px; }
-:where(.auth-popover-title) { font-size: 13px; font-weight: 600; margin: 0 0 8px; }
-:where(.auth-gis-slot) { min-height: 44px; display: flex; align-items: center; justify-content: center; }
-:where(.auth-popover-status) { margin: 8px 0 0; font-size: 11.5px; color: var(--ink-muted, #6f7684); line-height: 1.4; }
-:where(.auth-popover-status.is-error) { color: var(--neg, #b9382c); }
-:where(.auth-menu) { padding: 8px; width: 236px; }
-:where(.auth-menu-head) { padding: 6px 8px 8px; border-bottom: 1px solid var(--border, #e4dfd6); margin-bottom: 6px; }
-:where(.auth-menu-name) { font-size: 13px; font-weight: 600; color: var(--ink, #181a1f); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-:where(.auth-sync-status) { display: inline-flex; align-items: center; gap: 6px; margin-top: 3px; font-family: var(--font-mono, monospace); font-size: 11px; color: var(--ink-muted, #6f7684); }
-:where(.auth-sync-dot) { width: 7px; height: 7px; border-radius: 50%; background: var(--pos, #157347); }
-:where(.auth-sync-status.is-syncing .auth-sync-dot) { background: var(--warn, #b4690e); }
-:where(.auth-sync-status.is-local .auth-sync-dot) { background: var(--ink-muted, #6f7684); }
-:where(.auth-menu-item) { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 8px; border: 0; border-radius: var(--radius-sm, 5px); background: transparent; color: var(--ink-secondary, #4a505c); font-family: var(--font-sans, sans-serif); font-size: 13px; font-weight: 500; text-align: left; text-decoration: none; cursor: pointer; }
-:where(.auth-menu-item:hover) { background: var(--surface-subtle, #f3f0ea); color: var(--ink, #181a1f); }
-:where(.auth-menu-count) { font-family: var(--font-mono, monospace); font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 999px; background: var(--surface-subtle, #f3f0ea); border: 1px solid var(--border, #e4dfd6); color: var(--ink-secondary, #4a505c); }
-`;
-  document.head.appendChild(style);
-}
-
 /* ---------- Widget Rendering ---------- */
 
 function renderWidget() {
@@ -1081,7 +1048,6 @@ export function initAuth({
   onPreferencesAppliedCb = typeof onPreferencesApplied === "function" ? onPreferencesApplied : null;
   onAuthChangeCb = typeof onAuthChange === "function" ? onAuthChange : null;
 
-  ensureFallbackStyles();
   session = loadSessionFromStorage();
 
   registerSyncAdapter({

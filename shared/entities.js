@@ -3,8 +3,9 @@
  * Used by both Daily Briefing (/briefing/) and Weekly Briefing (/weekly/).
  */
 
-import { PLACE_ALIASES, PLACE_META } from "../briefing/country-map.js";
-import { BIAS_TONE_COLOR, buildHalfRingSvg, escapeHtml, escapeRegex } from "./ui.js";
+import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.js";
+import { BIAS_TONE_COLOR, buildHalfRingSvg, initSourceBiasPopover } from "./ui.js";
+import { escapeHtml, escapeRegex, fetchJson } from "./utils.js";
 
 export const EXPLICIT_BOLD_RE = /\*\*((?:(?!\*\*).)+)\*\*/g;
 export const FALLBACK_HIGHLIGHT_RE =
@@ -617,4 +618,48 @@ export function initFloatingTooltips(getCompanyFacts = () => null) {
   });
 
   window.addEventListener("scroll", hide, { passive: true });
+}
+
+export function initEntityOverlays({ getCompanyFacts, getCountryLeaders }) {
+  initSourceBiasPopover();
+  initFloatingTooltips(getCompanyFacts);
+  initCountryMapTooltip(escapeHtml, renderCountryFlagImg, (code) => {
+    const leaders = typeof getCountryLeaders === "function" ? getCountryLeaders() : null;
+    return leaders?.leaders?.[code] || null;
+  });
+}
+
+export async function loadSharedEntityData(briefingDataBase, { cache = "no-store" } = {}) {
+  const [factsRes, leadersRes] = await Promise.allSettled([
+    fetchJson(`${briefingDataBase}/company_facts.json`, { cache }),
+    fetchJson(`${briefingDataBase}/country_leaders.json`, { cache }),
+  ]);
+  return {
+    companyFacts: factsRes.status === "fulfilled" ? factsRes.value : null,
+    countryLeaders: leadersRes.status === "fulfilled" ? leadersRes.value : null,
+  };
+}
+
+export function createCachedPersonFormatter(getCompanyFacts) {
+  let cachedFactsRef = undefined;
+  let basePersonRe = DEFAULT_PERSON_NAME_RE;
+
+  function getBaseRegex() {
+    const facts = typeof getCompanyFacts === "function" ? getCompanyFacts() : null;
+    if (facts !== cachedFactsRef) {
+      cachedFactsRef = facts;
+      basePersonRe = facts ? buildPersonNameRegexFromTexts([], facts) : DEFAULT_PERSON_NAME_RE;
+    }
+    return basePersonRe;
+  }
+
+  return function getFormatterForTexts(texts, pillCompaniesInSummary = false) {
+    const hasItalics = texts.some((t) => typeof t === "string" && t.includes("*"));
+    const facts = typeof getCompanyFacts === "function" ? getCompanyFacts() : null;
+    const personRe = hasItalics ? buildPersonNameRegexFromTexts(texts, facts) : getBaseRegex();
+    return createEntityFormatter({
+      getPersonRe: () => personRe,
+      pillCompaniesInSummary,
+    });
+  };
 }

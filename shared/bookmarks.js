@@ -1,7 +1,15 @@
 /**
  * Shared Bookmarks Store, TTL Engine, Sync LWW Merge & Button Helpers
- * Standalone pure JS module — ZERO external imports so index.html can import it lightly.
+ * Imports only lightweight pure helpers from ./utils.js so index.html stays tiny.
  */
+
+import {
+  escapeHtml,
+  sanitizeHttpUrl,
+  fmtShortDate,
+  readJsonStorage,
+  writeJsonStorage,
+} from "./utils.js";
 
 export const BOOKMARKS_STORAGE_KEY = "briefing-bookmarks-v1";
 export const MAX_BOOKMARKS = 100;
@@ -9,22 +17,6 @@ export const ARCHIVE_TTL_DAYS = Object.freeze({ daily: 60, weekly: 364 });
 export const EXPIRING_SOON_DAYS = 7;
 export const TOMBSTONE_MAX_AGE_SEC = 35 * 86400;
 export const MAX_TOMBSTONES = 100;
-
-const SHORT_DATE_FMT = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-  timeZone: "UTC",
-});
-
-function escapeAttr(str) {
-  return String(str ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 function escapeSelectorVal(val) {
   const s = String(val ?? "");
@@ -34,38 +26,12 @@ function escapeSelectorVal(val) {
   return s.replace(/["\\]/g, "\\$&");
 }
 
-function sanitizeBookmarkUrl(raw) {
-  if (typeof raw !== "string") return "";
-  const trimmed = raw.trim();
-  if (!trimmed || trimmed.length > 320) return "";
-  try {
-    const parsed = new URL(trimmed);
-    if (parsed.username || parsed.password) return "";
-    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return "";
-    return parsed.href.length <= 320 ? parsed.href : "";
-  } catch {
-    return "";
-  }
-}
-
 function safeReadStorage(key) {
-  try {
-    if (typeof localStorage === "undefined") return null;
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
+  return readJsonStorage(key);
 }
 
 function safeWriteStorage(key, value) {
-  try {
-    if (typeof localStorage === "undefined") return false;
-    localStorage.setItem(key, JSON.stringify(value));
-    return true;
-  } catch {
-    return false;
-  }
+  return writeJsonStorage(key, value);
 }
 
 export function makeBookmarkKey({ edition, date, section, id, region = null } = {}) {
@@ -118,7 +84,7 @@ export function buildBookmarkRecord({
     title: cleanTitle,
     badge: String(badge ?? "").trim().slice(0, 32),
     source: String(source ?? "").trim().slice(0, 40),
-    url: sanitizeBookmarkUrl(url),
+    url: sanitizeHttpUrl(url, 320),
   };
 
   const reg = region ? String(region).trim().slice(0, 32) : "";
@@ -166,7 +132,7 @@ export function computeBookmarkTtl(
   const expiresMs = (editionUtcDay + ttlDays) * 86400000;
   const expiresDate = new Date(expiresMs).toISOString().slice(0, 10);
   const daysRemaining = editionUtcDay + ttlDays - todayUtcDay;
-  const expiresReadable = SHORT_DATE_FMT.format(new Date(expiresMs));
+  const expiresReadable = fmtShortDate(expiresDate);
 
   let status;
   let label;
@@ -610,15 +576,85 @@ export function mergeFromRemote(
 const BOOKMARK_SVG = `<svg viewBox="0 0 24 26" aria-hidden="true"><path d="M4.5 0h15v23.5l-7.5-4.8-7.5 4.8V0z"/></svg>`;
 
 export function renderBookmarkButton(key, { saved = false, label = "story", extraClass = "" } = {}) {
-  const safeKey = escapeAttr(key);
+  const safeKey = escapeHtml(key);
   const cleanLabel = String(label || "story").trim() || "story";
-  const safeLabel = escapeAttr(cleanLabel);
+  const safeLabel = escapeHtml(cleanLabel);
   const ariaLabel = saved
     ? `Remove ${safeLabel} from bookmarks`
     : `Bookmark ${safeLabel}`;
   const title = saved ? "Saved in Bookmarks (click to remove)" : "Save to Bookmarks";
-  const cls = `bookmark-btn${saved ? " is-saved" : ""}${extraClass ? ` ${escapeAttr(extraClass)}` : ""}`;
+  const cls = `bookmark-btn${saved ? " is-saved" : ""}${extraClass ? ` ${escapeHtml(extraClass)}` : ""}`;
   return `<button type="button" class="${cls}" data-bookmark-key="${safeKey}" data-bookmark-label="${safeLabel}" aria-pressed="${saved ? "true" : "false"}" aria-label="${ariaLabel}" title="${title}">${BOOKMARK_SVG}</button>`;
+}
+
+export function createBookmarkRegistry({ edition, getDate }) {
+  const map = new Map();
+  return {
+    clear() {
+      map.clear();
+    },
+    get(key) {
+      return map.get(key);
+    },
+    register({
+      section,
+      id,
+      region = null,
+      lang = null,
+      kind = null,
+      title = "",
+      badge = "",
+      source = "",
+      url = "",
+      label = "story",
+    }) {
+      if (!id) return "";
+      const date = String(getDate?.() || "");
+      const key = makeBookmarkKey({ edition, date, section, id, region });
+      map.set(
+        key,
+        buildBookmarkRecord({
+          edition,
+          date,
+          section,
+          id,
+          region,
+          lang,
+          kind,
+          title,
+          badge: badge || section,
+          source,
+          url,
+        })
+      );
+      return renderBookmarkButton(key, {
+        saved: isBookmarked(key),
+        label: title || label,
+      });
+    },
+  };
+}
+
+export function bindBookmarkCountBadge(
+  el,
+  { format = (n) => `(${n})`, syncButtons = false } = {}
+) {
+  const update = () => {
+    if (el) {
+      const { total } = getBookmarkStats();
+      if (total > 0) {
+        el.textContent = format(total);
+        el.classList.remove("hidden");
+      } else {
+        el.textContent = "";
+        el.classList.add("hidden");
+      }
+    }
+    if (syncButtons) syncBookmarkButtons();
+  };
+  update();
+  const unsub = onBookmarksChange(update);
+  return { update, unsub };
 }
 
 function applyButtonNodeState(btn, saved) {

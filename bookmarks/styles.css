@@ -1,25 +1,7 @@
 /* ==========================================================================
    Bookmarks Page — Dedicated Saved Reading List Styles
-   Inherits ../briefing/styles.css variables & base card layout
+   Inherits ../shared/{tokens,auth,briefing-base}.css
    ========================================================================== */
-
-:root {
-  --bm-weekly-accent: #2c5d6b;
-  --bm-weekly-soft: rgba(44, 93, 107, 0.11);
-  --geo-pin: #a63a2b;
-  --geo-pin-ring: rgba(166, 58, 43, 0.16);
-  --cuisine-pin: #c47d14;
-  --cuisine-pin-ring: rgba(196, 125, 20, 0.18);
-}
-
-[data-theme="dark"] {
-  --bm-weekly-accent: #6ab7cc;
-  --bm-weekly-soft: rgba(106, 183, 204, 0.15);
-  --geo-pin: #e06d53;
-  --geo-pin-ring: rgba(224, 109, 83, 0.22);
-  --cuisine-pin: #f0b354;
-  --cuisine-pin-ring: rgba(240, 179, 84, 0.22);
-}
 
 /* Performance: skip offscreen card layout/paint */
 .bookmarks-page .news-card,
@@ -195,9 +177,9 @@
 }
 
 .bm-edition-badge.is-weekly {
-  background: var(--bm-weekly-soft);
-  color: var(--bm-weekly-accent);
-  border: 1px solid color-mix(in srgb, var(--bm-weekly-accent) 28%, transparent);
+  background: var(--weekly-accent-soft);
+  color: var(--weekly-accent);
+  border: 1px solid color-mix(in srgb, var(--weekly-accent) 28%, transparent);
 }
 
 .bm-origin-link {
@@ -241,64 +223,12 @@
   color: var(--bg);
 }
 
-.weekly-takeaway {
-  margin: 4px 0 0;
-  padding: 8px 10px;
-  background: var(--surface-subtle);
-  border-left: 2px solid var(--bm-weekly-accent);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--ink-secondary);
-}
-
-.weekly-takeaway-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--bm-weekly-accent);
-  margin-right: 6px;
-}
-
 .bm-geo-card {
   border-top: 3px solid var(--geo-pin);
 }
 
 .bm-geo-card.is-cuisine {
   border-top-color: var(--cuisine-pin);
-}
-
-.geo-fact-loc-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 5px 7px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--ink-muted);
-}
-
-.geo-fact-place {
-  font-weight: 600;
-  color: var(--ink-secondary);
-}
-
-.geo-fact-coords {
-  font-size: 10.5px;
-  opacity: 0.85;
-}
-
-.geo-fact-wiki {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 600;
-  color: var(--bm-weekly-accent);
-}
-
-.geo-fact-wiki:hover {
-  text-decoration: underline;
 }
 
 /* TTL Retention Footer Bar inside Cards */

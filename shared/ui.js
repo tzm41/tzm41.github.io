@@ -1,85 +1,38 @@
 /**
- * Shared UI Primitives for colintan.dev Briefings (Daily & Weekly)
- * - Escaping, safe URLs, date formatting
+ * Shared UI Primitives for colintan.dev Briefings (Daily, Weekly & Bookmarks)
+ * - Re-exports pure utilities from ./utils.js
  * - 3-way Theme controller (Auto / Light / Dark)
+ * - Toast notifications, segmented group sync, source health strip
  * - Sticky Section Nav Scroll-Spy
  * - Collapsible section wiring & Expand All / Collapse All sync
  * - Source bias & 7-level sentiment half-ring widgets
  */
 
-export function escapeHtml(str) {
-  return String(str ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
+import {
+  escapeHtml,
+  safeUrl,
+  escapeRegex,
+  fmtReadableDate,
+  fmtShortDate,
+  fmtLocalTimestamp,
+  fmtCoords,
+  fetchJson,
+  readJsonStorage,
+  writeJsonStorage,
+} from "./utils.js";
 
-export function safeUrl(url) {
-  if (typeof url !== "string") return "#";
-  const trimmed = url.trim();
-  if (!trimmed || trimmed.length > 2048) return "#";
-  try {
-    const parsed = new URL(trimmed);
-    if (parsed.username || parsed.password) return "#";
-    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return "#";
-    return escapeHtml(parsed.href);
-  } catch {
-    return "#";
-  }
-}
-
-export function escapeRegex(str) {
-  return String(str ?? "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-const READABLE_DATE_FMT = new Intl.DateTimeFormat("en-US", {
-  weekday: "short",
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-  timeZone: "UTC",
-});
-
-const SHORT_DATE_FMT = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-  timeZone: "UTC",
-});
-
-export function fmtReadableDate(dateStr) {
-  if (!dateStr) return "";
-  const [y, m, d] = String(dateStr).split("-").map(Number);
-  if (!y || !m || !d) return String(dateStr);
-  const dt = new Date(Date.UTC(y, m - 1, d));
-  if (Number.isNaN(dt.getTime())) return String(dateStr);
-  return READABLE_DATE_FMT.format(dt);
-}
-
-export function fmtShortDate(dateStr) {
-  if (!dateStr) return "";
-  const [y, m, d] = String(dateStr).split("-").map(Number);
-  if (!y || !m || !d) return String(dateStr);
-  const dt = new Date(Date.UTC(y, m - 1, d));
-  if (Number.isNaN(dt.getTime())) return String(dateStr);
-  return SHORT_DATE_FMT.format(dt);
-}
-
-export function fmtLocalTimestamp(isoStr) {
-  if (!isoStr) return "";
-  const dt = new Date(isoStr);
-  if (Number.isNaN(dt.getTime())) return isoStr;
-  return dt.toLocaleString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    timeZoneName: "short",
-  });
-}
+export {
+  escapeHtml,
+  safeUrl,
+  escapeRegex,
+  fmtReadableDate,
+  fmtShortDate,
+  fmtLocalTimestamp,
+  fmtCoords,
+  fetchJson,
+  readJsonStorage,
+  writeJsonStorage,
+};
 
 /* ---------- 3-Way Theme Toggle (Auto / Light / Dark) ---------- */
 
@@ -103,8 +56,15 @@ export function resolveTheme(pref) {
 }
 
 export function initTheme(themeToggleEl, onThemeChange = null) {
-  const apply = (pref, { silent = false } = {}) => {
+  const apply = (pref, { silent = false, persist = false } = {}) => {
     const validPref = THEME_ORDER.includes(pref) ? pref : "system";
+    if (persist) {
+      try {
+        localStorage.setItem("briefing-theme", validPref);
+      } catch {
+        // Ignore storage errors
+      }
+    }
     const resolved = resolveTheme(validPref);
     document.documentElement.setAttribute("data-theme", resolved);
 
@@ -120,14 +80,13 @@ export function initTheme(themeToggleEl, onThemeChange = null) {
   };
 
   const media = window.matchMedia?.("(prefers-color-scheme: dark)");
-  apply(localStorage.getItem("briefing-theme") || "system");
+  apply(localStorage.getItem("briefing-theme") || "system", { silent: true });
 
   themeToggleEl?.addEventListener("click", () => {
     const cur = localStorage.getItem("briefing-theme") || "system";
     const idx = THEME_ORDER.indexOf(cur);
     const nextPref = THEME_ORDER[(idx + 1) % THEME_ORDER.length];
-    localStorage.setItem("briefing-theme", nextPref);
-    apply(nextPref);
+    apply(nextPref, { persist: true });
   });
 
   media?.addEventListener?.("change", () => {
@@ -137,6 +96,52 @@ export function initTheme(themeToggleEl, onThemeChange = null) {
   });
 
   return { apply };
+}
+
+/* ---------- Toast Notifications, Segmented Sync & Source Health ---------- */
+
+let sharedToastTimer = null;
+
+export function showToast(msg, durationMs = 4000) {
+  if (typeof document === "undefined") return;
+  let el = document.querySelector(".auth-toast[data-shared-toast]");
+  if (!el) {
+    el = document.createElement("div");
+    el.className = "auth-toast";
+    el.dataset.sharedToast = "1";
+    el.setAttribute("role", "status");
+    document.body.appendChild(el);
+  }
+  el.textContent = String(msg ?? "");
+  el.classList.remove("hidden");
+  if (sharedToastTimer) window.clearTimeout(sharedToastTimer);
+  sharedToastTimer = window.setTimeout(() => {
+    el.classList.add("hidden");
+  }, durationMs);
+}
+
+export function syncButtonGroup(containerOrNodes, isActiveFn, ariaAttr = "aria-pressed") {
+  const nodes =
+    containerOrNodes && typeof containerOrNodes.querySelectorAll === "function"
+      ? containerOrNodes.querySelectorAll("button")
+      : containerOrNodes || [];
+  for (const btn of nodes) {
+    const active = Boolean(isActiveFn(btn));
+    btn.classList.toggle("active", active);
+    if (ariaAttr) btn.setAttribute(ariaAttr, String(active));
+  }
+}
+
+export function renderSourceHealth(el, entries = []) {
+  if (!el) return;
+  el.innerHTML = entries
+    .map(([label, status]) => {
+      const cls = status === "ok" ? "ok" : status === "partial" ? "partial" : "failed";
+      const safeLabel = escapeHtml(label);
+      const safeStatus = escapeHtml(status || "unknown");
+      return `<span class="health-item" title="${safeLabel}: ${safeStatus}"><span class="health-dot ${cls}"></span>${safeLabel}</span>`;
+    })
+    .join("");
 }
 
 /* ---------- Sticky Section Nav Scroll-Spy ---------- */
@@ -409,14 +414,14 @@ export function inferSentimentFromText(text) {
   return "neutral";
 }
 
-export function renderSentimentRing(sentiment, fallbackText = "") {
+export function renderSentimentRing(sentiment, fallbackText = "", defaultKey = "neutral") {
   const key =
     sentiment && SENTIMENT_META[sentiment] && sentiment !== "neutral"
       ? sentiment
       : fallbackText
       ? inferSentimentFromText(fallbackText)
-      : "neutral";
-  const meta = SENTIMENT_META[key] || SENTIMENT_META.neutral;
+      : defaultKey;
+  const meta = SENTIMENT_META[key] || SENTIMENT_META[defaultKey] || SENTIMENT_META.neutral;
   const tip = `Sentiment: ${meta.label}`;
   return `<span class="sentiment-gauge" tabindex="0" data-tooltip="${escapeHtml(tip)}" aria-label="${escapeHtml(tip)}">${buildHalfRingSvg(meta.pos, meta.color)}</span>`;
 }

@@ -3,48 +3,48 @@
  * Inherits UI, theme, entity, Wikipedia link, and tooltip engines from ../shared/
  */
 
-import { initCountryMapTooltip, loadWorldAtlas } from "../briefing/country-map.js";
+import { loadWorldAtlas } from "../shared/country-map.js";
 import {
   escapeHtml,
-  safeUrl,
   fmtReadableDate,
   fmtLocalTimestamp,
-  resolveTheme,
+  fetchJson,
+} from "../shared/utils.js";
+import {
   initTheme,
   initScrollSpy,
   createCollapsibleManager,
-  renderSourceChip,
-  renderHashedTag,
-  initSourceBiasPopover,
-  renderSentimentRing,
+  showToast,
+  syncButtonGroup,
+  renderSourceHealth as renderSourceHealthStrip,
 } from "../shared/ui.js";
 import {
   DEFAULT_PERSON_NAME_RE,
   buildPersonNameRegexFromTexts,
   createEntityFormatter,
-  initFloatingTooltips,
   renderCountryFlagImg,
+  initEntityOverlays,
+  loadSharedEntityData,
 } from "../shared/entities.js";
 import {
-  makeBookmarkKey,
-  buildBookmarkRecord,
-  isBookmarked,
-  getBookmarkStats,
-  renderBookmarkButton,
-  syncBookmarkButtons,
+  createBookmarkRegistry,
+  bindBookmarkCountBadge,
   bindBookmarkToggle,
-  onBookmarksChange,
 } from "../shared/bookmarks.js";
 import {
   initAuth,
   getLocalPreferences,
   setPreference,
 } from "../shared/auth.js";
+import { createArchiveController } from "../shared/archive-nav.js";
+import {
+  renderBriefBullets as renderSharedBriefBullets,
+  renderWeeklyStoryCard,
+  renderAroundTheWorldCard,
+} from "../shared/cards.js";
 
 const DATA_BASE = "./data";
 const SHARED_DATA_BASE = "../briefing/data";
-
-const bookmarkRecordMap = new Map();
 
 const state = {
   index: null,
@@ -55,6 +55,11 @@ const state = {
   countryLeaders: null,
   personNameRe: null,
 };
+
+const bookmarkRegistry = createBookmarkRegistry({
+  edition: "weekly",
+  getDate: () => state.currentDate || state.edition?.date || "",
+});
 
 const els = {
   editionDate: document.getElementById("edition-date"),
@@ -92,10 +97,11 @@ const els = {
   sourceHealth: document.getElementById("source-health"),
 };
 
-const { formatEntitiesInPlain, highlightSummaryHtml } = createEntityFormatter({
+const entityFormatter = createEntityFormatter({
   getPersonRe: () => state.personNameRe || DEFAULT_PERSON_NAME_RE,
   pillCompaniesInSummary: false,
 });
+const { formatEntitiesInPlain, highlightSummaryHtml } = entityFormatter;
 
 const collapsibles = createCollapsibleManager(els.btnExpandAll);
 
@@ -153,22 +159,10 @@ function renderHeader(ed) {
 }
 
 function renderBriefBullets(bullets = []) {
-  return bullets
-    .map((item) => {
-      const text = typeof item === "string" ? item : item?.text || "";
-      const category = typeof item === "object" && item?.category ? item.category : "Weekly";
-      const sentiment = typeof item === "object" ? item?.sentiment : null;
-      return `
-        <li>
-          <span class="exec-meta">
-            ${renderSentimentRing(sentiment, text)}
-            ${renderHashedTag(category)}
-          </span>
-          <span class="exec-text">${highlightSummaryHtml(text)}</span>
-        </li>
-      `;
-    })
-    .join("");
+  return renderSharedBriefBullets(bullets, {
+    highlightSummaryHtml,
+    resolveCategory: () => "Weekly",
+  });
 }
 
 function renderDigest(ed) {
@@ -201,78 +195,23 @@ function renderFeaturedQuote(ed) {
   `;
 }
 
-function registerWeeklyBookmark({ section, id, region = null, kind = null, title, badge, source, url }) {
-  if (!id) return "";
-  const date = state.currentDate || state.edition?.date || "";
-  const key = makeBookmarkKey({
-    edition: "weekly",
-    date,
-    section,
-    id,
-    region,
-  });
-  bookmarkRecordMap.set(
-    key,
-    buildBookmarkRecord({
-      edition: "weekly",
-      date,
-      section,
-      id,
-      region,
-      lang: null,
-      kind,
-      title: title || "",
-      badge: badge || section,
-      source: source || "",
-      url: url || "",
-    })
-  );
-  return renderBookmarkButton(key, {
-    saved: isBookmarked(key),
-    label: title || "item",
-  });
-}
-
 function renderLearningCard(item, sectionName) {
-  const headlineUrl = safeUrl(item.sources?.[0]?.url);
-  const headlineHtml =
-    headlineUrl && headlineUrl !== "#"
-      ? `<a href="${headlineUrl}" target="_blank" rel="noopener noreferrer">${formatEntitiesInPlain(item.headline)}</a>`
-      : formatEntitiesInPlain(item.headline);
-
-  const sourcesHtml = (item.sources || []).slice(0, 3).map(renderSourceChip).join("");
-  const ringHtml = renderSentimentRing(item.sentiment, `${item.headline || ""} ${item.summary || ""}`);
-  const disciplineHtml = item.discipline
-    ? `<span class="discipline-tag">${escapeHtml(item.discipline)}</span>`
-    : "";
-  const takeawayHtml = item.takeaway
-    ? `<p class="weekly-takeaway"><span class="weekly-takeaway-label">Takeaway</span>${highlightSummaryHtml(item.takeaway)}</p>`
-    : "";
-  const bookmarkBtn = registerWeeklyBookmark({
+  const bookmarkHtml = bookmarkRegistry.register({
     section: sectionName,
     id: item.id || item.headline,
     title: item.headline || "",
     badge: item.category || item.discipline || sectionName,
     source: item.sources?.[0]?.name || "",
     url: item.sources?.[0]?.url || "",
+    label: "item",
   });
 
-  return `
-    <article class="news-card">
-      ${bookmarkBtn}
-      <div class="news-meta">
-        <div class="news-card-badges">
-          ${renderHashedTag(item.category || "Learning")}
-          ${ringHtml}
-        </div>
-        ${disciplineHtml ? `<div class="weekly-card-top-right">${disciplineHtml}</div>` : ""}
-      </div>
-      <h3>${headlineHtml}</h3>
-      <p class="news-summary">${highlightSummaryHtml(item.summary)}</p>
-      ${takeawayHtml}
-      <div class="source-links">${sourcesHtml}</div>
-    </article>
-  `;
+  return renderWeeklyStoryCard(item, {
+    section: sectionName,
+    formatter: entityFormatter,
+    bookmarkHtml,
+    showSubtypeTag: true,
+  });
 }
 
 function renderLearningSection(secData, narrativeEl, gridEl, emptyMsg, sectionName) {
@@ -328,12 +267,6 @@ function projectWorld(lon, lat) {
   const x = ((lon - WORLD_LON_MIN) / (WORLD_LON_MAX - WORLD_LON_MIN)) * WORLD_MAP_W;
   const y = ((WORLD_LAT_MAX - lat) / (WORLD_LAT_MAX - WORLD_LAT_MIN)) * WORLD_MAP_H;
   return [x, y];
-}
-
-function fmtCoords(lat, lon) {
-  const ns = lat >= 0 ? "N" : "S";
-  const ew = lon >= 0 ? "E" : "W";
-  return `${Math.abs(lat).toFixed(1)}°${ns}, ${Math.abs(lon).toFixed(1)}°${ew}`;
 }
 
 function buildWorldBaseSvg(features) {
@@ -399,14 +332,13 @@ function itemGeoKind(item) {
 function buildGeoCardHtml(item, showClose = true) {
   const kind = itemGeoKind(item);
   const kindLabel = kind === "cuisine" ? "Cuisine" : "Geology";
-  const flagHtml = item.country_code ? renderCountryFlagImg(item.country_code.toLowerCase()) : "";
-  const coords = fmtCoords(Number(item.lat ?? 0), Number(item.lon ?? 0));
   const wikiTitle = item.wiki_title || item.place || "";
   const wikiUrl = wikiTitle
     ? `https://en.wikipedia.org/wiki/${encodeURIComponent(String(wikiTitle).replace(/ /g, "_"))}`
     : "";
-  const bookmarkTitle = item.place && item.title ? `${item.place} — ${item.title}` : item.title || item.place || "";
-  const bookmarkBtn = registerWeeklyBookmark({
+  const bookmarkTitle =
+    item.place && item.title ? `${item.place} — ${item.title}` : item.title || item.place || "";
+  const bookmarkHtml = bookmarkRegistry.register({
     section: "around_the_world",
     id: item.id || item.place || item.title,
     region: null,
@@ -415,28 +347,14 @@ function buildGeoCardHtml(item, showClose = true) {
     badge: kindLabel,
     source: wikiUrl ? "Wikipedia" : item.region || "",
     url: wikiUrl,
+    label: "item",
   });
-  return `
-    ${bookmarkBtn}
-    <div class="geo-fact-head">
-      <div class="geo-fact-loc-row">
-        ${flagHtml}
-        <span class="geo-fact-place">${escapeHtml(item.place)}</span>
-        <span>&middot; ${escapeHtml(item.region || "")}</span>
-        <span class="geo-fact-coords">(${escapeHtml(coords)})</span>
-      </div>
-      ${showClose ? `<div class="geo-fact-head-actions"><button type="button" class="geo-fact-close" aria-label="Close card">&times;</button></div>` : ""}
-    </div>
-    <h4 class="geo-fact-title">${formatEntitiesInPlain(item.title)}</h4>
-    <p class="geo-fact-body">${highlightSummaryHtml(item.fact)}</p>
-    <div class="geo-fact-foot">
-      <div class="geo-fact-tags">
-        <span class="geo-kind-badge is-${kind}">${kindLabel}</span>
-        ${renderHashedTag(item.feature_type || kindLabel)}
-      </div>
-      ${wikiUrl ? `<a class="geo-fact-wiki" href="${wikiUrl}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a>` : ""}
-    </div>
-  `;
+  return renderAroundTheWorldCard(item, {
+    variant: "popover",
+    formatter: entityFormatter,
+    bookmarkHtml,
+    showClose,
+  });
 }
 
 function setGeoActiveState(id) {
@@ -627,11 +545,7 @@ function bindWorldMapEvents() {
 function applyWorldKindFilter(kind, { rerender = true } = {}) {
   const valid = ["all", "geology", "cuisine"].includes(kind) ? kind : "all";
   worldKindFilter = valid;
-  els.worldKindFilter?.querySelectorAll(".seg-btn").forEach((b) => {
-    const active = b.dataset.kind === worldKindFilter;
-    b.classList.toggle("active", active);
-    b.setAttribute("aria-pressed", String(active));
-  });
+  syncButtonGroup(els.worldKindFilter, (b) => b.dataset.kind === worldKindFilter, "aria-pressed");
   if (rerender && currentGeoItems.length) {
     hideGeoCard(true);
     renderWorldPinsAndLegend();
@@ -722,37 +636,21 @@ function renderLongReads(ed) {
   }
   els.longreadsGrid.innerHTML = items
     .map((lr) => {
-      const headlineUrl = safeUrl(lr.sources?.[0]?.url);
-      const headlineHtml =
-        headlineUrl && headlineUrl !== "#"
-          ? `<a href="${headlineUrl}" target="_blank" rel="noopener noreferrer">${formatEntitiesInPlain(lr.headline)}</a>`
-          : formatEntitiesInPlain(lr.headline);
-      const sourcesHtml = (lr.sources || []).slice(0, 3).map(renderSourceChip).join("");
-      const timeHtml = lr.reading_time
-        ? `<span class="reading-time-tag">${escapeHtml(lr.reading_time)}</span>`
-        : "";
-      const bookmarkBtn = registerWeeklyBookmark({
+      const bookmarkHtml = bookmarkRegistry.register({
         section: "long_reads",
         id: lr.id || lr.headline,
         title: lr.headline || "",
         badge: lr.topic || "Essay",
         source: lr.sources?.[0]?.name || "",
         url: lr.sources?.[0]?.url || "",
+        label: "item",
       });
-      return `
-        <article class="news-card">
-          ${bookmarkBtn}
-          <div class="news-meta">
-            <div class="news-card-badges">
-              ${renderHashedTag(lr.topic || "Essay")}
-            </div>
-            ${timeHtml ? `<div class="weekly-card-top-right">${timeHtml}</div>` : ""}
-          </div>
-          <h3>${headlineHtml}</h3>
-          <p class="news-summary">${highlightSummaryHtml(lr.summary)}</p>
-          <div class="source-links">${sourcesHtml}</div>
-        </article>
-      `;
+      return renderWeeklyStoryCard(lr, {
+        section: "long_reads",
+        formatter: entityFormatter,
+        bookmarkHtml,
+        showSubtypeTag: true,
+      });
     })
     .join("");
 }
@@ -767,24 +665,18 @@ function renderWeekInBrief(ed) {
 }
 
 function renderSourceHealth(health = {}) {
-  const entries = [
+  renderSourceHealthStrip(els.sourceHealth, [
     ["Science", health.science],
     ["Culture & Arts", health.culture],
     ["History", health.history],
     ["Long Reads", health.long_reads],
-  ];
-  els.sourceHealth.innerHTML = entries
-    .map(([label, status]) => {
-      const cls = status === "ok" ? "ok" : status === "partial" ? "partial" : "failed";
-      return `<span class="health-item" title="${label}: ${status || "unknown"}"><span class="health-dot ${cls}"></span>${label}</span>`;
-    })
-    .join("");
+  ]);
 }
 
 function renderEdition(ed) {
   state.edition = ed;
   state.currentDate = ed.date;
-  bookmarkRecordMap.clear();
+  bookmarkRegistry.clear();
   state.personNameRe = buildPersonNameRegexFromTexts(collectEditionTexts(ed), state.companyFacts);
 
   renderHeader(ed);
@@ -799,42 +691,27 @@ function renderEdition(ed) {
   renderWeekInBrief(ed);
   renderSourceHealth(ed.source_health);
 
-  updateArchiveControls();
+  archiveNav.updateControls();
   showBanner("");
 }
 
 /* ---------- Archive Navigation & Data Loading ---------- */
 
-async function fetchJson(url) {
-  const resp = await fetch(url, { cache: "no-store" });
-  if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${url}`);
-  return resp.json();
-}
-
-function populateDateSelect(index) {
-  const dates = index?.dates || [];
-  els.dateSelect.innerHTML = "";
-
-  const latestOpt = document.createElement("option");
-  latestOpt.value = "latest";
-  latestOpt.textContent = "Latest";
-  els.dateSelect.appendChild(latestOpt);
-
-  for (const d of dates) {
-    const opt = document.createElement("option");
-    opt.value = d;
-    opt.textContent = d;
-    els.dateSelect.appendChild(opt);
-  }
-}
-
-function updateArchiveControls() {
-  const dates = state.index?.dates || [];
-  const idx = dates.indexOf(state.currentDate);
-  els.dateSelect.value = state.viewingLatest ? "latest" : state.currentDate || "latest";
-  els.btnPrevWeek.disabled = idx === -1 || idx >= dates.length - 1;
-  els.btnNextWeek.disabled = idx <= 0;
-}
+const archiveNav = createArchiveController({
+  dateSelectEl: els.dateSelect,
+  prevBtnEl: els.btnPrevWeek,
+  nextBtnEl: els.btnNextWeek,
+  refreshBtnEl: els.btnRefresh,
+  indexUrl: `${DATA_BASE}/index.json`,
+  getDates: () => state.index?.dates || [],
+  getCurrentDate: () => state.currentDate,
+  isViewingLatest: () => state.viewingLatest,
+  onIndexLoaded: (idxData) => {
+    state.index = idxData;
+  },
+  onSelectDate: (dateStr) => loadEdition(dateStr),
+  onRefresh: () => loadEdition(state.viewingLatest ? "latest" : state.currentDate, false),
+});
 
 async function loadEdition(dateOrLatest = "latest", pushUrl = true) {
   try {
@@ -848,9 +725,7 @@ async function loadEdition(dateOrLatest = "latest", pushUrl = true) {
     renderEdition(ed);
 
     if (pushUrl) {
-      const target = new URL(window.location.href);
-      target.searchParams.set("date", isLatest ? "latest" : ed.date);
-      window.history.replaceState({}, "", target);
+      archiveNav.syncUrlDate(ed.date, isLatest);
     }
   } catch (err) {
     console.error(err);
@@ -861,101 +736,28 @@ async function loadEdition(dateOrLatest = "latest", pushUrl = true) {
   }
 }
 
-const SYNCED_THEME_ICONS = {
-  system: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>`,
-  light: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2M12 19.5v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2.5 12h2M19.5 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>`,
-  dark: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`,
-};
-
-const SYNCED_THEME_LABELS = {
-  system: "Theme: Auto (switch to Light)",
-  light: "Theme: Light (switch to Dark)",
-  dark: "Theme: Dark (switch to Auto)",
-};
-
-let lastThemePref = null;
-
-function applySyncedTheme(pref) {
-  const validPref = ["system", "light", "dark"].includes(pref) ? pref : "system";
-  lastThemePref = validPref;
-  localStorage.setItem("briefing-theme", validPref);
-  const resolved = resolveTheme(validPref);
-  document.documentElement.setAttribute("data-theme", resolved);
-  if (els.themeToggle) {
-    els.themeToggle.dataset.themePref = validPref;
-    els.themeToggle.innerHTML = SYNCED_THEME_ICONS[validPref];
-    const label = SYNCED_THEME_LABELS[validPref];
-    els.themeToggle.setAttribute("aria-label", label);
-    els.themeToggle.setAttribute("title", label);
-  }
-}
-
-let toastTimer = null;
-function showToast(msg) {
-  let el = document.querySelector(".auth-toast[data-weekly-toast]");
-  if (!el) {
-    el = document.createElement("div");
-    el.className = "auth-toast";
-    el.dataset.weeklyToast = "1";
-    el.setAttribute("role", "status");
-    document.body.appendChild(el);
-  }
-  el.textContent = msg;
-  el.classList.remove("hidden");
-  if (toastTimer) window.clearTimeout(toastTimer);
-  toastTimer = window.setTimeout(() => {
-    el.classList.add("hidden");
-  }, 4000);
-}
-
-function updateNavBookmarksCount() {
-  if (!els.navBookmarksCount) return;
-  const stats = getBookmarkStats();
-  if (stats.total > 0) {
-    els.navBookmarksCount.textContent = `(${stats.total})`;
-    els.navBookmarksCount.classList.remove("hidden");
-  } else {
-    els.navBookmarksCount.textContent = "";
-    els.navBookmarksCount.classList.add("hidden");
-  }
-}
-
 async function bootstrap() {
   const initialPrefs = getLocalPreferences();
   if (initialPrefs?.world_kind_filter) {
     applyWorldKindFilter(initialPrefs.world_kind_filter, { rerender: false });
   }
 
-  initTheme(els.themeToggle, (_resolved, pref) => {
-    if (lastThemePref !== null && pref !== lastThemePref) {
-      setPreference("theme", pref);
-    }
-    lastThemePref = pref;
+  const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
+    setPreference("theme", pref);
   });
 
   initScrollSpy();
-  initSourceBiasPopover();
-  initFloatingTooltips(() => state.companyFacts);
-  initCountryMapTooltip(
-    escapeHtml,
-    renderCountryFlagImg,
-    (code) => state.countryLeaders?.leaders?.[code] || null
-  );
+  initEntityOverlays({
+    getCompanyFacts: () => state.companyFacts,
+    getCountryLeaders: () => state.countryLeaders,
+  });
 
   const appRoot = document.getElementById("app-root");
-  bindBookmarkToggle(
-    appRoot,
-    (key) => bookmarkRecordMap.get(key),
-    {
-      onLimitReached: () =>
-        showToast("Bookmark limit reached. Remove an older bookmark to save more."),
-    }
-  );
-  updateNavBookmarksCount();
-  onBookmarksChange(() => {
-    updateNavBookmarksCount();
-    syncBookmarkButtons();
+  bindBookmarkToggle(appRoot, (key) => bookmarkRegistry.get(key), {
+    onLimitReached: () =>
+      showToast("Bookmark limit reached. Remove an older bookmark to save more."),
   });
+  bindBookmarkCountBadge(els.navBookmarksCount, { syncButtons: true });
 
   initAuth({
     mountEl: els.authMount,
@@ -963,7 +765,7 @@ async function bootstrap() {
     onPreferencesApplied(prefs) {
       if (!prefs || typeof prefs !== "object") return;
       if (prefs.theme && ["system", "light", "dark"].includes(prefs.theme)) {
-        applySyncedTheme(prefs.theme);
+        themeCtrl.apply(prefs.theme, { silent: true, persist: true });
       }
       if (
         prefs.world_kind_filter &&
@@ -988,55 +790,25 @@ async function bootstrap() {
   setWorldOpen?.(true);
   collapsibles.syncExpandAllButton();
 
-  els.dateSelect.addEventListener("change", () => {
-    loadEdition(els.dateSelect.value);
-  });
-
-  els.btnPrevWeek.addEventListener("click", () => {
-    const dates = state.index?.dates || [];
-    const idx = dates.indexOf(state.currentDate);
-    if (idx >= 0 && idx < dates.length - 1) loadEdition(dates[idx + 1]);
-  });
-
-  els.btnNextWeek.addEventListener("click", () => {
-    const dates = state.index?.dates || [];
-    const idx = dates.indexOf(state.currentDate);
-    if (idx > 0) loadEdition(idx === 1 ? "latest" : dates[idx - 1]);
-  });
-
-  els.btnRefresh?.addEventListener("click", async () => {
-    if (els.btnRefresh.disabled) return;
-    els.btnRefresh.disabled = true;
-    els.btnRefresh.classList.add("is-spinning");
-    try {
-      const idxData = await fetchJson(`${DATA_BASE}/index.json`);
-      state.index = idxData;
-      populateDateSelect(idxData);
-      await loadEdition(state.viewingLatest ? "latest" : state.currentDate, false);
-    } catch {
-      await loadEdition(state.viewingLatest ? "latest" : state.currentDate, false);
-    } finally {
-      els.btnRefresh.disabled = false;
-      els.btnRefresh.classList.remove("is-spinning");
-    }
-  });
+  archiveNav.bind();
 
   // Load shared company facts + country leaders + weekly index in parallel
-  const [factsRes, leadersRes, idxRes] = await Promise.allSettled([
-    fetchJson(`${SHARED_DATA_BASE}/company_facts.json`),
-    fetchJson(`${SHARED_DATA_BASE}/country_leaders.json`),
-    fetchJson(`${DATA_BASE}/index.json`),
+  const [entityData, idxRes] = await Promise.all([
+    loadSharedEntityData(SHARED_DATA_BASE),
+    fetchJson(`${DATA_BASE}/index.json`).then(
+      (v) => ({ ok: true, value: v }),
+      () => ({ ok: false, value: null })
+    ),
   ]);
 
-  if (factsRes.status === "fulfilled") state.companyFacts = factsRes.value;
-  if (leadersRes.status === "fulfilled") state.countryLeaders = leadersRes.value;
-  if (idxRes.status === "fulfilled") {
+  state.companyFacts = entityData.companyFacts;
+  state.countryLeaders = entityData.countryLeaders;
+  if (idxRes.ok && idxRes.value) {
     state.index = idxRes.value;
-    populateDateSelect(idxRes.value);
+    archiveNav.populateDateSelect(idxRes.value.dates || []);
   }
 
-  const params = new URLSearchParams(window.location.search);
-  const requestedDate = params.get("date") || "latest";
+  const requestedDate = archiveNav.resolveRequestedDate(state.index?.dates || []);
   await loadEdition(requestedDate, false);
 }
 

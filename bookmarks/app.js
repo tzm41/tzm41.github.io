@@ -7,25 +7,12 @@
  * 4. Memoized rich <article> DOM nodes in Map<key, entry> for <2ms filter/sort switching
  */
 
-import { initCountryMapTooltip } from "../briefing/country-map.js";
+import { escapeHtml, safeUrl, fmtShortDate, fetchJson } from "../shared/utils.js";
+import { initTheme, renderSourceChip, syncButtonGroup } from "../shared/ui.js";
 import {
-  escapeHtml,
-  safeUrl,
-  fmtShortDate,
-  initTheme,
-  renderSourceChip,
-  renderHashedTag,
-  initSourceBiasPopover,
-  SENTIMENT_LABELS,
-  inferSentimentFromText,
-  renderSentimentRing,
-} from "../shared/ui.js";
-import {
-  DEFAULT_PERSON_NAME_RE,
-  buildPersonNameRegexFromTexts,
-  createEntityFormatter,
-  initFloatingTooltips,
-  renderCountryFlagImg,
+  initEntityOverlays,
+  loadSharedEntityData,
+  createCachedPersonFormatter,
 } from "../shared/entities.js";
 import {
   ARCHIVE_TTL_DAYS,
@@ -38,6 +25,12 @@ import {
   onBookmarksChange,
 } from "../shared/bookmarks.js";
 import { initAuth, setPreference, getSyncState, onSyncStatusChange } from "../shared/auth.js";
+import {
+  renderCardShell,
+  renderDailyStoryCard,
+  renderWeeklyStoryCard,
+  renderAroundTheWorldCard,
+} from "../shared/cards.js";
 
 const BRIEFING_DATA = "../briefing/data";
 const WEEKLY_DATA = "../weekly/data";
@@ -91,12 +84,6 @@ const els = {
 };
 
 /* ---------- Formatting Helpers ---------- */
-
-function fmtCoords(lat, lon) {
-  const ns = lat >= 0 ? "N" : "S";
-  const ew = lon >= 0 ? "E" : "W";
-  return `${Math.abs(lat).toFixed(1)}°${ns}, ${Math.abs(lon).toFixed(1)}°${ew}`;
-}
 
 function sectionAnchor(edition, section) {
   if (edition === "daily") {
@@ -206,6 +193,8 @@ function computeEntryTtl(record) {
 
 /* ---------- Card Builders (Preview, Fallback, Full Rich) ---------- */
 
+const getFormatterForTexts = createCachedPersonFormatter(() => state.companyFacts);
+
 function buildPreviewCardHtml(entry) {
   const { key, record, ttl } = entry;
   const safeHref = safeUrl(record.url);
@@ -213,8 +202,6 @@ function buildPreviewCardHtml(entry) {
     safeHref !== "#"
       ? `<a href="${safeHref}" target="_blank" rel="noopener noreferrer">${escapeHtml(record.title || "Saved story")}</a>`
       : escapeHtml(record.title || "Saved story");
-  const typeLabel = getBookmarkType(entry);
-  const badgeHtml = typeLabel ? renderHashedTag(typeLabel) : "";
   const sourceChip =
     record.source && safeHref !== "#"
       ? renderSourceChip({ name: record.source, url: record.url })
@@ -222,19 +209,22 @@ function buildPreviewCardHtml(entry) {
       ? `<span class="source-chip">${escapeHtml(record.source)}</span>`
       : "";
 
-  return `
-    ${renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" })}
-    ${renderOriginRowHtml(record)}
-    ${badgeHtml ? `<div class="news-meta"><div class="news-card-badges">${badgeHtml}</div></div>` : ""}
-    <h3>${titleHtml}</h3>
-    <div class="bm-shimmer-group" aria-hidden="true">
-      <div class="bm-shimmer"></div>
-      <div class="bm-shimmer"></div>
-      <div class="bm-shimmer is-short"></div>
-    </div>
-    ${sourceChip ? `<div class="source-links">${sourceChip}</div>` : ""}
-    ${renderTtlBarHtml(ttl)}
-  `;
+  return renderCardShell({
+    innerOnly: true,
+    bookmarkHtml: renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" }),
+    headerHtml: renderOriginRowHtml(record),
+    badgeLabel: getBookmarkType(entry),
+    headlineHtml: titleHtml,
+    summaryHtml: `
+      <div class="bm-shimmer-group" aria-hidden="true">
+        <div class="bm-shimmer"></div>
+        <div class="bm-shimmer"></div>
+        <div class="bm-shimmer is-short"></div>
+      </div>
+    `,
+    sourcesHtml: sourceChip,
+    footerHtml: renderTtlBarHtml(ttl),
+  });
 }
 
 function buildFallbackCardHtml(entry, noteText = "") {
@@ -244,40 +234,27 @@ function buildFallbackCardHtml(entry, noteText = "") {
     safeHref !== "#"
       ? `<a href="${safeHref}" target="_blank" rel="noopener noreferrer">${escapeHtml(record.title || "Saved story")}</a>`
       : escapeHtml(record.title || "Saved story");
-  const typeLabel = getBookmarkType(entry);
-  const badgeHtml = typeLabel ? renderHashedTag(typeLabel) : "";
   const sourceChip =
     safeHref !== "#"
       ? renderSourceChip({ name: record.source || "Open original article", url: record.url })
       : record.source
       ? `<span class="source-chip">${escapeHtml(record.source)}</span>`
       : "";
-
   const fallbackNote =
     noteText ||
     (ttl.status === "expired"
       ? "This briefing edition has rotated out of the archive. Use the saved link below to read the original source."
       : "Full archived card details were unavailable; showing saved headline and source link.");
 
-  return `
-    ${renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" })}
-    ${renderOriginRowHtml(record)}
-    ${badgeHtml ? `<div class="news-meta"><div class="news-card-badges">${badgeHtml}</div></div>` : ""}
-    <h3>${titleHtml}</h3>
-    <p class="bm-fallback-note">${escapeHtml(fallbackNote)}</p>
-    ${sourceChip ? `<div class="source-links">${sourceChip}</div>` : ""}
-    ${renderTtlBarHtml(ttl)}
-  `;
-}
-
-function buildFormatterForTexts(texts, pillCompaniesInSummary) {
-  const personRe =
-    texts.some((t) => typeof t === "string" && t.includes("*")) || state.companyFacts
-      ? buildPersonNameRegexFromTexts(texts, state.companyFacts)
-      : DEFAULT_PERSON_NAME_RE;
-  return createEntityFormatter({
-    getPersonRe: () => personRe,
-    pillCompaniesInSummary,
+  return renderCardShell({
+    innerOnly: true,
+    bookmarkHtml: renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" }),
+    headerHtml: renderOriginRowHtml(record),
+    badgeLabel: getBookmarkType(entry),
+    headlineHtml: titleHtml,
+    summaryHtml: `<p class="bm-fallback-note">${escapeHtml(fallbackNote)}</p>`,
+    sourcesHtml: sourceChip,
+    footerHtml: renderTtlBarHtml(ttl),
   });
 }
 
@@ -285,55 +262,33 @@ function buildRichCardHtml(entry) {
   const { key, record, ttl, extracted } = entry;
   if (!extracted) return buildFallbackCardHtml(entry);
 
-  const bookmarkBtn = renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" });
+  const bookmarkHtml = renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" });
+  const headerHtml = renderOriginRowHtml(record);
+  const footerHtml = renderTtlBarHtml(ttl);
   const typeLabel = getBookmarkType(entry);
 
-  // 1. Daily: top_news (hide morning/afternoon tags on Bookmarks page)
-  if (record.edition === "daily" && record.section === "top_news") {
+  if (record.edition === "daily" && (record.section === "top_news" || record.section === "positive_news")) {
     const story = extracted.story;
-    const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
-      [story.headline, story.summary, story.why_it_matters],
-      true
-    );
-    const sentiment =
-      story.sentiment && SENTIMENT_LABELS[story.sentiment] && story.sentiment !== "neutral"
-        ? story.sentiment
-        : inferSentimentFromText(`${story.headline || ""} ${story.summary || ""}`);
-    const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
-
-    return `
-      ${bookmarkBtn}
-      ${renderOriginRowHtml(record)}
-      <div class="news-meta">
-        <div class="news-card-badges">
-          ${renderHashedTag(typeLabel)}
-          ${renderSentimentRing(sentiment)}
-        </div>
-      </div>
-      <h3>${formatEntitiesInPlain(story.headline)}</h3>
-      <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
-      ${story.why_it_matters ? `<div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>` : ""}
-      ${sourcesHtml ? `<div class="source-links">${sourcesHtml}</div>` : ""}
-      ${renderTtlBarHtml(ttl)}
-    `;
+    const formatter = getFormatterForTexts([story.headline, story.summary, story.why_it_matters], true);
+    return renderDailyStoryCard(story, {
+      section: record.section,
+      badgeLabel: typeLabel,
+      formatter,
+      bookmarkHtml,
+      showEditionTag: false,
+      headerHtml,
+      footerHtml,
+      innerOnly: true,
+    });
   }
 
-  // 2. Daily: local_news (with inline bilingual 中文|EN toggle when available)
   if (record.edition === "daily" && record.section === "local_news") {
     const hasNative = Boolean(extracted.storyNative);
     const hasEn = Boolean(extracted.storyEn);
     const isBilingual = hasNative && hasEn;
     const useEn = isBilingual ? entry.lang !== "native" : hasEn;
     const story = useEn ? extracted.storyEn : extracted.storyNative;
-    const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
-      [story.headline, story.summary, story.why_it_matters],
-      true
-    );
-    const sentiment =
-      story.sentiment && SENTIMENT_LABELS[story.sentiment] && story.sentiment !== "neutral"
-        ? story.sentiment
-        : inferSentimentFromText(`${story.headline || ""} ${story.summary || ""}`);
-    const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
+    const formatter = getFormatterForTexts([story.headline, story.summary, story.why_it_matters], true);
     const langToggleHtml = isBilingual
       ? `
         <div class="bm-lang-toggle" role="group" aria-label="Story language" data-lang-key="${escapeHtml(key)}">
@@ -343,154 +298,51 @@ function buildRichCardHtml(entry) {
       `
       : "";
 
-    return `
-      ${bookmarkBtn}
-      ${renderOriginRowHtml(record)}
-      <div class="news-meta">
-        <div class="news-card-badges">
-          ${renderHashedTag(typeLabel)}
-          ${renderSentimentRing(sentiment)}
-        </div>
-        ${langToggleHtml}
-      </div>
-      <h3>${formatEntitiesInPlain(story.headline)}</h3>
-      <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
-      ${story.why_it_matters ? `<div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>` : ""}
-      ${sourcesHtml ? `<div class="source-links">${sourcesHtml}</div>` : ""}
-      ${renderTtlBarHtml(ttl)}
-    `;
+    return renderDailyStoryCard(story, {
+      section: "local_news",
+      badgeLabel: typeLabel,
+      formatter,
+      bookmarkHtml,
+      showEditionTag: false,
+      headerHtml,
+      metaRightHtml: langToggleHtml,
+      footerHtml,
+      innerOnly: true,
+    });
   }
 
-  // 3. Daily: positive_news
-  if (record.edition === "daily" && record.section === "positive_news") {
-    const story = extracted.story;
-    const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
-      [story.headline, story.summary, story.why_it_matters],
-      true
-    );
-    const posSentiment =
-      story.sentiment && SENTIMENT_LABELS[story.sentiment] && story.sentiment !== "neutral"
-        ? story.sentiment
-        : "very_positive";
-    const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
-
-    return `
-      ${bookmarkBtn}
-      ${renderOriginRowHtml(record)}
-      <div class="news-meta">
-        <div class="news-card-badges">
-          ${renderHashedTag(typeLabel)}
-          ${renderSentimentRing(posSentiment)}
-        </div>
-      </div>
-      <h3>${formatEntitiesInPlain(story.headline)}</h3>
-      <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
-      ${story.why_it_matters ? `<div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>` : ""}
-      ${sourcesHtml ? `<div class="source-links">${sourcesHtml}</div>` : ""}
-      ${renderTtlBarHtml(ttl)}
-    `;
-  }
-
-  // 4. Weekly: science / culture / history (type tag on left, hide right-side subtype tag)
   if (
     record.edition === "weekly" &&
-    (record.section === "science" || record.section === "culture" || record.section === "history")
+    (record.section === "science" ||
+      record.section === "culture" ||
+      record.section === "history" ||
+      record.section === "long_reads")
   ) {
     const item = extracted.item;
-    const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
-      [item.headline, item.summary, item.takeaway],
-      false
-    );
-    const headlineUrl = safeUrl(item.sources?.[0]?.url);
-    const headlineHtml =
-      headlineUrl !== "#"
-        ? `<a href="${headlineUrl}" target="_blank" rel="noopener noreferrer">${formatEntitiesInPlain(item.headline)}</a>`
-        : formatEntitiesInPlain(item.headline);
-    const sourcesHtml = (item.sources || []).slice(0, 3).map(renderSourceChip).join("");
-    const ringHtml = renderSentimentRing(item.sentiment, `${item.headline || ""} ${item.summary || ""}`);
-    const takeawayHtml = item.takeaway
-      ? `<p class="weekly-takeaway"><span class="weekly-takeaway-label">Takeaway</span>${highlightSummaryHtml(item.takeaway)}</p>`
-      : "";
-
-    return `
-      ${bookmarkBtn}
-      ${renderOriginRowHtml(record)}
-      <div class="news-meta">
-        <div class="news-card-badges">
-          ${renderHashedTag(typeLabel)}
-          ${ringHtml}
-        </div>
-      </div>
-      <h3>${headlineHtml}</h3>
-      <p class="news-summary">${highlightSummaryHtml(item.summary)}</p>
-      ${takeawayHtml}
-      ${sourcesHtml ? `<div class="source-links">${sourcesHtml}</div>` : ""}
-      ${renderTtlBarHtml(ttl)}
-    `;
+    const formatter = getFormatterForTexts([item.headline, item.summary, item.takeaway], false);
+    return renderWeeklyStoryCard(item, {
+      section: record.section,
+      badgeLabel: typeLabel,
+      formatter,
+      bookmarkHtml,
+      showSubtypeTag: false,
+      headerHtml,
+      footerHtml,
+      innerOnly: true,
+    });
   }
 
-  // 5. Weekly: long_reads (type tag on left, unified style)
-  if (record.edition === "weekly" && record.section === "long_reads") {
-    const lr = extracted.item;
-    const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
-      [lr.headline, lr.summary],
-      false
-    );
-    const headlineUrl = safeUrl(lr.sources?.[0]?.url);
-    const headlineHtml =
-      headlineUrl !== "#"
-        ? `<a href="${headlineUrl}" target="_blank" rel="noopener noreferrer">${formatEntitiesInPlain(lr.headline)}</a>`
-        : formatEntitiesInPlain(lr.headline);
-    const sourcesHtml = (lr.sources || []).slice(0, 3).map(renderSourceChip).join("");
-
-    return `
-      ${bookmarkBtn}
-      ${renderOriginRowHtml(record)}
-      <div class="news-meta">
-        <div class="news-card-badges">
-          ${renderHashedTag(typeLabel)}
-        </div>
-      </div>
-      <h3>${headlineHtml}</h3>
-      <p class="news-summary">${highlightSummaryHtml(lr.summary)}</p>
-      ${sourcesHtml ? `<div class="source-links">${sourcesHtml}</div>` : ""}
-      ${renderTtlBarHtml(ttl)}
-    `;
-  }
-
-  // 6. Weekly: around_the_world (hashed Geology / Cuisine type tag on left, hide feature subtype)
   if (record.edition === "weekly" && record.section === "around_the_world") {
     const item = extracted.item;
-    const flagHtml = item.country_code ? renderCountryFlagImg(item.country_code.toLowerCase()) : "";
-    const coords = fmtCoords(Number(item.lat ?? 0), Number(item.lon ?? 0));
-    const wikiTitle = item.wiki_title || item.place || "";
-    const wikiUrl = wikiTitle
-      ? `https://en.wikipedia.org/wiki/${encodeURIComponent(String(wikiTitle).replace(/ /g, "_"))}`
-      : "";
-    const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
-      [item.place, item.region, item.title, item.fact],
-      false
-    );
-
-    return `
-      ${bookmarkBtn}
-      ${renderOriginRowHtml(record)}
-      <div class="news-meta">
-        <div class="news-card-badges">
-          ${renderHashedTag(typeLabel)}
-        </div>
-      </div>
-      <div class="geo-fact-loc-row">
-        ${flagHtml}
-        <span class="geo-fact-place">${escapeHtml(item.place)}</span>
-        ${item.region ? `<span>&middot; ${escapeHtml(item.region)}</span>` : ""}
-        <span class="geo-fact-coords">(${escapeHtml(coords)})</span>
-      </div>
-      <h3>${formatEntitiesInPlain(item.title)}</h3>
-      <p class="news-summary">${highlightSummaryHtml(item.fact)}</p>
-      ${wikiUrl ? `<div class="source-links"><a class="geo-fact-wiki" href="${escapeHtml(wikiUrl)}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a></div>` : ""}
-      ${renderTtlBarHtml(ttl)}
-    `;
+    const formatter = getFormatterForTexts([item.place, item.region, item.title, item.fact], false);
+    return renderAroundTheWorldCard(item, {
+      variant: "card",
+      formatter,
+      bookmarkHtml,
+      headerHtml,
+      footerHtml,
+      innerOnly: true,
+    });
   }
 
   return buildFallbackCardHtml(entry);
@@ -944,11 +796,7 @@ async function hydrateVisibleEntries(visibleEntries) {
 function setActiveFilter(nextFilter) {
   state.filter = nextFilter;
   state.visibleLimit = PAGE_SIZE;
-  els.filterBar?.querySelectorAll(".bm-filter-tab").forEach((btn) => {
-    const active = btn.dataset.filter === nextFilter;
-    btn.classList.toggle("active", active);
-    btn.setAttribute("aria-selected", active ? "true" : "false");
-  });
+  syncButtonGroup(els.filterBar, (btn) => btn.dataset.filter === nextFilter, "aria-selected");
   const visible = renderLists();
   if (state.indicesLoaded) {
     hydrateVisibleEntries(visible);
@@ -1048,12 +896,6 @@ function bindEvents() {
 
 /* ---------- Bootstrap (T=0 Preview -> Parallel Indices -> Concurrency-5 Hydration) ---------- */
 
-async function fetchJsonNoCache(url) {
-  const resp = await fetch(url, { cache: "no-cache" });
-  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-  return resp.json();
-}
-
 function renderFooterSyncIndicator(syncState = getSyncState()) {
   const el = els.footerSync;
   if (!el) return;
@@ -1088,25 +930,20 @@ function renderFooterSyncIndicator(syncState = getSyncState()) {
 
 async function bootstrap() {
   // 1. UI primitives & auth (zero cold-load requests when signed out)
-  let themeBooted = false;
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
-    if (themeBooted) setPreference("theme", pref);
+    setPreference("theme", pref);
   });
-  themeBooted = true;
 
-  initSourceBiasPopover();
-  initFloatingTooltips(() => state.companyFacts);
-  initCountryMapTooltip(
-    escapeHtml,
-    renderCountryFlagImg,
-    (code) => state.countryLeaders?.leaders?.[code] || null
-  );
+  initEntityOverlays({
+    getCompanyFacts: () => state.companyFacts,
+    getCountryLeaders: () => state.countryLeaders,
+  });
   initAuth({
     mountEl: els.authMount,
     bookmarksHref: "/bookmarks/",
     onPreferencesApplied: (prefs) => {
       if (prefs?.theme) {
-        themeCtrl?.apply?.(prefs.theme, { silent: true });
+        themeCtrl.apply(prefs.theme, { silent: true, persist: true });
       }
     },
     onAuthChange: () => renderFooterSyncIndicator(),
@@ -1121,17 +958,22 @@ async function bootstrap() {
   renderLists();
 
   // 3. Parallel fetch of indices + shared entity metadata (non-blocking)
-  const [dailyIdxRes, weeklyIdxRes, factsRes, leadersRes] = await Promise.allSettled([
-    fetchJsonNoCache(`${BRIEFING_DATA}/index.json`),
-    fetchJsonNoCache(`${WEEKLY_DATA}/index.json`),
-    fetchJsonNoCache(`${BRIEFING_DATA}/company_facts.json`),
-    fetchJsonNoCache(`${BRIEFING_DATA}/country_leaders.json`),
+  const [dailyIdxRes, weeklyIdxRes, entityData] = await Promise.all([
+    fetchJson(`${BRIEFING_DATA}/index.json`, { cache: "no-cache" }).then(
+      (value) => ({ ok: true, value }),
+      () => ({ ok: false, value: null })
+    ),
+    fetchJson(`${WEEKLY_DATA}/index.json`, { cache: "no-cache" }).then(
+      (value) => ({ ok: true, value }),
+      () => ({ ok: false, value: null })
+    ),
+    loadSharedEntityData(BRIEFING_DATA, { cache: "no-cache" }),
   ]);
 
-  if (factsRes.status === "fulfilled") state.companyFacts = factsRes.value;
-  if (leadersRes.status === "fulfilled") state.countryLeaders = leadersRes.value;
+  state.companyFacts = entityData.companyFacts;
+  state.countryLeaders = entityData.countryLeaders;
 
-  if (dailyIdxRes.status === "fulfilled" && dailyIdxRes.value) {
+  if (dailyIdxRes.ok && dailyIdxRes.value) {
     const idx = dailyIdxRes.value;
     state.availableDates.daily = new Set(Array.isArray(idx.dates) ? idx.dates : []);
     state.latestDates.daily = idx.latest_date || idx.dates?.[0] || "";
@@ -1140,7 +982,7 @@ async function bootstrap() {
     }
   }
 
-  if (weeklyIdxRes.status === "fulfilled" && weeklyIdxRes.value) {
+  if (weeklyIdxRes.ok && weeklyIdxRes.value) {
     const idx = weeklyIdxRes.value;
     state.availableDates.weekly = new Set(Array.isArray(idx.dates) ? idx.dates : []);
     state.latestDates.weekly = idx.latest_date || idx.dates?.[0] || "";
