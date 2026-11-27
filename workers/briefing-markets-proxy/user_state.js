@@ -29,6 +29,7 @@ const PREF_KEYS = new Set([
   "local_lang",
   "market_tf",
   "world_kind_filter",
+  "brief_style",
   "updated_at",
 ]);
 const THEME_VALS = new Set(["system", "light", "dark"]);
@@ -36,6 +37,7 @@ const POSITIVE_POS_VALS = new Set(["bottom", "top"]);
 const LANG_VALS = new Set(["native", "en"]);
 const MARKET_TF_VALS = new Set(["1d", "5d", "30d"]);
 const WORLD_KIND_VALS = new Set(["all", "geology", "cuisine"]);
+const BRIEF_STYLE_VALS = new Set(["regular", "bullets"]);
 
 const BOOKMARK_KEYS = new Set([
   "edition",
@@ -303,6 +305,13 @@ function validatePreferences(raw) {
           return { ok: false, message: "Invalid preferences.world_kind_filter." };
         }
         out.world_kind_filter = val;
+        break;
+      case "brief_style":
+        if (val === null) continue;
+        if (typeof val !== "string" || !BRIEF_STYLE_VALS.has(val)) {
+          return { ok: false, message: "Invalid preferences.brief_style." };
+        }
+        out.brief_style = val;
         break;
       case "updated_at":
         if (!isNonNegativeInt(val)) {

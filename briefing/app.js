@@ -68,6 +68,7 @@ const state = {
   localRegionId: null,
   localLang: "en",
   localExpanded: false,
+  briefStyle: getLocalPreferences().brief_style === "bullets" ? "bullets" : "regular",
   companyFacts: null,
   countryLeaders: null,
 };
@@ -386,6 +387,7 @@ function renderBriefBullets(bullets = []) {
   return renderSharedBriefBullets(bullets, {
     highlightSummaryHtml,
     resolveCategory: inferCategoryFromText,
+    bulletStyle: state.briefStyle,
   });
 }
 
@@ -1096,6 +1098,13 @@ async function bootstrap() {
       }
       if (localChanged && state.briefing) {
         renderLocalNews(state.briefing.local_news);
+      }
+      if (
+        (prefs.brief_style === "regular" || prefs.brief_style === "bullets") &&
+        prefs.brief_style !== state.briefStyle
+      ) {
+        state.briefStyle = prefs.brief_style;
+        if (state.briefing) renderExecutiveBrief(state.briefing);
       }
       if (
         ["1d", "5d", "30d"].includes(prefs.market_tf) &&

@@ -851,6 +851,26 @@ h3 {
   min-width: 0;
 }
 
+.exec-subbullets {
+  margin: 2px 0 0;
+  padding-left: 18px;
+  list-style: disc;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.exec-subbullets li {
+  display: list-item;
+  font-size: inherit;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.exec-subbullets li::marker {
+  color: var(--ink-muted);
+}
+
 .sentiment-gauge {
   position: relative;
   display: inline-flex;

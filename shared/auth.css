@@ -215,6 +215,64 @@
   color: var(--ink);
 }
 
+.auth-pref-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.auth-popover .auth-pref-row {
+  margin-top: 8px;
+  margin-bottom: 0;
+  padding: 8px 2px 2px;
+  border-bottom: 0;
+  border-top: 1px solid var(--border);
+}
+
+.auth-pref-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.auth-seg {
+  display: inline-flex;
+  align-items: center;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.auth-seg-btn {
+  border: 0;
+  background: transparent;
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.auth-seg-btn:hover {
+  color: var(--ink);
+}
+
+.auth-seg-btn.active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
 .auth-gis-slot {
   display: flex;
   justify-content: center;

@@ -32,7 +32,7 @@ const DEBOUNCE_PUSH_MS = 2000;
 const FRESH_SYNC_SKIP_MS = 30000;
 const KEEPALIVE_MAX_BYTES = 48 * 1024;
 
-const PREF_SUBKEYS = ["local_region", "local_lang", "market_tf", "world_kind_filter"];
+const PREF_SUBKEYS = ["local_region", "local_lang", "market_tf", "world_kind_filter", "brief_style"];
 
 /* ---------- State ---------- */
 
@@ -165,6 +165,7 @@ export function getLocalPreferences() {
     local_lang: blob.local_lang ?? null,
     market_tf: blob.market_tf ?? null,
     world_kind_filter: blob.world_kind_filter ?? null,
+    brief_style: blob.brief_style ?? "regular",
     updated_at: Number.isFinite(Number(blob.updated_at)) ? Math.floor(Number(blob.updated_at)) : 0,
   };
 }
@@ -184,6 +185,7 @@ function persistLocalPreferencesRaw(prefs) {
       local_lang: prefs.local_lang ?? existing.local_lang ?? null,
       market_tf: prefs.market_tf ?? existing.market_tf ?? null,
       world_kind_filter: prefs.world_kind_filter ?? existing.world_kind_filter ?? null,
+      brief_style: prefs.brief_style ?? existing.brief_style ?? "regular",
       updated_at: Number.isFinite(Number(prefs.updated_at))
         ? Math.floor(Number(prefs.updated_at))
         : Math.floor(Date.now() / 1000),
@@ -879,6 +881,19 @@ function closePopovers() {
 
 /* ---------- Widget Rendering ---------- */
 
+function renderBriefStyleControl() {
+  const cur = getLocalPreferences().brief_style === "bullets" ? "bullets" : "regular";
+  return `
+    <div class="auth-pref-row" role="group" aria-label="Brief display style">
+      <span class="auth-pref-label">Brief style</span>
+      <div class="auth-seg">
+        <button type="button" class="auth-seg-btn${cur === "regular" ? " active" : ""}" data-brief-style="regular" aria-pressed="${cur === "regular"}">Regular</button>
+        <button type="button" class="auth-seg-btn${cur === "bullets" ? " active" : ""}" data-brief-style="bullets" aria-pressed="${cur === "bullets"}">Bullets</button>
+      </div>
+    </div>
+  `;
+}
+
 function renderWidget() {
   if (!widgetMountEl) return;
 
@@ -893,6 +908,7 @@ function renderWidget() {
           <p class="auth-popover-title">Sign in to sync</p>
           <div class="auth-gis-slot"></div>
           <p class="auth-popover-status">Syncs bookmarks &amp; preferences across your devices.</p>
+          ${renderBriefStyleControl()}
         </div>
       </div>
     `;
@@ -918,6 +934,7 @@ function renderWidget() {
           <div class="auth-menu-name">${escapeHtml(user.name || user.email || "Signed in")}</div>
           <div class="auth-sync-status ${statusCls}"><span class="auth-sync-dot" aria-hidden="true"></span><span>${escapeHtml(statusText)}</span></div>
         </div>
+        ${renderBriefStyleControl()}
         <a class="auth-menu-item" role="menuitem" href="${safeInternalHref(widgetBookmarksHref)}">
           <span>Bookmarks</span>
           <span class="auth-menu-count">${count}</span>
@@ -974,6 +991,20 @@ function bindWidgetListeners() {
       menu?.classList.toggle("hidden", !menuOpen);
       avatarBtn.setAttribute("aria-expanded", menuOpen ? "true" : "false");
       if (menuOpen) updateBookmarkCountUi();
+      return;
+    }
+
+    const briefStyleBtn = e.target.closest?.("[data-brief-style]");
+    if (briefStyleBtn) {
+      e.stopPropagation();
+      const nextStyle = briefStyleBtn.dataset.briefStyle === "bullets" ? "bullets" : "regular";
+      setPreference("brief_style", nextStyle);
+      widgetMountEl.querySelectorAll("[data-brief-style]").forEach((btn) => {
+        const active = btn.dataset.briefStyle === nextStyle;
+        btn.classList.toggle("active", active);
+        btn.setAttribute("aria-pressed", String(active));
+      });
+      onPreferencesAppliedCb?.(getLocalPreferences());
       return;
     }
 

@@ -101,26 +101,102 @@ export function resolveLocalStoryTag(story, fallbackBadge = "") {
   return rawCat && normCat !== "world" ? rawCat : "Local";
 }
 
+const ABBREV_END_RE = /\b(?:U\.S|U\.K|E\.U|Mr|Mrs|Ms|Dr|Prof|Sen|Rep|Gov|St|Jr|Sr|Inc|Ltd|Corp|Co|No|vs|Jan|Feb|Mar|Apr|Aug|Sep|Sept|Oct|Nov|Dec|[A-Z])\.$/;
+
+function capitalizePointStart(str) {
+  const s = String(str || "").trim();
+  if (!s) return "";
+  // Capitalize first alphabetic letter even if preceded by ** or *
+  return s.replace(/^(\*{1,3})?([a-z])/, (_m, stars = "", ch) => `${stars}${ch.toUpperCase()}`);
+}
+
+function ensureTrailingPeriod(str) {
+  const s = String(str || "").trim().replace(/[,;:\s]+$/, "");
+  if (!s) return "";
+  if (/[.!?]["')\]]*$/.test(s)) return s;
+  return `${s}.`;
+}
+
+/**
+ * Split a multi-news brief/digest item into individual single-news bullet points,
+ * preserving Markdown **bold** / *italic* spans and abbreviations (U.S., M.C., Dr., etc.).
+ */
+export function splitBriefIntoPoints(text) {
+  const raw = String(text || "").trim();
+  if (!raw) return [];
+
+  // 1. Split on sentence boundaries (skipping common abbreviations) and semicolons
+  const chunks = [];
+  let start = 0;
+  for (let i = 0; i < raw.length; i++) {
+    const ch = raw[i];
+    if (ch === ";" && raw[i + 1] === " ") {
+      chunks.push(raw.slice(start, i).trim());
+      start = i + 2;
+      continue;
+    }
+    if ((ch === "." || ch === "!" || ch === "?") && raw[i + 1] === " ") {
+      const prefix = raw.slice(start, i + 1);
+      const next = raw.slice(i + 2);
+      if (ch === "." && ABBREV_END_RE.test(prefix)) continue;
+      if (/^(?:\*{1,3})?[A-Z"“]/.test(next)) {
+        chunks.push(prefix.trim());
+        start = i + 2;
+      }
+    }
+  }
+  if (start < raw.length) chunks.push(raw.slice(start).trim());
+
+  // 2. Further split compound multi-news sentences joined by ", while " / ", even as " / ", whereas "
+  const points = [];
+  const clauseSplitRe = /,\s+(?:while|whereas|even as)\s+(?=(?:\*{1,3})?(?:[A-Z]|the\s|a\s|an\s|hundreds|thousands|millions|archaeologists|physicists|lawmakers|protesters|officials|regulators|markets|investors))/i;
+  for (const chunk of chunks) {
+    if (!chunk) continue;
+    const subParts = chunk.split(clauseSplitRe).map((p) => p.trim()).filter(Boolean);
+    for (const part of subParts) {
+      // Avoid tiny fragments (< 25 chars) becoming standalone bullets
+      if (points.length && part.length < 25) {
+        points[points.length - 1] = `${points[points.length - 1].replace(/\.$/, "")}, ${part}`;
+      } else {
+        points.push(ensureTrailingPeriod(capitalizePointStart(part)));
+      }
+    }
+  }
+  return points.length ? points : [raw];
+}
+
 /**
  * Render Morning/Afternoon Brief, Sunday Digest, or Week in Brief bullet list items.
+ * Supports `bulletStyle: "regular"` (default prose) or `"bullets"` (one news item per bullet line).
  */
 export function renderBriefBullets(
   bullets = [],
-  { highlightSummaryHtml, resolveCategory = () => "Brief", useFallbackSentiment = true } = {}
+  {
+    highlightSummaryHtml,
+    resolveCategory = () => "Brief",
+    useFallbackSentiment = true,
+    bulletStyle = "regular",
+  } = {}
 ) {
+  const isBulletMode = bulletStyle === "bullets";
   return bullets
     .map((item) => {
       const text = typeof item === "string" ? item : item?.text || "";
       const category =
         typeof item === "object" && item?.category ? item.category : resolveCategory(text);
       const sentiment = typeof item === "object" ? item?.sentiment : null;
+      const bodyHtml = isBulletMode
+        ? `<ul class="exec-subbullets">${splitBriefIntoPoints(text)
+            .map((pt) => `<li>${highlightSummaryHtml(pt)}</li>`)
+            .join("")}</ul>`
+        : `<span class="exec-text">${highlightSummaryHtml(text)}</span>`;
       return `
         <li>
           <span class="exec-meta">
             ${renderHashedTag(category)}
             ${renderSentimentRing(sentiment, useFallbackSentiment ? text : "")}
           </span>
-          <span class="exec-text">${highlightSummaryHtml(text)}</span>
+          ${bodyHtml}
         </li>
       `;
     })

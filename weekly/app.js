@@ -55,6 +55,7 @@ const state = {
   companyFacts: null,
   countryLeaders: null,
   personNameRe: null,
+  briefStyle: getLocalPreferences().brief_style === "bullets" ? "bullets" : "regular",
 };
 
 const bookmarkRegistry = createBookmarkRegistry({
@@ -162,6 +163,7 @@ function renderBriefBullets(bullets = []) {
   return renderSharedBriefBullets(bullets, {
     highlightSummaryHtml,
     resolveCategory: () => "Weekly",
+    bulletStyle: state.briefStyle,
   });
 }
 
@@ -775,6 +777,16 @@ async function bootstrap() {
         prefs.world_kind_filter !== worldKindFilter
       ) {
         applyWorldKindFilter(prefs.world_kind_filter, { rerender: true });
+      }
+      if (
+        (prefs.brief_style === "regular" || prefs.brief_style === "bullets") &&
+        prefs.brief_style !== state.briefStyle
+      ) {
+        state.briefStyle = prefs.brief_style;
+        if (state.edition) {
+          renderDigest(state.edition);
+          renderPulse(state.edition);
+        }
       }
     },
   });
