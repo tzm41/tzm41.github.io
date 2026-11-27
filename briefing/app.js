@@ -2,7 +2,7 @@
  * Daily Briefing Dashboard — Client Application (Zero-Build ES Module)
  */
 
-import { initCountryMapTooltip } from "./country-map.js?v=13";
+import { initCountryMapTooltip } from "./country-map.js?v=15";
 import {
   escapeHtml,
   safeUrl,
@@ -25,7 +25,7 @@ import {
   buildPersonNameRegexFromTexts,
   createEntityFormatter,
   initFloatingTooltips,
-} from "../shared/entities.js?v=1";
+} from "../shared/entities.js?v=3";
 
 const DATA_BASE = "./data";
 

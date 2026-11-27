@@ -3,7 +3,7 @@
  * Used by both Daily Briefing (/briefing/) and Weekly Briefing (/weekly/).
  */
 
-import { PLACE_ALIASES, PLACE_META } from "../briefing/country-map.js?v=14";
+import { PLACE_ALIASES, PLACE_META } from "../briefing/country-map.js?v=15";
 import { BIAS_TONE_COLOR, buildHalfRingSvg, escapeHtml, escapeRegex } from "./ui.js?v=1";
 
 export const EXPLICIT_BOLD_RE = /\*\*((?:(?!\*\*).)+)\*\*/g;

@@ -3,7 +3,7 @@
  * Inherits UI, theme, entity, Wikipedia link, and tooltip engines from ../shared/
  */
 
-import { initCountryMapTooltip, loadWorldAtlas } from "../briefing/country-map.js?v=14";
+import { initCountryMapTooltip, loadWorldAtlas } from "../briefing/country-map.js?v=15";
 import {
   escapeHtml,
   safeUrl,
@@ -23,7 +23,7 @@ import {
   createEntityFormatter,
   initFloatingTooltips,
   renderCountryFlagImg,
-} from "../shared/entities.js?v=2";
+} from "../shared/entities.js?v=3";
 
 const DATA_BASE = "./data";
 const SHARED_DATA_BASE = "../briefing/data";

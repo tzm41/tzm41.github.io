@@ -9,6 +9,7 @@
 const WORLD_ATLAS_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 const US_ATLAS_URL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
 const CN_GEO_URL = "https://cdn.jsdelivr.net/gh/longwosion/geojson-map-china@master/china.json";
+const CA_PROVINCES_GEO_URL = "https://cdn.jsdelivr.net/gh/codeforgermany/click_that_hood@main/public/data/canada.geojson";
 
 const CONTINENT_META = {
   na: { label: "North America", bounds: [-168, -52, 7, 73] },
@@ -25,6 +26,7 @@ const CONTINENT_META = {
 const US_BOUNDS = [-126, -66, 24, 50];
 const US_FULL_BOUNDS = [-172, -66, 18, 72];
 const CN_BOUNDS = [73, 136, 18, 54];
+const CA_BOUNDS = [-142, -52, 41, 75];
 
 const EU_ISO_IDS = [
   "040", "056", "100", "191", "196", "203", "208", "233", "246",
@@ -643,6 +645,442 @@ for (const [slug, name, fips, stateName, lon, lat, aliases] of RAW_US_CAPITALS) 
   }
 }
 
+// 8. Canadian Provinces & Territories (all 10 provinces + 3 territories)
+// Format: [slug, name, geoName, capital, aliases[]]
+const RAW_CA_PROVINCES = [
+  ["on", "Ontario", "Ontario", "Toronto", ["Ontario", "安大略省", "安大略"]],
+  ["qc", "Quebec", "Quebec", "Quebec City", ["Quebec", "Québec", "魁北克省", "魁北克"]],
+  ["bc", "British Columbia", "British Columbia", "Victoria", ["British Columbia", "不列颠哥伦比亚省", "卑诗省"]],
+  ["ab", "Alberta", "Alberta", "Edmonton", ["Alberta", "阿尔伯塔省", "艾伯塔省"]],
+  ["mb", "Manitoba", "Manitoba", "Winnipeg", ["Manitoba", "马尼托巴省", "曼尼托巴省"]],
+  ["sk", "Saskatchewan", "Saskatchewan", "Regina", ["Saskatchewan", "萨斯喀彻温省"]],
+  ["ns", "Nova Scotia", "Nova Scotia", "Halifax", ["Nova Scotia", "新斯科舍省"]],
+  ["nb", "New Brunswick", "New Brunswick", "Fredericton", ["New Brunswick", "新不伦瑞克省"]],
+  ["nl", "Newfoundland and Labrador", "Newfoundland and Labrador", "St. John's", ["Newfoundland and Labrador", "Newfoundland", "纽芬兰与拉布拉多省", "纽芬兰"]],
+  ["pe", "Prince Edward Island", "Prince Edward Island", "Charlottetown", ["Prince Edward Island", "爱德华王子岛"]],
+  ["yt", "Yukon", "Yukon Territory", "Whitehorse", ["Yukon", "Yukon Territory", "育空"]],
+  ["nt", "Northwest Territories", "Northwest Territories", "Yellowknife", ["Northwest Territories", "西北地区"]],
+  ["nu", "Nunavut", "Nunavut", "Iqaluit", ["Nunavut", "努纳武特"]],
+];
+
+for (const [slug, name, geoName, capital, aliases] of RAW_CA_PROVINCES) {
+  const id = `can-${slug}`;
+  PLACE_META[id] = {
+    kind: "ca_province",
+    flagCode: "ca",
+    showInlineFlag: false,
+    name,
+    subtitle: capital,
+    regionLabel: "Canada",
+    geoName,
+  };
+  for (const alias of aliases) {
+    if (!(alias in PLACE_ALIASES)) PLACE_ALIASES[alias] = id;
+  }
+}
+
+// 9. Major Canadian Cities & Provincial Capitals
+// Format: [slug, name, geoName, provinceName, lon, lat, aliases[]]
+const RAW_CA_PROV_CITIES = [
+  ["ottawa", "Ottawa", "Ontario", "Ontario", -75.697, 45.421, ["Ottawa", "渥太华"]],
+  ["toronto", "Toronto", "Ontario", "Ontario", -79.383, 43.653, ["Toronto", "多伦多"]],
+  ["montreal", "Montreal", "Quebec", "Quebec", -73.567, 45.502, ["Montreal", "Montréal", "蒙特利尔"]],
+  ["vancouver", "Vancouver", "British Columbia", "British Columbia", -123.121, 49.283, ["Vancouver", "温哥华"]],
+  ["calgary", "Calgary", "Alberta", "Alberta", -114.072, 51.045, ["Calgary", "卡尔加里"]],
+  ["edmonton", "Edmonton", "Alberta", "Alberta", -113.494, 53.546, ["Edmonton", "埃德蒙顿"]],
+  ["winnipeg", "Winnipeg", "Manitoba", "Manitoba", -97.138, 49.895, ["Winnipeg", "温尼伯"]],
+  ["quebec-city", "Quebec City", "Quebec", "Quebec", -71.208, 46.814, ["Quebec City", "Québec City", "魁北克城"]],
+  ["halifax", "Halifax", "Nova Scotia", "Nova Scotia", -63.575, 44.649, ["Halifax", "哈利法克斯"]],
+  ["saskatoon", "Saskatoon", "Saskatchewan", "Saskatchewan", -106.670, 52.133, ["Saskatoon", "萨斯卡通"]],
+  ["regina", "Regina", "Saskatchewan", "Saskatchewan", -104.619, 50.445, ["Regina"]],
+  ["st-johns", "St. John's", "Newfoundland and Labrador", "Newfoundland and Labrador", -52.713, 47.562, ["St. John's"]],
+  ["fredericton", "Fredericton", "New Brunswick", "New Brunswick", -66.643, 45.964, ["Fredericton"]],
+  ["charlottetown", "Charlottetown", "Prince Edward Island", "Prince Edward Island", -63.131, 46.238, ["Charlottetown"]],
+  ["whitehorse", "Whitehorse", "Yukon Territory", "Yukon", -135.057, 60.721, ["Whitehorse"]],
+  ["yellowknife", "Yellowknife", "Northwest Territories", "Northwest Territories", -114.372, 62.454, ["Yellowknife"]],
+  ["iqaluit", "Iqaluit", "Nunavut", "Nunavut", -68.517, 63.747, ["Iqaluit"]],
+];
+
+for (const [slug, name, geoName, provinceName, lon, lat, aliases] of RAW_CA_PROV_CITIES) {
+  const id = `can-city-${slug}`;
+  PLACE_META[id] = {
+    kind: "ca_prov_city",
+    flagCode: "ca",
+    showInlineFlag: false,
+    name,
+    subtitle: provinceName,
+    regionLabel: "Canada",
+    geoName,
+    dot: [lon, lat],
+  };
+  for (const alias of aliases) {
+    if (!(alias in PLACE_ALIASES)) PLACE_ALIASES[alias] = id;
+  }
+}
+
+// 10. Major Non-Capital US Cities
+const RAW_US_MAJOR_CITIES = [
+  ["nyc", "New York City", "36", "New York", -74.006, 40.713, ["New York City", "NYC", "Manhattan", "Brooklyn", "纽约市", "纽约"]],
+  ["chicago", "Chicago", "17", "Illinois", -87.630, 41.878, ["Chicago", "芝加哥"]],
+  ["houston", "Houston", "48", "Texas", -95.370, 29.760, ["Houston", "休斯敦", "休斯顿"]],
+  ["dallas", "Dallas", "48", "Texas", -96.797, 32.777, ["Dallas", "达拉斯"]],
+  ["san-antonio", "San Antonio", "48", "Texas", -98.494, 29.424, ["San Antonio", "圣安东尼奥"]],
+  ["seattle", "Seattle", "53", "Washington", -122.332, 47.606, ["Seattle", "西雅图"]],
+  ["miami", "Miami", "12", "Florida", -80.192, 25.762, ["Miami", "迈阿密"]],
+  ["orlando", "Orlando", "12", "Florida", -81.379, 28.538, ["Orlando", "奥兰多"]],
+  ["tampa", "Tampa", "12", "Florida", -82.457, 27.951, ["Tampa", "坦帕"]],
+  ["philadelphia", "Philadelphia", "42", "Pennsylvania", -75.165, 39.953, ["Philadelphia", "费城"]],
+  ["pittsburgh", "Pittsburgh", "42", "Pennsylvania", -79.996, 40.441, ["Pittsburgh", "匹兹堡"]],
+  ["detroit", "Detroit", "26", "Michigan", -83.046, 42.331, ["Detroit", "底特律"]],
+  ["minneapolis", "Minneapolis", "27", "Minnesota", -93.265, 44.978, ["Minneapolis", "明尼阿波利斯"]],
+  ["las-vegas", "Las Vegas", "32", "Nevada", -115.140, 36.170, ["Las Vegas", "拉斯维加斯"]],
+  ["portland", "Portland", "41", "Oregon", -122.676, 45.523, ["Portland", "波特兰"]],
+  ["new-orleans", "New Orleans", "22", "Louisiana", -90.072, 29.951, ["New Orleans", "新奥尔良"]],
+  ["charlotte", "Charlotte", "37", "North Carolina", -80.843, 35.227, ["Charlotte", "夏洛特"]],
+  ["cleveland", "Cleveland", "39", "Ohio", -81.694, 41.499, ["Cleveland", "克利夫兰"]],
+  ["cincinnati", "Cincinnati", "39", "Ohio", -84.512, 39.103, ["Cincinnati", "辛辛那提"]],
+  ["st-louis", "St. Louis", "29", "Missouri", -90.199, 38.627, ["St. Louis", "Saint Louis", "圣路易斯"]],
+  ["kansas-city", "Kansas City", "29", "Missouri", -94.579, 39.100, ["Kansas City", "堪萨斯城"]],
+  ["baltimore", "Baltimore", "24", "Maryland", -76.612, 39.290, ["Baltimore", "巴尔的摩"]],
+  ["milwaukee", "Milwaukee", "55", "Wisconsin", -87.907, 43.039, ["Milwaukee", "密尔沃基"]],
+  ["memphis", "Memphis", "47", "Tennessee", -90.049, 35.150, ["Memphis", "孟菲斯"]],
+  ["anchorage", "Anchorage", "02", "Alaska", -149.900, 61.218, ["Anchorage", "安克雷奇"]],
+  ["omaha", "Omaha", "31", "Nebraska", -95.935, 41.257, ["Omaha", "奥马哈"]],
+  ["albuquerque", "Albuquerque", "35", "New Mexico", -106.650, 35.084, ["Albuquerque"]],
+  ["tucson", "Tucson", "04", "Arizona", -110.975, 32.223, ["Tucson"]],
+  ["louisville", "Louisville", "21", "Kentucky", -85.759, 38.253, ["Louisville"]],
+  ["buffalo", "Buffalo", "36", "New York", -78.878, 42.886, ["Buffalo"]],
+  ["newark", "Newark", "34", "New Jersey", -74.172, 40.736, ["Newark"]],
+];
+
+for (const [slug, name, fips, stateName, lon, lat, aliases] of RAW_US_MAJOR_CITIES) {
+  const id = `us-city-${slug}`;
+  PLACE_META[id] = {
+    kind: "us_city",
+    flagCode: "us",
+    showInlineFlag: false,
+    name,
+    subtitle: stateName,
+    regionLabel: "United States",
+    fips,
+    dot: [lon, lat],
+  };
+  for (const alias of aliases) {
+    if (!(alias in PLACE_ALIASES)) PLACE_ALIASES[alias] = id;
+  }
+}
+
+// 11. Major Non-Capital Chinese Cities
+const RAW_CN_MAJOR_CITIES = [
+  ["suzhou", "Suzhou", "32", "Jiangsu", 120.585, 31.299, ["Suzhou", "苏州"]],
+  ["ningbo", "Ningbo", "33", "Zhejiang", 121.550, 29.868, ["Ningbo", "宁波"]],
+  ["xiamen", "Xiamen", "35", "Fujian", 118.089, 24.480, ["Xiamen", "厦门"]],
+  ["qingdao", "Qingdao", "37", "Shandong", 120.383, 36.067, ["Qingdao", "青岛"]],
+  ["dalian", "Dalian", "21", "Liaoning", 121.615, 38.914, ["Dalian", "大连"]],
+  ["wuxi", "Wuxi", "32", "Jiangsu", 120.312, 31.491, ["Wuxi", "无锡"]],
+  ["wenzhou", "Wenzhou", "33", "Zhejiang", 120.699, 27.994, ["Wenzhou", "温州"]],
+  ["quanzhou", "Quanzhou", "35", "Fujian", 118.676, 24.874, ["Quanzhou", "泉州"]],
+  ["sanya", "Sanya", "46", "Hainan", 109.512, 18.253, ["Sanya", "三亚"]],
+  ["guilin", "Guilin", "45", "Guangxi", 110.290, 25.274, ["Guilin", "桂林"]],
+  ["kashgar", "Kashgar", "65", "Xinjiang", 75.990, 39.468, ["Kashgar", "喀什"]],
+];
+
+for (const [slug, name, gbId, provinceName, lon, lat, aliases] of RAW_CN_MAJOR_CITIES) {
+  const id = `cn-city-${slug}`;
+  PLACE_META[id] = {
+    kind: "cn_city",
+    flagCode: "cn",
+    showInlineFlag: false,
+    name,
+    subtitle: provinceName,
+    regionLabel: "China",
+    gbId,
+    dot: [lon, lat],
+  };
+  for (const alias of aliases) {
+    if (!(alias in PLACE_ALIASES)) PLACE_ALIASES[alias] = id;
+  }
+}
+
+// 12. World National Capitals & Major Global Cities
+// Format: [slug, name, countryCode, lon, lat, aliases[]]
+const RAW_WORLD_CITIES = [
+  // Europe
+  ["london", "London", "gb", -0.128, 51.507, ["London", "伦敦"]],
+  ["manchester", "Manchester", "gb", -2.243, 53.481, ["Manchester", "曼彻斯特"]],
+  ["edinburgh", "Edinburgh", "gb", -3.188, 55.953, ["Edinburgh", "爱丁堡"]],
+  ["birmingham", "Birmingham", "gb", -1.890, 52.486, ["Birmingham", "伯明翰"]],
+  ["liverpool", "Liverpool", "gb", -2.992, 53.408, ["Liverpool", "利物浦"]],
+  ["glasgow", "Glasgow", "gb", -4.252, 55.864, ["Glasgow", "格拉斯哥"]],
+  ["belfast", "Belfast", "gb", -5.930, 54.597, ["Belfast", "贝尔法斯特"]],
+  ["dublin", "Dublin", "ie", -6.260, 53.350, ["Dublin", "都柏林"]],
+  ["paris", "Paris", "fr", 2.352, 48.857, ["Paris", "巴黎"]],
+  ["marseille", "Marseille", "fr", 5.370, 43.297, ["Marseille", "马赛"]],
+  ["lyon", "Lyon", "fr", 4.836, 45.764, ["Lyon", "里昂"]],
+  ["berlin", "Berlin", "de", 13.405, 52.520, ["Berlin", "柏林"]],
+  ["munich", "Munich", "de", 11.582, 48.135, ["Munich", "München", "慕尼黑"]],
+  ["frankfurt", "Frankfurt", "de", 8.682, 50.111, ["Frankfurt", "法兰克福"]],
+  ["hamburg", "Hamburg", "de", 9.994, 53.551, ["Hamburg", "汉堡"]],
+  ["cologne", "Cologne", "de", 6.960, 50.938, ["Cologne", "Köln", "科隆"]],
+  ["rome", "Rome", "it", 12.496, 41.903, ["Rome", "Roma", "罗马"]],
+  ["milan", "Milan", "it", 9.190, 45.464, ["Milan", "Milano", "米兰"]],
+  ["naples", "Naples", "it", 14.268, 40.852, ["Naples", "Napoli", "那不勒斯"]],
+  ["venice", "Venice", "it", 12.316, 45.441, ["Venice", "Venezia", "威尼斯"]],
+  ["florence", "Florence", "it", 11.256, 43.770, ["Florence", "Firenze", "佛罗伦萨"]],
+  ["madrid", "Madrid", "es", -3.704, 40.417, ["Madrid", "马德里"]],
+  ["barcelona", "Barcelona", "es", 2.173, 41.385, ["Barcelona", "巴塞罗那"]],
+  ["seville", "Seville", "es", -5.984, 37.389, ["Seville", "Sevilla", "塞维利亚"]],
+  ["lisbon", "Lisbon", "pt", -9.139, 38.722, ["Lisbon", "里斯本"]],
+  ["porto", "Porto", "pt", -8.629, 41.158, ["Porto", "波尔图"]],
+  ["amsterdam", "Amsterdam", "nl", 4.904, 52.368, ["Amsterdam", "阿姆斯特丹"]],
+  ["rotterdam", "Rotterdam", "nl", 4.478, 51.924, ["Rotterdam", "鹿特丹"]],
+  ["the-hague", "The Hague", "nl", 4.301, 52.071, ["The Hague", "海牙"]],
+  ["brussels", "Brussels", "be", 4.352, 50.850, ["Brussels", "布鲁塞尔"]],
+  ["antwerp", "Antwerp", "be", 4.403, 51.219, ["Antwerp", "安特卫普"]],
+  ["zurich", "Zurich", "ch", 8.542, 47.377, ["Zurich", "Zürich", "苏黎世"]],
+  ["geneva", "Geneva", "ch", 6.143, 46.204, ["Geneva", "日内瓦"]],
+  ["bern", "Bern", "ch", 7.447, 46.948, ["Bern", "伯尔尼"]],
+  ["basel", "Basel", "ch", 7.589, 47.559, ["Basel", "巴塞尔"]],
+  ["vienna", "Vienna", "at", 16.374, 48.208, ["Vienna", "维也纳"]],
+  ["prague", "Prague", "cz", 14.438, 50.076, ["Prague", "布拉格"]],
+  ["warsaw", "Warsaw", "pl", 21.012, 52.230, ["Warsaw", "华沙"]],
+  ["krakow", "Krakow", "pl", 19.945, 50.065, ["Krakow", "Kraków", "克拉科夫"]],
+  ["budapest", "Budapest", "hu", 19.040, 47.498, ["Budapest", "布达佩斯"]],
+  ["bucharest", "Bucharest", "ro", 26.103, 44.427, ["Bucharest", "布加勒斯特"]],
+  ["sofia", "Sofia", "bg", 23.322, 42.698, ["Sofia", "索非亚"]],
+  ["athens", "Athens", "gr", 23.728, 37.984, ["Athens", "雅典"]],
+  ["thessaloniki", "Thessaloniki", "gr", 22.944, 40.640, ["Thessaloniki"]],
+  ["stockholm", "Stockholm", "se", 18.069, 59.329, ["Stockholm", "斯德哥尔摩"]],
+  ["gothenburg", "Gothenburg", "se", 11.975, 57.709, ["Gothenburg", "哥德堡"]],
+  ["oslo", "Oslo", "no", 10.752, 59.914, ["Oslo", "奥斯陆"]],
+  ["copenhagen", "Copenhagen", "dk", 12.568, 55.676, ["Copenhagen", "哥本哈根"]],
+  ["helsinki", "Helsinki", "fi", 24.938, 60.170, ["Helsinki", "赫尔辛基"]],
+  ["reykjavik", "Reykjavík", "is", -21.943, 64.147, ["Reykjavik", "Reykjavík", "雷克雅未克"]],
+  ["tallinn", "Tallinn", "ee", 24.754, 59.437, ["Tallinn", "塔林"]],
+  ["riga", "Riga", "lv", 24.105, 56.950, ["Riga", "里加"]],
+  ["vilnius", "Vilnius", "lt", 25.280, 54.687, ["Vilnius", "维尔纽斯"]],
+  ["kyiv", "Kyiv", "ua", 30.523, 50.450, ["Kyiv", "Kiev", "基辅"]],
+  ["odesa", "Odesa", "ua", 30.723, 46.483, ["Odesa", "Odessa", "敖德萨"]],
+  ["lviv", "Lviv", "ua", 24.030, 49.839, ["Lviv", "利沃夫"]],
+  ["kharkiv", "Kharkiv", "ua", 36.230, 49.994, ["Kharkiv", "哈尔科夫"]],
+  ["minsk", "Minsk", "by", 27.562, 53.901, ["Minsk", "明斯克"]],
+  ["chisinau", "Chișinău", "md", 28.864, 47.011, ["Chisinau", "Chișinău"]],
+  ["bratislava", "Bratislava", "sk", 17.108, 48.149, ["Bratislava", "布拉迪斯拉发"]],
+  ["zagreb", "Zagreb", "hr", 15.982, 45.815, ["Zagreb", "萨格勒布"]],
+  ["ljubljana", "Ljubljana", "si", 14.506, 46.057, ["Ljubljana"]],
+  ["belgrade", "Belgrade", "rs", 20.449, 44.787, ["Belgrade", "贝尔格莱德"]],
+  ["sarajevo", "Sarajevo", "ba", 18.413, 43.856, ["Sarajevo", "萨拉热窝"]],
+  ["podgorica", "Podgorica", "me", 19.263, 42.441, ["Podgorica"]],
+  ["tirana", "Tirana", "al", 19.819, 41.328, ["Tirana"]],
+  ["skopje", "Skopje", "mk", 21.425, 41.998, ["Skopje"]],
+  ["pristina", "Pristina", "xk", 21.166, 42.663, ["Pristina"]],
+  ["nicosia", "Nicosia", "cy", 33.382, 35.186, ["Nicosia"]],
+  ["valletta", "Valletta", "mt", 14.515, 35.899, ["Valletta"]],
+  ["luxembourg-city", "Luxembourg City", "lu", 6.132, 49.612, ["Luxembourg City"]],
+  ["moscow", "Moscow", "ru", 37.617, 55.756, ["Moscow", "莫斯科"]],
+  ["st-petersburg", "Saint Petersburg", "ru", 30.335, 59.934, ["Saint Petersburg", "St. Petersburg", "圣彼得堡"]],
+  ["vladivostok", "Vladivostok", "ru", 131.886, 43.116, ["Vladivostok", "海参崴", "符拉迪沃斯托克"]],
+  ["novosibirsk", "Novosibirsk", "ru", 82.920, 55.008, ["Novosibirsk", "新西伯利亚"]],
+
+  // East, Southeast & South Asia
+  ["tokyo", "Tokyo", "jp", 139.692, 35.690, ["Tokyo", "东京"]],
+  ["osaka", "Osaka", "jp", 135.502, 34.694, ["Osaka", "大阪"]],
+  ["kyoto", "Kyoto", "jp", 135.768, 35.012, ["Kyoto", "京都"]],
+  ["yokohama", "Yokohama", "jp", 139.638, 35.444, ["Yokohama", "横滨"]],
+  ["nagoya", "Nagoya", "jp", 136.907, 35.181, ["Nagoya", "名古屋"]],
+  ["sapporo", "Sapporo", "jp", 141.354, 43.062, ["Sapporo", "札幌"]],
+  ["fukuoka", "Fukuoka", "jp", 130.402, 33.590, ["Fukuoka", "福冈"]],
+  ["hiroshima", "Hiroshima", "jp", 132.455, 34.385, ["Hiroshima", "广岛"]],
+  ["seoul", "Seoul", "kr", 126.978, 37.567, ["Seoul", "首尔"]],
+  ["busan", "Busan", "kr", 129.076, 35.180, ["Busan", "釜山"]],
+  ["incheon", "Incheon", "kr", 126.705, 37.456, ["Incheon", "仁川"]],
+  ["pyongyang", "Pyongyang", "kp", 125.763, 39.039, ["Pyongyang", "平壤"]],
+  ["taipei", "Taipei", "tw", 121.565, 25.033, ["Taipei", "台北", "臺北"]],
+  ["kaohsiung", "Kaohsiung", "tw", 120.301, 22.627, ["Kaohsiung", "高雄"]],
+  ["bangkok", "Bangkok", "th", 100.502, 13.756, ["Bangkok", "曼谷"]],
+  ["chiang-mai", "Chiang Mai", "th", 98.985, 18.788, ["Chiang Mai", "清迈"]],
+  ["hanoi", "Hanoi", "vn", 105.834, 21.028, ["Hanoi", "河内"]],
+  ["ho-chi-minh", "Ho Chi Minh City", "vn", 106.630, 10.823, ["Ho Chi Minh City", "Saigon", "胡志明市"]],
+  ["manila", "Manila", "ph", 120.984, 14.600, ["Manila", "马尼拉"]],
+  ["jakarta", "Jakarta", "id", 106.846, -6.209, ["Jakarta", "雅加达"]],
+  ["bali", "Bali", "id", 115.189, -8.410, ["Bali", "巴厘岛"]],
+  ["surabaya", "Surabaya", "id", 112.752, -7.258, ["Surabaya", "泗水"]],
+  ["kuala-lumpur", "Kuala Lumpur", "my", 101.687, 3.139, ["Kuala Lumpur", "吉隆坡"]],
+  ["penang", "Penang", "my", 100.333, 5.414, ["Penang", "槟城"]],
+  ["phnom-penh", "Phnom Penh", "kh", 104.928, 11.556, ["Phnom Penh", "金边"]],
+  ["vientiane", "Vientiane", "la", 102.633, 17.976, ["Vientiane", "万象"]],
+  ["yangon", "Yangon", "mm", 96.195, 16.866, ["Yangon", "Rangoon", "仰光"]],
+  ["naypyidaw", "Naypyidaw", "mm", 96.079, 19.763, ["Naypyidaw", "内比都"]],
+  ["new-delhi", "New Delhi", "in", 77.209, 28.614, ["New Delhi", "Delhi", "新德里", "德里"]],
+  ["mumbai", "Mumbai", "in", 72.878, 19.076, ["Mumbai", "Bombay", "孟买"]],
+  ["bengaluru", "Bengaluru", "in", 77.595, 12.972, ["Bengaluru", "Bangalore", "班加罗尔"]],
+  ["chennai", "Chennai", "in", 80.271, 13.083, ["Chennai", "金奈"]],
+  ["kolkata", "Kolkata", "in", 88.364, 22.573, ["Kolkata", "Calcutta", "加尔各答"]],
+  ["hyderabad", "Hyderabad", "in", 78.487, 17.385, ["Hyderabad", "海得拉巴"]],
+  ["pune", "Pune", "in", 73.857, 18.520, ["Pune", "浦那"]],
+  ["ahmedabad", "Ahmedabad", "in", 72.571, 23.023, ["Ahmedabad"]],
+  ["karachi", "Karachi", "pk", 67.001, 24.861, ["Karachi", "卡拉奇"]],
+  ["lahore", "Lahore", "pk", 74.359, 31.520, ["Lahore", "拉合尔"]],
+  ["islamabad", "Islamabad", "pk", 73.048, 33.684, ["Islamabad", "伊斯兰堡"]],
+  ["dhaka", "Dhaka", "bd", 90.413, 23.810, ["Dhaka", "达卡"]],
+  ["colombo", "Colombo", "lk", 79.861, 6.927, ["Colombo", "科伦坡"]],
+  ["kathmandu", "Kathmandu", "np", 85.324, 27.717, ["Kathmandu", "加德满都"]],
+  ["thimphu", "Thimphu", "bt", 89.639, 27.473, ["Thimphu"]],
+  ["kabul", "Kabul", "af", 69.208, 34.555, ["Kabul", "喀布尔"]],
+  ["tashkent", "Tashkent", "uz", 69.240, 41.300, ["Tashkent", "塔什干"]],
+  ["samarkand", "Samarkand", "uz", 66.959, 39.654, ["Samarkand", "撒马尔罕"]],
+  ["almaty", "Almaty", "kz", 76.851, 43.222, ["Almaty", "阿拉木图"]],
+  ["astana", "Astana", "kz", 71.470, 51.161, ["Astana", "阿斯塔纳"]],
+  ["bishkek", "Bishkek", "kg", 74.569, 42.875, ["Bishkek", "比什凯克"]],
+  ["dushanbe", "Dushanbe", "tj", 68.774, 38.560, ["Dushanbe", "杜尚别"]],
+  ["ashgabat", "Ashgabat", "tm", 58.326, 37.960, ["Ashgabat", "阿什哈巴德"]],
+  ["ulaanbaatar", "Ulaanbaatar", "mn", 106.906, 47.886, ["Ulaanbaatar", "乌兰巴托"]],
+  ["baku", "Baku", "az", 49.867, 40.409, ["Baku", "巴库"]],
+  ["tbilisi", "Tbilisi", "ge", 44.827, 41.715, ["Tbilisi", "第比利斯"]],
+  ["yerevan", "Yerevan", "am", 44.515, 40.187, ["Yerevan", "埃里温"]],
+
+  // Middle East
+  ["istanbul", "Istanbul", "tr", 28.978, 41.008, ["Istanbul", "伊斯坦布尔"]],
+  ["ankara", "Ankara", "tr", 32.860, 39.933, ["Ankara", "安卡拉"]],
+  ["izmir", "Izmir", "tr", 27.143, 38.424, ["Izmir", "İzmir", "伊兹密尔"]],
+  ["tehran", "Tehran", "ir", 51.389, 35.689, ["Tehran", "德黑兰"]],
+  ["isfahan", "Isfahan", "ir", 51.666, 32.654, ["Isfahan", "伊斯法罕"]],
+  ["baghdad", "Baghdad", "iq", 44.366, 33.315, ["Baghdad", "巴格达"]],
+  ["mosul", "Mosul", "iq", 43.158, 36.349, ["Mosul", "摩苏尔"]],
+  ["basra", "Basra", "iq", 47.783, 30.508, ["Basra", "巴士拉"]],
+  ["damascus", "Damascus", "sy", 36.277, 33.514, ["Damascus", "大马士革"]],
+  ["aleppo", "Aleppo", "sy", 37.134, 36.202, ["Aleppo", "阿勒颇"]],
+  ["beirut", "Beirut", "lb", 35.502, 33.894, ["Beirut", "贝鲁特"]],
+  ["amman", "Amman", "jo", 35.911, 31.954, ["Amman", "安曼"]],
+  ["jerusalem", "Jerusalem", "il", 35.214, 31.768, ["Jerusalem", "耶路撒冷"]],
+  ["tel-aviv", "Tel Aviv", "il", 34.782, 32.085, ["Tel Aviv", "特拉维夫"]],
+  ["haifa", "Haifa", "il", 34.990, 32.794, ["Haifa", "海法"]],
+  ["gaza-city", "Gaza City", "ps", 34.467, 31.502, ["Gaza City", "加沙城"]],
+  ["riyadh", "Riyadh", "sa", 46.675, 24.714, ["Riyadh", "利雅得"]],
+  ["jeddah", "Jeddah", "sa", 39.198, 21.486, ["Jeddah", "吉达"]],
+  ["mecca", "Mecca", "sa", 39.858, 21.389, ["Mecca", "Makkah", "麦加"]],
+  ["medina", "Medina", "sa", 39.569, 24.525, ["Medina", "麦地那"]],
+  ["dubai", "Dubai", "ae", 55.271, 25.205, ["Dubai", "迪拜"]],
+  ["abu-dhabi", "Abu Dhabi", "ae", 54.377, 24.454, ["Abu Dhabi", "阿布扎比"]],
+  ["doha", "Doha", "qa", 51.531, 25.285, ["Doha", "多哈"]],
+  ["kuwait-city", "Kuwait City", "kw", 47.977, 29.376, ["Kuwait City", "科威特城"]],
+  ["manama", "Manama", "bh", 50.586, 26.229, ["Manama", "麦纳麦"]],
+  ["muscat", "Muscat", "om", 58.406, 23.588, ["Muscat", "马斯喀特"]],
+  ["sanaa", "Sanaa", "ye", 44.207, 15.369, ["Sanaa", "Sana'a", "萨那"]],
+  ["aden", "Aden", "ye", 45.019, 12.785, ["Aden", "亚丁"]],
+
+  // Africa
+  ["cairo", "Cairo", "eg", 31.236, 30.044, ["Cairo", "开罗"]],
+  ["alexandria", "Alexandria", "eg", 29.919, 31.200, ["Alexandria", "亚历山大港"]],
+  ["luxor", "Luxor", "eg", 32.640, 25.687, ["Luxor", "卢克索"]],
+  ["casablanca", "Casablanca", "ma", -7.590, 33.573, ["Casablanca", "卡萨布兰卡"]],
+  ["rabat", "Rabat", "ma", -6.849, 34.021, ["Rabat", "拉巴特"]],
+  ["marrakesh", "Marrakesh", "ma", -7.981, 31.630, ["Marrakesh", "Marrakech", "马拉喀什"]],
+  ["fez", "Fez", "ma", -5.008, 34.018, ["Fez", "Fès", "非斯"]],
+  ["algiers", "Algiers", "dz", 3.059, 36.754, ["Algiers", "阿尔及尔"]],
+  ["tunis", "Tunis", "tn", 10.182, 36.807, ["Tunis", "突尼斯市"]],
+  ["tripoli", "Tripoli", "ly", 13.191, 32.887, ["Tripoli", "的黎波里"]],
+  ["benghazi", "Benghazi", "ly", 20.087, 32.119, ["Benghazi", "班加西"]],
+  ["khartoum", "Khartoum", "sd", 32.560, 15.501, ["Khartoum", "喀土穆"]],
+  ["addis-ababa", "Addis Ababa", "et", 38.747, 9.032, ["Addis Ababa", "亚的斯亚贝巴"]],
+  ["nairobi", "Nairobi", "ke", 36.822, -1.292, ["Nairobi", "内罗毕"]],
+  ["mombasa", "Mombasa", "ke", 39.668, -4.044, ["Mombasa"]],
+  ["kampala", "Kampala", "ug", 32.583, 0.348, ["Kampala", "坎帕拉"]],
+  ["kigali", "Kigali", "rw", 30.062, -1.944, ["Kigali", "基加利"]],
+  ["dar-es-salaam", "Dar es Salaam", "tz", 39.208, -6.792, ["Dar es Salaam", "达累斯萨拉姆"]],
+  ["dodoma", "Dodoma", "tz", 35.752, -6.163, ["Dodoma"]],
+  ["lagos", "Lagos", "ng", 3.379, 6.524, ["Lagos", "拉各斯"]],
+  ["abuja", "Abuja", "ng", 7.495, 9.058, ["Abuja", "阿布贾"]],
+  ["accra", "Accra", "gh", -0.187, 5.604, ["Accra", "阿克拉"]],
+  ["dakar", "Dakar", "sn", -17.447, 14.717, ["Dakar", "达喀尔"]],
+  ["abidjan", "Abidjan", "ci", -4.008, 5.360, ["Abidjan", "阿比让"]],
+  ["kinshasa", "Kinshasa", "cd", 15.266, -4.442, ["Kinshasa", "金沙萨"]],
+  ["luanda", "Luanda", "ao", 13.234, -8.838, ["Luanda", "罗安达"]],
+  ["lusaka", "Lusaka", "zm", 28.323, -15.388, ["Lusaka", "卢萨卡"]],
+  ["harare", "Harare", "zw", 31.053, -17.825, ["Harare", "哈拉雷"]],
+  ["gaborone", "Gaborone", "bw", 25.923, -24.628, ["Gaborone", "哈博罗内"]],
+  ["windhoek", "Windhoek", "na", 17.066, -22.561, ["Windhoek", "温得和克"]],
+  ["maputo", "Maputo", "mz", 32.573, -25.969, ["Maputo", "马普托"]],
+  ["antananarivo", "Antananarivo", "mg", 47.508, -18.879, ["Antananarivo"]],
+  ["johannesburg", "Johannesburg", "za", 28.047, -26.204, ["Johannesburg", "约翰内斯堡"]],
+  ["cape-town", "Cape Town", "za", 18.424, -33.925, ["Cape Town", "开普敦"]],
+  ["pretoria", "Pretoria", "za", 28.229, -25.748, ["Pretoria", "比勒陀利亚"]],
+  ["durban", "Durban", "za", 31.022, -29.859, ["Durban", "德班"]],
+
+  // Latin America & Caribbean
+  ["mexico-city", "Mexico City", "mx", -99.133, 19.433, ["Mexico City", "墨西哥城"]],
+  ["guadalajara", "Guadalajara", "mx", -103.350, 20.660, ["Guadalajara", "瓜达拉哈拉"]],
+  ["monterrey", "Monterrey", "mx", -100.316, 25.687, ["Monterrey", "蒙特雷"]],
+  ["oaxaca", "Oaxaca", "mx", -96.726, 17.073, ["Oaxaca", "瓦哈卡"]],
+  ["cancun", "Cancún", "mx", -86.852, 21.162, ["Cancun", "Cancún", "坎昆"]],
+  ["tijuana", "Tijuana", "mx", -117.038, 32.515, ["Tijuana", "蒂华纳"]],
+  ["havana", "Havana", "cu", -82.367, 23.114, ["Havana", "哈瓦那"]],
+  ["santo-domingo", "Santo Domingo", "do", -69.931, 18.486, ["Santo Domingo", "圣多明各"]],
+  ["port-au-prince", "Port-au-Prince", "ht", -72.307, 18.594, ["Port-au-Prince", "太子港"]],
+  ["san-juan", "San Juan", "pr", -66.106, 18.466, ["San Juan", "圣胡安"]],
+  ["kingston", "Kingston", "jm", -76.809, 18.018, ["Kingston", "金斯敦"]],
+  ["nassau", "Nassau", "bs", -77.355, 25.048, ["Nassau", "拿骚"]],
+  ["guatemala-city", "Guatemala City", "gt", -90.507, 14.635, ["Guatemala City", "危地马拉城"]],
+  ["san-salvador", "San Salvador", "sv", -89.218, 13.693, ["San Salvador", "圣萨尔瓦多"]],
+  ["tegucigalpa", "Tegucigalpa", "hn", -87.192, 14.072, ["Tegucigalpa"]],
+  ["managua", "Managua", "ni", -86.236, 12.115, ["Managua", "马那瓜"]],
+  ["san-jose-cr", "San José", "cr", -84.091, 9.928, ["San José"]],
+  ["panama-city", "Panama City", "pa", -79.519, 8.982, ["Panama City", "巴拿马城"]],
+  ["bogota", "Bogotá", "co", -74.072, 4.711, ["Bogota", "Bogotá", "波哥大"]],
+  ["medellin", "Medellín", "co", -75.564, 6.244, ["Medellin", "Medellín", "麦德林"]],
+  ["cartagena", "Cartagena", "co", -75.479, 10.391, ["Cartagena"]],
+  ["caracas", "Caracas", "ve", -66.904, 10.481, ["Caracas", "加拉加斯"]],
+  ["quito", "Quito", "ec", -78.468, -0.181, ["Quito", "基多"]],
+  ["guayaquil", "Guayaquil", "ec", -79.922, -2.189, ["Guayaquil"]],
+  ["lima", "Lima", "pe", -77.043, -12.046, ["Lima", "利马"]],
+  ["cusco", "Cusco", "pe", -71.968, -13.532, ["Cusco", "Cuzco", "库斯科"]],
+  ["la-paz", "La Paz", "bo", -68.119, -16.490, ["La Paz", "拉巴斯"]],
+  ["sucre", "Sucre", "bo", -65.263, -19.019, ["Sucre", "苏克雷"]],
+  ["santiago", "Santiago", "cl", -70.669, -33.449, ["Santiago", "圣地亚哥"]],
+  ["buenos-aires", "Buenos Aires", "ar", -58.382, -34.604, ["Buenos Aires", "布宜诺斯艾利斯"]],
+  ["cordoba", "Córdoba", "ar", -64.189, -31.420, ["Córdoba"]],
+  ["mendoza", "Mendoza", "ar", -68.846, -32.890, ["Mendoza"]],
+  ["montevideo", "Montevideo", "uy", -56.165, -34.901, ["Montevideo", "蒙得维的亚"]],
+  ["asuncion", "Asunción", "py", -57.576, -25.264, ["Asuncion", "Asunción", "亚松森"]],
+  ["brasilia", "Brasília", "br", -47.929, -15.794, ["Brasilia", "Brasília", "巴西利亚"]],
+  ["sao-paulo", "São Paulo", "br", -46.633, -23.551, ["Sao Paulo", "São Paulo", "圣保罗"]],
+  ["rio-de-janeiro", "Rio de Janeiro", "br", -43.173, -22.907, ["Rio de Janeiro", "里约热内卢"]],
+  ["belo-horizonte", "Belo Horizonte", "br", -43.938, -19.917, ["Belo Horizonte"]],
+
+  // Oceania
+  ["sydney", "Sydney", "au", 151.209, -33.869, ["Sydney", "悉尼"]],
+  ["melbourne", "Melbourne", "au", 144.963, -37.814, ["Melbourne", "墨尔本"]],
+  ["brisbane", "Brisbane", "au", 153.026, -27.470, ["Brisbane", "布里斯班"]],
+  ["perth", "Perth", "au", 115.861, -31.951, ["Perth", "珀斯"]],
+  ["adelaide", "Adelaide", "au", 138.601, -34.929, ["Adelaide", "阿德莱德"]],
+  ["canberra", "Canberra", "au", 149.130, -35.281, ["Canberra", "堪培拉"]],
+  ["auckland", "Auckland", "nz", 174.763, -36.849, ["Auckland", "奥克兰"]],
+  ["wellington", "Wellington", "nz", 174.776, -41.287, ["Wellington", "惠灵顿"]],
+  ["christchurch", "Christchurch", "nz", 172.636, -43.532, ["Christchurch", "基督城"]],
+  ["suva", "Suva", "fj", 178.442, -18.142, ["Suva", "苏瓦"]],
+  ["port-moresby", "Port Moresby", "pg", 147.180, -9.444, ["Port Moresby", "莫尔兹比港"]],
+];
+
+for (const [slug, name, countryCode, lon, lat, aliases] of RAW_WORLD_CITIES) {
+  const parent = COUNTRY_META[countryCode];
+  if (!parent) continue;
+  const id = `city-${slug}`;
+  PLACE_META[id] = {
+    kind: "world_city",
+    flagCode: countryCode,
+    showInlineFlag: false,
+    name,
+    subtitle: parent.name,
+    regionLabel: parent.regionLabel,
+    continent: parent.continent,
+    iso: parent.iso,
+    dot: [lon, lat],
+  };
+  for (const alias of aliases) {
+    if (!(alias in PLACE_ALIASES)) PLACE_ALIASES[alias] = id;
+  }
+}
+
 /* ---------- Lazy Atlas Loaders & Geometry Decoders ---------- */
 
 const atlasPromises = {};
@@ -701,10 +1139,12 @@ function decodeTopoJson(topo, objectKey, padLen) {
   return features;
 }
 
-function decodeGeoJson(geo) {
+function decodeGeoJson(geo, useNameKey = false) {
   const features = [];
   for (const f of geo.features || []) {
-    const id = String(f.properties?.id ?? f.id ?? "").slice(0, 2);
+    const id = useNameKey
+      ? String(f.properties?.name ?? f.id ?? "")
+      : String(f.properties?.id ?? f.id ?? "").slice(0, 2);
     const geom = f.geometry;
     if (!geom) continue;
     let rings = [];
@@ -727,6 +1167,8 @@ function loadAtlas(kind) {
       ? "us"
       : kind === "cn_province" || kind === "gd_city" || kind === "cn_city"
       ? "cn"
+      : kind === "ca_province" || kind === "ca_prov_city"
+      ? "ca"
       : "world";
 
   if (!atlasPromises[key]) {
@@ -738,10 +1180,14 @@ function loadAtlas(kind) {
       atlasPromises[key] = fetch(US_ATLAS_URL)
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
         .then((t) => decodeTopoJson(t, "states", 2));
+    } else if (key === "ca") {
+      atlasPromises[key] = fetch(CA_PROVINCES_GEO_URL)
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+        .then((g) => decodeGeoJson(g, true));
     } else {
       atlasPromises[key] = fetch(CN_GEO_URL)
         .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
-        .then(decodeGeoJson);
+        .then((g) => decodeGeoJson(g, false));
     }
   }
   return atlasPromises[key];
@@ -762,12 +1208,46 @@ function buildPlaceSvg(features, placeId) {
     bounds = (CONTINENT_META[meta.continent] || CONTINENT_META.world).bounds;
     if (Array.isArray(meta.iso)) meta.iso.forEach((x) => targetIds.add(x));
     else if (meta.iso) targetIds.add(meta.iso);
+  } else if (meta.kind === "world_city") {
+    if (Array.isArray(meta.iso)) meta.iso.forEach((x) => targetIds.add(x));
+    else if (meta.iso) targetIds.add(meta.iso);
+    const parentFeat = typeof meta.iso === "string" ? features.find((f) => f.id === meta.iso) : null;
+    const [dotLon, dotLat] = meta.dot || [0, 0];
+    if (parentFeat) {
+      const [bMinLon, bMaxLon, bMinLat, bMaxLat] = parentFeat.bbox;
+      const lonSpan = bMaxLon - bMinLon;
+      const latSpan = bMaxLat - bMinLat;
+      // For sprawling or overseas-territory countries (Russia, France, USA, etc.), frame regionally around the city
+      if (lonSpan > 75 || latSpan > 50 || dotLon < bMinLon - 2 || dotLon > bMaxLon + 2) {
+        bounds = [dotLon - 18, dotLon + 18, Math.max(-58, dotLat - 12), Math.min(78, dotLat + 12)];
+      } else {
+        const padLon = Math.max(3.5, lonSpan * 0.22);
+        const padLat = Math.max(2.5, latSpan * 0.22);
+        bounds = [bMinLon - padLon, bMaxLon + padLon, Math.max(-58, bMinLat - padLat), Math.min(78, bMaxLat + padLat)];
+      }
+    } else {
+      bounds = [dotLon - 12, dotLon + 12, Math.max(-58, dotLat - 8), Math.min(78, dotLat + 8)];
+    }
   } else if (meta.kind === "us_state") {
     bounds = meta.fips === "02" || meta.fips === "15" ? US_FULL_BOUNDS : US_BOUNDS;
     targetIds.add(meta.fips);
   } else if (meta.kind === "cn_province") {
     bounds = CN_BOUNDS;
     targetIds.add(meta.gbId);
+  } else if (meta.kind === "ca_province") {
+    bounds = CA_BOUNDS;
+    targetIds.add(meta.geoName);
+  } else if (meta.kind === "ca_prov_city") {
+    targetIds.add(meta.geoName);
+    const parentFeat = features.find((f) => f.id === meta.geoName);
+    if (parentFeat) {
+      const [bMinLon, bMaxLon, bMinLat, bMaxLat] = parentFeat.bbox;
+      const padLon = Math.max(1.2, (bMaxLon - bMinLon) * 0.14);
+      const padLat = Math.max(1.0, (bMaxLat - bMinLat) * 0.14);
+      bounds = [bMinLon - padLon, bMaxLon + padLon, bMinLat - padLat, bMaxLat + padLat];
+    } else {
+      bounds = CA_BOUNDS;
+    }
   } else {
     // City-level: zoom directly onto its parent state/province contour
     const isUsCity = meta.kind === "ca_city" || meta.kind === "us_city";
@@ -854,7 +1334,9 @@ function buildPlaceSvg(features, placeId) {
     meta.kind === "ca_city" ||
     meta.kind === "gd_city" ||
     meta.kind === "us_city" ||
-    meta.kind === "cn_city";
+    meta.kind === "cn_city" ||
+    meta.kind === "ca_prov_city" ||
+    meta.kind === "world_city";
   const targetClass = isCityKind ? "cmap-target is-region" : "cmap-target";
   return `
     <svg class="cmap-svg" viewBox="0 0 ${w} ${h}" aria-hidden="true">
@@ -874,8 +1356,16 @@ const PLACE_WIKI_OVERRIDES = {
   "us-36": "New_York_(state)",
   "us-53": "Washington_(state)",
   "us-11": "Washington,_D.C.",
+  "us-city-nyc": "New_York_City",
   "ca-silicon-valley": "Silicon_Valley",
   "ca-bay-area": "San_Francisco_Bay_Area",
+  "can-city-quebec-city": "Quebec_City",
+  "city-san-jose-cr": "San_José,_Costa_Rica",
+  "city-cordoba": "Córdoba,_Argentina",
+  "city-santiago": "Santiago",
+  "city-alexandria": "Alexandria",
+  "city-fez": "Fez,_Morocco",
+  "city-st-petersburg": "Saint_Petersburg",
 };
 
 function buildPlaceWikiUrl(placeId, meta) {
@@ -884,7 +1374,7 @@ function buildPlaceWikiUrl(placeId, meta) {
     return `https://en.wikipedia.org/wiki/${PLACE_WIKI_OVERRIDES[placeId]}`;
   }
   const title =
-    (meta.kind === "ca_city" || meta.kind === "us_city") && meta.subtitle
+    (meta.kind === "ca_city" || meta.kind === "us_city" || meta.kind === "ca_prov_city") && meta.subtitle
       ? `${meta.name}, ${meta.subtitle}`
       : meta.name;
   return `https://en.wikipedia.org/wiki/${encodeURIComponent(String(title).replace(/ /g, "_"))}`;
@@ -933,7 +1423,9 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg, getLeader = nul
       meta.kind === "ca_city" ||
       meta.kind === "gd_city" ||
       meta.kind === "us_city" ||
-      meta.kind === "cn_city";
+      meta.kind === "cn_city" ||
+      meta.kind === "ca_prov_city" ||
+      meta.kind === "world_city";
     const flagHtml = meta.flagCode ? renderFlagImg(meta.flagCode) : "";
     const wikiUrl = buildPlaceWikiUrl(placeId, meta);
     const wikiLinkHtml =
