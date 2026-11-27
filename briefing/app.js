@@ -932,9 +932,12 @@ function computeSparklineLayout(values, times, tf, symbol) {
       const isTnx = symbol === "^TNX";
       const isVix = symbol === "^VIX";
       if (isTnx) {
-        // US 10Y Treasury yields trade 8:20 AM–3:00 PM ET (500–900 min)
-        const startMin = Math.min(minMin, 500);
-        const endMin = Math.max(maxMin, 900);
+        // US 10Y Treasury yields: anchor to first bar (8:20 AM live or 9:30 AM static),
+        // and span edge-to-edge once the session is closed (>30m since last bar)
+        const lastMs = Date.parse(times[times.length - 1] || "");
+        const sessionClosed = !Number.isNaN(lastMs) && Date.now() - lastMs > 30 * 60 * 1000;
+        const startMin = minMin;
+        const endMin = sessionClosed ? Math.max(maxMin, minMin + 1) : Math.max(maxMin, 900);
         const spanMin = Math.max(60, endMin - startMin);
         const xs = mins.map((m) => Math.max(0, Math.min(w, ((m - startMin) / spanMin) * w)));
         return { xs, closeX: null, isExtended: mins.map(() => false) };
