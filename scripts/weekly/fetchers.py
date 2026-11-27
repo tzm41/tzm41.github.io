@@ -12,7 +12,6 @@ import httpx
 
 from ..briefing.fetchers.news import clean_text, deduplicate_articles
 from .config import (
-    ARCHIVE_DIR,
     CULTURE_FEEDS,
     DAILY_ARCHIVE_DIR,
     HISTORY_FEEDS,
@@ -128,32 +127,3 @@ def load_recent_daily_pulse(target_date: str, days: int = 7) -> list[dict[str, A
         )
     return snippets
 
-
-def load_recent_weekly_headlines(target_date: str, max_weeks: int = 4) -> list[str]:
-    """Return previously published Weekly Briefing headlines so Sunday editions avoid repeating stories."""
-    if not ARCHIVE_DIR.exists():
-        return []
-    files = sorted(
-        (p for p in ARCHIVE_DIR.glob("*.json") if p.stem < target_date),
-        reverse=True,
-    )
-    seen: list[str] = []
-    for path in files[:max_weeks]:
-        try:
-            data = json.loads(path.read_text(encoding="utf-8"))
-        except Exception:
-            continue
-        for key in ("science", "culture", "history"):
-            for item in (data.get(key) or {}).get("items", []):
-                h = item.get("headline")
-                if h:
-                    seen.append(h)
-        for lr in data.get("long_reads") or []:
-            h = lr.get("headline")
-            if h:
-                seen.append(h)
-        for geo in data.get("around_the_world") or []:
-            p = geo.get("place")
-            if p:
-                seen.append(f"Geo: {p}")
-    return seen

@@ -22,7 +22,7 @@ git pull --rebase origin master
 ```bash
 python3 -m scripts.weekly.run --fetch-only /tmp/raw_weekly.json
 ```
-This fetches live RSS feeds across **Science & Discovery** (Quanta, Nature, ScienceDaily, Ars Technica, Phys.org, NASA, Smithsonian), **Culture & Arts** (Smithsonian, Hyperallergic, Colossal, Open Culture, Literary Hub, Dezeen, Guardian Culture), **History & Archaeology** (Smithsonian History, Archaeology Magazine, Public Domain Review, History Today, HeritageDaily, The Conversation), and **Long Reads** (Aeon, Guardian Long Read, Psyche, Works in Progress, Nautilus, The Atlantic), plus a compact 7-day recap from recent `briefing/data/archive/*.json` files and the last 4 weeks of `weekly/data/archive/*.json` headlines for deduplication.
+This fetches live RSS feeds across **Science & Discovery** (Quanta, Nature, ScienceDaily, Ars Technica, Phys.org, NASA, Smithsonian), **Culture & Arts** (Smithsonian, Artnet News, Colossal, Open Culture, Literary Hub, ArchDaily, Dezeen, Guardian Culture), **History & Archaeology** (Smithsonian History, Archaeology Magazine, Public Domain Review, Atlas Obscura, Lapham's Quarterly, HeritageDaily), and **Long Reads** (Aeon, Guardian Long Read, Psyche, Works in Progress, The Marginalian, Nautilus, The Atlantic), filters out repeat candidates against the rolling **3-edition memory** (`weekly/data/weekly_memory.json`), and includes a compact 7-day recap from recent `briefing/data/archive/*.json` files.
 
 ### 3. Synthesize the Weekly Briefing directly
 Read `/tmp/raw_weekly.json`, inspect the `instructions`, `synthesis_schema`, and fetched candidates, and write a strictly valid JSON file to `/tmp/weekly_synthesis.json` matching `WeeklySynthesis`:
@@ -34,13 +34,13 @@ Read `/tmp/raw_weekly.json`, inspect the `instructions`, `synthesis_schema`, and
 - `culture`: `{narrative, items}` with **4–5** grounded art, architecture, literature, film, music, or cultural stories.
 - `history`: `{narrative, items}` with **3–4** grounded archaeology, archival, or deep-history stories.
 - `this_week_in_history`: **4** well-verified historical, scientific, or artistic anniversaries falling within `week_label` (`{year, date_label, title, summary}`).
-- `around_the_world`: **10–11** geographically well-spaced pins across all continents: **6** geological fun facts (`kind: "geology"`) and **4–5** iconic regional dishes/cuisines (`kind: "cuisine"`), each with accurate decimal `lat`/`lon`, `country_code`, `feature_type`, `title`, `fact`, and `wiki_title` (avoiding any `Geo:` places in `recently_shown_weekly_headlines`).
+- `around_the_world`: **10–11** geographically well-spaced pins across all continents: **6** geological fun facts (`kind: "geology"`) and **4–5** iconic regional dishes/cuisines (`kind: "cuisine"`), each with accurate decimal `lat`/`lon`, `country_code`, `feature_type`, `title`, `fact`, and `wiki_title` (avoiding any places/dishes in `recently_shown_3_editions`).
 - `long_reads`: **4–5** curated essays (`{id, topic, reading_time, headline, summary, sources}`).
 - `week_in_brief`: **3–4** concise macro/world recap bullets (`{text, category, sentiment}`), keeping markets/politics light.
 
 **Formatting & Grounding Rules:**
 - Every story in `science`, `culture`, `history`, and `long_reads` must be grounded in `/tmp/raw_weekly.json` with **verbatim source URLs**.
-- Avoid repeating headlines from `recently_shown_weekly_headlines`.
+- Avoid repeating any story, place, dish, or quote from `recently_shown_3_editions` (the rolling 3-edition memory).
 - Wrap the single most illuminating takeaway in `**double asterisks**` and wrap human names in `*single asterisks*` so the UI renders bold highlights and person/Wikipedia links cleanly.
 
 ### 4. Validate and publish JSON artifacts
@@ -51,6 +51,7 @@ This validates the synthesis with Pydantic v2 and writes:
 - `weekly/data/latest.json`
 - `weekly/data/archive/YYYY-MM-DD.json`
 - `weekly/data/index.json`
+- `weekly/data/weekly_memory.json` (rolling 3-edition memory)
 
 ### 5. Commit and push to GitHub Pages
 ```bash

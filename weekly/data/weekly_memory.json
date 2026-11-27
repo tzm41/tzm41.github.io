@@ -1,0 +1,583 @@
+{
+  "updated_at": "2026-11-27T08:43:42Z",
+  "window_editions": 3,
+  "editions": [
+    "2026-11-27"
+  ],
+  "items": [
+    {
+      "date": "2026-11-27",
+      "section": "science",
+      "id": "sci-ultralight-dark-matter",
+      "headline": "Novel Precision Experiments Expand the Hunt for 'Ultralight' Dark Matter",
+      "urls": [
+        "https://www.quantamagazine.org/novel-experiments-expand-the-hunt-for-ultralight-dark-matter-20261125"
+      ],
+      "tokens": [
+        "dark",
+        "expand",
+        "experiments",
+        "hunt",
+        "matter",
+        "novel",
+        "precision",
+        "ultralight"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "science",
+      "id": "sci-dna-repair-editing",
+      "headline": "How Cells' Elegant DNA Repair Machinery Makes Modern Gene Editing Possible",
+      "urls": [
+        "https://www.quantamagazine.org/the-incredible-elegant-dna-repair-system-makes-gene-editing-work-20261123"
+      ],
+      "tokens": [
+        "cells",
+        "editing",
+        "elegant",
+        "gene",
+        "machinery",
+        "makes",
+        "modern",
+        "possible",
+        "repair"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "science",
+      "id": "sci-euclid-comet",
+      "headline": "ESA's Euclid Dark-Matter Telescope Unexpectedly Spots a Distant Long-Period Comet",
+      "urls": [
+        "https://www.sciencedaily.com/releases/2026/11/261124055852.htm"
+      ],
+      "tokens": [
+        "comet",
+        "dark",
+        "distant",
+        "euclid",
+        "long",
+        "matter",
+        "period",
+        "spots",
+        "telescope",
+        "unexpectedly"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "science",
+      "id": "sci-riemann-proofs",
+      "headline": "Dual Human and AI Proofs of the Riemann Hypothesis Enter Rigorous Peer Scrutiny",
+      "urls": [
+        "https://www.nature.com/articles/d41586-026-03853-y"
+      ],
+      "tokens": [
+        "dual",
+        "enter",
+        "human",
+        "hypothesis",
+        "peer",
+        "proofs",
+        "riemann",
+        "rigorous",
+        "scrutiny"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "science",
+      "id": "sci-neurons-multitaskers",
+      "headline": "Brain-Wide Recordings Reveal Most Neurons Are Versatile Multitaskers",
+      "urls": [
+        "https://www.sciencedaily.com/releases/2026/11/261125045302.htm"
+      ],
+      "tokens": [
+        "brain",
+        "multitaskers",
+        "neurons",
+        "recordings",
+        "reveal",
+        "versatile",
+        "wide"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "long_reads",
+      "id": "lr-wunderkammer",
+      "headline": "Wunderkammer: How Cabinets of Curiosity Invented the Modern Museum",
+      "urls": [
+        "https://aeon.co/videos/how-curiosity-cabinets-paved-the-way-for-modern-museums"
+      ],
+      "tokens": [
+        "cabinets",
+        "curiosity",
+        "invented",
+        "modern",
+        "museum",
+        "wunderkammer"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "long_reads",
+      "id": "lr-ancient-philosophy-map",
+      "headline": "The Map of Ancient Philosophy: Connecting Socrates, Confucius, and the Buddha",
+      "urls": [
+        "https://www.openculture.com/2026/11/the-map-of-ancient-philosophy.html"
+      ],
+      "tokens": [
+        "ancient",
+        "buddha",
+        "confucius",
+        "connecting",
+        "philosophy",
+        "socrates"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "long_reads",
+      "id": "lr-lina-ghotmeh",
+      "headline": "Lina Ghotmeh and the 'Archaeology of the Future'",
+      "urls": [
+        "https://aeon.co/videos/a-lebanese-architects-mission-to-build-structures-that-heal"
+      ],
+      "tokens": [
+        "archaeology",
+        "future",
+        "ghotmeh",
+        "lina"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "long_reads",
+      "id": "lr-mental-illness-culture",
+      "headline": "Is Mental Illness Universal or Shaped by Culture?",
+      "urls": [
+        "https://aeon.co/essays/are-mental-illnesses-universal-or-are-they-culturally-specific"
+      ],
+      "tokens": [
+        "culture",
+        "illness",
+        "mental",
+        "shaped",
+        "universal"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "long_reads",
+      "id": "lr-el-nino-millennia",
+      "headline": "A Colossal Oscillation: How El Niño Has Shaped Human Civilizations for Millennia",
+      "urls": [
+        "https://aeon.co/essays/what-can-we-learn-from-the-past-experience-of-el-nino"
+      ],
+      "tokens": [
+        "civilizations",
+        "colossal",
+        "human",
+        "millennia",
+        "oscillation",
+        "shaped"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "history",
+      "id": "hist-alexandria-ptolemaic",
+      "headline": "Ptolemaic Limestone Foundation and Subterranean Tunnel Unearthed in Alexandria",
+      "urls": [
+        "https://archaeology.org/news/2026/11/25/ptolemaic-foundation-unearthed-in-alexandria"
+      ],
+      "tokens": [
+        "alexandria",
+        "foundation",
+        "limestone",
+        "ptolemaic",
+        "subterranean",
+        "tunnel",
+        "unearthed"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "history",
+      "id": "hist-kalahari-handaxes",
+      "headline": "Nearly 100 Acheulean Hand Axes Uncovered in Botswana's Kalahari Desert",
+      "urls": [
+        "https://archaeology.org/news/2026/11/25/acheulean-handaxes-found-in-kalahari-desert"
+      ],
+      "tokens": [
+        "acheulean",
+        "axes",
+        "botswana",
+        "desert",
+        "hand",
+        "kalahari",
+        "nearly",
+        "uncovered"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "history",
+      "id": "hist-athens-churches-1854",
+      "headline": "Bickering Buildings: When an 1854 Athenian Newspaper Let the City's Churches Argue",
+      "urls": [
+        "https://publicdomainreview.org/essay/bickering-buildings"
+      ],
+      "tokens": [
+        "1854",
+        "argue",
+        "athenian",
+        "bickering",
+        "buildings",
+        "churches",
+        "city",
+        "newspaper"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "history",
+      "id": "hist-hagia-sophia-tunnels",
+      "headline": "Archaeologists Clear 3,000 Tons of Debris to Reveal Tunnels Beneath Hagia Sophia",
+      "urls": [
+        "https://archaeology.org/news/2026/11/24/tunnels-underneath-hagia-sophia-excavated"
+      ],
+      "tokens": [
+        "archaeologists",
+        "beneath",
+        "clear",
+        "debris",
+        "hagia",
+        "reveal",
+        "sophia",
+        "tons",
+        "tunnels"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "featured_quote",
+      "id": "",
+      "headline": "M.C. Escher: We adore chaos because we love to produce order.",
+      "urls": [],
+      "tokens": [
+        "adore",
+        "chaos",
+        "escher",
+        "love",
+        "order",
+        "produce"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "culture",
+      "id": "cult-ghent-altarpiece",
+      "headline": "Zooming Inside the Ghent Altarpiece, One of the Most Detailed Paintings Ever Made",
+      "urls": [
+        "https://www.openculture.com/2026/11/behold-the-most-detailed-painting-in-history-the-ghent-altarpiece.html"
+      ],
+      "tokens": [
+        "altarpiece",
+        "detailed",
+        "ever",
+        "ghent",
+        "inside",
+        "made",
+        "paintings",
+        "zooming"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "culture",
+      "id": "cult-william-morris",
+      "headline": "William Morris's Textiles and the Enduring Tension Between Craft and Accessibility",
+      "urls": [
+        "https://www.smithsonianmag.com/arts-culture/intricate-textile-designs-william-morris-bring-conflict-concepts-art-accessibility-180989837"
+      ],
+      "tokens": [
+        "accessibility",
+        "craft",
+        "enduring",
+        "morris",
+        "tension",
+        "textiles",
+        "william"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "culture",
+      "id": "cult-escher-math",
+      "headline": "How M.C. Escher's Self-Taught Vision Built Bizarre Mathematical Worlds",
+      "urls": [
+        "https://www.quantamagazine.org/how-m-c-eschers-art-creates-bizarre-mathematical-worlds-20261118"
+      ],
+      "tokens": [
+        "bizarre",
+        "built",
+        "escher",
+        "mathematical",
+        "self",
+        "taught",
+        "vision",
+        "worlds"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "culture",
+      "id": "cult-astronomy-art",
+      "headline": "Astronomers and Art Historians Team Up to Decode Celestial Clues in Classic Paintings",
+      "urls": [
+        "https://www.smithsonianmag.com/arts-culture/how-astronomers-art-historians-working-together-identify-inspiration-behind-famous-works-art-180989649"
+      ],
+      "tokens": [
+        "astronomers",
+        "celestial",
+        "classic",
+        "clues",
+        "decode",
+        "historians",
+        "paintings",
+        "team"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "culture",
+      "id": "cult-empty-frames",
+      "headline": "Art Gallery of Ontario Displays 37 Empty Picture Frames to Spotlight Forgotten Craft",
+      "urls": [
+        "https://www.smithsonianmag.com/history/why-are-all-37-of-the-picture-frames-in-this-exhibition-empty-the-frames-themselves-are-the-stars-of-the-show-180989860"
+      ],
+      "tokens": [
+        "craft",
+        "displays",
+        "empty",
+        "forgotten",
+        "frames",
+        "gallery",
+        "ontario",
+        "picture",
+        "spotlight"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "around_world:geology",
+      "id": "geo-zhangye-danxia",
+      "headline": "Zhangye Danxia — Painted Mountains Tilted Upward by the Himalayan Collision",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Zhangye_National_Geopark"
+      ],
+      "tokens": [
+        "collision",
+        "danxia",
+        "himalayan",
+        "mountains",
+        "painted",
+        "tilted",
+        "upward",
+        "zhangye"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "around_world:geology",
+      "id": "geo-salar-uyuni",
+      "headline": "Salar de Uyuni — A Salt Flat So Level Satellites Calibrate Against It",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Salar_de_Uyuni"
+      ],
+      "tokens": [
+        "calibrate",
+        "flat",
+        "level",
+        "salar",
+        "salt",
+        "satellites",
+        "uyuni"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "around_world:geology",
+      "id": "geo-richat-structure",
+      "headline": "Richat Structure — The 'Eye of the Sahara' Is Not an Impact Crater",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Richat_Structure"
+      ],
+      "tokens": [
+        "crater",
+        "impact",
+        "richat",
+        "sahara",
+        "structure"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "around_world:geology",
+      "id": "geo-shark-bay",
+      "headline": "Hamelin Pool Stromatolites — Living Rock Reefs From Earth's First Oxygen Revolution",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Hamelin_Pool_Marine_Nature_Reserve"
+      ],
+      "tokens": [
+        "earth",
+        "hamelin",
+        "living",
+        "oxygen",
+        "pool",
+        "reefs",
+        "revolution",
+        "rock",
+        "stromatolites"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "around_world:geology",
+      "id": "geo-yellowstone",
+      "headline": "Grand Prismatic Spring — A Supervolcano's Living Rainbow Thermometer",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Grand_Prismatic_Spring"
+      ],
+      "tokens": [
+        "grand",
+        "living",
+        "prismatic",
+        "rainbow",
+        "spring",
+        "supervolcano",
+        "thermometer"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "around_world:geology",
+      "id": "geo-giants-causeway",
+      "headline": "Giant's Causeway — 40,000 Hexagonal Columns Sculpted by Cooling Physics",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Giant%27s_Causeway"
+      ],
+      "tokens": [
+        "causeway",
+        "columns",
+        "cooling",
+        "giant",
+        "hexagonal",
+        "physics",
+        "sculpted"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "around_world:cuisine",
+      "id": "food-osaka-takoyaki",
+      "headline": "Osaka · Takoyaki — Cast-Iron Octopus Spheres Powered by Kombu Dashi",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Takoyaki"
+      ],
+      "tokens": [
+        "cast",
+        "dashi",
+        "iron",
+        "kombu",
+        "octopus",
+        "osaka",
+        "powered",
+        "spheres",
+        "takoyaki"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "around_world:cuisine",
+      "id": "food-oaxaca-mole",
+      "headline": "Oaxaca · Mole Negro — Thirty Toasted Ingredients Simmered Into Velvet",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Mole_%28sauce%29"
+      ],
+      "tokens": [
+        "ingredients",
+        "mole",
+        "negro",
+        "oaxaca",
+        "simmered",
+        "thirty",
+        "toasted",
+        "velvet"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "around_world:cuisine",
+      "id": "food-naples-pizza",
+      "headline": "Naples · Pizza Napoletana — Volcanic Tomatoes and a 90-Second Wood-Fired Bake",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Neapolitan_pizza"
+      ],
+      "tokens": [
+        "bake",
+        "fired",
+        "naples",
+        "napoletana",
+        "pizza",
+        "second",
+        "tomatoes",
+        "volcanic",
+        "wood"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "around_world:cuisine",
+      "id": "food-bangkok-tomyum",
+      "headline": "Bangkok · Tom Yum Goong — Aromatic Balance of Sour, Heat, Salt, and Citrus Leaf",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Tom_yum"
+      ],
+      "tokens": [
+        "aromatic",
+        "balance",
+        "bangkok",
+        "citrus",
+        "goong",
+        "heat",
+        "leaf",
+        "salt",
+        "sour"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "around_world:cuisine",
+      "id": "food-addis-injera",
+      "headline": "Addis Ababa · Injera & Wot — A Three-Day Sourdough Flatbread That Doubles as Plate and Utensil",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Injera"
+      ],
+      "tokens": [
+        "ababa",
+        "addis",
+        "doubles",
+        "flatbread",
+        "injera",
+        "plate",
+        "sourdough",
+        "three",
+        "utensil"
+      ]
+    }
+  ]
+}

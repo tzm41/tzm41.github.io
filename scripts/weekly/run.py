@@ -13,7 +13,12 @@ from .config import ARCHIVE_DIR, DATA_DIR, INDEX_PATH, LATEST_PATH, MAX_ARCHIVE_
 from .fetchers import (
     fetch_all_weekly_sources,
     load_recent_daily_pulse,
-    load_recent_weekly_headlines,
+)
+from .memory import (
+    filter_raw_candidates,
+    format_memory_headlines,
+    load_recent_weekly_memory,
+    record_shown_weekly,
 )
 from .schema import WeeklyBriefing, WeeklySourceHealth, WeeklySynthesis
 
@@ -80,6 +85,7 @@ def _write_weekly_files(briefing: WeeklyBriefing) -> Path:
     LATEST_PATH.write_text(serialized, encoding="utf-8")
 
     _prune_archive()
+    record_shown_weekly(briefing.model_dump())
     rebuild_index()
     rel = archive_file.relative_to(Path.cwd()) if archive_file.is_relative_to(Path.cwd()) else archive_file
     print(f"[weekly] Wrote {rel}")
@@ -96,14 +102,14 @@ def _build_synthesis_instructions(target_date: str, week_label: str) -> str:
         "Editorial rules:\n"
         "1. Ground EVERY item in science, culture, history, and long_reads strictly in the fetched articles in this bundle. "
         "Copy source URLs verbatim—never fabricate URLs or sources.\n"
-        "2. Avoid repeating any headline listed in recently_shown_weekly_headlines.\n"
+        "2. Avoid repeating any story, place, dish, or quote listed in recently_shown_3_editions (items featured in the last 3 weekly editions).\n"
         "3. Use **double asterisks** around the single most illuminating takeaway/finding in each bullet or summary, "
         "and *single asterisks* around human names (scientists, artists, historians, authors, leaders) so the UI renders them cleanly.\n"
         "4. Populate 'this_week_in_history' with 4 genuine, well-verified historical, scientific, or artistic anniversaries "
         f"that occurred during the calendar dates covered by {week_label}.\n"
         "5. Populate 'around_the_world' with 10-11 geographically well-spaced entries across all continents: "
         "6 surprising geological fun facts (kind='geology') and 4-5 iconic regional dishes/culinary traditions (kind='cuisine'), "
-        "each with accurate decimal lat/lon coordinates, ISO 2-letter country_code, wiki_title, and no places listed in recently_shown_weekly_headlines.\n"
+        "each with accurate decimal lat/lon coordinates, ISO 2-letter country_code, wiki_title, and no places/dishes listed in recently_shown_3_editions.\n"
         "6. Populate 'featured_quote' with a real, accurately attributed quote from a scientist, artist, historian, or writer "
         "that resonates with this week's theme_title.\n"
         "7. Output raw JSON conforming strictly to synthesis_schema."
@@ -119,15 +125,21 @@ async def fetch_only(out_path_str: str, date_str: str | None = None) -> None:
     print(f"[weekly] Fetching Weekly Briefing sources for {target_date} ({week_label})...")
     fetched = await fetch_all_weekly_sources()
     daily_pulse = load_recent_daily_pulse(target_date, days=7)
-    recent_weekly = load_recent_weekly_headlines(target_date, max_weeks=4)
+    memory_3ed = load_recent_weekly_memory(target_date, include_same_date=False)
+
+    raw_science = filter_raw_candidates(fetched["science"], memory_3ed, label="science", min_keep=6)
+    raw_culture = filter_raw_candidates(fetched["culture"], memory_3ed, label="culture", min_keep=6)
+    raw_history = filter_raw_candidates(fetched["history"], memory_3ed, label="history", min_keep=5)
+    raw_long_reads = filter_raw_candidates(fetched["long_reads"], memory_3ed, label="long_reads", min_keep=6)
+    recent_3ed_lines = format_memory_headlines(memory_3ed, limit=100, include_section=True)
 
     health = fetched["source_health"]
     print(
-        f"[weekly] Fetch complete — science={len(fetched['science'])} ({health['science']}), "
-        f"culture={len(fetched['culture'])} ({health['culture']}), "
-        f"history={len(fetched['history'])} ({health['history']}), "
-        f"long_reads={len(fetched['long_reads'])} ({health['long_reads']}), "
-        f"daily_pulse_days={len(daily_pulse)}"
+        f"[weekly] Fetch complete — science={len(raw_science)} ({health['science']}), "
+        f"culture={len(raw_culture)} ({health['culture']}), "
+        f"history={len(raw_history)} ({health['history']}), "
+        f"long_reads={len(raw_long_reads)} ({health['long_reads']}), "
+        f"daily_pulse_days={len(daily_pulse)}, memory_items={len(memory_3ed)}"
     )
 
     bundle = {
@@ -135,12 +147,12 @@ async def fetch_only(out_path_str: str, date_str: str | None = None) -> None:
         "week_label": week_label,
         "generated_at": generated_at,
         "source_health": health,
-        "raw_science": fetched["science"],
-        "raw_culture": fetched["culture"],
-        "raw_history": fetched["history"],
-        "raw_long_reads": fetched["long_reads"],
+        "raw_science": raw_science,
+        "raw_culture": raw_culture,
+        "raw_history": raw_history,
+        "raw_long_reads": raw_long_reads,
         "daily_pulse_7d": daily_pulse,
-        "recently_shown_weekly_headlines": recent_weekly,
+        "recently_shown_3_editions": recent_3ed_lines,
         "instructions": _build_synthesis_instructions(target_date, week_label),
         "synthesis_schema": WeeklySynthesis.model_json_schema(),
     }

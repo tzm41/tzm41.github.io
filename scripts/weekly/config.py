@@ -9,6 +9,8 @@ DATA_DIR = REPO_ROOT / "weekly" / "data"
 ARCHIVE_DIR = DATA_DIR / "archive"
 LATEST_PATH = DATA_DIR / "latest.json"
 INDEX_PATH = DATA_DIR / "index.json"
+WEEKLY_MEMORY_PATH = DATA_DIR / "weekly_memory.json"
+WEEKLY_MEMORY_EDITIONS = 3
 DAILY_ARCHIVE_DIR = REPO_ROOT / "briefing" / "data" / "archive"
 
 MAX_ARCHIVE_WEEKS = 52
