@@ -30,14 +30,14 @@ jobs:
       - name: Install pipeline dependencies
         run: pip install -r scripts/briefing/requirements.txt
 
-      - name: Refresh public company market caps
-        run: python -m scripts.briefing.refresh_company_facts
+      - name: Refresh public company market caps (sharded + cascaded)
+        run: python -m scripts.briefing.refresh_company_facts --mode active --batch-size 45
 
       - name: Commit updated company facts
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add briefing/data/company_facts.json
+          git add shared/data/entities.json
           if git diff --cached --quiet; then
             echo "No company facts changes to commit."
             exit 0

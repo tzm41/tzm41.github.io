@@ -15,39 +15,14 @@ export const EXPLICIT_ITALIC_RE = /(?<!\*)\*([^*\n]+)\*(?!\*)/g;
 const NON_PERSON_TITLE_WORD =
   "(?:Reinstatement|Leadership|Resignation|Nomination|Election|Administration|Succession|Investigation|Hearing|Policy|Orders?|Return|Ouster|Exit|Role|Office|Vote|Race|Campaign|Debate|Summit|Visit|Meeting|Statement|Scrutiny|Backlash|Reversal|Power|Term|Authority|Pardon|Veto|Cabinet|Approval|Polls?|Rules?|Ruling|Blocks?|Blocked|Strikes?|Struck|Signs?|Signed|Vetoes?|Vetoed|Faces?|Facing|Warns?|Warned|Urges?|Urged|Calls?|Called|Backs?|Backed|Rejects?|Rejected|Approves?|Approved|Dismisses?|Dismissed|Halts?|Halted|Upholds?|Upheld|Overturns?|Overturned|Allows?|Allowed|Bars?|Barred|Finds?|Found|Says?|Said|Tells?|Told|Slams?|Praises?|Meets?|Met|Visits?|Plans?|Seeks?|Pushes?|Moves?|Drops?|Opens?|Closes?|Ends?|Starts?|Launches?|Announces?|Unveils?|Proposes?|Defends?|Criticizes?|Accuses?|Targets?|Threatens?|Promises?|Vows?|Pledges?|Cites?|Names?|Picks?|Taps?|Fires?|Hires?|Quits?|Resigns?|Steps?|Takes?|Gives?|Gets?|Makes?|Sets?|Holds?|Wins?|Loses?|Leads?|Trails?|Violates?|Violated|Sues?|Sued|Indicts?|Indicted|Charges?|Charged|Decision|Verdict|Court|Panel|Bench|Bill|Act|Law|Plan|Deal|Talks|Move|Push|Bid|Case|Trial|Suit|Probe|Report|Review|Speech|Address|Remarks|Briefing|Press|News|Media|Team|Staff|Aides?|Allies|Critics|Supporters|Opponents|Rivals|Voters|Lawmakers|Senators|Democrats|Republicans|Officials|Leaders|Ministers|Justices|Judges|Federal|State|Local|National|Global|Foreign|Domestic|New|Top|Former|Acting|Interim|Chief|Senior|Junior|High|Supreme|Appeals|District|Circuit|Over|Under|With|Without|From|Into|Onto|Against|After|Before|During|Amid|Among|Between|Through|About|Around|Near|Behind|Beyond|Towards?|For|And|But|Or|Nor|Not|No|To|In|On|At|By|Of|As|Is|Are|Was|Were|Be|Been|Has|Have|Had|Will|Would|Could|Should|May|Might|Must|Can|That|This|Who|Whom|Whose|Which|What|When|Where|Why|How)\\b";
 
-export const BASE_PERSON_NAMES = [
-  "Donald Trump Jr.", "Donald Trump", "Trump", "Joe Biden", "Biden", "Kamala Harris", "JD Vance",
-  "Benjamin Netanyahu", "Netanyahu", "Vladimir Putin", "Putin", "Volodymyr Zelenskyy",
-  "Volodymyr Zelensky", "Zelenskyy", "Zelensky", "Xi Jinping", "Lai Ching-te", "Emmanuel Macron",
-  "Macron", "Keir Starmer", "Starmer", "Friedrich Merz", "Olaf Scholz", "Giorgia Meloni",
-  "Mark Carney", "Justin Trudeau", "Narendra Modi", "Modi", "Shigeru Ishiba", "Sanae Takaichi",
-  "Lee Jae-myung", "Yoon Suk Yeol", "Kim Jong Un", "Masoud Pezeshkian", "Ali Khamenei", "Khamenei",
-  "Mohammed bin Salman", "Recep Tayyip Erdogan", "Erdogan", "Luiz Inácio Lula da Silva",
-  "Javier Milei", "Claudia Sheinbaum", "Anthony Albanese", "Jerome Powell", "Scott Bessent",
-  "Marco Rubio", "Pete Hegseth", "Pam Bondi", "Kash Patel", "Tulsi Gabbard", "Robert F. Kennedy Jr.",
-  "RFK Jr.", "Howard Lutnick", "Karoline Leavitt", "Stephen Miller", "Chuck Schumer",
-  "Mike Johnson", "Hakeem Jeffries", "John Thune", "Mitch McConnell", "Nancy Pelosi",
-  "Alexandria Ocasio-Cortez", "Bernie Sanders", "Elizabeth Warren", "Gavin Newsom", "Ron DeSantis",
-  "Josh Shapiro", "Gretchen Whitmer", "Greg Abbott", "J.B. Pritzker", "Raphael Warnock",
-  "Zohran Mamdani", "Jimmy Gomez", "Jamie Raskin", "Ilhan Omar", "Barack Obama", "Obama",
-  "Bill Clinton", "Hillary Clinton", "Pope Leo XIV", "Pope Francis", "King Charles III",
-  "King Charles", "King Salman", "King Abdullah II", "King Felipe VI", "Queen Camilla",
-  "Elon Musk", "Musk", "Jensen Huang", "Tim Cook", "John Ternus", "Satya Nadella", "Sundar Pichai",
-  "Andy Jassy", "Jeff Bezos", "Bezos", "Mark Zuckerberg", "Zuckerberg", "Sam Altman", "Altman",
-  "Dario Amodei", "Demis Hassabis", "Bill Gates", "Warren Buffett", "Greg Abel", "Jamie Dimon",
-  "Lisa Su", "Liang Wenfeng", "Jack Ma", "Pony Ma", "Lei Jun", "Wang Chuanfu", "Ren Zhengfei",
-  "Zhang Yiming", "Kilmar Ábrego García", "Kilmar Abrego Garcia", "Abrego Garcia",
-  "Abdul El-Sayed", "Scott Colom", "Puma Shen", "Guo Jiakun", "Chen Jining", "Nick Fuentes",
-  "David Lisnard", "赖清德", "沈伯洋", "郭嘉昆", "黄仁勋", "特朗普", "陈吉宁", "习近平",
-  "普京", "泽连斯基", "马斯克", "奥特曼", "扎克伯格", "库克", "内塔尼亚胡", "拜登", "莫迪",
-  "马克龙", "金正恩", "鲍威尔", "卢比奥", "万斯",
-];
+export const BASE_PERSON_NAMES = [];
 
 const PERSON_NAME_WORD = `(?!${NON_PERSON_TITLE_WORD})[A-ZÀ-Ý][a-zà-ÿ'-]+`;
 const PERSON_TITLE_PREFIX_PATTERN = `(?:President|Prime Minister|Pope|Sen\\.-elect|Sen\\.|Rep\\.|Gov\\.|Dr\\.)\\s+${PERSON_NAME_WORD}(?:\\s+${PERSON_NAME_WORD}){0,2}|(?:Attorney General|Secretary|Chairman|Mayor|Governor|Justice|Judge|CEO)\\s+${PERSON_NAME_WORD}\\s+${PERSON_NAME_WORD}(?:\\s+${PERSON_NAME_WORD})?`;
 
 export function compilePersonNameRegex(names) {
   const unique = [...new Set(names.filter(Boolean))].sort((a, b) => b.length - a.length);
+  if (!unique.length) return new RegExp(`(${PERSON_TITLE_PREFIX_PATTERN})`, "g");
   const parts = unique.map((n) => {
     const esc = escapeRegex(n);
     return /^[\x00-\x7F\u00C0-\u024F]+$/.test(n) ? `\\b${esc}\\b` : esc;
@@ -55,137 +30,133 @@ export function compilePersonNameRegex(names) {
   return new RegExp(`(${PERSON_TITLE_PREFIX_PATTERN}|${parts.join("|")})`, "g");
 }
 
-export const DEFAULT_PERSON_NAME_RE = compilePersonNameRegex(BASE_PERSON_NAMES);
+export let DEFAULT_PERSON_NAME_RE = compilePersonNameRegex(BASE_PERSON_NAMES);
 
-export const COMPANY_LOGOS = {
-  Nvidia: "nvidia.com", NVIDIA: "nvidia.com", 英伟达: "nvidia.com",
-  Apple: "apple.com", 苹果: "apple.com",
-  Microsoft: "microsoft.com", 微软: "microsoft.com",
-  Alphabet: "google.com", Google: "google.com", 谷歌: "google.com",
-  Amazon: "amazon.com", 亚马逊: "amazon.com",
-  Meta: "meta.com",
-  Tesla: "tesla.com", 特斯拉: "tesla.com",
-  Anthropic: "anthropic.com", OpenAI: "openai.com",
-  "Google DeepMind": "deepmind.google", DeepMind: "deepmind.google",
-  DeepSeek: "deepseek.com", xAI: "x.ai",
-  "Mistral AI": "mistral.ai", Mistral: "mistral.ai",
-  "Perplexity AI": "perplexity.ai", Perplexity: "perplexity.ai",
-  Cohere: "cohere.com", "Hugging Face": "huggingface.co", "Meta AI": "ai.meta.com",
-  "Safe Superintelligence": "ssi.inc", "Thinking Machines Lab": "thinkingmachines.ai",
-  "Thinking Machines": "thinkingmachines.ai", "Scale AI": "scale.com",
-  "Moonshot AI": "moonshot.cn", "Zhipu AI": "zhipuai.cn", 智谱AI: "zhipuai.cn", 智谱: "zhipuai.cn",
-  MiniMax: "minimax.io", Midjourney: "midjourney.com", Runway: "runwayml.com",
-  ElevenLabs: "elevenlabs.io", Cursor: "cursor.com", "Character.AI": "character.ai",
-  Huawei: "huawei.com", 华为: "huawei.com", TSMC: "tsmc.com", 台积电: "tsmc.com",
-  Samsung: "samsung.com", 三星: "samsung.com", ByteDance: "bytedance.com", 字节跳动: "bytedance.com",
-  TikTok: "tiktok.com", Alibaba: "alibaba.com", 阿里巴巴: "alibaba.com",
-  Tencent: "tencent.com", 腾讯: "tencent.com", Baidu: "baidu.com", 百度: "baidu.com",
-  Xiaomi: "mi.com", 小米: "mi.com", BYD: "byd.com", 比亚迪: "byd.com",
-  CATL: "catl.com", 宁德时代: "catl.com", Meituan: "meituan.com", 美团: "meituan.com",
-  "JD.com": "jd.com", 京东: "jd.com", PDD: "pddholdings.com", 拼多多: "pddholdings.com",
-  Intel: "intel.com", AMD: "amd.com", Broadcom: "broadcom.com", Qualcomm: "qualcomm.com",
-  ASML: "asml.com", Oracle: "oracle.com", Netflix: "netflix.com", SpaceX: "spacex.com",
-  Boeing: "boeing.com", Toyota: "toyota.com", Sony: "sony.com", Nintendo: "nintendo.com",
-  Disney: "disney.com", Walmart: "walmart.com", Costco: "costco.com",
-  // Major US & Chinese Banks & Central Banks
-  "JPMorgan Chase": "jpmorganchase.com", JPMorgan: "jpmorganchase.com", "JP Morgan": "jpmorganchase.com",
-  "Chase Bank": "jpmorganchase.com", 摩根大通: "jpmorganchase.com",
-  "Bank of America": "bankofamerica.com", BofA: "bankofamerica.com", 美国银行: "bankofamerica.com",
-  Citigroup: "citigroup.com", Citibank: "citigroup.com", Citi: "citigroup.com", 花旗银行: "citigroup.com", 花旗: "citigroup.com",
-  "Wells Fargo": "wellsfargo.com", 富国银行: "wellsfargo.com",
-  "Goldman Sachs": "goldmansachs.com", 高盛: "goldmansachs.com",
-  "Morgan Stanley": "morganstanley.com", 摩根士丹利: "morganstanley.com",
-  "U.S. Bancorp": "usbank.com", "U.S. Bank": "usbank.com", "US Bank": "usbank.com",
-  "PNC Financial": "pnc.com", "PNC Bank": "pnc.com",
-  "Truist Financial": "truist.com", Truist: "truist.com",
-  "Capital One": "capitalone.com",
-  "Charles Schwab": "schwab.com", Schwab: "schwab.com",
-  "BNY Mellon": "bny.com", "Bank of New York Mellon": "bny.com",
-  "State Street": "statestreet.com",
-  "Federal Reserve": "federalreserve.gov", 美联储: "federalreserve.gov",
-  "People's Bank of China": "pbc.gov.cn", PBOC: "pbc.gov.cn", PBoC: "pbc.gov.cn", 中国人民银行: "pbc.gov.cn",
-  "Industrial and Commercial Bank of China": "icbc.com.cn", ICBC: "icbc.com.cn", 中国工商银行: "icbc.com.cn", 工商银行: "icbc.com.cn", 工行: "icbc.com.cn",
-  "China Construction Bank": "ccb.com", CCB: "ccb.com", 中国建设银行: "ccb.com", 建设银行: "ccb.com", 建行: "ccb.com",
-  "Agricultural Bank of China": "abchina.com", 中国农业银行: "abchina.com", 农业银行: "abchina.com", 农行: "abchina.com",
-  "Bank of China": "boc.cn", BOC: "boc.cn", 中国银行: "boc.cn", 中行: "boc.cn",
-  "Bank of Communications": "bankcomm.com", BoCom: "bankcomm.com", 交通银行: "bankcomm.com", 交行: "bankcomm.com",
-  "Postal Savings Bank of China": "psbc.com", PSBC: "psbc.com", 中国邮政储蓄银行: "psbc.com", 邮储银行: "psbc.com",
-  "China Merchants Bank": "cmbchina.com", CMB: "cmbchina.com", 招商银行: "cmbchina.com", 招行: "cmbchina.com",
-  "China CITIC Bank": "citicbank.com", 中信银行: "citicbank.com",
-  "Ping An Bank": "bank.pingan.com", 平安银行: "bank.pingan.com",
-  "Shanghai Pudong Development Bank": "spdb.com.cn", SPDB: "spdb.com.cn", 浦发银行: "spdb.com.cn",
-  "Industrial Bank Co.": "cib.com.cn", 兴业银行: "cib.com.cn",
-  // Enterprise, Fintech, Pharma & Energy
-  Palantir: "palantir.com",
-  Salesforce: "salesforce.com", Adobe: "adobe.com", Uber: "uber.com", Stripe: "stripe.com",
-  Spotify: "spotify.com", IBM: "ibm.com", Cisco: "cisco.com", SoftBank: "softbank.jp",
-  Cloudflare: "cloudflare.com", CrowdStrike: "crowdstrike.com", Snowflake: "snowflake.com",
-  Databricks: "databricks.com", Coinbase: "coinbase.com", Visa: "visa.com",
-  Mastercard: "mastercard.com", Pfizer: "pfizer.com", "Eli Lilly": "lilly.com",
-  "Novo Nordisk": "novonordisk.com", ExxonMobil: "exxonmobil.com", Chevron: "chevron.com",
-  "Saudi Aramco": "aramco.com",
-  // Major News Networks & Media
-  BBC: "bbc.com", CNN: "cnn.com", Reuters: "reuters.com", Bloomberg: "bloomberg.com",
-  CNBC: "cnbc.com", "Fox News": "foxnews.com", "NBC News": "nbcnews.com", NBC: "nbcnews.com",
-  "CBS News": "cbsnews.com", CBS: "cbsnews.com", "ABC News": "abcnews.go.com", ABC: "abcnews.go.com",
-  MSNBC: "msnbc.com", NPR: "npr.org", "New York Times": "nytimes.com", NYT: "nytimes.com",
-  "Washington Post": "washingtonpost.com", "Wall Street Journal": "wsj.com", WSJ: "wsj.com",
-  "Financial Times": "ft.com", "The Guardian": "theguardian.com", "Associated Press": "apnews.com",
-  "Al Jazeera": "aljazeera.com", Politico: "politico.com", "The Economist": "economist.com",
-  "The Atlantic": "theatlantic.com", Axios: "axios.com", "News Corp": "newscorp.com",
-  Comcast: "comcastcorporation.com", "Warner Bros. Discovery": "wbd.com", Paramount: "paramount.com",
-  // Major Airlines & Aviation
-  Airbus: "airbus.com", "Delta Air Lines": "delta.com", "United Airlines": "united.com",
-  "American Airlines": "aa.com", "Southwest Airlines": "southwest.com",
-  "Alaska Airlines": "alaskaair.com", JetBlue: "jetblue.com", FedEx: "fedex.com", UPS: "ups.com",
-  Lufthansa: "lufthansa.com", "British Airways": "britishairways.com", "Air France": "airfrance.com",
-  Emirates: "emirates.com", "Qatar Airways": "qatarairways.com",
-  "Singapore Airlines": "singaporeair.com", "Cathay Pacific": "cathaypacific.com",
-  "Japan Airlines": "jal.co.jp", "Korean Air": "koreanair.com",
-  "Air China": "airchina.com.cn", 中国国航: "airchina.com.cn",
-  "China Eastern": "ceair.com", 东方航空: "ceair.com",
-  "China Southern": "csair.com", 南方航空: "csair.com",
-  Qantas: "qantas.com", Ryanair: "ryanair.com", "Air Canada": "aircanada.com",
-  // Major Space Agencies
-  NASA: "nasa.gov", ESA: "esa.int", "European Space Agency": "esa.int",
-  CNSA: "cnsa.gov.cn", "China National Space Administration": "cnsa.gov.cn", 国家航天局: "cnsa.gov.cn",
-  Roscosmos: "roscosmos.ru", 俄罗斯航天局: "roscosmos.ru", JAXA: "jaxa.jp",
-  ISRO: "isro.gov.in", "Indian Space Research Organisation": "isro.gov.in",
-  "Canadian Space Agency": "asc-csa.gc.ca", CNES: "cnes.fr", DLR: "dlr.de",
-  "Italian Space Agency": "asi.it", KASA: "kasa.go.kr",
-  "Korea AeroSpace Administration": "kasa.go.kr", "UAE Space Agency": "space.gov.ae",
-  "Australian Space Agency": "space.gov.au",
-};
-
-export const US_PARTY_TAGS = {
-  "Democratic Party": "dem", "Senate Democrats": "dem", "House Democrats": "dem",
-  Democrats: "dem", Democrat: "dem", Democratic: "dem", DNC: "dem",
-  "Republican Party": "gop", "Senate Republicans": "gop", "House Republicans": "gop",
-  Republicans: "gop", Republican: "gop", GOP: "gop", RNC: "gop",
-};
+export const COMPANY_LOGOS = {};
+export const LOCAL_COMPANY_LOGOS = {};
+export const COMPANY_WIKI_OVERRIDES = {};
+export const US_PARTY_TAGS = {};
 
 export const PARTY_ICONS = {
   dem: `<svg class="inline-party-icon" viewBox="0 0 16 16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#1d6fe2"/><text x="8" y="11.6" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="10.5" font-weight="800">D</text></svg>`,
   gop: `<svg class="inline-party-icon" viewBox="0 0 16 16" aria-hidden="true"><rect width="16" height="16" rx="3" fill="#d93829"/><text x="8" y="11.6" text-anchor="middle" fill="#ffffff" font-family="Inter,system-ui,sans-serif" font-size="10.5" font-weight="800">R</text></svg>`,
 };
 
-const ENTITY_DECORATOR_RE = (() => {
-  const keys = [
-    ...new Set([
-      ...Object.keys(COMPANY_LOGOS),
-      ...Object.keys(PLACE_ALIASES),
-      ...Object.keys(US_PARTY_TAGS),
-    ]),
-  ].sort((a, b) => b.length - a.length);
-  const parts = keys.map((k) => {
-    const esc = escapeRegex(k);
-    if (!/^[\x00-\x7F]+$/.test(k)) return esc;
-    const prefix = /^\w/.test(k) ? "\\b" : "";
-    const suffix = /\w$/.test(k) ? "\\b" : "";
-    return `${prefix}${esc}${suffix}`;
-  });
-  return new RegExp(`(${parts.join("|")})`, "g");
-})();
+/* ---------- Prefix Trie Matcher (O(text_length), dictionary-size independent) ---------- */
+
+const ASCII_WORD_CHAR_RE = /[A-Za-z0-9_]/;
+
+function isWordBoundaryOk(text, start, end, needLeftBoundary, needRightBoundary) {
+  if (needLeftBoundary && start > 0 && ASCII_WORD_CHAR_RE.test(text[start - 1])) return false;
+  if (needRightBoundary && end < text.length && ASCII_WORD_CHAR_RE.test(text[end])) return false;
+  return true;
+}
+
+export function buildPrefixTrie(keys) {
+  const root = Object.create(null);
+  for (const key of keys) {
+    if (!key) continue;
+    let node = root;
+    for (let i = 0; i < key.length; i++) {
+      const ch = key[i];
+      if (!node[ch]) node[ch] = Object.create(null);
+      node = node[ch];
+    }
+    const isAscii = /^[\x00-\x7F]+$/.test(key);
+    node.$ = {
+      key,
+      len: key.length,
+      leftBoundary: isAscii && ASCII_WORD_CHAR_RE.test(key[0]),
+      rightBoundary: isAscii && ASCII_WORD_CHAR_RE.test(key[key.length - 1]),
+    };
+  }
+  return root;
+}
+
+function longestMatchAt(text, pos, trie) {
+  if (!trie) return null;
+  let node = trie;
+  let best = null;
+  for (let i = pos; i < text.length; i++) {
+    const next = node[text[i]];
+    if (!next) break;
+    node = next;
+    const hit = node.$;
+    if (hit && isWordBoundaryOk(text, pos, i + 1, hit.leftBoundary, hit.rightBoundary)) {
+      best = hit;
+    }
+  }
+  return best;
+}
+
+/**
+ * Scan `text` left-to-right picking the longest valid match across `baseTrie`
+ * and optional `overlayTrie` (used for per-story Tier-1 LLM entities without recompiling).
+ */
+export function findLongestMatches(text, baseTrie, overlayTrie = null) {
+  const matches = [];
+  let i = 0;
+  while (i < text.length) {
+    const a = longestMatchAt(text, i, baseTrie);
+    const b = overlayTrie ? longestMatchAt(text, i, overlayTrie) : null;
+    const best = a && b ? (b.len >= a.len ? b : a) : a || b;
+    if (best) {
+      matches.push({ token: best.key, index: i, length: best.len });
+      i += best.len;
+    } else {
+      i += 1;
+    }
+  }
+  return matches;
+}
+
+let BASE_ENTITY_TRIE = buildPrefixTrie(Object.keys(PLACE_ALIASES));
+
+/**
+ * Hydrate all in-memory entity registries and rebuild the Prefix Trie from the
+ * single unified `shared/data/entities.json` payload.
+ */
+export function hydrateEntityRegistry(entitiesJson) {
+  if (!entitiesJson || typeof entitiesJson !== "object") return;
+
+  for (const k of Object.keys(COMPANY_LOGOS)) delete COMPANY_LOGOS[k];
+  for (const k of Object.keys(LOCAL_COMPANY_LOGOS)) delete LOCAL_COMPANY_LOGOS[k];
+  for (const k of Object.keys(COMPANY_WIKI_OVERRIDES)) delete COMPANY_WIKI_OVERRIDES[k];
+  for (const k of Object.keys(US_PARTY_TAGS)) delete US_PARTY_TAGS[k];
+
+  const companies = entitiesJson.companies || {};
+  for (const [domain, info] of Object.entries(companies)) {
+    if (!info || typeof info !== "object") continue;
+    for (const alias of info.aliases || []) {
+      COMPANY_LOGOS[alias] = domain;
+    }
+    for (const alias of info.ambiguous_aliases || []) {
+      if (!COMPANY_LOGOS[alias]) COMPANY_LOGOS[alias] = domain;
+    }
+    if (info.logo) {
+      LOCAL_COMPANY_LOGOS[domain] = new URL(`./logos/${info.logo}`, import.meta.url).href;
+    }
+    if (info.wiki) {
+      COMPANY_WIKI_OVERRIDES[domain] = info.wiki;
+    }
+  }
+
+  BASE_PERSON_NAMES.length = 0;
+  if (Array.isArray(entitiesJson.people)) {
+    BASE_PERSON_NAMES.push(...entitiesJson.people);
+  }
+  DEFAULT_PERSON_NAME_RE = compilePersonNameRegex(BASE_PERSON_NAMES);
+
+  if (entitiesJson.us_parties && typeof entitiesJson.us_parties === "object") {
+    Object.assign(US_PARTY_TAGS, entitiesJson.us_parties);
+  }
+
+  BASE_ENTITY_TRIE = buildPrefixTrie([
+    ...Object.keys(COMPANY_LOGOS),
+    ...Object.keys(PLACE_ALIASES),
+    ...Object.keys(US_PARTY_TAGS),
+  ]);
+}
 
 export function isLikelyPersonName(raw) {
   const s = String(raw || "").trim();
@@ -220,17 +191,6 @@ export function buildPersonNameRegexFromTexts(texts = [], companyFacts = null) {
   return compilePersonNameRegex([...names]);
 }
 
-const LOCAL_COMPANY_LOGOS = {
-  "pbc.gov.cn": new URL("./logos/pbc.png", import.meta.url).href,
-  "abchina.com": new URL("./logos/abchina.png", import.meta.url).href,
-  "boc.cn": new URL("./logos/boc.png", import.meta.url).href,
-  "psbc.com": new URL("./logos/psbc.png", import.meta.url).href,
-  "citicbank.com": new URL("./logos/citicbank.png", import.meta.url).href,
-  "spdb.com.cn": new URL("./logos/spdb.png", import.meta.url).href,
-  "cib.com.cn": new URL("./logos/cib.png", import.meta.url).href,
-  "bny.com": new URL("./logos/bny.png", import.meta.url).href,
-};
-
 export function renderCompanyLogoImg(domain) {
   const src =
     LOCAL_COMPANY_LOGOS[domain] ||
@@ -253,20 +213,13 @@ export function glueIconWithText(iconHtml, text) {
   return `<span class="icon-glue">${iconHtml}${escapeHtml(s.slice(0, sp))}</span>${escapeHtml(s.slice(sp))}`;
 }
 
+/* ---------- Minimal Tier-2 Safety-Net Guards (Tier-1 LLM entities[] is primary) ---------- */
+
 const BANKING_CTX_RE =
-  /\b(?:ICBC|CCB|BOC|PBOC|PBoC|PSBC|BoCom|CMB|People's Bank|Big Four|Agricultural Bank|Bank of China|Construction Bank|Merchants Bank|state-owned banks?|commercial banks?|major banks?|lending|loans?|yuan|renminbi|relending|banks?|banking|deposits?|mortgages?|credit|buyback)\b|农行|农业银行|工行|建行|中行|招行|交行|四大行|四大商业银行|银行|贷款|央行/i;
+  /\b(?:ICBC|CCB|BOC|PBOC|PBoC|PSBC|BoCom|CMB|People's Bank|Big Four|Agricultural Bank|Bank of China|Construction Bank|Merchants Bank|state-owned banks?|commercial banks?|major banks?|lending|loans?|yuan|renminbi|relending|banks?|banking)\b|农行|农业银行|工行|建行|中行|招行|交行|四大行|四大商业银行|银行|贷款|央行/i;
 const CANADA_BANK_CTX_RE = /\b(?:Canada|Canadian|Ottawa|Macklem|loonie|CAD)\b/i;
-const BC_INSURANCE_CTX_RE = /\b(?:British Columbia|Vancouver|auto insurance|driver'?s? licen[cs]e|car insurance)\b/i;
-const COSMOLOGY_CMB_CTX_RE =
-  /\b(?:cosmic microwave|microwave background|radiation|Big Bang|cosmolog(?:y|ical)|Planck|telescope|universe|redshift|astrophysic)\b/i;
 const NON_MEDIA_ABC_RE =
   /\b(?:Alcoholic Beverage|Australian Broadcasting|Activity-Based|ABC(?:'s)?\s+of\b|ABC\s+(?:islands|weapons|stores?|liquor|board|commission|license|permit|permittee))\b/i;
-const FRUIT_APPLE_CTX_RE = /\b(?:orchard|cider|apple\s+pie|harvest|apples|fruit|grove|blossom)\b/i;
-const NON_COMPANY_META_AFTER_RE = /^-(?:analysis|analyses|study|studies|learning|data|heuristic|model|narrative|fiction|commentary)\b/i;
-const COUNTRY_GEORGIA_CTX_RE =
-  /\b(?:Tbilisi|Caucasus|Georgian Dream|South Ossetia|Abkhazia|Black Sea|Post-Soviet|Salome Zourabichvili|Irakli Kobakhidze|EU accession|EU membership|NATO|Russia(?:n)?)\b/i;
-const PERSON_BRAND_JORDAN_CTX_RE =
-  /\b(?:Michael Jordan|Jim Jordan|Air Jordan|Jordan Brand|Rep\.\s+Jordan|Jordan Peele|Jordan Peterson|Jordan Spieth|Jordan Love)\b/i;
 const NATIVE_BEFORE_RE = /\bNative\s+$/i;
 const INDIGENOUS_INDIAN_CTX_RE =
   /\b(?:American|Native|Plains|Pueblo|Navajo|Cherokee|Sioux|Apache|Mohawk|Iroquois|Algonquin|Seminole|Lakota|Shawnee|Cheyenne|Comanche|Wampanoag)\s+Indians?\b|\bIndians?\s+(?:Tribes?|Tribal|Nations?|Reservations?|Territory|Affairs|Health Service|Country|Heritage|Boarding Schools?|Child Welfare|Gaming|Lands?)\b|\b(?:Indigenous|Native Americans?|First Nations|Bureau of Indian Affairs|Pilgrims|Thanksgiving)\b/i;
@@ -277,14 +230,8 @@ const PERSON_PREFIX_STRIP_RE =
 const NON_INDEX_DOW_AFTER_RE = /^\s+(?:Chemical|Inc\.?|Corning|DuPont|AgroSciences)\b/i;
 
 /**
- * Declarative heuristic disambiguation rules for ambiguous tokens.
- * Evaluated against the full text (not just a bold/non-bold slice) whenever
- * no explicit LLM-assigned EntityIdentity overrides the mention.
- * Each rule returns:
- *   - { type: "company", domain, wikiTitle? }
- *   - { type: "place", placeId }
- *   - { type: "none" }  (suppress false positive)
- *   - null              (fall back to default lookup)
+ * Minimal Tier-2 safety net for legacy/untagged archives and high-collision short acronyms.
+ * All other semantic disambiguation is delegated to Tier-1 LLM-assigned `entities[]`.
  */
 const HEURISTIC_DISAMBIGUATORS = {
   ABC: ({ ctx }) => {
@@ -292,27 +239,17 @@ const HEURISTIC_DISAMBIGUATORS = {
     if (NON_MEDIA_ABC_RE.test(ctx)) return { type: "none" };
     return { type: "company", domain: "abcnews.go.com" };
   },
-  BOC: ({ ctx }) => {
-    if (CANADA_BANK_CTX_RE.test(ctx)) return { type: "none" };
-    if (BANKING_CTX_RE.test(ctx)) return { type: "company", domain: "boc.cn" };
-    return { type: "none" };
-  },
+  BOC: ({ ctx }) =>
+    !CANADA_BANK_CTX_RE.test(ctx) && BANKING_CTX_RE.test(ctx)
+      ? { type: "company", domain: "boc.cn" }
+      : { type: "none" },
   CCB: ({ ctx }) => (BANKING_CTX_RE.test(ctx) ? { type: "company", domain: "ccb.com" } : { type: "none" }),
-  CMB: ({ ctx }) => {
-    if (COSMOLOGY_CMB_CTX_RE.test(ctx)) return { type: "none" };
-    if (BANKING_CTX_RE.test(ctx)) return { type: "company", domain: "cmbchina.com" };
-    return { type: "none" };
-  },
-  ICBC: ({ ctx }) => (BC_INSURANCE_CTX_RE.test(ctx) ? { type: "none" } : { type: "company", domain: "icbc.com.cn" }),
-  Apple: ({ ctx }) => (FRUIT_APPLE_CTX_RE.test(ctx) ? { type: "none" } : null),
-  Meta: ({ after }) => (NON_COMPANY_META_AFTER_RE.test(after) ? { type: "none" } : null),
+  CMB: ({ ctx }) => (BANKING_CTX_RE.test(ctx) ? { type: "company", domain: "cmbchina.com" } : { type: "none" }),
   American: ({ before }) => (NATIVE_BEFORE_RE.test(before) ? { type: "none" } : null),
   Americans: ({ before }) => (NATIVE_BEFORE_RE.test(before) ? { type: "none" } : null),
   Indian: ({ ctx }) => (INDIGENOUS_INDIAN_CTX_RE.test(ctx) ? { type: "none" } : null),
   Indians: ({ ctx }) => (INDIGENOUS_INDIAN_CTX_RE.test(ctx) ? { type: "none" } : null),
   European: ({ after }) => (EU_INSTITUTION_AFTER_RE.test(after) ? { type: "place", placeId: "eu" } : null),
-  Georgia: ({ ctx }) => (COUNTRY_GEORGIA_CTX_RE.test(ctx) ? { type: "place", placeId: "ge" } : null),
-  Jordan: ({ ctx }) => (PERSON_BRAND_JORDAN_CTX_RE.test(ctx) ? { type: "none" } : null),
 };
 
 /**
@@ -339,26 +276,6 @@ export function buildEntityIdentityMap(...entityLists) {
   return map;
 }
 
-function buildMentionRegex(extraKeys = []) {
-  if (!extraKeys.length) return ENTITY_DECORATOR_RE;
-  const keys = [
-    ...new Set([
-      ...extraKeys,
-      ...Object.keys(COMPANY_LOGOS),
-      ...Object.keys(PLACE_ALIASES),
-      ...Object.keys(US_PARTY_TAGS),
-    ]),
-  ].sort((a, b) => b.length - a.length);
-  const parts = keys.map((k) => {
-    const esc = escapeRegex(k);
-    if (!/^[\x00-\x7F]+$/.test(k)) return esc;
-    const prefix = /^\w/.test(k) ? "\\b" : "";
-    const suffix = /\w$/.test(k) ? "\\b" : "";
-    return `${prefix}${esc}${suffix}`;
-  });
-  return new RegExp(`(${parts.join("|")})`, "g");
-}
-
 function renderPersonSpan(raw, wikiTitleOverride = "") {
   const title =
     String(wikiTitleOverride || "").trim() ||
@@ -376,28 +293,37 @@ export function createEntityFormatter({
   deltaClass = () => "flat",
   pillCompaniesInSummary = true,
 } = {}) {
-  const resolveEntityMap = (opts) => {
+  const resolveEntityContext = (opts) => {
     const globalList = typeof getEntities === "function" ? getEntities() : null;
     const localList = opts?.entities || null;
-    if ((!globalList || !globalList.length) && (!localList || !localList.length)) return null;
-    return buildEntityIdentityMap(globalList, localList);
+    if ((!globalList || !globalList.length) && (!localList || !localList.length)) {
+      return { entityMap: null, overlayTrie: null };
+    }
+    const entityMap = buildEntityIdentityMap(globalList, localList);
+    const extraKeys = [...entityMap.keys()].filter(
+      (k) => !COMPANY_LOGOS[k] && !PLACE_ALIASES[k] && !US_PARTY_TAGS[k]
+    );
+    return {
+      entityMap,
+      overlayTrie: extraKeys.length ? buildPrefixTrie(extraKeys) : null,
+    };
   };
 
   const decorateFlagsAndLogos = (segment, seen = new Set(), pillCompanies = false, opts = {}) => {
     if (!segment) return "";
-    const entityMap = opts._entityMap ?? resolveEntityMap(opts);
+    const ctxObj = opts._prepared ? opts : resolveEntityContext(opts);
+    const entityMap = ctxObj.entityMap ?? null;
+    const overlayTrie = ctxObj.overlayTrie ?? null;
     const fullText = opts._fullText || segment;
-    const extraKeys = entityMap
-      ? [...entityMap.keys()].filter((k) => !COMPANY_LOGOS[k] && !PLACE_ALIASES[k] && !US_PARTY_TAGS[k])
-      : [];
-    const re = extraKeys.length ? buildMentionRegex(extraKeys) : ENTITY_DECORATOR_RE;
-    re.lastIndex = 0;
+
+    const matches = findLongestMatches(segment, BASE_ENTITY_TRIE, overlayTrie);
+    if (!matches.length) return escapeHtml(segment);
 
     let out = "";
     let last = 0;
-    for (const m of segment.matchAll(re)) {
-      const token = m[0];
-      const idx = m.index ?? 0;
+    for (const m of matches) {
+      const token = m.token;
+      const idx = m.index;
       if (idx > last) out += escapeHtml(segment.slice(last, idx));
 
       let domain;
@@ -489,8 +415,8 @@ export function createEntityFormatter({
     if (!segment) return "";
     const runOpts = opts._prepared
       ? opts
-      : { _prepared: true, _fullText: opts._fullText || segment, _entityMap: resolveEntityMap(opts) };
-    const entityMap = runOpts._entityMap;
+      : { _prepared: true, _fullText: opts._fullText || segment, ...resolveEntityContext(opts) };
+    const entityMap = runOpts.entityMap;
 
     EXPLICIT_ITALIC_RE.lastIndex = 0;
     if (EXPLICIT_ITALIC_RE.test(segment)) {
@@ -531,7 +457,7 @@ export function createEntityFormatter({
     if (!tickerMap?.size || !tickerRe) {
       return formatEntitiesInPlain(segment, seen, pillCompaniesInSummary, opts);
     }
-    const entityMap = opts._entityMap;
+    const entityMap = opts.entityMap;
     tickerRe.lastIndex = 0;
     let out = "";
     let lastIdx = 0;
@@ -575,7 +501,7 @@ export function createEntityFormatter({
     const runOpts = {
       _prepared: true,
       _fullText: raw.replace(/\*\*/g, ""),
-      _entityMap: resolveEntityMap(opts),
+      ...resolveEntityContext(opts),
     };
     EXPLICIT_BOLD_RE.lastIndex = 0;
     const hasExplicit = EXPLICIT_BOLD_RE.test(raw);
@@ -597,54 +523,6 @@ export function createEntityFormatter({
 
   return { decorateFlagsAndLogos, formatEntitiesInPlain, highlightSummaryHtml };
 }
-
-export const COMPANY_WIKI_OVERRIDES = {
-  "apple.com": "Apple_Inc.",
-  "amazon.com": "Amazon_(company)",
-  "meta.com": "Meta_Platforms",
-  "google.com": "Alphabet_Inc.",
-  "delta.com": "Delta_Air_Lines",
-  "paramount.com": "Paramount_Skydance",
-  "cursor.com": "Cursor_(code_editor)",
-  "runwayml.com": "Runway_(company)",
-  "x.ai": "XAI_(company)",
-  "ups.com": "United_Parcel_Service",
-  "abcnews.go.com": "ABC_News",
-  "abchina.com": "Agricultural_Bank_of_China",
-  "icbc.com.cn": "Industrial_and_Commercial_Bank_of_China",
-  "ccb.com": "China_Construction_Bank",
-  "boc.cn": "Bank_of_China",
-  "bankcomm.com": "Bank_of_Communications",
-  "psbc.com": "Postal_Savings_Bank_of_China",
-  "cmbchina.com": "China_Merchants_Bank",
-  "citicbank.com": "China_CITIC_Bank",
-  "bank.pingan.com": "Ping_An_Bank",
-  "spdb.com.cn": "Shanghai_Pudong_Development_Bank",
-  "cib.com.cn": "Industrial_Bank_(China)",
-  "pbc.gov.cn": "People's_Bank_of_China",
-  "jpmorganchase.com": "JPMorgan_Chase",
-  "bankofamerica.com": "Bank_of_America",
-  "citigroup.com": "Citigroup",
-  "wellsfargo.com": "Wells_Fargo",
-  "goldmansachs.com": "Goldman_Sachs",
-  "morganstanley.com": "Morgan_Stanley",
-  "usbank.com": "U.S._Bancorp",
-  "pnc.com": "PNC_Financial_Services",
-  "truist.com": "Truist_Financial",
-  "capitalone.com": "Capital_One",
-  "schwab.com": "Charles_Schwab_Corporation",
-  "bny.com": "BNY_Mellon",
-  "statestreet.com": "State_Street_Corporation",
-  "federalreserve.gov": "Federal_Reserve",
-  "reuters.com": "Reuters",
-  "foxnews.com": "Fox_News",
-  "britishairways.com": "British_Airways",
-  "esa.int": "European_Space_Agency",
-  "cnsa.gov.cn": "China_National_Space_Administration",
-  "dlr.de": "German_Aerospace_Center",
-  "asi.it": "Italian_Space_Agency",
-  "kasa.go.kr": "Korea_AeroSpace_Administration",
-};
 
 export function buildEntityWikiUrl(el, getCompanyFacts = () => null) {
   if (!el) return "";
@@ -855,13 +733,17 @@ export function initEntityOverlays({ getCompanyFacts, getCountryLeaders }) {
   });
 }
 
+const UNIFIED_ENTITIES_URL = new URL("./data/entities.json", import.meta.url).href;
+
 export async function loadSharedEntityData(briefingDataBase, { cache = "no-store" } = {}) {
-  const [factsRes, leadersRes] = await Promise.allSettled([
-    fetchJson(`${briefingDataBase}/company_facts.json`, { cache }),
+  const [entitiesRes, leadersRes] = await Promise.allSettled([
+    fetchJson(UNIFIED_ENTITIES_URL, { cache }),
     fetchJson(`${briefingDataBase}/country_leaders.json`, { cache }),
   ]);
+  const entitiesJson = entitiesRes.status === "fulfilled" ? entitiesRes.value : null;
+  if (entitiesJson) hydrateEntityRegistry(entitiesJson);
   return {
-    companyFacts: factsRes.status === "fulfilled" ? factsRes.value : null,
+    companyFacts: entitiesJson,
     countryLeaders: leadersRes.status === "fulfilled" ? leadersRes.value : null,
   };
 }

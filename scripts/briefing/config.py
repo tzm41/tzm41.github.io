@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 # Repository paths
@@ -12,6 +13,7 @@ LATEST_PATH = DATA_DIR / "latest.json"
 INDEX_PATH = DATA_DIR / "index.json"
 MARKETS_LIVE_PATH = DATA_DIR / "markets_live.json"
 NEWS_MEMORY_PATH = DATA_DIR / "news_memory.json"
+ENTITIES_DB_PATH = REPO_ROOT / "shared" / "data" / "entities.json"
 
 # Retention
 MAX_ARCHIVE_DAYS = 60
@@ -103,47 +105,31 @@ MARKET_BIG7: list[dict[str, str]] = [
 
 FEAR_GREED_URL = "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
 
-# Global public stock directory for on-demand inline text matching (not added to watchlist)
-# Each entry: symbol -> (display_name, currency_prefix, [text aliases])
-INLINE_TICKER_DIRECTORY: dict[str, tuple[str, str, list[str]]] = {
-    # US / AI / Tech / Auto / Finance
-    "ANT": ("Anthropic", "$", ["Anthropic", "ANT"]),
-    "AMD": ("AMD", "$", ["AMD"]),
-    "INTC": ("Intel", "$", ["Intel", "INTC"]),
-    "AVGO": ("Broadcom", "$", ["Broadcom", "AVGO"]),
-    "ORCL": ("Oracle", "$", ["Oracle", "ORCL"]),
-    "PLTR": ("Palantir", "$", ["Palantir", "PLTR"]),
-    "NFLX": ("Netflix", "$", ["Netflix", "NFLX"]),
-    "QCOM": ("Qualcomm", "$", ["Qualcomm", "QCOM"]),
-    "ARM": ("Arm", "$", ["ARM"]),
-    "F": ("Ford", "$", ["Ford"]),
-    "BA": ("Boeing", "$", ["Boeing"]),
-    "JPM": ("JPMorgan", "$", ["JPMorgan", "JPM"]),
-    "GS": ("Goldman Sachs", "$", ["Goldman Sachs"]),
-    # Hong Kong & China (.HK / .SS / .SZ)
-    "0700.HK": ("Tencent", "HK$", ["Tencent", "腾讯", "0700.HK"]),
-    "9988.HK": ("Alibaba", "HK$", ["Alibaba", "阿里巴巴", "BABA", "9988.HK"]),
-    "1810.HK": ("Xiaomi", "HK$", ["Xiaomi", "小米", "1810.HK"]),
-    "3690.HK": ("Meituan", "HK$", ["Meituan", "美团", "3690.HK"]),
-    "1211.HK": ("BYD", "HK$", ["BYD", "比亚迪", "1211.HK"]),
-    "0981.HK": ("SMIC", "HK$", ["SMIC", "中芯国际", "0981.HK"]),
-    "9888.HK": ("Baidu", "HK$", ["Baidu", "百度", "BIDU", "9888.HK"]),
-    "9618.HK": ("JD.com", "HK$", ["JD.com", "京东", "9618.HK"]),
-    "9999.HK": ("NetEase", "HK$", ["NetEase", "网易", "9999.HK"]),
-    "300750.SZ": ("CATL", "¥", ["CATL", "宁德时代", "300750.SZ"]),
-    "600519.SS": ("Kweichow Moutai", "¥", ["Moutai", "茅台", "600519.SS"]),
-    "^HSI": ("Hang Seng", "", ["Hang Seng", "恒生指数"]),
-    "000300.SS": ("CSI 300", "", ["CSI 300", "沪深300"]),
-    "000001.SS": ("Shanghai Composite", "", ["Shanghai Composite", "上证指数"]),
-    # Japan (.T) & Taiwan / Korea (.TW / .KS)
-    "7203.T": ("Toyota", "¥", ["Toyota", "丰田", "7203.T"]),
-    "6758.T": ("Sony", "¥", ["Sony", "索尼", "6758.T"]),
-    "9984.T": ("SoftBank", "¥", ["SoftBank", "软银", "9984.T"]),
-    "7974.T": ("Nintendo", "¥", ["Nintendo", "任天堂", "7974.T"]),
-    "^N225": ("Nikkei 225", "", ["Nikkei 225", "Nikkei", "日经225"]),
-    "2330.TW": ("TSMC", "NT$", ["TSMC", "台积电", "2330.TW"]),
-    "005930.KS": ("Samsung", "₩", ["Samsung", "三星", "005930.KS"]),
-}
+def _load_inline_ticker_directory() -> dict[str, tuple[str, str, list[str]]]:
+    """Derive inline stock/index lookup directly from the single unified shared/data/entities.json."""
+    if not ENTITIES_DB_PATH.exists():
+        return {}
+    raw = json.loads(ENTITIES_DB_PATH.read_text(encoding="utf-8"))
+    directory: dict[str, tuple[str, str, list[str]]] = {}
+    for info in (raw.get("companies") or {}).values():
+        if not info.get("inline_ticker") or not info.get("symbol"):
+            continue
+        sym = str(info["symbol"])
+        name = str(info.get("name") or sym)
+        cur = str(info.get("currency") or "$")
+        aliases = list(info.get("inline_aliases") or info.get("aliases") or [name, sym])
+        directory[sym] = (name, cur, aliases)
+    for sym, info in (raw.get("indices") or {}).items():
+        directory[sym] = (
+            str(info.get("name") or sym),
+            str(info.get("currency") or ""),
+            list(info.get("aliases") or [info.get("name") or sym]),
+        )
+    return directory
+
+
+# Global public stock & index directory derived from shared/data/entities.json (zero duplication)
+INLINE_TICKER_DIRECTORY: dict[str, tuple[str, str, list[str]]] = _load_inline_ticker_directory()
 
 # 11 GICS SPDR Sector ETFs
 MARKET_SECTORS: list[dict[str, str]] = [
