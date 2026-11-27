@@ -13,9 +13,10 @@ import {
   initScrollSpy,
   createCollapsibleManager,
   renderSourceChip,
+  renderHashedTag,
   initSourceBiasPopover,
   renderSentimentRing,
-} from "../shared/ui.js?v=1";
+} from "../shared/ui.js?v=2";
 import {
   DEFAULT_PERSON_NAME_RE,
   buildPersonNameRegexFromTexts,
@@ -47,7 +48,6 @@ const els = {
   btnRefresh: document.getElementById("btn-refresh"),
   themeToggle: document.getElementById("theme-toggle"),
   statusBanner: document.getElementById("status-banner"),
-  themeTag: document.getElementById("theme-tag"),
   digestList: document.getElementById("weekly-digest-list"),
   featuredQuoteCard: document.getElementById("featured-quote-card"),
   scienceNarrative: document.getElementById("science-narrative"),
@@ -129,7 +129,25 @@ function renderHeader(ed) {
   els.editionDate.textContent = label;
   const themeSuffix = ed.theme_title ? ` · Theme: ${ed.theme_title}` : "";
   els.generatedMeta.textContent = `Published ${fmtLocalTimestamp(ed.generated_at)}${themeSuffix}`;
-  els.themeTag.textContent = ed.theme_title || "Sunday Edition";
+}
+
+function renderBriefBullets(bullets = []) {
+  return bullets
+    .map((item) => {
+      const text = typeof item === "string" ? item : item?.text || "";
+      const category = typeof item === "object" && item?.category ? item.category : "Weekly";
+      const sentiment = typeof item === "object" ? item?.sentiment : null;
+      return `
+        <li>
+          <span class="exec-meta">
+            ${renderSentimentRing(sentiment, text)}
+            <span class="cat-pill">${escapeHtml(category)}</span>
+          </span>
+          <span class="exec-text">${highlightSummaryHtml(text)}</span>
+        </li>
+      `;
+    })
+    .join("");
 }
 
 function renderDigest(ed) {
@@ -138,24 +156,7 @@ function renderDigest(ed) {
     els.digestList.innerHTML = `<li class="empty-note">No weekly digest bullets available for this edition.</li>`;
     return;
   }
-  els.digestList.innerHTML = bullets
-    .map((item) => {
-      const text = typeof item === "string" ? item : item?.text || "";
-      const category = typeof item === "object" ? item?.category : "";
-      const sentiment = typeof item === "object" ? item?.sentiment : null;
-      const ringHtml = renderSentimentRing(sentiment, text);
-      const catHtml = category ? `<span class="category-tag">${escapeHtml(category)}</span>` : "";
-      return `
-        <li class="executive-item">
-          <div class="executive-item-main">
-            ${ringHtml}
-            <span class="executive-text">${highlightSummaryHtml(text)}</span>
-          </div>
-          ${catHtml ? `<div class="executive-item-meta">${catHtml}</div>` : ""}
-        </li>
-      `;
-    })
-    .join("");
+  els.digestList.innerHTML = renderBriefBullets(bullets);
 }
 
 function renderFeaturedQuote(ed) {
@@ -196,17 +197,17 @@ function renderLearningCard(item) {
 
   return `
     <article class="news-card">
-      <div class="news-card-top">
-        <span class="category-tag">${escapeHtml(item.category || "Learning")}</span>
-        <div class="weekly-card-top-right">
-          ${disciplineHtml}
+      <div class="news-meta">
+        <div class="news-card-badges">
+          ${renderHashedTag(item.category || "Learning")}
           ${ringHtml}
         </div>
+        ${disciplineHtml}
       </div>
-      <h3 class="news-headline">${headlineHtml}</h3>
+      <h3>${headlineHtml}</h3>
       <p class="news-summary">${highlightSummaryHtml(item.summary)}</p>
       ${takeawayHtml}
-      <div class="source-list">${sourcesHtml}</div>
+      <div class="source-links">${sourcesHtml}</div>
     </article>
   `;
 }
@@ -347,7 +348,7 @@ function buildGeoCardHtml(item, showClose = true) {
     <h4 class="geo-fact-title">${formatEntitiesInPlain(item.title)}</h4>
     <p class="geo-fact-body">${highlightSummaryHtml(item.fact)}</p>
     <div class="geo-fact-foot">
-      <span class="category-tag">${escapeHtml(item.feature_type || "Geology")}</span>
+      ${renderHashedTag(item.feature_type || "Geology")}
       ${wikiUrl ? `<a class="geo-fact-wiki" href="${wikiUrl}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a>` : ""}
     </div>
   `;
@@ -610,13 +611,15 @@ function renderLongReads(ed) {
         : "";
       return `
         <article class="news-card">
-          <div class="news-card-top">
-            <span class="category-tag">${escapeHtml(lr.topic || "Essay")}</span>
+          <div class="news-meta">
+            <div class="news-card-badges">
+              ${renderHashedTag(lr.topic || "Essay")}
+            </div>
             ${timeHtml}
           </div>
-          <h3 class="news-headline">${headlineHtml}</h3>
+          <h3>${headlineHtml}</h3>
           <p class="news-summary">${highlightSummaryHtml(lr.summary)}</p>
-          <div class="source-list">${sourcesHtml}</div>
+          <div class="source-links">${sourcesHtml}</div>
         </article>
       `;
     })
@@ -629,24 +632,7 @@ function renderWeekInBrief(ed) {
     els.pulseList.innerHTML = `<li class="empty-note">No macro recap available for this week.</li>`;
     return;
   }
-  els.pulseList.innerHTML = items
-    .map((item) => {
-      const text = typeof item === "string" ? item : item?.text || "";
-      const category = typeof item === "object" ? item?.category : "";
-      const sentiment = typeof item === "object" ? item?.sentiment : null;
-      const ringHtml = renderSentimentRing(sentiment, text);
-      const catHtml = category ? `<span class="category-tag">${escapeHtml(category)}</span>` : "";
-      return `
-        <li class="executive-item">
-          <div class="executive-item-main">
-            ${ringHtml}
-            <span class="executive-text">${highlightSummaryHtml(text)}</span>
-          </div>
-          ${catHtml ? `<div class="executive-item-meta">${catHtml}</div>` : ""}
-        </li>
-      `;
-    })
-    .join("");
+  els.pulseList.innerHTML = renderBriefBullets(items);
 }
 
 function renderSourceHealth(health = {}) {

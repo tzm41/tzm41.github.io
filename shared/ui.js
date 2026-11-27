@@ -323,6 +323,26 @@ export function renderSourceChip(src) {
   return `<a class="source-chip"${biasAttr} href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`;
 }
 
+export const TAG_COLOR_COUNT = 12;
+
+export function hashTagColorIndex(label, paletteSize = TAG_COLOR_COUNT) {
+  const str = String(label ?? "").trim().toLowerCase();
+  let hash = 0x811c9dc5; // FNV-1a 32-bit offset basis
+  for (let i = 0; i < str.length; i++) {
+    hash ^= str.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0) % paletteSize;
+}
+
+export function renderHashedTag(label, extraClass = "") {
+  const text = String(label ?? "").trim();
+  if (!text) return "";
+  const idx = hashTagColorIndex(text, TAG_COLOR_COUNT);
+  const cls = extraClass ? `cat-pill tag-hue-${idx} ${extraClass}` : `cat-pill tag-hue-${idx}`;
+  return `<span class="${cls}">${escapeHtml(text)}</span>`;
+}
+
 export const SENTIMENT_META = {
   very_negative: { label: "Very Negative", pos: 0.06, color: "var(--sent-very-neg)" },
   negative: { label: "Negative", pos: 0.2, color: "var(--sent-neg)" },
