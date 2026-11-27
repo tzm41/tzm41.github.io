@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>colintan.dev</title>
-  <meta name="description" content="Navigation hub for colintan.dev — Daily Briefing.">
+  <meta name="description" content="Navigation hub for colintan.dev — Daily Briefing and Weekly Briefing.">
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf8f5">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1d2430">
   <link rel="icon" type="image/svg+xml" href="/briefing/favicon.svg">
@@ -29,6 +29,9 @@
       --accent: #a63a2b;
       --accent-soft: rgba(166, 58, 43, 0.09);
 
+      --weekly-accent: #2c5d6b;
+      --weekly-accent-soft: rgba(44, 93, 107, 0.1);
+
       --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
       --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -52,6 +55,9 @@
 
       --accent: #e06d53;
       --accent-soft: rgba(224, 109, 83, 0.14);
+
+      --weekly-accent: #6ab7cc;
+      --weekly-accent-soft: rgba(106, 183, 204, 0.15);
 
       --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.22);
       --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.34);
@@ -83,7 +89,7 @@
 
     .topbar {
       width: 100%;
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
       padding: 18px 20px;
       display: flex;
@@ -102,6 +108,8 @@
 
     .segmented {
       display: inline-flex;
+      align-items: center;
+      height: 32px;
       background: var(--surface-subtle);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
@@ -109,13 +117,17 @@
     }
 
     .seg-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
       border: 0;
       background: transparent;
       color: var(--ink-muted);
       font-family: var(--font-mono);
       font-size: 11.5px;
       font-weight: 600;
-      padding: 4px 10px;
+      padding: 0 10px;
       border-radius: 4px;
       cursor: pointer;
     }
@@ -131,19 +143,34 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px 20px;
+      padding: 24px 20px 44px;
+    }
+
+    .hub-grid {
+      width: 100%;
+      max-width: 940px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      align-items: stretch;
     }
 
     .nav-card {
       width: 100%;
-      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-top: 3px solid var(--accent);
+      border-top: 3px solid var(--card-accent, var(--accent));
       border-radius: var(--radius);
-      padding: 32px 30px 28px;
+      padding: 30px 26px 26px;
       box-shadow: var(--shadow-md);
       text-align: center;
+    }
+
+    .nav-card--weekly {
+      --card-accent: var(--weekly-accent);
     }
 
     .kicker {
@@ -153,24 +180,26 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: var(--accent);
+      color: var(--card-accent, var(--accent));
       margin-bottom: 6px;
     }
 
-    h1 {
+    h1,
+    h2 {
       margin: 0;
       font-family: var(--font-serif);
-      font-size: 34px;
+      font-size: 32px;
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1.15;
     }
 
     .lead {
-      margin: 12px auto 24px;
-      max-width: 440px;
-      font-size: 15px;
+      margin: 12px auto 22px;
+      max-width: 390px;
+      font-size: 14.5px;
       color: var(--ink-secondary);
+      flex: 1;
     }
 
     .primary-cta {
@@ -178,14 +207,18 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      background: var(--accent);
+      background: var(--card-accent, var(--accent));
       color: #ffffff;
       font-weight: 600;
-      font-size: 14.5px;
-      padding: 11px 22px;
+      font-size: 14px;
+      padding: 10px 20px;
       border-radius: var(--radius-sm);
       box-shadow: var(--shadow-sm);
       transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    [data-theme="dark"] .nav-card--weekly .primary-cta {
+      color: #10161e;
     }
 
     .primary-cta:hover {
@@ -194,63 +227,47 @@
     }
 
     .quick-links {
+      width: 100%;
       margin-top: 22px;
-      padding-top: 18px;
+      padding-top: 16px;
       border-top: 1px solid var(--border);
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 8px;
+      gap: 7px;
     }
 
     .quick-chip {
       font-family: var(--font-mono);
-      font-size: 11.5px;
+      font-size: 11px;
       color: var(--ink-secondary);
       background: var(--surface-subtle);
       border: 1px solid var(--border);
       border-radius: 999px;
-      padding: 5px 11px;
+      padding: 4px 10px;
       transition: border-color 0.15s ease, color 0.15s ease;
     }
 
     .quick-chip:hover {
-      border-color: var(--accent);
-      color: var(--accent);
+      border-color: var(--card-accent, var(--accent));
+      color: var(--card-accent, var(--accent));
     }
 
-    .bottom-bar {
-      padding: 18px 20px 26px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .legacy-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      color: var(--ink-muted);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 6px 12px;
-      transition: border-color 0.15s ease, color 0.15s ease;
-    }
-
-    .legacy-btn:hover {
-      border-color: var(--border-strong);
-      color: var(--ink);
+    @media (max-width: 780px) {
+      .hub-grid {
+        grid-template-columns: 1fr;
+        max-width: 560px;
+      }
     }
 
     @media (max-width: 540px) {
       .nav-card {
-        padding: 26px 20px 22px;
+        padding: 24px 18px 20px;
       }
 
-      h1 {
-        font-size: 28px;
+      h1,
+      h2 {
+        font-size: 27px;
       }
     }
   </style>
@@ -266,24 +283,45 @@
   </header>
 
   <main class="center-stage">
-    <section class="nav-card" aria-label="Primary navigation">
-      <span class="kicker">Daily Intelligence</span>
-      <h1>Daily Briefing</h1>
-      <p class="lead">
-        Top world news, stock markets &amp; Magnificent 7 trends, global conflict tracker, US politics pulse, and a daily bright spot.
-      </p>
-      <a class="primary-cta" href="/briefing/?date=latest">
-        Open Daily Briefing &rarr;
-      </a>
-      <div class="quick-links" aria-label="Briefing sections">
-        <a class="quick-chip" href="/briefing/?date=latest#executive">Overview</a>
-        <a class="quick-chip" href="/briefing/?date=latest#news">Top News</a>
-        <a class="quick-chip" href="/briefing/?date=latest#markets">Markets</a>
-        <a class="quick-chip" href="/briefing/?date=latest#conflicts">Conflicts</a>
-        <a class="quick-chip" href="/briefing/?date=latest#politics">US Politics</a>
-        <a class="quick-chip" href="/briefing/?date=latest#positive">Positive News</a>
-      </div>
-    </section>
+    <div class="hub-grid" aria-label="Primary publications">
+      <section class="nav-card" aria-label="Daily Briefing">
+        <span class="kicker">Daily Edition</span>
+        <h1>Daily Briefing</h1>
+        <p class="lead">
+          Top world news, stock markets &amp; Magnificent 7 trends, global conflict tracker, US politics pulse, local news, and daily bright spots.
+        </p>
+        <a class="primary-cta" href="/briefing/?date=latest">
+          Open Daily Briefing &rarr;
+        </a>
+        <div class="quick-links" aria-label="Daily Briefing sections">
+          <a class="quick-chip" href="/briefing/?date=latest#executive">Overview</a>
+          <a class="quick-chip" href="/briefing/?date=latest#news">Top News</a>
+          <a class="quick-chip" href="/briefing/?date=latest#markets">Markets</a>
+          <a class="quick-chip" href="/briefing/?date=latest#conflicts">Conflicts</a>
+          <a class="quick-chip" href="/briefing/?date=latest#politics">US Politics</a>
+          <a class="quick-chip" href="/briefing/?date=latest#positive">Positive News</a>
+        </div>
+      </section>
+
+      <section class="nav-card nav-card--weekly" aria-label="Weekly Briefing">
+        <span class="kicker">Sunday Edition</span>
+        <h2>Weekly Briefing</h2>
+        <p class="lead">
+          Curated learnings across science, discovery, arts, architecture, culture, history, and long-form essays — published every Sunday morning.
+        </p>
+        <a class="primary-cta" href="/weekly/?date=latest">
+          Open Weekly Briefing &rarr;
+        </a>
+        <div class="quick-links" aria-label="Weekly Briefing sections">
+          <a class="quick-chip" href="/weekly/?date=latest#overview">Overview</a>
+          <a class="quick-chip" href="/weekly/?date=latest#science">Science</a>
+          <a class="quick-chip" href="/weekly/?date=latest#culture">Culture &amp; Arts</a>
+          <a class="quick-chip" href="/weekly/?date=latest#history">History</a>
+          <a class="quick-chip" href="/weekly/?date=latest#longreads">Long Reads</a>
+          <a class="quick-chip" href="/weekly/?date=latest#pulse">Week in Brief</a>
+        </div>
+      </section>
+    </div>
   </main>
 
   <script>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Briefing — Science, Culture, Arts &amp; History</title>
+  <meta name="description" content="Automated Sunday weekly briefing curating scientific breakthroughs, cultural &amp; artistic learnings, historical deep context, and long-form essays.">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf8f5">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1d2430">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Weekly Briefing">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="icon" type="image/svg+xml" href="/briefing/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/briefing/favicon-32x32.png">
+  <link rel="shortcut icon" href="/briefing/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/briefing/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../briefing/styles.css?v=59">
+  <link rel="stylesheet" href="./styles.css?v=1">
+</head>
+<body class="weekly-page">
+  <header class="masthead" id="top">
+    <div class="container masthead-inner">
+      <div class="masthead-brand">
+        <div class="masthead-crumb-row">
+          <a href="../index.html" class="back-home" title="Back to main site">&larr; colintan.dev</a>
+          <span class="crumb-sep" aria-hidden="true">&middot;</span>
+          <a href="../briefing/?date=latest" class="back-home" title="Open Daily Briefing">Daily Briefing &rarr;</a>
+        </div>
+        <div class="title-row">
+          <h1>Weekly Briefing</h1>
+          <span class="edition-label" id="edition-date">Loading…</span>
+        </div>
+        <p class="masthead-sub" id="generated-meta">Loading latest Sunday edition…</p>
+      </div>
+
+      <div class="masthead-controls">
+        <button type="button" id="btn-expand-all" class="masthead-btn" aria-expanded="false" title="Expand or collapse all sections">
+          <span class="collapse-label">Expand All</span>
+          <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+        </button>
+
+        <div class="archive-nav" aria-label="Archive week navigation">
+          <button type="button" id="btn-prev-week" class="icon-btn" title="Previous week" aria-label="Previous week">&lsaquo;</button>
+          <select id="date-select" class="date-select" aria-label="Select weekly edition">
+            <option value="latest">Latest</option>
+          </select>
+          <button type="button" id="btn-next-week" class="icon-btn" title="Next week" aria-label="Next week">&rsaquo;</button>
+        </div>
+
+        <button type="button" id="btn-refresh" class="masthead-icon-btn" aria-label="Refresh weekly briefing" title="Refresh weekly briefing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
+        </button>
+
+        <button type="button" id="theme-toggle" class="masthead-icon-btn" aria-label="Toggle color theme" title="Toggle color theme"></button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="section-nav" aria-label="Weekly briefing sections">
+    <div class="container section-nav-inner">
+      <div class="nav-links">
+        <a href="#overview" class="active" aria-current="location">Overview</a>
+        <a href="#science">Science</a>
+        <a href="#culture">Culture &amp; Arts</a>
+        <a href="#history">History</a>
+        <a href="#longreads">Long Reads</a>
+        <a href="#pulse">Week in Brief</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container main-content" id="app-root">
+    <div id="status-banner" class="status-banner hidden" role="status"></div>
+
+    <!-- 1. Weekly Overview & Featured Quote -->
+    <section id="overview" class="section executive-section">
+      <article class="brief-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Sunday Digest</h2>
+          </div>
+          <span class="mode-tag" id="theme-tag"></span>
+        </div>
+        <ul class="executive-list" id="weekly-digest-list">
+          <li class="skeleton-line"></li>
+          <li class="skeleton-line"></li>
+          <li class="skeleton-line"></li>
+        </ul>
+      </article>
+
+      <aside class="quote-card hidden" id="featured-quote-card" aria-label="Quote or idea of the week"></aside>
+    </section>
+
+    <!-- 2. Science & Discovery -->
+    <section id="science" class="section">
+      <div class="section-header">
+        <div>
+          <h2>Science &amp; Discovery</h2>
+        </div>
+        <div class="section-actions">
+          <button type="button" class="collapse-btn" id="btn-toggle-science" aria-expanded="true" aria-controls="science-body">
+            <span class="collapse-label">Collapse</span>
+            <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+          </button>
+        </div>
+      </div>
+      <div id="science-body">
+        <p class="section-narrative" id="science-narrative"></p>
+        <div class="news-grid" id="science-grid"></div>
+      </div>
+    </section>
+
+    <!-- 3. Culture & Arts -->
+    <section id="culture" class="section">
+      <div class="section-header">
+        <div>
+          <h2>Culture &amp; Arts</h2>
+        </div>
+        <div class="section-actions">
+          <button type="button" class="collapse-btn" id="btn-toggle-culture" aria-expanded="true" aria-controls="culture-body">
+            <span class="collapse-label">Collapse</span>
+            <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+          </button>
+        </div>
+      </div>
+      <div id="culture-body">
+        <p class="section-narrative" id="culture-narrative"></p>
+        <div class="news-grid" id="culture-grid"></div>
+      </div>
+    </section>
+
+    <!-- 4. History & Deep Context -->
+    <section id="history" class="section">
+      <div class="section-header">
+        <div>
+          <h2>History &amp; Archaeology</h2>
+        </div>
+        <div class="section-actions">
+          <button type="button" class="collapse-btn" id="btn-toggle-history" aria-expanded="true" aria-controls="history-body">
+            <span class="collapse-label">Collapse</span>
+            <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+          </button>
+        </div>
+      </div>
+      <div id="history-body">
+        <p class="section-narrative" id="history-narrative"></p>
+        <div class="news-grid" id="history-grid"></div>
+
+        <div class="sub-block hidden" id="milestones-block">
+          <div class="sub-header">
+            <h3>This Week in History</h3>
+            <span class="sub-note" id="milestones-note">Notable anniversaries &amp; turning points</span>
+          </div>
+          <div class="history-timeline" id="history-timeline"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Long Reads & Ideas -->
+    <section id="longreads" class="section">
+      <div class="section-header">
+        <div>
+          <h2>Long Reads &amp; Essays</h2>
+        </div>
+        <div class="section-actions">
+          <button type="button" class="collapse-btn" id="btn-toggle-longreads" aria-expanded="false" aria-controls="longreads-body">
+            <span class="collapse-label">Expand</span>
+            <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+          </button>
+        </div>
+      </div>
+      <div id="longreads-body" class="hidden">
+        <div class="news-grid" id="longreads-grid"></div>
+      </div>
+    </section>
+
+    <!-- 6. Week in Brief (lightweight world/macro recap) -->
+    <section id="pulse" class="section">
+      <div class="section-header">
+        <div>
+          <h2>Week in Brief</h2>
+        </div>
+        <div class="section-actions">
+          <button type="button" class="collapse-btn" id="btn-toggle-pulse" aria-expanded="false" aria-controls="pulse-body">
+            <span class="collapse-label">Expand</span>
+            <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+          </button>
+        </div>
+      </div>
+      <div id="pulse-body" class="hidden">
+        <article class="brief-panel pulse-panel">
+          <ul class="executive-list" id="pulse-list"></ul>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>Automated weekly every Sunday via Antigravity. Curated from Quanta, Nature, Smithsonian, Archaeology, Aeon, Hyperallergic, Open Culture, and public essays.</p>
+      <div class="health-strip" id="source-health" aria-label="Data source status"></div>
+      <a href="#top">Back to top &uarr;</a>
+    </div>
+  </footer>
+
+  <script type="module" src="./app.js?v=1"></script>
+</body>
+</html>

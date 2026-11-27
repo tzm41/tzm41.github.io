@@ -19,13 +19,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=58">
+  <link rel="stylesheet" href="./styles.css?v=59">
 </head>
 <body>
   <header class="masthead" id="top">
     <div class="container masthead-inner">
       <div class="masthead-brand">
-        <a href="../index.html" class="back-home" title="Back to main site">&larr; colintan.dev</a>
+        <div class="masthead-crumb-row">
+          <a href="../index.html" class="back-home" title="Back to main site">&larr; colintan.dev</a>
+          <span class="crumb-sep" aria-hidden="true">&middot;</span>
+          <a href="../weekly/?date=latest" class="back-home" title="Open Weekly Briefing">Weekly Briefing &rarr;</a>
+        </div>
         <div class="title-row">
           <h1>Daily Briefing</h1>
           <span class="edition-label" id="edition-date">Loading…</span>
@@ -289,6 +293,6 @@
     </div>
   </footer>
 
-  <script type="module" src="./app.js?v=108"></script>
+  <script type="module" src="./app.js?v=109"></script>
 </body>
 </html>

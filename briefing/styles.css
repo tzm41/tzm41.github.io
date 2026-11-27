@@ -139,14 +139,29 @@ a {
   flex-wrap: wrap;
 }
 
+.masthead-crumb-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
 .back-home {
   display: inline-block;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--ink-muted);
-  margin-bottom: 4px;
+  margin-bottom: 0;
   transition: color 0.15s ease;
+}
+
+.crumb-sep {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--border-strong);
+  user-select: none;
 }
 
 .back-home:hover {

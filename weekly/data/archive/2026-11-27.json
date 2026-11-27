@@ -1,0 +1,385 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-11-27",
+  "week_label": "Nov 21 – 27, 2026",
+  "generated_at": "2026-11-27T08:02:07Z",
+  "theme_title": "Hidden Structures & Deep Time",
+  "digest": [
+    {
+      "text": "Mathematicians are scrutinizing **dual human- and AI-assisted proofs of the Riemann hypothesis**, while physicists expand precision experiments hunting for **ultralight dark matter**.",
+      "category": "Science",
+      "sentiment": "very_positive"
+    },
+    {
+      "text": "Recordings across 43 brain regions challenge decades of textbook neuroscience by showing **most neurons act as versatile multitaskers** rather than single-purpose specialists.",
+      "category": "Science",
+      "sentiment": "positive"
+    },
+    {
+      "text": "Museum exhibitions and digital archives highlight **the hidden craft of art and geometry** — from *M.C. Escher*'s self-taught hyperbolic worlds and *William Morris*'s textile paradox to empty antique picture frames taking center stage in Toronto.",
+      "category": "Culture & Arts",
+      "sentiment": "positive"
+    },
+    {
+      "text": "Archaeologists uncovered **subterranean tunnels beneath Istanbul's Hagia Sophia**, nearly 100 Acheulean hand axes in Botswana's Kalahari Desert, and a Ptolemaic limestone foundation in Alexandria.",
+      "category": "History",
+      "sentiment": "positive"
+    },
+    {
+      "text": "Long-form essays trace how **deep environmental and cultural memory shapes the present** — from *Dagomar Degroot* on millennia of El Niño disruptions to architect *Lina Ghotmeh*'s \"archaeology of the future.\"",
+      "category": "Long Reads",
+      "sentiment": "slightly_positive"
+    }
+  ],
+  "featured_quote": {
+    "quote": "We adore chaos because we love to produce order.",
+    "author": "M.C. Escher",
+    "context": "Dutch graphic artist whose intuitive geometry continues to inspire mathematicians and exhibitions today"
+  },
+  "science": {
+    "narrative": "This week's scientific learnings span the extremes of scale: probing invisible cosmic fields and millennia-old mathematical mysteries while overturning long-held assumptions about how neurons and cellular DNA repair operate.",
+    "items": [
+      {
+        "id": "sci-riemann-proofs",
+        "category": "Mathematics",
+        "discipline": "Number Theory",
+        "headline": "Dual Human and AI Proofs of the Riemann Hypothesis Enter Rigorous Peer Scrutiny",
+        "summary": "Mathematicians worldwide are examining **two separate proposed proofs of the 167-year-old Riemann hypothesis** — one human-written and one generated with AI assistance. Because the conjecture governs the distribution of prime numbers across mathematics and cryptography, specialists emphasize that line-by-line verification will take careful, independent checking.",
+        "takeaway": "Whether confirmed or refuted, **AI-assisted formal proof search** is moving from toy benchmarks into mathematics' deepest unsolved conjectures.",
+        "sentiment": "very_positive",
+        "sources": [
+          {
+            "name": "Nature",
+            "url": "https://www.nature.com/articles/d41586-026-03853-y"
+          }
+        ]
+      },
+      {
+        "id": "sci-ultralight-dark-matter",
+        "category": "Physics",
+        "discipline": "Cosmology",
+        "headline": "Novel Precision Experiments Expand the Hunt for 'Ultralight' Dark Matter",
+        "summary": "After decades of fruitless searches for heavy dark-matter particles, physicists are building **tabletop quantum sensors, atomic clocks, and resonant cavities to detect wave-like ultralight dark matter**. Rather than colliding like billiard balls, these wispy fields would gently oscillate fundamental constants and electromagnetic fields across galaxies.",
+        "takeaway": "Reframing dark matter from **rare particle collisions to continuous cosmic waves** opens a vast, previously unsearched slice of physics.",
+        "sentiment": "positive",
+        "sources": [
+          {
+            "name": "Quanta Magazine",
+            "url": "https://www.quantamagazine.org/novel-experiments-expand-the-hunt-for-ultralight-dark-matter-20261125/"
+          }
+        ]
+      },
+      {
+        "id": "sci-neurons-multitaskers",
+        "category": "Neuroscience",
+        "discipline": "Systems Biology",
+        "headline": "Brain-Wide Recordings Reveal Most Neurons Are Versatile Multitaskers",
+        "summary": "Analyzing neural activity across **43 regions of the mouse brain**, researchers found that while some cells remain narrowly tuned, **the majority of neurons participate flexibly across multiple sensory, motor, and cognitive tasks**. The findings challenge the classical textbook picture of cleanly segregated, single-function brain modules.",
+        "takeaway": "Intelligence in biological brains relies less on **rigid specialist circuits** and more on dynamic, overlapping coalitions of generalist cells.",
+        "sentiment": "positive",
+        "sources": [
+          {
+            "name": "ScienceDaily",
+            "url": "https://www.sciencedaily.com/releases/2026/11/261125045302.htm"
+          }
+        ]
+      },
+      {
+        "id": "sci-dna-repair-editing",
+        "category": "Biology",
+        "discipline": "Molecular Genetics",
+        "headline": "How Cells' Elegant DNA Repair Machinery Makes Modern Gene Editing Possible",
+        "summary": "Every cell endures thousands of physical DNA breaks daily yet preserves genetic continuity through **an intricate suite of natural molecular repair pathways**. Rather than inventing editing from scratch, CRISPR and newer precision editors hijack these ancient cellular repair enzymes to rewrite sequences cleanly.",
+        "takeaway": "Gene editing is fundamentally **a collaboration with billions of years of evolved cellular error-correction**.",
+        "sentiment": "positive",
+        "sources": [
+          {
+            "name": "Quanta Magazine",
+            "url": "https://www.quantamagazine.org/the-incredible-elegant-dna-repair-system-makes-gene-editing-work-20261123/"
+          }
+        ]
+      },
+      {
+        "id": "sci-euclid-comet",
+        "category": "Space",
+        "discipline": "Planetary Astronomy",
+        "headline": "ESA's Euclid Dark-Matter Telescope Unexpectedly Spots a Distant Long-Period Comet",
+        "summary": "Built to map billions of distant galaxies and probe dark energy, **ESA's Euclid space telescope has discovered its first previously unknown comet** roughly 1.3 billion kilometers from Earth. The icy visitor travels along an elongated orbit spanning thousands of years.",
+        "takeaway": "Wide-field deep-sky surveys built for cosmology routinely unlock **serendipitous discoveries inside our own solar system**.",
+        "sentiment": "positive",
+        "sources": [
+          {
+            "name": "ScienceDaily",
+            "url": "https://www.sciencedaily.com/releases/2026/11/261124055852.htm"
+          }
+        ]
+      }
+    ]
+  },
+  "culture": {
+    "narrative": "Across museums, craft studios, and interdisciplinary archives, this week's cultural stories celebrate how artistic mastery intersects with mathematics, astronomy, and the quiet framing devices we usually overlook.",
+    "items": [
+      {
+        "id": "cult-escher-math",
+        "category": "Visual Arts",
+        "discipline": "Art & Mathematics",
+        "headline": "How M.C. Escher's Self-Taught Vision Built Bizarre Mathematical Worlds",
+        "summary": "Though *M.C. Escher* had no formal mathematical training, a new exhibition highlights how **his intuitive tessellations, impossible staircases, and hyperbolic tilings anticipated and inspired formal mathematical research**. Decades later, geometers still credit his prints with giving visual intuition to non-Euclidean space and symmetry groups.",
+        "takeaway": "Deep visual experimentation can uncover **rigorous structural truths** long before equations formalize them.",
+        "sentiment": "very_positive",
+        "sources": [
+          {
+            "name": "Quanta Magazine",
+            "url": "https://www.quantamagazine.org/how-m-c-eschers-art-creates-bizarre-mathematical-worlds-20261118/"
+          }
+        ]
+      },
+      {
+        "id": "cult-ghent-altarpiece",
+        "category": "Art History",
+        "discipline": "Northern Renaissance",
+        "headline": "Zooming Inside the Ghent Altarpiece, One of the Most Detailed Paintings Ever Made",
+        "summary": "Ultra-high-resolution digital imaging allows viewers to inspect **microscopic brushwork, botanical specimens, and luminous oil glazes on the 1432 Ghent Altarpiece** at magnification impossible inside a cathedral or museum. The restoration archive reveals how *Jan van Eyck* and *Hubert van Eyck* pioneered optical realism in early oil painting.",
+        "takeaway": "Gigapixel art conservation turns centuries-old masterpieces into **living scientific and historical lenses**.",
+        "sentiment": "positive",
+        "sources": [
+          {
+            "name": "Open Culture",
+            "url": "https://www.openculture.com/2026/11/behold-the-most-detailed-painting-in-history-the-ghent-altarpiece.html"
+          }
+        ]
+      },
+      {
+        "id": "cult-william-morris",
+        "category": "Design & Craft",
+        "discipline": "Arts & Crafts Movement",
+        "headline": "William Morris's Textiles and the Enduring Tension Between Craft and Accessibility",
+        "summary": "The 19th-century British designer *William Morris* championed beauty as a universal human right, yet **the labor-intensive handcraft required for his intricate botanical textiles priced out the very working people he hoped to reach**. Fresh curatorial re-examinations trace how that paradox still haunts sustainable design today.",
+        "takeaway": "*William Morris*'s dilemma remains central to modern design: **how to honor skilled human craft without making beauty exclusive**.",
+        "sentiment": "neutral",
+        "sources": [
+          {
+            "name": "Smithsonian",
+            "url": "https://www.smithsonianmag.com/arts-culture/intricate-textile-designs-william-morris-bring-conflict-concepts-art-accessibility-180989837/"
+          }
+        ]
+      },
+      {
+        "id": "cult-empty-frames",
+        "category": "Museums",
+        "discipline": "Decorative Arts",
+        "headline": "Art Gallery of Ontario Displays 37 Empty Picture Frames to Spotlight Forgotten Craft",
+        "summary": "By removing the paintings altogether, a bold exhibition at the Art Gallery of Ontario in Canada puts **37 carved, gilded, and hand-joined historical frames under the gallery lights**. The show reveals how frame-makers shaped the lighting, proportion, and social meaning of European and North American art.",
+        "takeaway": "Shifting focus from the centerpiece to its border uncovers **an entire lineage of anonymous sculptural craftsmanship**.",
+        "sentiment": "positive",
+        "sources": [
+          {
+            "name": "Smithsonian",
+            "url": "https://www.smithsonianmag.com/history/why-are-all-37-of-the-picture-frames-in-this-exhibition-empty-the-frames-themselves-are-the-stars-of-the-show-180989860/"
+          }
+        ]
+      },
+      {
+        "id": "cult-astronomy-art",
+        "category": "Interdisciplinary",
+        "discipline": "Art & Astronomy",
+        "headline": "Astronomers and Art Historians Team Up to Decode Celestial Clues in Classic Paintings",
+        "summary": "By cross-referencing historical star charts, eclipses, and twilight atmospheric optics against brushwork, **astronomers and art historians are pinning down exact dates, locations, and real sky events captured in famous paintings and literature** — even distinguishing painted stars from centuries of dust.",
+        "takeaway": "Great artworks double as **accidental observational records of skies and climates from centuries past**.",
+        "sentiment": "positive",
+        "sources": [
+          {
+            "name": "Smithsonian",
+            "url": "https://www.smithsonianmag.com/arts-culture/how-astronomers-art-historians-working-together-identify-inspiration-behind-famous-works-art-180989649/"
+          }
+        ]
+      }
+    ]
+  },
+  "history": {
+    "narrative": "Excavations from Istanbul and Alexandria to Botswana's Kalahari Desert reveal physical layers of human ingenuity, while 19th-century archival satire shows how cities have always argued over their architectural heritage.",
+    "items": [
+      {
+        "id": "hist-hagia-sophia-tunnels",
+        "category": "Archaeology",
+        "discipline": "Byzantine Architecture",
+        "headline": "Archaeologists Clear 3,000 Tons of Debris to Reveal Tunnels Beneath Hagia Sophia",
+        "summary": "Conservation teams in Istanbul, Turkey, have removed roughly **3,000 tons of accumulated earth and rubble from subterranean passages beneath the 6th-century Hagia Sophia**. Clearing the hidden vaults helps engineers protect the monument's drainage and ventilation while shedding light on Byzantine underground construction.",
+        "takeaway": "Even the world's most studied monuments conceal **living structural networks engineered fifteen centuries ago**.",
+        "sentiment": "positive",
+        "sources": [
+          {
+            "name": "Archaeology",
+            "url": "https://archaeology.org/news/2026/11/24/tunnels-underneath-hagia-sophia-excavated/"
+          }
+        ]
+      },
+      {
+        "id": "hist-kalahari-handaxes",
+        "category": "Prehistory",
+        "discipline": "Paleolithic Africa",
+        "headline": "Nearly 100 Acheulean Hand Axes Uncovered in Botswana's Kalahari Desert",
+        "summary": "Fieldwork in the Okwa Valley of Botswana has recovered **close to 100 bifacial Acheulean stone hand axes** from what is now arid Kalahari terrain. The dense assemblage points to ancient wetter phases when early human ancestors gathered and manufactured durable toolkits along seasonal waterways.",
+        "takeaway": "Today's deserts frequently preserve **the richest archives of early human adaptation across shifting ancient climates**.",
+        "sentiment": "positive",
+        "sources": [
+          {
+            "name": "Archaeology",
+            "url": "https://archaeology.org/news/2026/11/25/acheulean-handaxes-found-in-kalahari-desert/"
+          }
+        ]
+      },
+      {
+        "id": "hist-alexandria-ptolemaic",
+        "category": "Archaeology",
+        "discipline": "Hellenistic Egypt",
+        "headline": "Ptolemaic Limestone Foundation and Subterranean Tunnel Unearthed in Alexandria",
+        "summary": "Excavations in Alexandria, Egypt, have revealed **a monumental limestone-block foundation paired with an underground tunnel dating to the Ptolemaic dynasty**. The discovery adds a fresh piece to the urban grid of the ancient Mediterranean capital founded after *Alexander the Great*.",
+        "takeaway": "Beneath modern Alexandria, Hellenistic infrastructure continues to emerge **block by block from beneath centuries of urban layering**.",
+        "sentiment": "positive",
+        "sources": [
+          {
+            "name": "Archaeology",
+            "url": "https://archaeology.org/news/2026/11/25/ptolemaic-foundation-unearthed-in-alexandria/"
+          }
+        ]
+      },
+      {
+        "id": "hist-athens-churches-1854",
+        "category": "Archives",
+        "discipline": "19th-Century Europe",
+        "headline": "Bickering Buildings: When an 1854 Athenian Newspaper Let the City's Churches Argue",
+        "summary": "In 1854, an anonymous Greek satirist published **a lively newspaper dialogue in which the churches of Athens bickered over architectural taste, foreign neoclassical influence, and national identity**. Historian *Nikos Magouliotis* revisits the text to illuminate how newly independent Greece negotiated between Byzantine memory and European modernity.",
+        "takeaway": "Historical satire often preserves **public anxieties about urban heritage far more vividly than official architectural treaties**.",
+        "sentiment": "slightly_positive",
+        "sources": [
+          {
+            "name": "Public Domain Review",
+            "url": "https://publicdomainreview.org/essay/bickering-buildings"
+          }
+        ]
+      }
+    ]
+  },
+  "this_week_in_history": [
+    {
+      "year": "1783",
+      "date_label": "Nov 21",
+      "title": "First Untethered Human Flight Over Paris",
+      "summary": "*Jean-François Pilâtre de Rozier* and the *Marquis d'Arlandes* drifted five miles across Paris in a paper-and-silk Montgolfier hot-air balloon, inaugurating **the age of human aviation**."
+    },
+    {
+      "year": "1859",
+      "date_label": "Nov 24",
+      "title": "Darwin Publishes 'On the Origin of Species'",
+      "summary": "*Charles Darwin* released his landmark treatise on natural selection in London, selling out its initial print run and **unifying all of biology under common descent**."
+    },
+    {
+      "year": "1915",
+      "date_label": "Nov 25",
+      "title": "Einstein Completes General Relativity",
+      "summary": "*Albert Einstein* presented the final field equations of general relativity to the Prussian Academy of Sciences in Berlin, reframing gravity as **the curvature of spacetime itself**."
+    },
+    {
+      "year": "1922",
+      "date_label": "Nov 26",
+      "title": "Howard Carter Peers Into Tutankhamun's Tomb",
+      "summary": "Holding a candle to a small breach in Egypt's Valley of the Kings, archaeologist *Howard Carter* answered *Lord Carnarvon*'s question with **\"Yes, wonderful things!\"** — revealing the nearly intact royal burial."
+    }
+  ],
+  "long_reads": [
+    {
+      "id": "lr-el-nino-millennia",
+      "topic": "Environmental History",
+      "reading_time": "14 min read",
+      "headline": "A Colossal Oscillation: How El Niño Has Shaped Human Civilizations for Millennia",
+      "summary": "Historian *Dagomar Degroot* traces how **Pacific El Niño swings repeatedly toppled harvests, redirected empires, and sparked social adaptation** across ancient Peru, Asia, and Europe. Looking backward offers grounded lessons for navigating an era of amplified climate volatility.",
+      "sources": [
+        {
+          "name": "Aeon",
+          "url": "https://aeon.co/essays/what-can-we-learn-from-the-past-experience-of-el-nino"
+        }
+      ]
+    },
+    {
+      "id": "lr-lina-ghotmeh",
+      "topic": "Architecture",
+      "reading_time": "10 min watch",
+      "headline": "Lina Ghotmeh and the 'Archaeology of the Future'",
+      "summary": "Lebanese-born architect *Lina Ghotmeh* explains how **excavating a site's cultural memory, local earth, and historical scars produces buildings that heal rather than erase**. Her practice reframes contemporary architecture as a deeply rooted dialogue with place.",
+      "sources": [
+        {
+          "name": "Aeon",
+          "url": "https://aeon.co/videos/a-lebanese-architects-mission-to-build-structures-that-heal"
+        }
+      ]
+    },
+    {
+      "id": "lr-wunderkammer",
+      "topic": "Museum History",
+      "reading_time": "9 min watch",
+      "headline": "Wunderkammer: How Cabinets of Curiosity Invented the Modern Museum",
+      "summary": "From nautilus shells and clockwork automata to narwhal tusks passed off as unicorn horns, **early modern Europe's curiosity cabinets mixed art, natural science, and wonder in a single room**. This short documentary traces how those eclectic private collections evolved into today's public museums.",
+      "sources": [
+        {
+          "name": "Aeon",
+          "url": "https://aeon.co/videos/how-curiosity-cabinets-paved-the-way-for-modern-museums"
+        }
+      ]
+    },
+    {
+      "id": "lr-ancient-philosophy-map",
+      "topic": "Philosophy",
+      "reading_time": "12 min read",
+      "headline": "The Map of Ancient Philosophy: Connecting Socrates, Confucius, and the Buddha",
+      "summary": "Science communicator *Dominic Walliman* charts **how ancient Greek, Indian, and Chinese philosophical traditions emerged in parallel** and branched into ethics, metaphysics, and political thought. The visual synthesis makes centuries of cross-cultural intellectual lineage graspable at a glance.",
+      "sources": [
+        {
+          "name": "Open Culture",
+          "url": "https://www.openculture.com/2026/11/the-map-of-ancient-philosophy.html"
+        }
+      ]
+    },
+    {
+      "id": "lr-mental-illness-culture",
+      "topic": "Psychology & Culture",
+      "reading_time": "15 min read",
+      "headline": "Is Mental Illness Universal or Shaped by Culture?",
+      "summary": "Writer *Alexander Pereira* explores the long-running psychiatric debate over **which patterns of psychological distress transcend borders and which are sculpted by language, ritual, and community**. The essay challenges purely biomedical models with rich cross-cultural case histories.",
+      "sources": [
+        {
+          "name": "Aeon",
+          "url": "https://aeon.co/essays/are-mental-illnesses-universal-or-are-they-culturally-specific"
+        }
+      ]
+    }
+  ],
+  "week_in_brief": [
+    {
+      "text": "Europe's Hera spacecraft revealed **a stadium-sized crater on asteroid Dimorphos** left by NASA's DART planetary-defense impact test, confirming kinetic deflection physics.",
+      "category": "Tech",
+      "sentiment": "positive"
+    },
+    {
+      "text": "Nvidia paused select AI chip shipments to Southeast Asia amid **tightening semiconductor export controls**, underscoring ongoing supply-chain realignments.",
+      "category": "Economy",
+      "sentiment": "slightly_negative"
+    },
+    {
+      "text": "Argentina enacted a monetary guardrail **barring its central bank from printing money to finance government spending** as part of its inflation-curbing overhaul.",
+      "category": "Policy",
+      "sentiment": "neutral"
+    },
+    {
+      "text": "Severe Thanksgiving winter storms swept across parts of the United States, **cutting power to nearly one million customers** and snarling holiday travel.",
+      "category": "Climate",
+      "sentiment": "negative"
+    }
+  ],
+  "source_health": {
+    "science": "ok",
+    "culture": "ok",
+    "history": "ok",
+    "long_reads": "ok"
+  }
+}

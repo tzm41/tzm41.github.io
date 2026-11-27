@@ -1,0 +1,207 @@
+/* ==========================================================================
+   Weekly Briefing — Editorial Overrides (inherits ../briefing/styles.css)
+   ========================================================================== */
+
+:root {
+  --accent: #2c5d6b;
+  --accent-soft: rgba(44, 93, 107, 0.1);
+}
+
+[data-theme="dark"] {
+  --accent: #6ab7cc;
+  --accent-soft: rgba(106, 183, 204, 0.15);
+}
+
+/* Quote / Idea of the Week callout */
+.quote-card {
+  margin-top: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.quote-card-kicker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.quote-card blockquote {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.48;
+  color: var(--ink);
+}
+
+.quote-card-meta {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+  font-size: 12.5px;
+  color: var(--ink-secondary);
+}
+
+.quote-card-author {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.quote-card-context {
+  color: var(--ink-muted);
+}
+
+/* Discipline & reading-time tags on weekly cards */
+.discipline-tag,
+.reading-time-tag {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.weekly-card-top-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Takeaway / Why it matters strip inside learning cards */
+.weekly-takeaway {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  background: var(--surface-subtle);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+.weekly-takeaway-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-right: 6px;
+}
+
+/* This Week in History timeline */
+.history-timeline {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.history-milestone {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 13px 15px;
+  box-shadow: var(--shadow-sm);
+}
+
+.milestone-year-col {
+  flex-shrink: 0;
+  min-width: 62px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px 8px;
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.milestone-year {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.15;
+}
+
+.milestone-date {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+}
+
+.milestone-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.milestone-title {
+  margin: 0 0 4px;
+  font-family: var(--font-serif);
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.milestone-summary {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+/* Week in Brief panel */
+.pulse-panel {
+  border-top-width: 1px;
+  border-top-color: var(--border);
+}
+
+/* Keep section-narrative hidden cleanly when empty */
+.section-narrative:empty {
+  display: none;
+}
+
+@media (max-width: 780px) {
+  .history-timeline {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .quote-card {
+    padding: 14px 16px;
+  }
+
+  .quote-card blockquote {
+    font-size: 16.5px;
+  }
+
+  .history-milestone {
+    padding: 12px 13px;
+    gap: 10px;
+  }
+}
