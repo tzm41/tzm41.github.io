@@ -20,9 +20,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
   <script src="../shared/theme-boot.js"></script>
-  <link rel="stylesheet" href="../shared/tokens.css?v=1">
+  <link rel="stylesheet" href="../shared/tokens.css?v=2">
   <link rel="stylesheet" href="../shared/auth.css?v=1">
-  <link rel="stylesheet" href="../shared/briefing-base.css?v=1">
+  <link rel="stylesheet" href="../shared/briefing-base.css?v=2">
   <link rel="stylesheet" href="./styles.css?v=9">
 </head>
 <body class="weekly-page">
@@ -38,7 +38,17 @@
         </div>
         <div class="title-row">
           <h1>Weekly Briefing</h1>
-          <span class="edition-label" id="edition-date">Loading…</span>
+          <div class="edition-picker" aria-label="Archive week navigation">
+            <button type="button" id="btn-prev-week" class="edition-step-btn" title="Previous week" aria-label="Previous week">&lsaquo;</button>
+            <span class="edition-select-wrap" title="Select weekly edition">
+              <span class="edition-label" id="edition-date">Loading…</span>
+              <span class="edition-caret" aria-hidden="true">&#9662;</span>
+              <select id="date-select" class="edition-native-select" aria-label="Select weekly edition">
+                <option value="latest">Latest</option>
+              </select>
+            </span>
+            <button type="button" id="btn-next-week" class="edition-step-btn" title="Next week" aria-label="Next week">&rsaquo;</button>
+          </div>
         </div>
         <p class="masthead-sub" id="generated-meta">Loading latest Sunday edition…</p>
       </div>
@@ -48,14 +58,6 @@
           <span class="collapse-label">Expand All</span>
           <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
         </button>
-
-        <div class="archive-nav" aria-label="Archive week navigation">
-          <button type="button" id="btn-prev-week" class="icon-btn" title="Previous week" aria-label="Previous week">&lsaquo;</button>
-          <select id="date-select" class="date-select" aria-label="Select weekly edition">
-            <option value="latest">Latest</option>
-          </select>
-          <button type="button" id="btn-next-week" class="icon-btn" title="Next week" aria-label="Next week">&rsaquo;</button>
-        </div>
 
         <button type="button" id="btn-refresh" class="masthead-icon-btn" aria-label="Refresh weekly briefing" title="Refresh weekly briefing">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
