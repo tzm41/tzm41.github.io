@@ -1422,3 +1422,9 @@ h3 {
     padding: 18px;
   }
 }
+
+@media (max-width: 600px) {
+  .title-suffix {
+    display: none;
+  }
+}

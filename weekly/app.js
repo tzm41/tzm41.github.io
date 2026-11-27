@@ -153,8 +153,7 @@ function collectEditionTexts(ed) {
 /* ---------- Renderers ---------- */
 
 function renderHeader(ed) {
-  const label = ed.week_label || fmtReadableDate(ed.date);
-  els.editionDate.textContent = label;
+  els.editionDate.textContent = fmtReadableDate(ed.date);
   const themeSuffix = ed.theme_title ? ` · Theme: ${ed.theme_title}` : "";
   els.generatedMeta.textContent = `Published ${fmtLocalTimestamp(ed.generated_at)}${themeSuffix}`;
 }
