@@ -7,7 +7,7 @@ import { PLACE_ALIASES, PLACE_META, initCountryMapTooltip } from "./country-map.
 import { BIAS_TONE_COLOR, buildHalfRingSvg, initSourceBiasPopover } from "./ui.js";
 import { escapeHtml, escapeRegex, fetchJson } from "./utils.js";
 
-export const EXPLICIT_BOLD_RE = /\*\*((?:(?!\*\*).)+)\*\*/g;
+export const EXPLICIT_BOLD_RE = /\*\*((?:(?!\*\*(?!\*)).)+?)\*\*(?!\*)/g;
 export const FALLBACK_HIGHLIGHT_RE =
   /(?<![\w.$])([+-]?\$\d[\d,]*(?:\.\d+)?(?:\s?(?:million|billion|trillion|M|B|K))?|[+-]?\d[\d,]*(?:\.\d+)?%|\b\d{1,3}(?:,\d{3})+(?:\.\d+)?\b)(?!\w)|(['"][A-Z][^'"]{1,40}['"])/g;
 export const EXPLICIT_ITALIC_RE = /(?<!\*)\*([^*\n]+)\*(?!\*)/g;
