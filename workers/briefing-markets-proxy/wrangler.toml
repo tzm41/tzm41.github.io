@@ -2,6 +2,14 @@ name = "briefing-markets-proxy"
 main = "worker.js"
 compatibility_date = "2026-01-01"
 
+routes = [
+  { pattern = "colintan.dev/s/*", zone_name = "colintan.dev" },
+  { pattern = "colintan.dev/briefing", zone_name = "colintan.dev" },
+  { pattern = "colintan.dev/briefing/", zone_name = "colintan.dev" },
+  { pattern = "colintan.dev/weekly", zone_name = "colintan.dev" },
+  { pattern = "colintan.dev/weekly/", zone_name = "colintan.dev" },
+]
+
 [triggers]
 crons = ["*/5 * * * *", "3 */2 * * *", "20 14,21 * * 1-5"]
 
