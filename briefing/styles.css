@@ -278,17 +278,6 @@ a {
   }
 }
 
-.masthead-controls .segmented {
-  height: 32px;
-  align-items: stretch;
-}
-
-.masthead-controls .seg-btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 0 10px;
-}
-
 .archive-nav {
   display: inline-flex;
   align-items: stretch;
@@ -449,17 +438,6 @@ a {
   padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 18px;
-}
-
-.kicker {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--accent);
-  margin-bottom: 2px;
 }
 
 h2 {
@@ -998,10 +976,6 @@ h3 {
   border-top-color: var(--warn);
 }
 
-.afternoon-kicker {
-  color: var(--warn);
-}
-
 .panel-header {
   display: flex;
   align-items: flex-start;
@@ -1256,25 +1230,24 @@ h3 {
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
 }
 
-.news-card:hover > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
-.news-card:focus-within > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
-.news-card.bm-card-revealed > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
-.positive-card:hover > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
-.positive-card:focus-within > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
-.positive-card.bm-card-revealed > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
-.geo-fact-popover:hover > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
-.geo-fact-popover:focus-within > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
-.geo-fact-popover.bm-card-revealed > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
-.geo-mobile-card:hover > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
-.geo-mobile-card:focus-within > .bookmark-btn:not(.is-saved):not(.is-bookmarked),
-.geo-mobile-card.bm-card-revealed > .bookmark-btn:not(.is-saved):not(.is-bookmarked) {
+.news-card:hover > .bookmark-btn:not(.is-saved),
+.news-card:focus-within > .bookmark-btn:not(.is-saved),
+.news-card.bm-card-revealed > .bookmark-btn:not(.is-saved),
+.positive-card:hover > .bookmark-btn:not(.is-saved),
+.positive-card:focus-within > .bookmark-btn:not(.is-saved),
+.positive-card.bm-card-revealed > .bookmark-btn:not(.is-saved),
+.geo-fact-popover:hover > .bookmark-btn:not(.is-saved),
+.geo-fact-popover:focus-within > .bookmark-btn:not(.is-saved),
+.geo-fact-popover.bm-card-revealed > .bookmark-btn:not(.is-saved),
+.geo-mobile-card:hover > .bookmark-btn:not(.is-saved),
+.geo-mobile-card:focus-within > .bookmark-btn:not(.is-saved),
+.geo-mobile-card.bm-card-revealed > .bookmark-btn:not(.is-saved) {
   opacity: 0.78;
   pointer-events: auto;
   transform: translateY(-10px);
 }
 
-.bookmark-btn.is-saved,
-.bookmark-btn.is-bookmarked {
+.bookmark-btn.is-saved {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(-10px);
@@ -1282,9 +1255,7 @@ h3 {
 }
 
 .bookmark-btn.is-saved svg,
-.bookmark-btn.is-saved svg path,
-.bookmark-btn.is-bookmarked svg,
-.bookmark-btn.is-bookmarked svg path {
+.bookmark-btn.is-saved svg path {
   fill: currentColor;
 }
 
@@ -1307,8 +1278,7 @@ h3 {
 .geo-mobile-card:hover > .bookmark-btn:hover,
 .geo-mobile-card:focus-within > .bookmark-btn:focus-visible,
 .geo-mobile-card.bm-card-revealed > .bookmark-btn:hover,
-.bookmark-btn.is-saved:hover,
-.bookmark-btn.is-bookmarked:hover {
+.bookmark-btn.is-saved:hover {
   opacity: 1;
   color: var(--accent);
   transform: translateY(-4px);
@@ -1694,27 +1664,6 @@ h3 {
 
 .live-dot.stale {
   background: var(--neg);
-}
-
-.regime-badge {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--neutral-badge);
-  color: var(--ink);
-}
-
-.regime-badge.risk-on {
-  background: var(--pos-soft);
-  color: var(--pos);
-}
-
-.regime-badge.risk-off,
-.regime-badge.volatility-spike {
-  background: var(--neg-soft);
-  color: var(--neg);
 }
 
 .segmented {
@@ -2522,10 +2471,6 @@ h3 {
 }
 
 /* ---------- Positive News ---------- */
-
-.positive-kicker {
-  color: var(--pos);
-}
 
 .positive-grid {
   display: grid;

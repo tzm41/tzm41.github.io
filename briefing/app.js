@@ -2,7 +2,7 @@
  * Daily Briefing Dashboard — Client Application (Zero-Build ES Module)
  */
 
-import { initCountryMapTooltip } from "./country-map.js?v=15";
+import { initCountryMapTooltip } from "./country-map.js";
 import {
   escapeHtml,
   safeUrl,
@@ -19,7 +19,7 @@ import {
   SENTIMENT_LABELS,
   inferSentimentFromText,
   renderSentimentRing,
-} from "../shared/ui.js?v=4";
+} from "../shared/ui.js";
 import {
   COMPANY_LOGOS,
   renderCompanyLogoImg,
@@ -27,7 +27,7 @@ import {
   buildPersonNameRegexFromTexts,
   createEntityFormatter,
   initFloatingTooltips,
-} from "../shared/entities.js?v=5";
+} from "../shared/entities.js";
 import {
   makeBookmarkKey,
   buildBookmarkRecord,
@@ -37,12 +37,12 @@ import {
   syncBookmarkButtons,
   bindBookmarkToggle,
   onBookmarksChange,
-} from "../shared/bookmarks.js?v=2";
+} from "../shared/bookmarks.js";
 import {
   initAuth,
   getLocalPreferences,
   setPreference,
-} from "../shared/auth.js?v=2";
+} from "../shared/auth.js";
 
 const DATA_BASE = "./data";
 
@@ -90,7 +90,6 @@ const els = {
   afternoonList: document.getElementById("afternoon-list"),
   newsFilters: document.getElementById("news-filters"),
   newsGrid: document.getElementById("news-grid"),
-  marketRegime: document.getElementById("market-regime"),
   marketsLivePill: document.getElementById("markets-live-pill"),
   marketNarrative: document.getElementById("market-narrative"),
   fearGreedCard: document.getElementById("fear-greed-card"),
@@ -978,12 +977,6 @@ function renderSectorHeatmap(markets = {}) {
 }
 
 function renderMarkets(markets = {}) {
-  if (els.marketRegime) {
-    const regime = markets.regime_tag || "Mixed";
-    const regimeSlug = regime.toLowerCase().replace(/\s+/g, "-");
-    els.marketRegime.textContent = regime;
-    els.marketRegime.className = `regime-badge ${regimeSlug}`;
-  }
   els.marketNarrative.innerHTML = highlightSummaryHtml(markets.narrative || "");
 
   const tf = state.marketTimeframe;
@@ -1465,41 +1458,6 @@ async function fetchViaPublicCorsFallback(symbols) {
   };
 }
 
-async function fetchClientLiveQuotes(symbols, force = false) {
-  if (!symbols.length) return null;
-
-  // Primary: Cloudflare Worker (strictly rate-limited to <= 3 fetches / symbol / 5 min)
-  if (canCallCloudflare(symbols)) {
-    try {
-      recordCloudflareFetch(symbols);
-      const ctrl = new AbortController();
-      const timer = window.setTimeout(() => ctrl.abort(), 8000);
-      const url = `${CF_MARKETS_PROXY_URL}?symbols=${encodeURIComponent(symbols.join(","))}${
-        force ? "&force=1" : ""
-      }`;
-      const resp = await fetch(url, { signal: ctrl.signal, cache: "no-store" });
-      window.clearTimeout(timer);
-      if (resp.ok) {
-        const data = await resp.json();
-        if (data?.quotes && Object.keys(data.quotes).length > 0) {
-          return {
-            updated_at: data.updated_at || new Date().toISOString(),
-            fetched_at_ms: Date.now(),
-            source: "cloudflare",
-            quotes: data.quotes,
-          };
-        }
-      }
-      // On HTTP 429 (Worker rate limit reached) or 5xx, fall through to Option 3 public CORS fallback
-    } catch {
-      // Network/CORS failure -> fall through to Option 3 public CORS fallback
-    }
-  }
-
-  // Fallback (Option 3): Public CORS relay
-  return fetchViaPublicCorsFallback(symbols);
-}
-
 const NY_PARTS_FMT = new Intl.DateTimeFormat("en-US", {
   timeZone: "America/New_York",
   weekday: "short",
@@ -1769,9 +1727,9 @@ async function loadBriefingForDate(dateStr) {
     if (els.dateSelect.value !== selectVal) {
       els.dateSelect.value = selectVal;
     }
-    const qs = new URLSearchParams(window.location.search);
-    qs.set("date", isLatest ? "latest" : data.date);
-    window.history.replaceState(null, "", `?${qs.toString()}`);
+    const target = new URL(window.location.href);
+    target.searchParams.set("date", isLatest ? "latest" : data.date);
+    window.history.replaceState(null, "", target);
 
     updateArchiveButtons();
     state.priorBriefing = null;
@@ -2126,7 +2084,6 @@ async function bootstrap() {
   els.btnMovePositive?.addEventListener("click", () => {
     const cur = localStorage.getItem("briefing-positive-pos") || "bottom";
     const next = cur === "top" ? "bottom" : "top";
-    localStorage.setItem("briefing-positive-pos", next);
     setPreference("positive_pos", next);
     applyPositivePlacement(next);
     els.positiveSection?.scrollIntoView({ behavior: "smooth", block: "start" });

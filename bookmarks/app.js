@@ -7,7 +7,7 @@
  * 4. Memoized rich <article> DOM nodes in Map<key, entry> for <2ms filter/sort switching
  */
 
-import { initCountryMapTooltip } from "../briefing/country-map.js?v=15";
+import { initCountryMapTooltip } from "../briefing/country-map.js";
 import {
   escapeHtml,
   safeUrl,
@@ -19,14 +19,14 @@ import {
   SENTIMENT_LABELS,
   inferSentimentFromText,
   renderSentimentRing,
-} from "../shared/ui.js?v=4";
+} from "../shared/ui.js";
 import {
   DEFAULT_PERSON_NAME_RE,
   buildPersonNameRegexFromTexts,
   createEntityFormatter,
   initFloatingTooltips,
   renderCountryFlagImg,
-} from "../shared/entities.js?v=5";
+} from "../shared/entities.js";
 import {
   ARCHIVE_TTL_DAYS,
   makeBookmarkKey,
@@ -36,8 +36,8 @@ import {
   renderBookmarkButton,
   bindBookmarkToggle,
   onBookmarksChange,
-} from "../shared/bookmarks.js?v=2";
-import { initAuth, setPreference, getSyncState, onSyncStatusChange } from "../shared/auth.js?v=3";
+} from "../shared/bookmarks.js";
+import { initAuth, setPreference, getSyncState, onSyncStatusChange } from "../shared/auth.js";
 
 const BRIEFING_DATA = "../briefing/data";
 const WEEKLY_DATA = "../weekly/data";

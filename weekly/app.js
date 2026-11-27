@@ -3,7 +3,7 @@
  * Inherits UI, theme, entity, Wikipedia link, and tooltip engines from ../shared/
  */
 
-import { initCountryMapTooltip, loadWorldAtlas } from "../briefing/country-map.js?v=15";
+import { initCountryMapTooltip, loadWorldAtlas } from "../briefing/country-map.js";
 import {
   escapeHtml,
   safeUrl,
@@ -17,14 +17,14 @@ import {
   renderHashedTag,
   initSourceBiasPopover,
   renderSentimentRing,
-} from "../shared/ui.js?v=4";
+} from "../shared/ui.js";
 import {
   DEFAULT_PERSON_NAME_RE,
   buildPersonNameRegexFromTexts,
   createEntityFormatter,
   initFloatingTooltips,
   renderCountryFlagImg,
-} from "../shared/entities.js?v=5";
+} from "../shared/entities.js";
 import {
   makeBookmarkKey,
   buildBookmarkRecord,
@@ -34,12 +34,12 @@ import {
   syncBookmarkButtons,
   bindBookmarkToggle,
   onBookmarksChange,
-} from "../shared/bookmarks.js?v=2";
+} from "../shared/bookmarks.js";
 import {
   initAuth,
   getLocalPreferences,
   setPreference,
-} from "../shared/auth.js?v=2";
+} from "../shared/auth.js";
 
 const DATA_BASE = "./data";
 const SHARED_DATA_BASE = "../briefing/data";
@@ -174,7 +174,7 @@ function renderBriefBullets(bullets = []) {
 function renderDigest(ed) {
   const bullets = ed.digest || [];
   if (!bullets.length) {
-    els.digestList.innerHTML = `<li class="empty-note">No weekly digest bullets available for this edition.</li>`;
+    els.digestList.innerHTML = `<li class="empty-state">No weekly digest bullets available for this edition.</li>`;
     return;
   }
   els.digestList.innerHTML = renderBriefBullets(bullets);
@@ -280,7 +280,7 @@ function renderLearningSection(secData, narrativeEl, gridEl, emptyMsg, sectionNa
   const items = secData?.items || [];
   narrativeEl.innerHTML = narrative ? highlightSummaryHtml(narrative) : "";
   if (!items.length) {
-    gridEl.innerHTML = `<p class="empty-note">${escapeHtml(emptyMsg)}</p>`;
+    gridEl.innerHTML = `<p class="empty-state">${escapeHtml(emptyMsg)}</p>`;
     return;
   }
   gridEl.innerHTML = items.map((item) => renderLearningCard(item, sectionName)).join("");
@@ -717,7 +717,7 @@ function renderAroundTheWorld(ed) {
 function renderLongReads(ed) {
   const items = ed.long_reads || [];
   if (!items.length) {
-    els.longreadsGrid.innerHTML = `<p class="empty-note">No long reads curated for this edition.</p>`;
+    els.longreadsGrid.innerHTML = `<p class="empty-state">No long reads curated for this edition.</p>`;
     return;
   }
   els.longreadsGrid.innerHTML = items
@@ -760,7 +760,7 @@ function renderLongReads(ed) {
 function renderWeekInBrief(ed) {
   const items = ed.week_in_brief || [];
   if (!items.length) {
-    els.pulseList.innerHTML = `<li class="empty-note">No macro recap available for this week.</li>`;
+    els.pulseList.innerHTML = `<li class="empty-state">No macro recap available for this week.</li>`;
     return;
   }
   els.pulseList.innerHTML = renderBriefBullets(items);
@@ -776,7 +776,7 @@ function renderSourceHealth(health = {}) {
   els.sourceHealth.innerHTML = entries
     .map(([label, status]) => {
       const cls = status === "ok" ? "ok" : status === "partial" ? "partial" : "failed";
-      return `<span class="health-pill ${cls}" title="${label}: ${status || "unknown"}"><span class="dot"></span>${label}</span>`;
+      return `<span class="health-item" title="${label}: ${status || "unknown"}"><span class="health-dot ${cls}"></span>${label}</span>`;
     })
     .join("");
 }
@@ -841,7 +841,7 @@ async function loadEdition(dateOrLatest = "latest", pushUrl = true) {
     const isLatest = !dateOrLatest || dateOrLatest === "latest";
     state.viewingLatest = isLatest;
     const url = isLatest
-      ? `${DATA_BASE}/latest.json?t=${Date.now()}`
+      ? `${DATA_BASE}/latest.json`
       : `${DATA_BASE}/archive/${encodeURIComponent(dateOrLatest)}.json`;
 
     const ed = await fetchJson(url);
@@ -951,11 +951,6 @@ async function bootstrap() {
         showToast("Bookmark limit reached. Remove an older bookmark to save more."),
     }
   );
-  appRoot?.addEventListener("click", (e) => {
-    if (e.target.closest?.(".bookmark-btn")) {
-      e.stopPropagation();
-    }
-  });
   updateNavBookmarksCount();
   onBookmarksChange(() => {
     updateNavBookmarksCount();
@@ -1014,7 +1009,7 @@ async function bootstrap() {
     els.btnRefresh.disabled = true;
     els.btnRefresh.classList.add("is-spinning");
     try {
-      const idxData = await fetchJson(`${DATA_BASE}/index.json?t=${Date.now()}`);
+      const idxData = await fetchJson(`${DATA_BASE}/index.json`);
       state.index = idxData;
       populateDateSelect(idxData);
       await loadEdition(state.viewingLatest ? "latest" : state.currentDate, false);
@@ -1030,7 +1025,7 @@ async function bootstrap() {
   const [factsRes, leadersRes, idxRes] = await Promise.allSettled([
     fetchJson(`${SHARED_DATA_BASE}/company_facts.json`),
     fetchJson(`${SHARED_DATA_BASE}/country_leaders.json`),
-    fetchJson(`${DATA_BASE}/index.json?t=${Date.now()}`),
+    fetchJson(`${DATA_BASE}/index.json`),
   ]);
 
   if (factsRes.status === "fulfilled") state.companyFacts = factsRes.value;

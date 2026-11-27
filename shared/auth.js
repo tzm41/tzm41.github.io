@@ -12,8 +12,8 @@ import {
   mergeFromRemote,
   onBookmarksChange,
   registerSyncAdapter,
-} from "./bookmarks.js?v=1";
-import { escapeHtml } from "./ui.js?v=4";
+} from "./bookmarks.js";
+import { escapeHtml } from "./ui.js";
 
 export const API_BASE = "https://briefing-markets-proxy.tzm41.workers.dev";
 export const GOOGLE_CLIENT_ID =
