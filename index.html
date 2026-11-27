@@ -174,25 +174,16 @@
       --card-accent: var(--weekly-accent);
     }
 
-    .kicker {
-      display: block;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--card-accent, var(--accent));
-      margin-bottom: 6px;
-    }
-
     h1,
     h2 {
       margin: 0;
-      font-family: var(--font-serif);
-      font-size: 32px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1.2;
+      color: var(--card-accent, var(--accent));
     }
 
     .lead {
@@ -241,7 +232,7 @@
 
       h1,
       h2 {
-        font-size: 27px;
+        font-size: 18px;
       }
     }
   </style>
@@ -258,9 +249,8 @@
 
   <main class="center-stage">
     <div class="hub-grid" aria-label="Primary publications">
-      <section class="nav-card" aria-label="Daily Briefing">
-        <span class="kicker">Daily Edition</span>
-        <h1>Daily Briefing</h1>
+      <section class="nav-card" aria-label="Daily Edition">
+        <h1>Daily Edition</h1>
         <p class="lead">
           Top world news, stock markets &amp; Magnificent 7 trends, global conflict tracker, US politics pulse, local news, and daily bright spots.
         </p>
@@ -269,9 +259,8 @@
         </a>
       </section>
 
-      <section class="nav-card nav-card--weekly" aria-label="Weekly Briefing">
-        <span class="kicker">Sunday Edition</span>
-        <h2>Weekly Briefing</h2>
+      <section class="nav-card nav-card--weekly" aria-label="Weekly Edition">
+        <h2>Weekly Edition</h2>
         <p class="lead">
           Curated learnings across science, discovery, arts, architecture, culture, history, and long-form essays — published every Sunday morning.
         </p>
