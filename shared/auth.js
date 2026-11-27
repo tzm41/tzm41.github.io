@@ -841,9 +841,11 @@ function ensureFallbackStyles() {
   style.textContent = `
 :where(.auth-widget) { position: relative; display: inline-flex; align-items: center; }
 :where(.auth-signin-btn) { gap: 6px; }
-:where(.auth-avatar-btn) { width: 32px; height: 32px; padding: 0; border-radius: 50%; border: 1px solid var(--border, #e4dfd6); background: var(--surface-subtle, #f3f0ea); color: var(--ink, #181a1f); font-family: var(--font-mono, monospace); font-size: 11.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; transition: border-color .15s ease; }
+:where(.auth-avatar-btn) { width: 32px; height: 32px; padding: 3px; border-radius: 50%; border: 1px solid var(--border-strong, #cfc8bc); background: var(--surface, #fff); color: var(--ink, #181a1f); font-family: var(--font-mono, monospace); font-size: 10.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; transition: border-color .15s ease; }
 :where(.auth-avatar-btn:hover) { border-color: var(--accent, #a63a2b); }
-:where(.auth-avatar-img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+:where(.auth-avatar-img) { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; transition: filter .15s ease; }
+:where([data-theme="dark"] .auth-avatar-img) { filter: brightness(0.84) contrast(0.96); }
+:where([data-theme="dark"] .auth-avatar-btn:hover .auth-avatar-img) { filter: brightness(0.94); }
 :where(.auth-popover, .auth-menu) { position: absolute; top: calc(100% + 8px); right: 0; z-index: 90; width: 268px; max-width: calc(100vw - 24px); background: var(--surface, #fff); color: var(--ink, #181a1f); border: 1px solid var(--border-strong, #cfc8bc); border-radius: var(--radius, 8px); box-shadow: var(--shadow-md, 0 4px 14px rgba(0,0,0,.1)); padding: 12px; }
 :where(.auth-popover-title) { font-size: 13px; font-weight: 600; margin: 0 0 8px; }
 :where(.auth-gis-slot) { min-height: 44px; display: flex; align-items: center; justify-content: center; }

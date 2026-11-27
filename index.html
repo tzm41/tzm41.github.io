@@ -187,13 +187,13 @@
       justify-content: center;
       width: 32px;
       height: 32px;
-      padding: 0;
+      padding: 3px;
       border-radius: 50%;
       border: 1px solid var(--border-strong);
-      background: var(--surface-subtle);
+      background: var(--surface);
       color: var(--ink);
       font-family: var(--font-mono);
-      font-size: 11.5px;
+      font-size: 10.5px;
       font-weight: 600;
       cursor: pointer;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -211,6 +211,28 @@
       border-radius: 50%;
       object-fit: cover;
       display: block;
+      transition: filter 0.15s ease;
+    }
+
+    .auth-avatar-initials {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: var(--surface-subtle);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    [data-theme="dark"] .auth-avatar-btn img,
+    [data-theme="dark"] .auth-avatar-img {
+      filter: brightness(0.84) contrast(0.96);
+    }
+
+    [data-theme="dark"] .auth-avatar-btn:hover img,
+    [data-theme="dark"] .auth-avatar-btn:hover .auth-avatar-img {
+      filter: brightness(0.94);
     }
 
     .auth-sync-dot {
