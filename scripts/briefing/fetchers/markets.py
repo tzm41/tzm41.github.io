@@ -208,7 +208,7 @@ def _download_timeframes(
     with ThreadPoolExecutor(max_workers=3) as pool:
         fut_5d_daily = pool.submit(_download_df, all_daily_symbols, "5d", "1d")
         fut_5d_1h = pool.submit(_download_df, quote_symbols, "5d", "1h") if include_intraday else None
-        fut_1d_30m = pool.submit(_download_df, quote_symbols, "2d", "30m", True) if include_intraday else None
+        fut_1d_15m = pool.submit(_download_df, quote_symbols, "2d", "15m", True) if include_intraday else None
 
         df_5d_daily = fut_5d_daily.result()
 
@@ -233,7 +233,7 @@ def _download_timeframes(
 
         df_45d = _download_df(need_45d, "45d", "1d") if need_45d else None
         df_5d = fut_5d_1h.result() if fut_5d_1h else None
-        df_1d = fut_1d_30m.result() if fut_1d_30m else None
+        df_1d = fut_1d_15m.result() if fut_1d_15m else None
 
     if stitched_30d:
         print(f"[markets] Reused cached 30D history for {len(stitched_30d)}/{len(all_daily_symbols)} symbols.")
@@ -264,7 +264,7 @@ def _download_timeframes(
             cutoff = s.index[-1] - pd.Timedelta(hours=24)
             sliced = s[s.index >= cutoff]
             if len(sliced) < 2:
-                sliced = s.iloc[-48:]
+                sliced = s.iloc[-96:]
             return [round(float(x), 2) for x in sliced.tolist()], [_fmt_iso_utc(ts) for ts in sliced.index]
         idx_ny = (
             s.index.tz_convert("America/New_York")
@@ -287,7 +287,7 @@ def _download_timeframes(
                 sliced = cand
                 break
         if len(sliced) < 2:
-            sliced = s.iloc[-14:]
+            sliced = s.iloc[-28:]
         return [round(float(x), 2) for x in sliced.tolist()], [_fmt_iso_utc(ts) for ts in sliced.index]
 
     return {"1d": get_1d, "5d": get_5d, "30d": get_30d}

@@ -1723,7 +1723,7 @@ function renderMarkets(markets = {}) {
       els.big7Block.classList.remove("hidden");
       if (els.big7Label) {
         const big7Sub = {
-          "1d": "Mega-cap tech leaders (1D change · 30m chart)",
+          "1d": "Mega-cap tech leaders (1D change · 15m chart)",
           "5d": "Mega-cap tech leaders (5D change · 1h chart)",
           "30d": "Mega-cap tech leaders (30D change · daily chart)",
         };
