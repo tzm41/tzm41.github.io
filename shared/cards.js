@@ -23,8 +23,8 @@ export function renderBriefBullets(
       return `
         <li>
           <span class="exec-meta">
-            ${renderSentimentRing(sentiment, useFallbackSentiment ? text : "")}
             ${renderHashedTag(category)}
+            ${renderSentimentRing(sentiment, useFallbackSentiment ? text : "")}
           </span>
           <span class="exec-text">${highlightSummaryHtml(text)}</span>
         </li>
