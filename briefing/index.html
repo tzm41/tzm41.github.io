@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://briefing-markets-proxy.tzm41.workers.dev https://accounts.google.com https://cdn.jsdelivr.net https://query1.finance.yahoo.com https://corsproxy.io https://api.allorigins.win; frame-src https://accounts.google.com; object-src 'none'; base-uri 'self';">
   <title>Daily Briefing — News, Markets, Conflicts &amp; US Politics</title>
   <meta name="description" content="Automated daily intelligence briefing aggregating top world news, stock market &amp; sector trends, global conflict trackers, and US politics signals.">
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf8f5">
@@ -20,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=59">
+  <link rel="stylesheet" href="./styles.css?v=61">
 </head>
 <body>
   <header class="masthead" id="top">
@@ -30,6 +31,8 @@
           <a href="../index.html" class="back-home" title="Back to main site">&larr; colintan.dev</a>
           <span class="crumb-sep" aria-hidden="true">&middot;</span>
           <a href="../weekly/?date=latest" class="back-home" title="Open Weekly Briefing">Weekly Briefing &rarr;</a>
+          <span class="crumb-sep" aria-hidden="true">&middot;</span>
+          <a href="../bookmarks/" class="back-home" title="Open Saved Bookmarks">Bookmarks<span class="crumb-count hidden" id="nav-bookmarks-count"></span></a>
         </div>
         <div class="title-row">
           <h1>Daily Briefing</h1>
@@ -57,6 +60,7 @@
         </button>
 
         <button type="button" id="theme-toggle" class="masthead-icon-btn" aria-label="Toggle color theme" title="Toggle color theme"></button>
+        <div id="auth-mount" class="auth-mount"></div>
       </div>
     </div>
   </header>
@@ -294,6 +298,6 @@
     </div>
   </footer>
 
-  <script type="module" src="./app.js?v=110"></script>
+  <script type="module" src="./app.js?v=112"></script>
 </body>
 </html>

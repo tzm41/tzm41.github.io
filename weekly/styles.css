@@ -440,6 +440,13 @@
   margin-bottom: 6px;
 }
 
+.geo-fact-head-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
 .geo-fact-loc-row {
   display: flex;
   align-items: center;

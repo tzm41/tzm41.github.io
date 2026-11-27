@@ -1,5 +1,6 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
+  "archive_ttl_days": 364,
   "date": "2026-11-27",
   "week_label": "Nov 21 – 27, 2026",
   "generated_at": "2026-11-27T08:02:07Z",
@@ -263,24 +264,28 @@
   },
   "this_week_in_history": [
     {
+      "id": "milestone-1783-first-untethered-human-flight-over-paris-a97627",
       "year": "1783",
       "date_label": "Nov 21",
       "title": "First Untethered Human Flight Over Paris",
       "summary": "*Jean-François Pilâtre de Rozier* and the *Marquis d'Arlandes* drifted five miles across Paris in a paper-and-silk Montgolfier hot-air balloon, inaugurating **the age of human aviation**."
     },
     {
+      "id": "milestone-1859-darwin-publishes-on-the-origin-of-species-605c30",
       "year": "1859",
       "date_label": "Nov 24",
       "title": "Darwin Publishes 'On the Origin of Species'",
       "summary": "*Charles Darwin* released his landmark treatise on natural selection in London, selling out its initial print run and **unifying all of biology under common descent**."
     },
     {
+      "id": "milestone-1915-einstein-completes-general-relativity-47c9bd",
       "year": "1915",
       "date_label": "Nov 25",
       "title": "Einstein Completes General Relativity",
       "summary": "*Albert Einstein* presented the final field equations of general relativity to the Prussian Academy of Sciences in Berlin, reframing gravity as **the curvature of spacetime itself**."
     },
     {
+      "id": "milestone-1922-howard-carter-peers-into-tutankhamun-s-tomb-04245a",
       "year": "1922",
       "date_label": "Nov 26",
       "title": "Howard Carter Peers Into Tutankhamun's Tomb",

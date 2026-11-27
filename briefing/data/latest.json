@@ -1,4 +1,6 @@
 {
+  "schema_version": "1.1",
+  "archive_ttl_days": 60,
   "date": "2026-11-26",
   "generated_at": "2026-11-27T01:01:13Z",
   "synthesis_mode": "gemini",

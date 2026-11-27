@@ -4,7 +4,7 @@
  */
 
 import { PLACE_ALIASES, PLACE_META } from "../briefing/country-map.js?v=15";
-import { BIAS_TONE_COLOR, buildHalfRingSvg, escapeHtml, escapeRegex } from "./ui.js?v=1";
+import { BIAS_TONE_COLOR, buildHalfRingSvg, escapeHtml, escapeRegex } from "./ui.js?v=4";
 
 export const EXPLICIT_BOLD_RE = /\*\*((?:(?!\*\*).)+)\*\*/g;
 export const FALLBACK_HIGHLIGHT_RE =
@@ -192,12 +192,12 @@ export function buildPersonNameRegexFromTexts(texts = [], companyFacts = null) {
 
 export function renderCompanyLogoImg(domain) {
   const src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
-  return `<img class="inline-logo" src="${src}" width="14" height="14" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
+  return `<img class="inline-logo" src="${src}" width="14" height="14" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
 }
 
 export function renderCountryFlagImg(code) {
   const src = `https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/flags/4x3/${encodeURIComponent(code)}.svg`;
-  return `<img class="inline-flag-icon" src="${src}" width="16" height="12" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">`;
+  return `<img class="inline-flag-icon" src="${src}" width="16" height="12" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
 }
 
 export function glueIconWithText(iconHtml, text) {
@@ -437,7 +437,21 @@ export function buildEntityWikiUrl(el, getCompanyFacts = () => null) {
   return "";
 }
 
+let inlineImgErrorBound = false;
+
 export function initFloatingTooltips(getCompanyFacts = () => null) {
+  if (!inlineImgErrorBound && typeof document !== "undefined") {
+    inlineImgErrorBound = true;
+    document.addEventListener(
+      "error",
+      (e) => {
+        if (e.target?.matches?.(".inline-logo, .inline-flag-icon")) {
+          e.target.style.display = "none";
+        }
+      },
+      true
+    );
+  }
   const tip = document.createElement("div");
   tip.className = "floating-tip hidden";
   tip.setAttribute("role", "tooltip");

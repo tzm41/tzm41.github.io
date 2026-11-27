@@ -1,0 +1,1075 @@
+/**
+ * Dedicated Bookmarks Page (/bookmarks/)
+ * Performance-first progressive hydration:
+ * 1. T=0 synchronous preview render from localStorage
+ * 2. Parallel index.json + company_facts + country_leaders fetch (0 wasted 404s)
+ * 3. Concurrency-5 deduplicated archive hydration with immediate full-JSON discard
+ * 4. Memoized rich <article> DOM nodes in Map<key, entry> for <2ms filter/sort switching
+ */
+
+import { initCountryMapTooltip } from "../briefing/country-map.js?v=15";
+import {
+  escapeHtml,
+  safeUrl,
+  fmtShortDate,
+  initTheme,
+  renderSourceChip,
+  renderHashedTag,
+  initSourceBiasPopover,
+  SENTIMENT_LABELS,
+  inferSentimentFromText,
+  renderSentimentRing,
+} from "../shared/ui.js?v=4";
+import {
+  DEFAULT_PERSON_NAME_RE,
+  buildPersonNameRegexFromTexts,
+  createEntityFormatter,
+  initFloatingTooltips,
+  renderCountryFlagImg,
+} from "../shared/entities.js?v=5";
+import {
+  ARCHIVE_TTL_DAYS,
+  makeBookmarkKey,
+  computeBookmarkTtl,
+  getBookmarks,
+  clearExpiredBookmarks,
+  renderBookmarkButton,
+  bindBookmarkToggle,
+  onBookmarksChange,
+} from "../shared/bookmarks.js?v=1";
+import { initAuth, setPreference } from "../shared/auth.js?v=2";
+
+const BRIEFING_DATA = "../briefing/data";
+const WEEKLY_DATA = "../weekly/data";
+const PAGE_SIZE = 24;
+const HYDRATE_CONCURRENCY = 5;
+
+const state = {
+  filter: "all", // "all" | "daily" | "weekly" | "around_the_world" | "expiring"
+  sort: "saved_desc", // "saved_desc" | "date_desc" | "expiry_asc"
+  visibleLimit: PAGE_SIZE,
+  indicesLoaded: false,
+  availableDates: {
+    daily: null, // Set<string> | null
+    weekly: null,
+  },
+  latestDates: {
+    daily: "",
+    weekly: "",
+  },
+  ttlOverrides: {
+    daily: ARCHIVE_TTL_DAYS.daily,
+    weekly: ARCHIVE_TTL_DAYS.weekly,
+  },
+  companyFacts: null,
+  countryLeaders: null,
+  /** @type {Map<string, { key: string, record: object, el: HTMLElement, ttl: object, hydrated: boolean, extracted: object|null, lang: string }>} */
+  cardCache: new Map(),
+  inFlightArchives: new Set(),
+  fetchedArchives: new Set(),
+};
+
+const els = {
+  appRoot: document.getElementById("app-root"),
+  countLabel: document.getElementById("bookmarks-count-label"),
+  sortSelect: document.getElementById("bookmarks-sort"),
+  btnClearExpired: document.getElementById("btn-clear-expired"),
+  btnClearExpiredSection: document.getElementById("btn-clear-expired-section"),
+  themeToggle: document.getElementById("theme-toggle"),
+  authMount: document.getElementById("auth-mount"),
+  filterBar: document.getElementById("bookmarks-filter-bar"),
+  expiryBanner: document.getElementById("expiry-banner"),
+  emptyState: document.getElementById("bookmarks-empty"),
+  availableSection: document.getElementById("available-section"),
+  grid: document.getElementById("bookmarks-grid"),
+  loadMoreWrap: document.getElementById("load-more-wrap"),
+  btnLoadMore: document.getElementById("btn-load-more"),
+  expiredSection: document.getElementById("expired-section"),
+  expiredCountNote: document.getElementById("expired-count-note"),
+  expiredGrid: document.getElementById("expired-grid"),
+};
+
+/* ---------- Formatting Helpers ---------- */
+
+function fmtCoords(lat, lon) {
+  const ns = lat >= 0 ? "N" : "S";
+  const ew = lon >= 0 ? "E" : "W";
+  return `${Math.abs(lat).toFixed(1)}°${ns}, ${Math.abs(lon).toFixed(1)}°${ew}`;
+}
+
+function sectionAnchor(edition, section) {
+  if (edition === "daily") {
+    if (section === "local_news") return "#local-news";
+    if (section === "positive_news") return "#positive";
+    return "#news";
+  }
+  if (section === "around_the_world") return "#around-world";
+  if (section === "long_reads") return "#longreads";
+  if (section === "science" || section === "culture" || section === "history") {
+    return `#${section}`;
+  }
+  return "#overview";
+}
+
+function buildEditionHref(record) {
+  const base = record.edition === "weekly" ? "../weekly/" : "../briefing/";
+  const anchor = sectionAnchor(record.edition, record.section);
+  return `${base}?date=${encodeURIComponent(record.date)}${anchor}`;
+}
+
+function sectionDisplayLabel(record) {
+  const map = {
+    top_news: "Top News",
+    local_news: "Local News",
+    positive_news: "Positive News",
+    science: "Science",
+    culture: "Culture & Arts",
+    history: "History",
+    long_reads: "Long Reads",
+    around_the_world: "Around the World",
+  };
+  return map[record.section] || record.section;
+}
+
+function ttlBarClass(status) {
+  if (status === "expired") return "is-expired";
+  if (status === "expiring_soon") return "is-warn";
+  return "is-active";
+}
+
+function renderOriginRowHtml(record, key) {
+  const isWeekly = record.edition === "weekly";
+  const edBadgeCls = isWeekly ? "is-weekly" : "is-daily";
+  const edLabel = isWeekly ? "Weekly" : "Daily";
+  const dateLabel = fmtShortDate(record.date) || record.date;
+  const href = buildEditionHref(record);
+  return `
+    <div class="bm-origin-row">
+      <div class="bm-origin-left">
+        <span class="bm-edition-badge ${edBadgeCls}">${edLabel}</span>
+        <a class="bm-origin-link" href="${escapeHtml(href)}">${escapeHtml(dateLabel)} &middot; ${escapeHtml(sectionDisplayLabel(record))}</a>
+      </div>
+      ${renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" })}
+    </div>
+  `;
+}
+
+function renderTtlBarHtml(ttl) {
+  return `
+    <div class="bm-ttl-bar ${ttlBarClass(ttl.status)}">
+      <span class="bm-ttl-text">
+        <span class="bm-ttl-dot" aria-hidden="true"></span>
+        <span>${escapeHtml(ttl.label)}</span>
+      </span>
+    </div>
+  `;
+}
+
+function computeEntryTtl(record) {
+  const availSet = state.availableDates[record.edition] || null;
+  return computeBookmarkTtl(record, {
+    ttlOverrides: state.ttlOverrides,
+    availableDatesSet: availSet,
+  });
+}
+
+/* ---------- Card Builders (Preview, Fallback, Full Rich) ---------- */
+
+function buildPreviewCardHtml(entry) {
+  const { key, record, ttl } = entry;
+  const safeHref = safeUrl(record.url);
+  const titleHtml =
+    safeHref !== "#"
+      ? `<a href="${safeHref}" target="_blank" rel="noopener noreferrer">${escapeHtml(record.title || "Saved story")}</a>`
+      : escapeHtml(record.title || "Saved story");
+  const badgeHtml = record.badge ? `<span class="cat-pill">${escapeHtml(record.badge)}</span>` : "";
+  const sourceChip =
+    record.source && safeHref !== "#"
+      ? renderSourceChip({ name: record.source, url: record.url })
+      : record.source
+      ? `<span class="source-chip">${escapeHtml(record.source)}</span>`
+      : "";
+
+  return `
+    ${renderOriginRowHtml(record, key)}
+    ${badgeHtml ? `<div class="news-meta"><div class="news-card-badges">${badgeHtml}</div></div>` : ""}
+    <h3>${titleHtml}</h3>
+    <div class="bm-shimmer-group" aria-hidden="true">
+      <div class="bm-shimmer"></div>
+      <div class="bm-shimmer"></div>
+      <div class="bm-shimmer is-short"></div>
+    </div>
+    ${sourceChip ? `<div class="source-links">${sourceChip}</div>` : ""}
+    ${renderTtlBarHtml(ttl)}
+  `;
+}
+
+function buildFallbackCardHtml(entry, noteText = "") {
+  const { key, record, ttl } = entry;
+  const safeHref = safeUrl(record.url);
+  const titleHtml =
+    safeHref !== "#"
+      ? `<a href="${safeHref}" target="_blank" rel="noopener noreferrer">${escapeHtml(record.title || "Saved story")}</a>`
+      : escapeHtml(record.title || "Saved story");
+  const badgeHtml = record.badge ? `<span class="cat-pill">${escapeHtml(record.badge)}</span>` : "";
+  const sourceChip =
+    safeHref !== "#"
+      ? renderSourceChip({ name: record.source || "Open original article", url: record.url })
+      : record.source
+      ? `<span class="source-chip">${escapeHtml(record.source)}</span>`
+      : "";
+
+  const fallbackNote =
+    noteText ||
+    (ttl.status === "expired"
+      ? "This briefing edition has rotated out of the archive. Use the saved link below to read the original source."
+      : "Full archived card details were unavailable; showing saved headline and source link.");
+
+  return `
+    ${renderOriginRowHtml(record, key)}
+    ${badgeHtml ? `<div class="news-meta"><div class="news-card-badges">${badgeHtml}</div></div>` : ""}
+    <h3>${titleHtml}</h3>
+    <p class="bm-fallback-note">${escapeHtml(fallbackNote)}</p>
+    ${sourceChip ? `<div class="source-links">${sourceChip}</div>` : ""}
+    ${renderTtlBarHtml(ttl)}
+  `;
+}
+
+function buildFormatterForTexts(texts, pillCompaniesInSummary) {
+  const personRe =
+    texts.some((t) => typeof t === "string" && t.includes("*")) || state.companyFacts
+      ? buildPersonNameRegexFromTexts(texts, state.companyFacts)
+      : DEFAULT_PERSON_NAME_RE;
+  return createEntityFormatter({
+    getPersonRe: () => personRe,
+    pillCompaniesInSummary,
+  });
+}
+
+function buildRichCardHtml(entry) {
+  const { key, record, ttl, extracted } = entry;
+  if (!extracted) return buildFallbackCardHtml(entry);
+
+  // 1. Daily: top_news
+  if (record.edition === "daily" && record.section === "top_news") {
+    const story = extracted.story;
+    const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
+      [story.headline, story.summary, story.why_it_matters],
+      true
+    );
+    const sentiment =
+      story.sentiment && SENTIMENT_LABELS[story.sentiment] && story.sentiment !== "neutral"
+        ? story.sentiment
+        : inferSentimentFromText(`${story.headline || ""} ${story.summary || ""}`);
+    const editionPill = story.is_afternoon
+      ? `<span class="afternoon-pill" title="Added in Afternoon Update">Afternoon</span>`
+      : `<span class="morning-pill" title="Published in Morning Briefing">Morning</span>`;
+    const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
+
+    return `
+      ${renderOriginRowHtml(record, key)}
+      <div class="news-meta">
+        <div class="news-card-badges">
+          <span class="cat-pill">${escapeHtml(story.category || record.badge || "News")}</span>
+          ${renderSentimentRing(sentiment)}
+          ${editionPill}
+        </div>
+      </div>
+      <h3>${formatEntitiesInPlain(story.headline)}</h3>
+      <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
+      ${story.why_it_matters ? `<div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>` : ""}
+      ${sourcesHtml ? `<div class="source-links">${sourcesHtml}</div>` : ""}
+      ${renderTtlBarHtml(ttl)}
+    `;
+  }
+
+  // 2. Daily: local_news (with inline bilingual 中文|EN toggle when available)
+  if (record.edition === "daily" && record.section === "local_news") {
+    const hasNative = Boolean(extracted.storyNative);
+    const hasEn = Boolean(extracted.storyEn);
+    const isBilingual = hasNative && hasEn;
+    const useEn = isBilingual ? entry.lang !== "native" : hasEn;
+    const story = useEn ? extracted.storyEn : extracted.storyNative;
+    const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
+      [story.headline, story.summary, story.why_it_matters],
+      true
+    );
+    const sentiment =
+      story.sentiment && SENTIMENT_LABELS[story.sentiment] && story.sentiment !== "neutral"
+        ? story.sentiment
+        : inferSentimentFromText(`${story.headline || ""} ${story.summary || ""}`);
+    const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
+    const langToggleHtml = isBilingual
+      ? `
+        <div class="bm-lang-toggle" role="group" aria-label="Story language" data-lang-key="${escapeHtml(key)}">
+          <button type="button" class="bm-lang-btn${!useEn ? " active" : ""}" data-lang="native" aria-pressed="${!useEn}">中文</button>
+          <button type="button" class="bm-lang-btn${useEn ? " active" : ""}" data-lang="en" aria-pressed="${useEn}">EN</button>
+        </div>
+      `
+      : "";
+
+    return `
+      ${renderOriginRowHtml(record, key)}
+      <div class="news-meta">
+        <div class="news-card-badges">
+          <span class="cat-pill">${escapeHtml(extracted.regionName || record.badge || "Local")}</span>
+          ${renderSentimentRing(sentiment)}
+        </div>
+        ${langToggleHtml}
+      </div>
+      <h3>${formatEntitiesInPlain(story.headline)}</h3>
+      <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
+      ${story.why_it_matters ? `<div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>` : ""}
+      ${sourcesHtml ? `<div class="source-links">${sourcesHtml}</div>` : ""}
+      ${renderTtlBarHtml(ttl)}
+    `;
+  }
+
+  // 3. Daily: positive_news
+  if (record.edition === "daily" && record.section === "positive_news") {
+    const story = extracted.story;
+    const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
+      [story.headline, story.summary, story.why_it_matters],
+      true
+    );
+    const posSentiment =
+      story.sentiment && SENTIMENT_LABELS[story.sentiment] && story.sentiment !== "neutral"
+        ? story.sentiment
+        : "very_positive";
+    const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
+
+    return `
+      ${renderOriginRowHtml(record, key)}
+      <div class="news-meta">
+        <div class="news-card-badges">
+          <span class="cat-pill">${escapeHtml(story.category || "Progress")}</span>
+          ${renderSentimentRing(posSentiment)}
+        </div>
+      </div>
+      <h3>${formatEntitiesInPlain(story.headline)}</h3>
+      <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
+      ${story.why_it_matters ? `<div class="why-box"><strong>Why it matters:</strong> ${highlightSummaryHtml(story.why_it_matters)}</div>` : ""}
+      ${sourcesHtml ? `<div class="source-links">${sourcesHtml}</div>` : ""}
+      ${renderTtlBarHtml(ttl)}
+    `;
+  }
+
+  // 4. Weekly: science / culture / history
+  if (
+    record.edition === "weekly" &&
+    (record.section === "science" || record.section === "culture" || record.section === "history")
+  ) {
+    const item = extracted.item;
+    const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
+      [item.headline, item.summary, item.takeaway],
+      false
+    );
+    const headlineUrl = safeUrl(item.sources?.[0]?.url);
+    const headlineHtml =
+      headlineUrl !== "#"
+        ? `<a href="${headlineUrl}" target="_blank" rel="noopener noreferrer">${formatEntitiesInPlain(item.headline)}</a>`
+        : formatEntitiesInPlain(item.headline);
+    const sourcesHtml = (item.sources || []).slice(0, 3).map(renderSourceChip).join("");
+    const ringHtml = renderSentimentRing(item.sentiment, `${item.headline || ""} ${item.summary || ""}`);
+    const disciplineHtml = item.discipline
+      ? `<span class="discipline-tag">${escapeHtml(item.discipline)}</span>`
+      : "";
+    const takeawayHtml = item.takeaway
+      ? `<p class="weekly-takeaway"><span class="weekly-takeaway-label">Takeaway</span>${highlightSummaryHtml(item.takeaway)}</p>`
+      : "";
+
+    return `
+      ${renderOriginRowHtml(record, key)}
+      <div class="news-meta">
+        <div class="news-card-badges">
+          ${renderHashedTag(item.category || "Learning")}
+          ${ringHtml}
+        </div>
+        ${disciplineHtml}
+      </div>
+      <h3>${headlineHtml}</h3>
+      <p class="news-summary">${highlightSummaryHtml(item.summary)}</p>
+      ${takeawayHtml}
+      ${sourcesHtml ? `<div class="source-links">${sourcesHtml}</div>` : ""}
+      ${renderTtlBarHtml(ttl)}
+    `;
+  }
+
+  // 5. Weekly: long_reads
+  if (record.edition === "weekly" && record.section === "long_reads") {
+    const lr = extracted.item;
+    const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
+      [lr.headline, lr.summary],
+      false
+    );
+    const headlineUrl = safeUrl(lr.sources?.[0]?.url);
+    const headlineHtml =
+      headlineUrl !== "#"
+        ? `<a href="${headlineUrl}" target="_blank" rel="noopener noreferrer">${formatEntitiesInPlain(lr.headline)}</a>`
+        : formatEntitiesInPlain(lr.headline);
+    const sourcesHtml = (lr.sources || []).slice(0, 3).map(renderSourceChip).join("");
+    const timeHtml = lr.reading_time
+      ? `<span class="reading-time-tag">${escapeHtml(lr.reading_time)}</span>`
+      : "";
+
+    return `
+      ${renderOriginRowHtml(record, key)}
+      <div class="news-meta">
+        <div class="news-card-badges">
+          ${renderHashedTag(lr.topic || "Essay")}
+        </div>
+        ${timeHtml}
+      </div>
+      <h3>${headlineHtml}</h3>
+      <p class="news-summary">${highlightSummaryHtml(lr.summary)}</p>
+      ${sourcesHtml ? `<div class="source-links">${sourcesHtml}</div>` : ""}
+      ${renderTtlBarHtml(ttl)}
+    `;
+  }
+
+  // 6. Weekly: around_the_world (geology / cuisine)
+  if (record.edition === "weekly" && record.section === "around_the_world") {
+    const item = extracted.item;
+    const kind = item.kind === "cuisine" ? "cuisine" : "geology";
+    const kindLabel = kind === "cuisine" ? "Cuisine" : "Geology";
+    const flagHtml = item.country_code ? renderCountryFlagImg(item.country_code.toLowerCase()) : "";
+    const coords = fmtCoords(Number(item.lat ?? 0), Number(item.lon ?? 0));
+    const wikiTitle = item.wiki_title || item.place || "";
+    const wikiUrl = wikiTitle
+      ? `https://en.wikipedia.org/wiki/${encodeURIComponent(String(wikiTitle).replace(/ /g, "_"))}`
+      : "";
+    const { formatEntitiesInPlain, highlightSummaryHtml } = buildFormatterForTexts(
+      [item.place, item.region, item.title, item.fact],
+      false
+    );
+
+    return `
+      ${renderOriginRowHtml(record, key)}
+      <div class="news-meta">
+        <div class="news-card-badges">
+          <span class="geo-kind-badge is-${kind}">${kindLabel}</span>
+          ${renderHashedTag(item.feature_type || kindLabel)}
+        </div>
+      </div>
+      <div class="geo-fact-loc-row">
+        ${flagHtml}
+        <span class="geo-fact-place">${escapeHtml(item.place)}</span>
+        ${item.region ? `<span>&middot; ${escapeHtml(item.region)}</span>` : ""}
+        <span class="geo-fact-coords">(${escapeHtml(coords)})</span>
+      </div>
+      <h3>${formatEntitiesInPlain(item.title)}</h3>
+      <p class="news-summary">${highlightSummaryHtml(item.fact)}</p>
+      ${wikiUrl ? `<div class="source-links"><a class="geo-fact-wiki" href="${escapeHtml(wikiUrl)}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a></div>` : ""}
+      ${renderTtlBarHtml(ttl)}
+    `;
+  }
+
+  return buildFallbackCardHtml(entry);
+}
+
+function applyCardClasses(el, entry) {
+  const { record, ttl, extracted } = entry;
+  const classes = [];
+  if (record.edition === "daily" && record.section === "positive_news" && ttl.status !== "expired") {
+    classes.push("positive-card");
+  } else {
+    classes.push("news-card");
+  }
+  if (record.section === "around_the_world" && ttl.status !== "expired") {
+    const kind = (extracted?.item?.kind || record.kind) === "cuisine" ? "cuisine" : "geology";
+    classes.push("bm-geo-card", `is-${kind}`);
+  }
+  if (ttl.status === "expired") {
+    classes.push("bm-expired-card");
+  }
+  el.className = classes.join(" ");
+}
+
+function updateTtlBarInPlace(entry) {
+  const bar = entry.el.querySelector(".bm-ttl-bar");
+  if (!bar) return;
+  bar.className = `bm-ttl-bar ${ttlBarClass(entry.ttl.status)}`;
+  const spans = bar.querySelectorAll(".bm-ttl-text span");
+  if (spans.length >= 2) {
+    spans[1].textContent = entry.ttl.label;
+  }
+}
+
+/* ---------- Card Cache Management (Memoized DOM Nodes) ---------- */
+
+function createCardEntry(record) {
+  const key = makeBookmarkKey(record);
+  const ttl = computeEntryTtl(record);
+  const el = document.createElement("article");
+  el.dataset.bmKey = key;
+
+  const entry = {
+    key,
+    record,
+    el,
+    ttl,
+    hydrated: false,
+    extracted: null,
+    lang: record.lang || "en",
+  };
+
+  applyCardClasses(el, entry);
+  el.innerHTML = ttl.status === "expired" ? buildFallbackCardHtml(entry) : buildPreviewCardHtml(entry);
+  if (ttl.status === "expired") {
+    entry.hydrated = true;
+  }
+  return entry;
+}
+
+function syncCardCacheFromStore() {
+  const records = getBookmarks();
+  const activeKeys = new Set();
+
+  for (const rec of records) {
+    const key = makeBookmarkKey(rec);
+    activeKeys.add(key);
+    const existing = state.cardCache.get(key);
+    if (!existing) {
+      state.cardCache.set(key, createCardEntry(rec));
+    } else {
+      existing.record = rec;
+      existing.ttl = computeEntryTtl(rec);
+      updateTtlBarInPlace(existing);
+    }
+  }
+
+  for (const key of [...state.cardCache.keys()]) {
+    if (!activeKeys.has(key)) {
+      state.cardCache.delete(key);
+    }
+  }
+}
+
+function refreshAllEntryTtls() {
+  for (const entry of state.cardCache.values()) {
+    const prevStatus = entry.ttl.status;
+    entry.ttl = computeEntryTtl(entry.record);
+    if (entry.ttl.status === "expired" && prevStatus !== "expired") {
+      entry.hydrated = true;
+      applyCardClasses(entry.el, entry);
+      entry.el.innerHTML = buildFallbackCardHtml(entry);
+    } else {
+      updateTtlBarInPlace(entry);
+    }
+  }
+}
+
+/* ---------- Filtering, Sorting & DOM Mounting (<2ms, Zero Re-Parse) ---------- */
+
+function matchesFilter(entry, filter) {
+  if (filter === "all") return true;
+  if (filter === "daily") return entry.record.edition === "daily";
+  if (filter === "weekly") return entry.record.edition === "weekly";
+  if (filter === "around_the_world") return entry.record.section === "around_the_world";
+  if (filter === "expiring") return entry.ttl.status === "expiring_soon";
+  return true;
+}
+
+function compareEntries(a, b) {
+  if (state.sort === "date_desc") {
+    if (a.record.date !== b.record.date) return a.record.date < b.record.date ? 1 : -1;
+    return (b.record.saved_at || 0) - (a.record.saved_at || 0);
+  }
+  if (state.sort === "expiry_asc") {
+    const diff = a.ttl.daysRemaining - b.ttl.daysRemaining;
+    if (diff !== 0) return diff;
+    return (b.record.saved_at || 0) - (a.record.saved_at || 0);
+  }
+  // Default: saved_desc
+  const diff = (b.record.saved_at || 0) - (a.record.saved_at || 0);
+  if (diff !== 0) return diff;
+  return a.record.date < b.record.date ? 1 : a.record.date > b.record.date ? -1 : 0;
+}
+
+function updateCountsAndBanners() {
+  const all = [...state.cardCache.values()];
+  let daily = 0;
+  let weekly = 0;
+  let world = 0;
+  let expiring = 0;
+  let expired = 0;
+
+  for (const e of all) {
+    if (e.record.edition === "daily") daily += 1;
+    else if (e.record.edition === "weekly") weekly += 1;
+    if (e.record.section === "around_the_world") world += 1;
+    if (e.ttl.status === "expiring_soon") expiring += 1;
+    else if (e.ttl.status === "expired") expired += 1;
+  }
+
+  if (els.countLabel) {
+    els.countLabel.textContent = `${all.length} saved`;
+  }
+
+  const countMap = {
+    all: all.length,
+    daily,
+    weekly,
+    around_the_world: world,
+    expiring,
+  };
+
+  for (const [name, val] of Object.entries(countMap)) {
+    const span = els.filterBar?.querySelector(`[data-count-for="${name}"]`);
+    if (span) span.textContent = String(val);
+  }
+
+  const expiringTab = els.filterBar?.querySelector('[data-filter="expiring"]');
+  if (expiringTab) {
+    const showExpTab = expiring > 0 || state.filter === "expiring";
+    expiringTab.classList.toggle("hidden", !showExpTab);
+  }
+
+  els.btnClearExpired?.classList.toggle("hidden", expired === 0);
+
+  if (els.expiryBanner) {
+    if (expiring === 0 && expired === 0) {
+      els.expiryBanner.classList.add("hidden");
+      els.expiryBanner.innerHTML = "";
+    } else {
+      const parts = [];
+      if (expiring > 0) {
+        parts.push(
+          `<strong>${expiring}</strong> ${expiring === 1 ? "bookmark expires" : "bookmarks expire"} within 7 days`
+        );
+      }
+      if (expired > 0) {
+        parts.push(
+          `<strong>${expired}</strong> ${expired === 1 ? "edition has" : "editions have"} rotated out of the archive`
+        );
+      }
+      const actions = [];
+      if (expiring > 0 && state.filter !== "expiring") {
+        actions.push(
+          `<button type="button" class="bm-banner-btn" data-banner-action="show-expiring">Show Expiring</button>`
+        );
+      }
+      if (expired > 0) {
+        actions.push(
+          `<button type="button" class="bm-banner-btn" data-banner-action="clear-expired">Clear Expired</button>`
+        );
+      }
+      els.expiryBanner.innerHTML = `
+        <div class="bm-expiry-banner-text">${parts.join(" &middot; ")}</div>
+        <div class="bm-expiry-banner-actions">${actions.join("")}</div>
+      `;
+      els.expiryBanner.classList.remove("hidden");
+    }
+  }
+
+  if (els.expiredCountNote) {
+    els.expiredCountNote.textContent = `${expired} ${expired === 1 ? "story" : "stories"} · Showing saved links`;
+  }
+}
+
+function renderLists() {
+  updateCountsAndBanners();
+
+  const allEntries = [...state.cardCache.values()];
+  const filtered = allEntries.filter((e) => matchesFilter(e, state.filter)).sort(compareEntries);
+
+  const available = [];
+  const expired = [];
+  for (const e of filtered) {
+    if (e.ttl.status === "expired") expired.push(e);
+    else available.push(e);
+  }
+
+  // Empty state handling
+  if (allEntries.length === 0) {
+    els.availableSection?.classList.add("hidden");
+    els.expiredSection?.classList.add("hidden");
+    if (els.emptyState) {
+      els.emptyState.innerHTML = `
+        <h2>No bookmarks yet</h2>
+        <p>Tap the bookmark icon on any story in Daily Briefing, Weekly Briefing, or the Around the World map to build your personal reading list.</p>
+        <div class="bm-empty-actions">
+          <a class="bm-empty-link" href="../briefing/?date=latest">Explore Daily Briefing &rarr;</a>
+          <a class="bm-empty-link" href="../weekly/?date=latest">Explore Weekly Briefing &rarr;</a>
+        </div>
+      `;
+      els.emptyState.classList.remove("hidden");
+    }
+    return [];
+  }
+
+  if (filtered.length === 0) {
+    els.availableSection?.classList.add("hidden");
+    els.expiredSection?.classList.add("hidden");
+    if (els.emptyState) {
+      els.emptyState.innerHTML = `
+        <h2>No matching bookmarks</h2>
+        <p>None of your saved stories match this filter.</p>
+        <div class="bm-empty-actions">
+          <button type="button" class="bm-empty-link" data-reset-filter="all">Show all bookmarks</button>
+        </div>
+      `;
+      els.emptyState.classList.remove("hidden");
+    }
+    return [];
+  }
+
+  els.emptyState?.classList.add("hidden");
+
+  // Available cards (sliced to visibleLimit for progressive hydration)
+  const visibleAvailable = available.slice(0, state.visibleLimit);
+  if (visibleAvailable.length > 0) {
+    els.availableSection?.classList.remove("hidden");
+    const frag = document.createDocumentFragment();
+    for (const entry of visibleAvailable) {
+      frag.appendChild(entry.el);
+    }
+    els.grid.replaceChildren(frag);
+  } else {
+    els.availableSection?.classList.add("hidden");
+    els.grid.replaceChildren();
+  }
+
+  const remaining = available.length - visibleAvailable.length;
+  if (els.loadMoreWrap && els.btnLoadMore) {
+    els.loadMoreWrap.classList.toggle("hidden", remaining <= 0);
+    if (remaining > 0) {
+      els.btnLoadMore.textContent = `Load more (${remaining} remaining)`;
+    }
+  }
+
+  // Expired cards section
+  if (expired.length > 0) {
+    els.expiredSection?.classList.remove("hidden");
+    const expFrag = document.createDocumentFragment();
+    for (const entry of expired) {
+      expFrag.appendChild(entry.el);
+    }
+    els.expiredGrid.replaceChildren(expFrag);
+  } else {
+    els.expiredSection?.classList.add("hidden");
+    els.expiredGrid.replaceChildren();
+  }
+
+  return visibleAvailable;
+}
+
+/* ---------- Archive Extraction & Concurrency-5 Hydration Pool ---------- */
+
+function extractItemFromArchive(archiveData, record) {
+  if (!archiveData || typeof archiveData !== "object") return null;
+
+  if (record.edition === "daily") {
+    if (record.section === "top_news") {
+      const story = (archiveData.top_news || []).find((s) => s?.id === record.id);
+      return story ? { story } : null;
+    }
+    if (record.section === "positive_news") {
+      const list = Array.isArray(archiveData.positive_news)
+        ? archiveData.positive_news
+        : archiveData.positive_news
+        ? [archiveData.positive_news]
+        : [];
+      const story = list.find((s) => s?.id === record.id);
+      return story ? { story } : null;
+    }
+    if (record.section === "local_news") {
+      const regions = Array.isArray(archiveData.local_news)
+        ? archiveData.local_news
+        : archiveData.local_news?.regions || [];
+      const region = regions.find((r) => r?.id === record.region);
+      if (!region) return null;
+      const storyNative = (region.stories || []).find((s) => s?.id === record.id) || null;
+      const storyEn = (region.stories_en || []).find((s) => s?.id === record.id) || null;
+      if (!storyNative && !storyEn) return null;
+      return { regionName: region.name || record.region, storyNative, storyEn };
+    }
+    return null;
+  }
+
+  if (record.edition === "weekly") {
+    if (record.section === "science" || record.section === "culture" || record.section === "history") {
+      const item = (archiveData[record.section]?.items || []).find((i) => i?.id === record.id);
+      return item ? { item } : null;
+    }
+    if (record.section === "long_reads") {
+      const item = (archiveData.long_reads || []).find((i) => i?.id === record.id);
+      return item ? { item } : null;
+    }
+    if (record.section === "around_the_world") {
+      const item = (archiveData.around_the_world || []).find((i) => i?.id === record.id);
+      return item ? { item } : null;
+    }
+  }
+  return null;
+}
+
+async function hydrateArchiveGroup(edition, date) {
+  const archiveKey = `${edition}:${date}`;
+  if (state.inFlightArchives.has(archiveKey)) return;
+
+  // Double-check against availableDates to guarantee 0 wasted 404s
+  const availSet = state.availableDates[edition];
+  if (availSet && !availSet.has(date)) {
+    for (const entry of state.cardCache.values()) {
+      if (entry.record.edition === edition && entry.record.date === date && !entry.hydrated) {
+        entry.ttl = computeEntryTtl(entry.record);
+        entry.hydrated = true;
+        applyCardClasses(entry.el, entry);
+        entry.el.innerHTML = buildFallbackCardHtml(entry);
+      }
+    }
+    return;
+  }
+
+  state.inFlightArchives.add(archiveKey);
+  try {
+    const base = edition === "weekly" ? WEEKLY_DATA : BRIEFING_DATA;
+    const url = `${base}/archive/${encodeURIComponent(date)}.json`;
+    const latestDate = state.latestDates[edition];
+    const cacheMode = latestDate && date < latestDate ? "force-cache" : "no-cache";
+
+    const resp = await fetch(url, { cache: cacheMode });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    let fullJson = await resp.json();
+
+    // Extract ONLY matched bookmarked entries for this (edition, date)
+    for (const entry of state.cardCache.values()) {
+      if (entry.record.edition !== edition || entry.record.date !== date) continue;
+      if (entry.hydrated) continue;
+      entry.extracted = extractItemFromArchive(fullJson, entry.record);
+      entry.hydrated = true;
+      entry.ttl = computeEntryTtl(entry.record);
+      applyCardClasses(entry.el, entry);
+      entry.el.innerHTML = entry.extracted
+        ? buildRichCardHtml(entry)
+        : buildFallbackCardHtml(entry);
+    }
+
+    // Immediately drop reference to the full ~139 KB archive JSON
+    fullJson = null;
+    state.fetchedArchives.add(archiveKey);
+  } catch {
+    for (const entry of state.cardCache.values()) {
+      if (entry.record.edition !== edition || entry.record.date !== date) continue;
+      if (entry.hydrated) continue;
+      entry.hydrated = true;
+      applyCardClasses(entry.el, entry);
+      entry.el.innerHTML = buildFallbackCardHtml(entry);
+    }
+  } finally {
+    state.inFlightArchives.delete(archiveKey);
+  }
+}
+
+async function hydrateVisibleEntries(visibleEntries) {
+  const queue = [];
+  const seen = new Set();
+
+  for (const entry of visibleEntries) {
+    if (entry.hydrated || entry.ttl.status === "expired") continue;
+    const ak = `${entry.record.edition}:${entry.record.date}`;
+    if (seen.has(ak) || state.inFlightArchives.has(ak)) continue;
+    seen.add(ak);
+    queue.push([entry.record.edition, entry.record.date]);
+  }
+
+  if (!queue.length) return;
+
+  let cursor = 0;
+  const workerCount = Math.min(HYDRATE_CONCURRENCY, queue.length);
+  const workers = Array.from({ length: workerCount }, async () => {
+    while (cursor < queue.length) {
+      const idx = cursor++;
+      const [edition, date] = queue[idx];
+      await hydrateArchiveGroup(edition, date);
+    }
+  });
+
+  await Promise.all(workers);
+}
+
+/* ---------- Event Wiring ---------- */
+
+function setActiveFilter(nextFilter) {
+  state.filter = nextFilter;
+  state.visibleLimit = PAGE_SIZE;
+  els.filterBar?.querySelectorAll(".bm-filter-tab").forEach((btn) => {
+    const active = btn.dataset.filter === nextFilter;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-selected", active ? "true" : "false");
+  });
+  const visible = renderLists();
+  if (state.indicesLoaded) {
+    hydrateVisibleEntries(visible);
+  }
+}
+
+function handleClearExpired() {
+  clearExpiredBookmarks(state.availableDates, { ttlOverrides: state.ttlOverrides });
+  syncCardCacheFromStore();
+  const visible = renderLists();
+  if (state.indicesLoaded) {
+    hydrateVisibleEntries(visible);
+  }
+}
+
+function bindEvents() {
+  els.filterBar?.addEventListener("click", (e) => {
+    const btn = e.target.closest?.(".bm-filter-tab");
+    if (!btn) return;
+    setActiveFilter(btn.dataset.filter || "all");
+  });
+
+  els.sortSelect?.addEventListener("change", () => {
+    state.sort = els.sortSelect.value || "saved_desc";
+    const visible = renderLists();
+    if (state.indicesLoaded) {
+      hydrateVisibleEntries(visible);
+    }
+  });
+
+  els.btnClearExpired?.addEventListener("click", handleClearExpired);
+  els.btnClearExpiredSection?.addEventListener("click", handleClearExpired);
+
+  els.btnLoadMore?.addEventListener("click", () => {
+    state.visibleLimit += PAGE_SIZE;
+    const visible = renderLists();
+    if (state.indicesLoaded) {
+      hydrateVisibleEntries(visible);
+    }
+  });
+
+  els.expiryBanner?.addEventListener("click", (e) => {
+    const btn = e.target.closest?.("[data-banner-action]");
+    if (!btn) return;
+    const action = btn.dataset.bannerAction;
+    if (action === "show-expiring") setActiveFilter("expiring");
+    else if (action === "clear-expired") handleClearExpired();
+  });
+
+  els.emptyState?.addEventListener("click", (e) => {
+    if (e.target.closest?.("[data-reset-filter]")) {
+      setActiveFilter("all");
+    }
+  });
+
+  // Inline bilingual toggle for China local news cards
+  els.appRoot?.addEventListener("click", (e) => {
+    const langBtn = e.target.closest?.(".bm-lang-btn");
+    if (!langBtn) return;
+    const group = langBtn.closest(".bm-lang-toggle");
+    const key = group?.dataset.langKey;
+    const nextLang = langBtn.dataset.lang;
+    if (!key || !nextLang) return;
+    const entry = state.cardCache.get(key);
+    if (!entry || entry.lang === nextLang) return;
+    entry.lang = nextLang;
+    entry.el.innerHTML = buildRichCardHtml(entry);
+  });
+
+  // Delegated bookmark removal on /bookmarks/
+  bindBookmarkToggle(
+    els.appRoot,
+    (key) => state.cardCache.get(key)?.record || null,
+    {
+      onToggle: (res) => {
+        if (!res.saved && res.key) {
+          state.cardCache.delete(res.key);
+          const visible = renderLists();
+          if (state.indicesLoaded) {
+            hydrateVisibleEntries(visible);
+          }
+        }
+      },
+    }
+  );
+
+  // Sync from cloud merge or cross-tab storage edits
+  onBookmarksChange((evt) => {
+    if (evt.source === "local") return;
+    syncCardCacheFromStore();
+    const visible = renderLists();
+    if (state.indicesLoaded) {
+      hydrateVisibleEntries(visible);
+    }
+  });
+}
+
+/* ---------- Bootstrap (T=0 Preview -> Parallel Indices -> Concurrency-5 Hydration) ---------- */
+
+async function fetchJsonNoCache(url) {
+  const resp = await fetch(url, { cache: "no-cache" });
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  return resp.json();
+}
+
+async function bootstrap() {
+  // 1. UI primitives & auth (zero cold-load requests when signed out)
+  let themeBooted = false;
+  const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
+    if (themeBooted) setPreference("theme", pref);
+  });
+  themeBooted = true;
+
+  initSourceBiasPopover();
+  initFloatingTooltips(() => state.companyFacts);
+  initCountryMapTooltip(
+    escapeHtml,
+    renderCountryFlagImg,
+    (code) => state.countryLeaders?.leaders?.[code] || null
+  );
+  initAuth({
+    mountEl: els.authMount,
+    bookmarksHref: "/bookmarks/",
+    onPreferencesApplied: (prefs) => {
+      if (prefs?.theme) {
+        themeCtrl?.apply?.(prefs.theme, { silent: true });
+      }
+    },
+  });
+
+  bindEvents();
+
+  // 2. T=0 synchronous preview render from localStorage
+  syncCardCacheFromStore();
+  renderLists();
+
+  // 3. Parallel fetch of indices + shared entity metadata (non-blocking)
+  const [dailyIdxRes, weeklyIdxRes, factsRes, leadersRes] = await Promise.allSettled([
+    fetchJsonNoCache(`${BRIEFING_DATA}/index.json`),
+    fetchJsonNoCache(`${WEEKLY_DATA}/index.json`),
+    fetchJsonNoCache(`${BRIEFING_DATA}/company_facts.json`),
+    fetchJsonNoCache(`${BRIEFING_DATA}/country_leaders.json`),
+  ]);
+
+  if (factsRes.status === "fulfilled") state.companyFacts = factsRes.value;
+  if (leadersRes.status === "fulfilled") state.countryLeaders = leadersRes.value;
+
+  if (dailyIdxRes.status === "fulfilled" && dailyIdxRes.value) {
+    const idx = dailyIdxRes.value;
+    state.availableDates.daily = new Set(Array.isArray(idx.dates) ? idx.dates : []);
+    state.latestDates.daily = idx.latest_date || idx.dates?.[0] || "";
+    if (Number.isFinite(Number(idx.archive_ttl_days))) {
+      state.ttlOverrides.daily = Number(idx.archive_ttl_days);
+    }
+  }
+
+  if (weeklyIdxRes.status === "fulfilled" && weeklyIdxRes.value) {
+    const idx = weeklyIdxRes.value;
+    state.availableDates.weekly = new Set(Array.isArray(idx.dates) ? idx.dates : []);
+    state.latestDates.weekly = idx.latest_date || idx.dates?.[0] || "";
+    if (Number.isFinite(Number(idx.archive_ttl_days))) {
+      state.ttlOverrides.weekly = Number(idx.archive_ttl_days);
+    }
+  }
+
+  state.indicesLoaded = true;
+  refreshAllEntryTtls();
+  const visible = renderLists();
+
+  // 4. Hydrate visible available cards via concurrency-5 pool
+  await hydrateVisibleEntries(visible);
+}
+
+bootstrap();

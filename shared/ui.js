@@ -17,10 +17,14 @@ export function escapeHtml(str) {
 }
 
 export function safeUrl(url) {
-  if (!url) return "#";
+  if (typeof url !== "string") return "#";
+  const trimmed = url.trim();
+  if (!trimmed || trimmed.length > 2048) return "#";
   try {
-    const parsed = new URL(url);
-    return parsed.protocol === "http:" || parsed.protocol === "https:" ? url : "#";
+    const parsed = new URL(trimmed);
+    if (parsed.username || parsed.password) return "#";
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return "#";
+    return escapeHtml(parsed.href);
   } catch {
     return "#";
   }
@@ -30,17 +34,37 @@ export function escapeRegex(str) {
   return String(str ?? "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+const READABLE_DATE_FMT = new Intl.DateTimeFormat("en-US", {
+  weekday: "short",
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+const SHORT_DATE_FMT = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
 export function fmtReadableDate(dateStr) {
   if (!dateStr) return "";
-  const [y, m, d] = dateStr.split("-").map(Number);
+  const [y, m, d] = String(dateStr).split("-").map(Number);
+  if (!y || !m || !d) return String(dateStr);
   const dt = new Date(Date.UTC(y, m - 1, d));
-  return dt.toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC",
-  });
+  if (Number.isNaN(dt.getTime())) return String(dateStr);
+  return READABLE_DATE_FMT.format(dt);
+}
+
+export function fmtShortDate(dateStr) {
+  if (!dateStr) return "";
+  const [y, m, d] = String(dateStr).split("-").map(Number);
+  if (!y || !m || !d) return String(dateStr);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  if (Number.isNaN(dt.getTime())) return String(dateStr);
+  return SHORT_DATE_FMT.format(dt);
 }
 
 export function fmtLocalTimestamp(isoStr) {
@@ -79,7 +103,7 @@ export function resolveTheme(pref) {
 }
 
 export function initTheme(themeToggleEl, onThemeChange = null) {
-  const apply = (pref) => {
+  const apply = (pref, { silent = false } = {}) => {
     const validPref = THEME_ORDER.includes(pref) ? pref : "system";
     const resolved = resolveTheme(validPref);
     document.documentElement.setAttribute("data-theme", resolved);
@@ -92,7 +116,7 @@ export function initTheme(themeToggleEl, onThemeChange = null) {
       themeToggleEl.setAttribute("title", label);
     }
 
-    if (typeof onThemeChange === "function") onThemeChange(resolved, validPref);
+    if (!silent && typeof onThemeChange === "function") onThemeChange(resolved, validPref);
   };
 
   const media = window.matchMedia?.("(prefers-color-scheme: dark)");
@@ -108,9 +132,11 @@ export function initTheme(themeToggleEl, onThemeChange = null) {
 
   media?.addEventListener?.("change", () => {
     if ((localStorage.getItem("briefing-theme") || "system") === "system") {
-      apply("system");
+      apply("system", { silent: true });
     }
   });
+
+  return { apply };
 }
 
 /* ---------- Sticky Section Nav Scroll-Spy ---------- */

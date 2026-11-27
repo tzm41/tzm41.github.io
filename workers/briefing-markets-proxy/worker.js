@@ -17,6 +17,33 @@
  *   the client cleanly falls back to public CORS relays).
  */
 
+import {
+  AuthError,
+  deriveUid,
+  extractBearerToken,
+  maybeRefreshSession,
+  mintSessionToken,
+  verifyGoogleIdToken,
+  verifySessionToken,
+} from "./auth.js";
+import {
+  authSecurityHeaders,
+  checkSlidingRateLimit,
+  handleGetUserState,
+  handlePutUserState,
+  readJsonBody,
+} from "./user_state.js";
+
+const AUTH_ALLOWED_ORIGINS = new Set([
+  "https://colintan.dev",
+  "https://www.colintan.dev",
+  "https://tzm41.github.io",
+]);
+const LOCALHOST_ORIGIN_RE = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i;
+const GOOGLE_AUTH_IP_WINDOW_SEC = 600; // 10 min
+const GOOGLE_AUTH_IP_MAX = 15;
+const GOOGLE_AUTH_MAX_BODY_BYTES = 16384;
+
 const WATCHLIST_CONFIG = [
   { symbol: "^GSPC", name: "S&P 500", group: "Equity" },
   { symbol: "^IXIC", name: "Nasdaq", group: "Equity" },
@@ -152,6 +179,41 @@ function corsHeaders(request) {
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
   };
+}
+
+export function isAllowedAuthOrigin(origin, env) {
+  if (typeof origin !== "string" || !origin) return false;
+  if (AUTH_ALLOWED_ORIGINS.has(origin)) return true;
+  if (env?.ALLOW_LOCALHOST_CORS === "true" && LOCALHOST_ORIGIN_RE.test(origin)) {
+    return true;
+  }
+  return false;
+}
+
+export function authCorsHeaders(request, env) {
+  const origin = request.headers.get("Origin") || "";
+  const headers = {
+    "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization, If-None-Match",
+    "Access-Control-Expose-Headers": "ETag, Retry-After, X-Refreshed-Token",
+    "Access-Control-Max-Age": "86400",
+    Vary: "Origin",
+  };
+  if (isAllowedAuthOrigin(origin, env)) {
+    headers["Access-Control-Allow-Origin"] = origin;
+  }
+  return headers;
+}
+
+function authJsonResponse(body, status, request, env, extraHeaders = {}) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      ...authCorsHeaders(request, env),
+      ...authSecurityHeaders(extraHeaders),
+    },
+  });
 }
 
 function jsonResponse(body, status, request, extraHeaders = {}) {
@@ -328,7 +390,11 @@ async function loadState(env) {
 async function saveState(env, state) {
   state.updated_at = new Date().toISOString();
   state.source = "cloudflare-kv";
-  await env.MARKETS_KV.put(KV_KEY_LATEST, JSON.stringify(state));
+  try {
+    await env.MARKETS_KV.put(KV_KEY_LATEST, JSON.stringify(state));
+  } catch (err) {
+    console.error("[markets] MARKETS_KV.put failed:", err?.message || err);
+  }
 }
 
 function apply1DUpdates(state, map1d) {
@@ -510,6 +576,177 @@ async function consumeRateLimit(cache, symbols) {
   return { allowed, maxRetryAfter };
 }
 
+async function handleAuthAndUserRoutes(request, env, url) {
+  const path = url.pathname;
+  const method = request.method;
+
+  if (method === "OPTIONS") {
+    return new Response(null, { status: 204, headers: authCorsHeaders(request, env) });
+  }
+
+  // Enforce strict Origin allowlist on state-changing auth/user endpoints
+  if (method === "POST" || method === "PUT") {
+    const origin = request.headers.get("Origin") || "";
+    if (!isAllowedAuthOrigin(origin, env)) {
+      return authJsonResponse(
+        { error: "origin_not_allowed", message: "Request origin is not permitted." },
+        403,
+        request,
+        env
+      );
+    }
+  }
+
+  try {
+    if (path === "/auth/config") {
+      if (method !== "GET") {
+        return authJsonResponse({ error: "method_not_allowed" }, 405, request, env);
+      }
+      return authJsonResponse(
+        {
+          google_client_id: env?.GOOGLE_CLIENT_ID || "",
+          sync_writes_enabled: env?.AUTH_SYNC_WRITES_ENABLED !== "false",
+          open_signup: env?.AUTH_OPEN_SIGNUP !== "false",
+        },
+        200,
+        request,
+        env
+      );
+    }
+
+    if (path === "/auth/google") {
+      if (method !== "POST") {
+        return authJsonResponse({ error: "method_not_allowed" }, 405, request, env);
+      }
+
+      const clientIp = request.headers.get("CF-Connecting-IP") || "unknown";
+      const rl = await checkSlidingRateLimit(
+        `https://rl.internal/v1/auth-google-ip/${encodeURIComponent(clientIp)}`,
+        GOOGLE_AUTH_IP_WINDOW_SEC,
+        GOOGLE_AUTH_IP_MAX,
+        true
+      );
+      if (!rl.allowed) {
+        return authJsonResponse(
+          { error: "rate_limited", retry_after: rl.retryAfter },
+          429,
+          request,
+          env,
+          { "Retry-After": String(rl.retryAfter) }
+        );
+      }
+
+      const parsed = await readJsonBody(request, GOOGLE_AUTH_MAX_BODY_BYTES);
+      if (!parsed.ok) {
+        return authJsonResponse(
+          { error: parsed.error, message: parsed.message },
+          parsed.status,
+          request,
+          env
+        );
+      }
+
+      const credential = parsed.data?.credential ?? parsed.data?.id_token;
+      if (typeof credential !== "string" || !credential.trim()) {
+        return authJsonResponse(
+          { error: "missing_credential", message: "Google ID token credential is required." },
+          400,
+          request,
+          env
+        );
+      }
+
+      const verified = await verifyGoogleIdToken(credential.trim(), env);
+      const uid = await deriveUid(verified.sub);
+
+      if (env?.AUTH_OPEN_SIGNUP === "false") {
+        const existing = env?.USER_PREFS_KV
+          ? await env.USER_PREFS_KV.get(`user:${uid}`).catch(() => null)
+          : null;
+        if (!existing) {
+          return authJsonResponse(
+            { error: "signup_disabled", message: "New account sign-ups are currently disabled." },
+            403,
+            request,
+            env
+          );
+        }
+      }
+
+      const minted = await mintSessionToken(
+        { uid, name: verified.name, picture: verified.picture },
+        env
+      );
+      return authJsonResponse(
+        {
+          token: minted.token,
+          expires_at: minted.payload.exp,
+          user: {
+            uid,
+            name: minted.payload.name,
+            picture: minted.payload.picture,
+          },
+        },
+        200,
+        request,
+        env
+      );
+    }
+
+    if (path === "/auth/me") {
+      if (method !== "GET") {
+        return authJsonResponse({ error: "method_not_allowed" }, 405, request, env);
+      }
+      const token = extractBearerToken(request);
+      if (!token) {
+        return authJsonResponse({ error: "unauthorized", message: "Missing Bearer token." }, 401, request, env);
+      }
+      const session = await verifySessionToken(token, env);
+      const refreshed = await maybeRefreshSession(session, env);
+      const extraHeaders = refreshed ? { "X-Refreshed-Token": refreshed.token } : {};
+      return authJsonResponse(
+        {
+          user: {
+            uid: session.uid,
+            name: session.name,
+            picture: session.picture,
+          },
+          expires_at: refreshed ? refreshed.exp : session.exp,
+        },
+        200,
+        request,
+        env,
+        extraHeaders
+      );
+    }
+
+    if (path === "/user/state") {
+      if (method !== "GET" && method !== "PUT") {
+        return authJsonResponse({ error: "method_not_allowed" }, 405, request, env);
+      }
+      const token = extractBearerToken(request);
+      if (!token) {
+        return authJsonResponse({ error: "unauthorized", message: "Missing Bearer token." }, 401, request, env);
+      }
+      const session = await verifySessionToken(token, env);
+      const refreshed = await maybeRefreshSession(session, env);
+      const cors = authCorsHeaders(request, env);
+      if (method === "GET") {
+        return await handleGetUserState(request, env, session, refreshed, cors);
+      }
+      return await handlePutUserState(request, env, session, refreshed, cors);
+    }
+
+    return authJsonResponse({ error: "not_found" }, 404, request, env);
+  } catch (err) {
+    if (err instanceof AuthError) {
+      return authJsonResponse({ error: err.code, message: err.message }, err.status, request, env);
+    }
+    console.error("[auth] Unhandled error:", err?.message || err);
+    return authJsonResponse({ error: "internal_error" }, 500, request, env);
+  }
+}
+
 export default {
   async scheduled(controller, env, ctx) {
     const cron = controller.cron || "";
@@ -532,6 +769,11 @@ export default {
   },
 
   async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    if (url.pathname.startsWith("/auth/") || url.pathname.startsWith("/user/")) {
+      return handleAuthAndUserRoutes(request, env, url);
+    }
+
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders(request) });
     }
@@ -539,7 +781,6 @@ export default {
       return jsonResponse({ error: "Method not allowed" }, 405, request);
     }
 
-    const url = new URL(request.url);
     if (url.pathname === "/health") {
       return jsonResponse({ ok: true, symbols: ALL_SYMBOLS_LIST.length, storage: "kv" }, 200, request);
     }

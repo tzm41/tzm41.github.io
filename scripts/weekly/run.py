@@ -68,6 +68,8 @@ def rebuild_index() -> dict[str, Any]:
     payload = {
         "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "latest_date": dates[0] if dates else None,
+        "archive_ttl_days": MAX_ARCHIVE_WEEKS * 7,
+        "max_archive_weeks": MAX_ARCHIVE_WEEKS,
         "dates": dates,
         "editions": editions,
     }

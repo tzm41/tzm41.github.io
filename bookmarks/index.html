@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://accounts.google.com/gsi/client; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://briefing-markets-proxy.tzm41.workers.dev https://accounts.google.com https://cdn.jsdelivr.net; frame-src https://accounts.google.com; object-src 'none'; base-uri 'self';">
+  <title>Bookmarks — colintan.dev Briefings</title>
+  <meta name="description" content="Saved stories from Daily Briefing and Weekly Briefing with archive retention tracking and optional cross-device sync.">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf8f5">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1d2430">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Bookmarks">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/briefing/favicon-32x32.png?v=2">
+  <link rel="shortcut icon" href="/favicon.ico?v=2">
+  <link rel="mask-icon" href="/favicon.svg?v=2" color="#c44530">
+  <link rel="apple-touch-icon" sizes="180x180" href="/briefing/apple-touch-icon.png?v=3">
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/briefing/apple-touch-icon.png?v=3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../briefing/styles.css?v=61">
+  <link rel="stylesheet" href="./styles.css?v=1">
+</head>
+<body class="bookmarks-page">
+  <header class="masthead" id="top">
+    <div class="container masthead-inner">
+      <div class="masthead-brand">
+        <div class="masthead-crumb-row">
+          <a href="../index.html" class="back-home" title="Back to main site">&larr; colintan.dev</a>
+          <span class="crumb-sep" aria-hidden="true">&middot;</span>
+          <a href="../briefing/?date=latest" class="back-home" title="Open Daily Briefing">Daily Briefing &rarr;</a>
+          <span class="crumb-sep" aria-hidden="true">&middot;</span>
+          <a href="../weekly/?date=latest" class="back-home" title="Open Weekly Briefing">Weekly Briefing &rarr;</a>
+        </div>
+        <div class="title-row">
+          <h1>Bookmarks</h1>
+          <span class="edition-label" id="bookmarks-count-label">0 saved</span>
+        </div>
+        <p class="masthead-sub">Daily stories retained 60 days &middot; Weekly &amp; Around the World retained 52 weeks</p>
+      </div>
+
+      <div class="masthead-controls">
+        <select id="bookmarks-sort" class="bm-sort-select" aria-label="Sort bookmarks">
+          <option value="saved_desc">Newest Saved</option>
+          <option value="date_desc">Edition Date</option>
+          <option value="expiry_asc">Expiring Soonest</option>
+        </select>
+
+        <button type="button" id="btn-clear-expired" class="masthead-btn hidden" title="Remove expired archive bookmarks">
+          Clear Expired
+        </button>
+
+        <button type="button" id="theme-toggle" class="masthead-icon-btn" aria-label="Toggle color theme" title="Toggle color theme"></button>
+
+        <div id="auth-mount" class="auth-mount"></div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="section-nav" aria-label="Filter bookmarks">
+    <div class="container section-nav-inner">
+      <div class="nav-links bm-filter-bar" id="bookmarks-filter-bar" role="tablist" aria-label="Bookmark edition filter">
+        <button type="button" class="bm-filter-tab active" data-filter="all" role="tab" aria-selected="true">
+          <span>All</span><span class="bm-tab-count" data-count-for="all">0</span>
+        </button>
+        <button type="button" class="bm-filter-tab" data-filter="daily" role="tab" aria-selected="false">
+          <span>Daily</span><span class="bm-tab-count" data-count-for="daily">0</span>
+        </button>
+        <button type="button" class="bm-filter-tab" data-filter="weekly" role="tab" aria-selected="false">
+          <span>Weekly</span><span class="bm-tab-count" data-count-for="weekly">0</span>
+        </button>
+        <button type="button" class="bm-filter-tab" data-filter="around_the_world" role="tab" aria-selected="false">
+          <span>Around the World</span><span class="bm-tab-count" data-count-for="around_the_world">0</span>
+        </button>
+        <button type="button" class="bm-filter-tab hidden" data-filter="expiring" role="tab" aria-selected="false">
+          <span>Expiring Soon</span><span class="bm-tab-count" data-count-for="expiring">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container main-content" id="app-root">
+    <div id="expiry-banner" class="bm-expiry-banner hidden" role="status"></div>
+
+    <div id="bookmarks-empty" class="bm-empty-state hidden"></div>
+
+    <section id="available-section" class="section bm-section">
+      <div class="news-grid" id="bookmarks-grid"></div>
+      <div id="load-more-wrap" class="bm-load-more-wrap hidden">
+        <button type="button" id="btn-load-more" class="masthead-btn">Load more bookmarks</button>
+      </div>
+    </section>
+
+    <section id="expired-section" class="section bm-expired-section hidden">
+      <div class="section-header">
+        <div>
+          <h2>Expired from Archive</h2>
+        </div>
+        <div class="section-actions">
+          <span class="sub-note" id="expired-count-note"></span>
+          <button type="button" id="btn-clear-expired-section" class="masthead-btn">Clear Expired</button>
+        </div>
+      </div>
+      <div class="news-grid" id="expired-grid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>Bookmarks are stored locally in your browser and optionally synced when signed in with Google.</p>
+      <a href="#top">Back to top &uarr;</a>
+    </div>
+  </footer>
+
+  <script type="module" src="./app.js?v=2"></script>
+</body>
+</html>

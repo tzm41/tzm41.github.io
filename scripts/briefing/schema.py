@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import Literal
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
+
+from ..common.ids import dedupe_ids, ensure_card_id
+from .config import MAX_ARCHIVE_DAYS
 
 
 HealthStatus = Literal["ok", "partial", "failed"]
@@ -29,7 +32,7 @@ class SourceLink(BaseModel):
 
 
 class NewsStory(BaseModel):
-    id: str
+    id: str = ""
     category: NewsCategory
     headline: str
     summary: str
@@ -38,6 +41,12 @@ class NewsStory(BaseModel):
     sentiment: StorySentiment = "neutral"
     continued_from_prior: bool = False
     is_afternoon: bool = False
+
+    @model_validator(mode="after")
+    def _ensure_id(self) -> NewsStory:
+        first_url = self.sources[0].url if self.sources else ""
+        self.id = ensure_card_id(self.id, "story", self.headline, first_url)
+        return self
 
 
 class MarketQuote(BaseModel):
@@ -190,8 +199,20 @@ class LocalNewsRegion(BaseModel):
     stories: list[NewsStory] = Field(default_factory=list)
     stories_en: list[NewsStory] = Field(default_factory=list)
 
+    @model_validator(mode="after")
+    def _align_story_ids(self) -> LocalNewsRegion:
+        dedupe_ids(self.stories)
+        if len(self.stories_en) == len(self.stories):
+            for native_story, en_story in zip(self.stories, self.stories_en):
+                en_story.id = native_story.id
+        else:
+            dedupe_ids(self.stories_en)
+        return self
+
 
 class DailyBriefing(BaseModel):
+    schema_version: str = "1.1"
+    archive_ttl_days: int = MAX_ARCHIVE_DAYS
     date: str
     generated_at: str
     synthesis_mode: Literal["gemini", "extractive_fallback"] = "gemini"
@@ -205,6 +226,13 @@ class DailyBriefing(BaseModel):
     us_politics: PoliticsSection
     positive_news: list[NewsStory] | NewsStory | None = None
     local_news: list[LocalNewsRegion] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _dedupe_section_ids(self) -> DailyBriefing:
+        dedupe_ids(self.top_news)
+        if isinstance(self.positive_news, list):
+            dedupe_ids(self.positive_news)
+        return self
 
 
 # --- Gemini structured output schema (LLM generates narratives/summaries only) ---

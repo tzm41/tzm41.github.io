@@ -1,0 +1,25 @@
+name = "briefing-markets-proxy"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+[triggers]
+crons = ["*/5 * * * *", "3 */2 * * *", "20 14,21 * * 1-5"]
+
+[[kv_namespaces]]
+binding = "MARKETS_KV"
+id = "5c4a1c48d7204b84ad4672d5187246b0"
+
+[[kv_namespaces]]
+binding = "USER_PREFS_KV"
+# TODO: Replace with live KV namespace ID created via `wrangler kv namespace create USER_PREFS_KV` before deploy.
+id = "REPLACE_WITH_USER_PREFS_KV_ID"
+
+[vars]
+GOOGLE_CLIENT_ID = "860276707063-9giqi2mtolon02mntnh0vjmi1uos9sge.apps.googleusercontent.com"
+ALLOW_LOCALHOST_CORS = "false"
+AUTH_SYNC_WRITES_ENABLED = "true"
+AUTH_OPEN_SIGNUP = "true"
+SESSION_VERSION = "1"
+
+# Required secret (set via `wrangler secret put SESSION_SECRET`, >= 32 random chars):
+# SESSION_SECRET

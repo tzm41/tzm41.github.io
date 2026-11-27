@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
+
+from ..common.ids import dedupe_ids, ensure_card_id
+from .config import MAX_ARCHIVE_WEEKS
 
 SentimentTag = Literal[
     "very_negative",
@@ -39,7 +42,7 @@ class FeaturedQuote(BaseModel):
 
 
 class WeeklyLearningItem(BaseModel):
-    id: str
+    id: str = ""
     category: str = Field(description="Short badge such as Physics, Biology, Space, Visual Arts, Architecture, Literature, Archaeology, History.")
     discipline: str = Field(default="", description="Optional narrower field or era label, e.g. 'Quantum Optics' or 'Bronze Age'.")
     headline: str
@@ -48,6 +51,12 @@ class WeeklyLearningItem(BaseModel):
     sentiment: SentimentTag = "positive"
     sources: list[SourceLink] = Field(default_factory=list)
 
+    @model_validator(mode="after")
+    def _ensure_id(self) -> WeeklyLearningItem:
+        first_url = self.sources[0].url if self.sources else ""
+        self.id = ensure_card_id(self.id, "learn", self.category, self.headline, first_url)
+        return self
+
 
 class LearningSection(BaseModel):
     narrative: str = Field(default="", description="1-2 sentence thematic framing for this section.")
@@ -55,14 +64,20 @@ class LearningSection(BaseModel):
 
 
 class HistoryMilestone(BaseModel):
+    id: str = ""
     year: str = Field(description="Year or era, e.g. '1922' or '1609'.")
     date_label: str = Field(default="", description="Calendar date in this week, e.g. 'Nov 26'.")
     title: str
     summary: str = Field(description="1-2 sentences capturing why this historical turning point still resonates.")
 
+    @model_validator(mode="after")
+    def _ensure_id(self) -> HistoryMilestone:
+        self.id = ensure_card_id(self.id, "milestone", self.year, self.title)
+        return self
+
 
 class GeoFact(BaseModel):
-    id: str
+    id: str = ""
     kind: Literal["geology", "cuisine"] = Field(
         default="geology",
         description="Pin type: 'geology' for geological wonders or 'cuisine' for iconic regional dishes/culinary traditions.",
@@ -77,14 +92,26 @@ class GeoFact(BaseModel):
     fact: str = Field(description="2-3 engaging sentences explaining the geological fun fact or culinary history/technique, using **bold** for the key mechanism, ingredients, or number.")
     wiki_title: str = Field(default="", description="Optional exact English Wikipedia article title for further reading.")
 
+    @model_validator(mode="after")
+    def _ensure_id(self) -> GeoFact:
+        prefix = "food" if self.kind == "cuisine" else "geo"
+        self.id = ensure_card_id(self.id, prefix, self.place, self.title)
+        return self
+
 
 class LongReadItem(BaseModel):
-    id: str
+    id: str = ""
     topic: str = Field(description="Short topic label such as Essay, Philosophy, Architecture, Science History, Cultural Criticism.")
     reading_time: str = Field(default="10 min read", description="Estimated reading time like '12 min read'.")
     headline: str
     summary: str = Field(description="2-3 sentences summarizing the essay's central argument and why it is worth reading.")
     sources: list[SourceLink] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _ensure_id(self) -> LongReadItem:
+        first_url = self.sources[0].url if self.sources else ""
+        self.id = ensure_card_id(self.id, "lr", self.headline, first_url)
+        return self
 
 
 class PulseBullet(BaseModel):
@@ -119,7 +146,8 @@ class WeeklySynthesis(BaseModel):
 
 
 class WeeklyBriefing(BaseModel):
-    schema_version: str = "1.0"
+    schema_version: str = "1.1"
+    archive_ttl_days: int = MAX_ARCHIVE_WEEKS * 7
     date: str
     week_label: str
     generated_at: str
@@ -134,3 +162,13 @@ class WeeklyBriefing(BaseModel):
     long_reads: list[LongReadItem]
     week_in_brief: list[PulseBullet]
     source_health: WeeklySourceHealth
+
+    @model_validator(mode="after")
+    def _dedupe_section_ids(self) -> WeeklyBriefing:
+        dedupe_ids(self.science.items)
+        dedupe_ids(self.culture.items)
+        dedupe_ids(self.history.items)
+        dedupe_ids(self.this_week_in_history)
+        dedupe_ids(self.around_the_world)
+        dedupe_ids(self.long_reads)
+        return self

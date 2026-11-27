@@ -9,6 +9,7 @@ import {
   escapeRegex,
   fmtReadableDate,
   fmtLocalTimestamp,
+  resolveTheme,
   initTheme,
   initScrollSpy,
   createCollapsibleManager,
@@ -17,7 +18,7 @@ import {
   SENTIMENT_LABELS,
   inferSentimentFromText,
   renderSentimentRing,
-} from "../shared/ui.js?v=1";
+} from "../shared/ui.js?v=4";
 import {
   COMPANY_LOGOS,
   renderCompanyLogoImg,
@@ -25,9 +26,26 @@ import {
   buildPersonNameRegexFromTexts,
   createEntityFormatter,
   initFloatingTooltips,
-} from "../shared/entities.js?v=3";
+} from "../shared/entities.js?v=5";
+import {
+  makeBookmarkKey,
+  buildBookmarkRecord,
+  isBookmarked,
+  getBookmarkStats,
+  renderBookmarkButton,
+  syncBookmarkButtons,
+  bindBookmarkToggle,
+  onBookmarksChange,
+} from "../shared/bookmarks.js?v=1";
+import {
+  initAuth,
+  getLocalPreferences,
+  setPreference,
+} from "../shared/auth.js?v=2";
 
 const DATA_BASE = "./data";
+
+const bookmarkRecordMap = new Map();
 
 const state = {
   index: null,
@@ -56,6 +74,8 @@ const els = {
   btnExpandAll: document.getElementById("btn-expand-all"),
   btnRefresh: document.getElementById("btn-refresh"),
   themeToggle: document.getElementById("theme-toggle"),
+  authMount: document.getElementById("auth-mount"),
+  navBookmarksCount: document.getElementById("nav-bookmarks-count"),
   sourceHealth: document.getElementById("source-health"),
   statusBanner: document.getElementById("status-banner"),
   kpiWrapper: document.getElementById("kpi-wrapper"),
@@ -651,12 +671,54 @@ function inferCategoryFromText(text) {
   return "World";
 }
 
-function renderNewsCard(story, badgeLabel, continued, showEditionTag = false) {
+function registerStoryBookmark({ section, story, badge, region = null, lang = null }) {
+  const itemId = story?.id || story?.headline;
+  if (!itemId) return "";
+  const date = state.briefing?.date || state.currentDate || "";
+  const key = makeBookmarkKey({
+    edition: "daily",
+    date,
+    section,
+    id: itemId,
+    region,
+  });
+  bookmarkRecordMap.set(
+    key,
+    buildBookmarkRecord({
+      edition: "daily",
+      date,
+      section,
+      id: itemId,
+      region,
+      lang,
+      kind: null,
+      title: story.headline || "",
+      badge: badge || story.category || "News",
+      source: story.sources?.[0]?.name || "",
+      url: story.sources?.[0]?.url || "",
+    })
+  );
+  return renderBookmarkButton(key, {
+    saved: isBookmarked(key),
+    label: story.headline || "story",
+  });
+}
+
+function renderNewsCard(story, badgeLabel, continued, showEditionTag = false, bookmarkCtx = null) {
   const sourcesHtml = (story.sources || []).map(renderSourceChip).join("");
   const sentiment = resolveStorySentiment(story);
 
   const toggleBtn = continued
     ? `<button type="button" class="card-toggle-btn" aria-expanded="false">Expand &#9662;</button>`
+    : "";
+  const bookmarkBtn = bookmarkCtx
+    ? registerStoryBookmark({
+        section: bookmarkCtx.section,
+        story,
+        badge: bookmarkCtx.badge || badgeLabel,
+        region: bookmarkCtx.region || null,
+        lang: bookmarkCtx.lang || null,
+      })
     : "";
   const editionBadge = showEditionTag
     ? story.is_afternoon
@@ -676,7 +738,10 @@ function renderNewsCard(story, badgeLabel, continued, showEditionTag = false) {
           ${editionBadge}
           ${continuedBadge}
         </div>
-        ${toggleBtn}
+        <div class="news-meta-actions">
+          ${toggleBtn}
+          ${bookmarkBtn}
+        </div>
       </div>
       <h3>${formatEntitiesInPlain(story.headline)}</h3>
       <p class="news-summary">${highlightSummaryHtml(story.summary)}</p>
@@ -700,7 +765,10 @@ function renderNews(stories = []) {
   const priorTop = state.priorBriefing?.top_news || [];
   els.newsGrid.innerHTML = filtered
     .map((story) =>
-      renderNewsCard(story, story.category, isContinuedFromPrior(story, priorTop), true)
+      renderNewsCard(story, story.category, isContinuedFromPrior(story, priorTop), true, {
+        section: "top_news",
+        badge: story.category || "News",
+      })
     )
     .join("");
 }
@@ -1107,12 +1175,20 @@ function renderPositiveNews(positiveNews) {
         story.sentiment && SENTIMENT_LABELS[story.sentiment] && story.sentiment !== "neutral"
           ? story.sentiment
           : "very_positive";
+      const bookmarkBtn = registerStoryBookmark({
+        section: "positive_news",
+        story,
+        badge: story.category || "Progress",
+      });
       return `
         <article class="positive-card">
           <div class="news-meta">
             <div class="news-card-badges">
               <span class="cat-pill">${escapeHtml(story.category || "Progress")}</span>
               ${renderSentimentRing(posSentiment)}
+            </div>
+            <div class="news-meta-actions">
+              ${bookmarkBtn}
             </div>
           </div>
           <h3>${formatEntitiesInPlain(story.headline)}</h3>
@@ -1183,7 +1259,12 @@ function renderLocalNews(regions = []) {
   } else {
     els.localNewsGrid.innerHTML = stories
       .map((story) =>
-        renderNewsCard(story, activeRegion.name, isContinuedFromPrior(story, priorLocal))
+        renderNewsCard(story, activeRegion.name, isContinuedFromPrior(story, priorLocal), false, {
+          section: "local_news",
+          region: activeRegion.id,
+          lang: useEn ? "en" : "native",
+          badge: activeRegion.name,
+        })
       )
       .join("");
   }
@@ -1193,6 +1274,7 @@ function renderLocalNews(regions = []) {
 
 function renderAll(briefing) {
   state.briefing = briefing;
+  bookmarkRecordMap.clear();
   buildTickerMap(briefing.markets);
   buildPersonNameRegex(briefing, state.companyFacts);
   els.editionDate.textContent = fmtReadableDate(briefing.date);
@@ -1899,11 +1981,87 @@ function applyPositivePlacement(pos) {
   }
 }
 
+const SYNCED_THEME_ICONS = {
+  system: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>`,
+  light: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2M12 19.5v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2.5 12h2M19.5 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>`,
+  dark: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`,
+};
+
+const SYNCED_THEME_LABELS = {
+  system: "Theme: Auto (switch to Light)",
+  light: "Theme: Light (switch to Dark)",
+  dark: "Theme: Dark (switch to Auto)",
+};
+
+let lastThemePref = null;
+
+function applySyncedTheme(pref) {
+  const validPref = ["system", "light", "dark"].includes(pref) ? pref : "system";
+  lastThemePref = validPref;
+  localStorage.setItem("briefing-theme", validPref);
+  const resolved = resolveTheme(validPref);
+  document.documentElement.setAttribute("data-theme", resolved);
+  if (els.themeToggle) {
+    els.themeToggle.dataset.themePref = validPref;
+    els.themeToggle.innerHTML = SYNCED_THEME_ICONS[validPref];
+    const label = SYNCED_THEME_LABELS[validPref];
+    els.themeToggle.setAttribute("aria-label", label);
+    els.themeToggle.setAttribute("title", label);
+  }
+  if (state.briefing) renderSectorHeatmap(state.briefing.markets);
+}
+
+let toastTimer = null;
+function showToast(msg) {
+  let el = document.querySelector(".auth-toast[data-briefing-toast]");
+  if (!el) {
+    el = document.createElement("div");
+    el.className = "auth-toast";
+    el.dataset.briefingToast = "1";
+    el.setAttribute("role", "status");
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.remove("hidden");
+  if (toastTimer) window.clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => {
+    el.classList.add("hidden");
+  }, 4000);
+}
+
+function updateNavBookmarksCount() {
+  if (!els.navBookmarksCount) return;
+  const stats = getBookmarkStats();
+  if (stats.total > 0) {
+    els.navBookmarksCount.textContent = `(${stats.total})`;
+    els.navBookmarksCount.classList.remove("hidden");
+  } else {
+    els.navBookmarksCount.textContent = "";
+    els.navBookmarksCount.classList.add("hidden");
+  }
+}
+
 async function bootstrap() {
-  initTheme(els.themeToggle, () => {
+  const initialPrefs = getLocalPreferences();
+  if (initialPrefs?.local_region) state.localRegionId = initialPrefs.local_region;
+  if (initialPrefs?.local_lang === "en" || initialPrefs?.local_lang === "native") {
+    state.localLang = initialPrefs.local_lang;
+  }
+  if (["1d", "5d", "30d"].includes(initialPrefs?.market_tf)) {
+    state.marketTimeframe = initialPrefs.market_tf;
+  }
+
+  initTheme(els.themeToggle, (_resolved, pref) => {
+    if (lastThemePref !== null && pref !== lastThemePref) {
+      setPreference("theme", pref);
+    }
+    lastThemePref = pref;
     if (state.briefing) renderSectorHeatmap(state.briefing.markets);
   });
-  applyPositivePlacement(localStorage.getItem("briefing-positive-pos") || "bottom");
+
+  applyPositivePlacement(
+    initialPrefs?.positive_pos || localStorage.getItem("briefing-positive-pos") || "bottom"
+  );
   initScrollSpy();
   initSparklineHover();
   initSourceBiasPopover();
@@ -1913,6 +2071,20 @@ async function bootstrap() {
     renderCountryFlagImg,
     (code) => state.countryLeaders?.leaders?.[code] || null
   );
+
+  bindBookmarkToggle(
+    document.getElementById("app-root"),
+    (key) => bookmarkRecordMap.get(key),
+    {
+      onLimitReached: () =>
+        showToast("Bookmark limit reached. Remove an older bookmark to save more."),
+    }
+  );
+  updateNavBookmarksCount();
+  onBookmarksChange(() => {
+    updateNavBookmarksCount();
+    syncBookmarkButtons();
+  });
 
   // Mobile KPI strip collapse toggle (collapsed by default on narrow screens)
   const setKpiOpen = (open) => {
@@ -1958,6 +2130,7 @@ async function bootstrap() {
     const cur = localStorage.getItem("briefing-positive-pos") || "bottom";
     const next = cur === "top" ? "bottom" : "top";
     localStorage.setItem("briefing-positive-pos", next);
+    setPreference("positive_pos", next);
     applyPositivePlacement(next);
     els.positiveSection?.scrollIntoView({ behavior: "smooth", block: "start" });
   });
@@ -1989,11 +2162,15 @@ async function bootstrap() {
 
   // Market timeframe toggle (1D / 7D / 30D; defaults to 1D on weekdays, 7D on weekends)
   const tfBtns = [els.btnTf1d, els.btnTf5d, els.btnTf30d].filter(Boolean);
-  tfBtns.forEach((b) => b.classList.toggle("active", b.dataset.tf === state.marketTimeframe));
+  const syncTfButtons = () => {
+    tfBtns.forEach((b) => b.classList.toggle("active", b.dataset.tf === state.marketTimeframe));
+  };
+  syncTfButtons();
   tfBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
       state.marketTimeframe = btn.dataset.tf;
-      tfBtns.forEach((b) => b.classList.toggle("active", b === btn));
+      setPreference("market_tf", state.marketTimeframe);
+      syncTfButtons();
       setMarketsOpen?.(true);
       if (state.briefing) renderMarkets(state.briefing.markets);
     });
@@ -2055,6 +2232,7 @@ async function bootstrap() {
     const btn = e.target.closest(".seg-btn");
     if (!btn) return;
     state.localRegionId = btn.dataset.regionId;
+    setPreference("local_region", state.localRegionId);
     if (!state.localExpanded) setLocalExpanded(true);
     if (state.briefing) renderLocalNews(state.briefing.local_news);
   });
@@ -2063,8 +2241,47 @@ async function bootstrap() {
     const btn = e.target.closest(".seg-btn");
     if (!btn) return;
     state.localLang = btn.dataset.lang || "native";
+    setPreference("local_lang", state.localLang);
     if (!state.localExpanded) setLocalExpanded(true);
     if (state.briefing) renderLocalNews(state.briefing.local_news);
+  });
+
+  initAuth({
+    mountEl: els.authMount,
+    bookmarksHref: "../bookmarks/",
+    onPreferencesApplied(prefs) {
+      if (!prefs || typeof prefs !== "object") return;
+      if (prefs.theme && ["system", "light", "dark"].includes(prefs.theme)) {
+        applySyncedTheme(prefs.theme);
+      }
+      if (prefs.positive_pos && (prefs.positive_pos === "top" || prefs.positive_pos === "bottom")) {
+        localStorage.setItem("briefing-positive-pos", prefs.positive_pos);
+        applyPositivePlacement(prefs.positive_pos);
+      }
+      let localChanged = false;
+      if (prefs.local_region && prefs.local_region !== state.localRegionId) {
+        state.localRegionId = prefs.local_region;
+        localChanged = true;
+      }
+      if (
+        (prefs.local_lang === "en" || prefs.local_lang === "native") &&
+        prefs.local_lang !== state.localLang
+      ) {
+        state.localLang = prefs.local_lang;
+        localChanged = true;
+      }
+      if (localChanged && state.briefing) {
+        renderLocalNews(state.briefing.local_news);
+      }
+      if (
+        ["1d", "5d", "30d"].includes(prefs.market_tf) &&
+        prefs.market_tf !== state.marketTimeframe
+      ) {
+        state.marketTimeframe = prefs.market_tf;
+        syncTfButtons();
+        if (state.briefing) renderMarkets(state.briefing.markets);
+      }
+    },
   });
 
   // Archive navigation controls
