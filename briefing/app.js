@@ -152,6 +152,7 @@ const TICKER_ALIASES = [
   ["S&P 500", "^GSPC"],
   ["Nasdaq", "^IXIC"],
   ["Dow Jones", "^DJI"],
+  ["Dow", "^DJI"],
   ["Russell 2000", "^RUT"],
   ["VIX", "^VIX"],
   ["WTI crude", "CL=F"],
@@ -825,6 +826,8 @@ function formatEntitiesInPlain(segment, seen = new Set(), pillCompanies = false)
   return out;
 }
 
+const NON_INDEX_DOW_AFTER_RE = /^\s+(?:Chemical|Inc\.?|Corning|DuPont|AgroSciences)\b/i;
+
 function escapeWithTickers(segment, seen = new Set()) {
   if (!segment) return "";
   if (!state.tickerMap.size || !state.inlineTickerRe) {
@@ -838,6 +841,10 @@ function escapeWithTickers(segment, seen = new Set()) {
     const info = state.tickerMap.get(token);
     if (!info) continue;
     const idx = match.index ?? 0;
+    if (token === "Dow") {
+      const after = segment.slice(idx + token.length, Math.min(segment.length, idx + token.length + 24));
+      if (NON_INDEX_DOW_AFTER_RE.test(after)) continue;
+    }
     if (idx > lastIdx) out += formatEntitiesInPlain(segment.slice(lastIdx, idx), seen, true);
     const cls = deltaClass(info.change_pct);
     const tip = formatTickerTip(info);
