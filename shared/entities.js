@@ -220,8 +220,21 @@ export function buildPersonNameRegexFromTexts(texts = [], companyFacts = null) {
   return compilePersonNameRegex([...names]);
 }
 
+const LOCAL_COMPANY_LOGOS = {
+  "pbc.gov.cn": new URL("./logos/pbc.png", import.meta.url).href,
+  "abchina.com": new URL("./logos/abchina.png", import.meta.url).href,
+  "boc.cn": new URL("./logos/boc.png", import.meta.url).href,
+  "psbc.com": new URL("./logos/psbc.png", import.meta.url).href,
+  "citicbank.com": new URL("./logos/citicbank.png", import.meta.url).href,
+  "spdb.com.cn": new URL("./logos/spdb.png", import.meta.url).href,
+  "cib.com.cn": new URL("./logos/cib.png", import.meta.url).href,
+  "bny.com": new URL("./logos/bny.png", import.meta.url).href,
+};
+
 export function renderCompanyLogoImg(domain) {
-  const src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
+  const src =
+    LOCAL_COMPANY_LOGOS[domain] ||
+    `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
   return `<img class="inline-logo" src="${src}" width="14" height="14" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
 }
 
