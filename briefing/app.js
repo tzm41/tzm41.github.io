@@ -39,6 +39,7 @@ import { createArchiveController } from "../shared/archive-nav.js";
 import {
   renderBriefBullets as renderSharedBriefBullets,
   renderDailyStoryCard,
+  resolveLocalStoryTag,
 } from "../shared/cards.js";
 import {
   fmtPct,
@@ -732,14 +733,15 @@ function renderLocalNews(regions = []) {
     els.localNewsGrid.innerHTML = `<div class="empty-state">No local news stories available for ${escapeHtml(activeRegion.name)} in this edition.</div>`;
   } else {
     els.localNewsGrid.innerHTML = stories
-      .map((story) =>
-        renderNewsCard(story, activeRegion.name, isContinuedFromPrior(story, priorLocal), false, {
+      .map((story) => {
+        const tag = resolveLocalStoryTag(story);
+        return renderNewsCard(story, tag, isContinuedFromPrior(story, priorLocal), false, {
           section: "local_news",
           region: activeRegion.id,
           lang: useEn ? "en" : "native",
-          badge: activeRegion.name,
-        })
-      )
+          badge: tag,
+        });
+      })
       .join("");
   }
 

@@ -30,6 +30,7 @@ import {
   renderDailyStoryCard,
   renderWeeklyStoryCard,
   renderAroundTheWorldCard,
+  resolveLocalStoryTag,
 } from "../shared/cards.js";
 
 const BRIEFING_DATA = "../briefing/data";
@@ -105,7 +106,7 @@ function buildEditionHref(record) {
   return `${base}?date=${encodeURIComponent(record.date)}${anchor}`;
 }
 
-function sectionDisplayLabel(record) {
+function sectionDisplayLabel(record, extracted = null) {
   const map = {
     top_news: "Top News",
     local_news: "Local News",
@@ -116,6 +117,12 @@ function sectionDisplayLabel(record) {
     long_reads: "Long Reads",
     around_the_world: "Around the World",
   };
+  if (record.section === "local_news") {
+    const region =
+      extracted?.regionName ||
+      (record.region === "bay-area" ? "Bay Area" : record.region === "china" ? "China" : "");
+    return region ? `Local · ${region}` : "Local News";
+  }
   return map[record.section] || record.section;
 }
 
@@ -127,7 +134,8 @@ function getBookmarkType(entry) {
   }
   if (record.edition === "daily") {
     if (record.section === "local_news") {
-      return String(extracted?.regionName || record.badge || "Local").trim() || "Local";
+      const story = extracted?.storyEn || extracted?.storyNative || null;
+      return resolveLocalStoryTag(story, record.badge);
     }
     if (record.section === "positive_news") {
       return String(extracted?.story?.category || record.badge || "Progress").trim() || "Progress";
@@ -156,7 +164,7 @@ function ttlBarClass(status) {
   return "is-active";
 }
 
-function renderOriginRowHtml(record) {
+function renderOriginRowHtml(record, extracted = null) {
   const isWeekly = record.edition === "weekly";
   const edBadgeCls = isWeekly ? "is-weekly" : "is-daily";
   const edLabel = isWeekly ? "Weekly" : "Daily";
@@ -166,7 +174,7 @@ function renderOriginRowHtml(record) {
     <div class="bm-origin-row">
       <div class="bm-origin-left">
         <span class="bm-edition-badge ${edBadgeCls}">${edLabel}</span>
-        <a class="bm-origin-link" href="${escapeHtml(href)}">${escapeHtml(dateLabel)} &middot; ${escapeHtml(sectionDisplayLabel(record))}</a>
+        <a class="bm-origin-link" href="${escapeHtml(href)}">${escapeHtml(dateLabel)} &middot; ${escapeHtml(sectionDisplayLabel(record, extracted))}</a>
       </div>
     </div>
   `;
@@ -263,7 +271,7 @@ function buildRichCardHtml(entry) {
   if (!extracted) return buildFallbackCardHtml(entry);
 
   const bookmarkHtml = renderBookmarkButton(key, { saved: true, label: record.title || "bookmark" });
-  const headerHtml = renderOriginRowHtml(record);
+  const headerHtml = renderOriginRowHtml(record, extracted);
   const footerHtml = renderTtlBarHtml(ttl);
   const typeLabel = getBookmarkType(entry);
 

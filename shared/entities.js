@@ -95,6 +95,7 @@ export const COMPANY_LOGOS = {
   Mastercard: "mastercard.com", Pfizer: "pfizer.com", "Eli Lilly": "lilly.com",
   "Novo Nordisk": "novonordisk.com", ExxonMobil: "exxonmobil.com", Chevron: "chevron.com",
   "Saudi Aramco": "aramco.com",
+  "Agricultural Bank of China": "abchina.com", 中国农业银行: "abchina.com", 农行: "abchina.com",
   // Major News Networks & Media
   BBC: "bbc.com", CNN: "cnn.com", Reuters: "reuters.com", Bloomberg: "bloomberg.com",
   CNBC: "cnbc.com", "Fox News": "foxnews.com", "NBC News": "nbcnews.com", NBC: "nbcnews.com",
@@ -211,8 +212,10 @@ export function glueIconWithText(iconHtml, text) {
   return `<span class="icon-glue">${iconHtml}${escapeHtml(s.slice(0, sp))}</span>${escapeHtml(s.slice(sp))}`;
 }
 
+const BANKING_ABC_RE =
+  /\b(?:ICBC|CCB|BOC|PBOC|People's Bank|Big Four|Agricultural Bank|state-owned banks?|commercial banks?|major banks?|lending|loans?|yuan|renminbi|relending|banks?|banking)\b|农行|农业银行|四大行|四大商业银行/i;
 const NON_MEDIA_ABC_RE =
-  /\b(?:Agricultural Bank|Alcoholic Beverage|Australian Broadcasting|Activity-Based|ABC(?:'s)?\s+of\b|ABC\s+(?:islands|weapons|stores?|liquor|board|commission|license|permit|permittee))\b/i;
+  /\b(?:Alcoholic Beverage|Australian Broadcasting|Activity-Based|ABC(?:'s)?\s+of\b|ABC\s+(?:islands|weapons|stores?|liquor|board|commission|license|permit|permittee))\b/i;
 const NATIVE_BEFORE_RE = /\bNative\s+$/i;
 const INDIGENOUS_INDIAN_CTX_RE =
   /\b(?:American|Native|Plains|Pueblo|Navajo|Cherokee|Sioux|Apache|Mohawk|Iroquois|Algonquin|Seminole|Lakota|Shawnee|Cheyenne|Comanche|Wampanoag)\s+Indians?\b|\bIndians?\s+(?:Tribes?|Tribal|Nations?|Reservations?|Territory|Affairs|Health Service|Country|Heritage|Boarding Schools?|Child Welfare|Gaming|Lands?)\b|\b(?:Indigenous|Native Americans?|First Nations|Bureau of Indian Affairs|Pilgrims|Thanksgiving)\b/i;
@@ -247,8 +250,12 @@ export function createEntityFormatter({
       if (idx > last) out += escapeHtml(segment.slice(last, idx));
       let domain = COMPANY_LOGOS[token];
       if (token === "ABC") {
-        const ctx = segment.slice(Math.max(0, idx - 40), Math.min(segment.length, idx + 45));
-        if (NON_MEDIA_ABC_RE.test(ctx)) domain = undefined;
+        const ctx = segment.slice(Math.max(0, idx - 100), Math.min(segment.length, idx + 100));
+        if (BANKING_ABC_RE.test(ctx)) {
+          domain = "abchina.com";
+        } else if (NON_MEDIA_ABC_RE.test(ctx)) {
+          domain = undefined;
+        }
       }
       let placeId = PLACE_ALIASES[token];
       if (placeId === "us" && (token === "American" || token === "Americans")) {
@@ -410,6 +417,7 @@ export const COMPANY_WIKI_OVERRIDES = {
   "x.ai": "XAI_(company)",
   "ups.com": "United_Parcel_Service",
   "abcnews.go.com": "ABC_News",
+  "abchina.com": "Agricultural_Bank_of_China",
   "reuters.com": "Reuters",
   "foxnews.com": "Fox_News",
   "britishairways.com": "British_Airways",

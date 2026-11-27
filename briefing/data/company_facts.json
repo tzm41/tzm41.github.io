@@ -1360,6 +1360,15 @@
       "leader": "Enrico Palermo (Head)",
       "public": false,
       "budget": "~$50M / yr"
+    },
+    "abchina.com": {
+      "name": "Agricultural Bank of China",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$270B",
+      "leader": "Gu Shu (Chairman)",
+      "public": true,
+      "symbol": "1288.HK"
     }
   }
 }

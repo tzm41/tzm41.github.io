@@ -11,6 +11,25 @@ from .config import MAX_ARCHIVE_DAYS
 
 HealthStatus = Literal["ok", "partial", "failed"]
 NewsCategory = Literal["World", "Economy", "Tech", "Policy", "Science"]
+LocalNewsCategory = Literal[
+    "Weather",
+    "Transit",
+    "Housing",
+    "Sports",
+    "Community",
+    "Public Safety",
+    "Finance",
+    "Trade",
+    "Tech",
+    "Economy",
+    "Policy",
+    "Culture",
+    "Health",
+    "Education",
+    "Science",
+    "Industry",
+    "World",
+]
 StorySentiment = Literal[
     "very_negative",
     "negative",
@@ -193,11 +212,15 @@ class AfternoonSynthesis(BaseModel):
     )
 
 
+class LocalNewsStory(NewsStory):
+    category: LocalNewsCategory
+
+
 class LocalNewsRegion(BaseModel):
     id: str
     name: str
-    stories: list[NewsStory] = Field(default_factory=list)
-    stories_en: list[NewsStory] = Field(default_factory=list)
+    stories: list[LocalNewsStory] = Field(default_factory=list)
+    stories_en: list[LocalNewsStory] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def _align_story_ids(self) -> LocalNewsRegion:
@@ -276,5 +299,5 @@ class GeminiBriefingSynthesis(BaseModel):
     )
     local_news: list[LocalNewsRegion] = Field(
         default_factory=list,
-        description="Local news grouped by region id/name from local_news_candidates (3 to 5 top local stories per region with 2-3 sentence summaries, why_it_matters, and verbatim source URLs). For non-English regions like 'china', write `stories` in Simplified Chinese and provide the matching English translation in `stories_en`.",
+        description="Local news grouped by region id/name from local_news_candidates (3 to 5 top local stories per region with 2-3 sentence summaries, why_it_matters, and verbatim source URLs). Assign each story a specific local topic category (e.g., Weather, Transit, Housing, Sports, Community, Public Safety, Finance, Trade, Tech, Industry, Policy, Culture, Health, Education, Economy) — never generic 'World' or the region name. For non-English regions like 'china', write `stories` in Simplified Chinese and provide the matching English translation in `stories_en` with matching categories.",
     )
