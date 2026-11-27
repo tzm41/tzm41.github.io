@@ -518,7 +518,15 @@ export default {
     } else if (cron === "20 14,21 * * 1-5") {
       ctx.waitUntil(run30DRefresh(env));
     } else {
-      // Default: */5 * * * * intraday refresh for actively-trading symbols
+      // */5 * * * *: run every 5m when non-crypto markets trade;
+      // when only BTC-USD is trading (weekends/holidays/break), throttle to every 15m (:00/:15/:30/:45)
+      const now = new Date();
+      const nonCryptoTrading = ALL_SYMBOLS_LIST.some(
+        (sym) => sym !== "BTC-USD" && isSymbolTradingNow(sym, now)
+      );
+      if (!nonCryptoTrading && now.getUTCMinutes() % 15 !== 0) {
+        return;
+      }
       ctx.waitUntil(runIntradayRefresh(env));
     }
   },
