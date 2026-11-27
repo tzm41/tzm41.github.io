@@ -152,4 +152,8 @@ def load_recent_weekly_headlines(target_date: str, max_weeks: int = 4) -> list[s
             h = lr.get("headline")
             if h:
                 seen.append(h)
+        for geo in data.get("around_the_world") or []:
+            p = geo.get("place")
+            if p:
+                seen.append(f"Geo: {p}")
     return seen

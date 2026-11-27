@@ -747,6 +747,10 @@ function loadAtlas(kind) {
   return atlasPromises[key];
 }
 
+export function loadWorldAtlas() {
+  return loadAtlas("world");
+}
+
 function buildPlaceSvg(features, placeId) {
   const meta = PLACE_META[placeId];
   if (!meta) return "";

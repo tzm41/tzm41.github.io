@@ -61,6 +61,19 @@ class HistoryMilestone(BaseModel):
     summary: str = Field(description="1-2 sentences capturing why this historical turning point still resonates.")
 
 
+class GeoFact(BaseModel):
+    id: str
+    place: str = Field(description="Name of the geological landmark or site, e.g. 'Danakil Depression'.")
+    region: str = Field(description="Country or region label, e.g. 'Ethiopia' or 'Western Australia'.")
+    country_code: str = Field(default="", description="Optional 2-letter lowercase ISO country code for flag display, e.g. 'et', 'au', 'is'.")
+    lat: float = Field(description="Latitude in decimal degrees (-60 to 82).")
+    lon: float = Field(description="Longitude in decimal degrees (-180 to 180).")
+    feature_type: str = Field(description="Short geological discipline tag such as Tectonics, Volcanology, Karst, Glaciology, Geomorphology, Deep Time.")
+    title: str = Field(description="Punchy 4-9 word title capturing the geological wonder.")
+    fact: str = Field(description="2-3 engaging sentences explaining the geological fun fact, using **bold** for the key scientific mechanism or number.")
+    wiki_title: str = Field(default="", description="Optional exact English Wikipedia article title for further reading.")
+
+
 class LongReadItem(BaseModel):
     id: str
     topic: str = Field(description="Short topic label such as Essay, Philosophy, Architecture, Science History, Cultural Criticism.")
@@ -93,6 +106,10 @@ class WeeklySynthesis(BaseModel):
     culture: LearningSection = Field(description="4-5 grounded visual art, architecture, literature, film, music, or cultural stories.")
     history: LearningSection = Field(description="3-4 grounded archaeology, archival, or deep-history stories.")
     this_week_in_history: list[HistoryMilestone] = Field(description="4 notable historical, scientific, or artistic anniversaries falling within this calendar week.")
+    around_the_world: list[GeoFact] = Field(
+        default_factory=list,
+        description="6 geographically diverse geological fun facts (spanning North America, South America, Europe, Africa, Asia, and Oceania) with accurate lat/lon coordinates.",
+    )
     long_reads: list[LongReadItem] = Field(description="4-5 curated long-form essays or deep dives worth lingering over.")
     week_in_brief: list[PulseBullet] = Field(description="3-4 concise bullets recapping major world/macro developments from the past week, keeping politics/markets light.")
 
@@ -109,6 +126,7 @@ class WeeklyBriefing(BaseModel):
     culture: LearningSection
     history: LearningSection
     this_week_in_history: list[HistoryMilestone]
+    around_the_world: list[GeoFact] = Field(default_factory=list)
     long_reads: list[LongReadItem]
     week_in_brief: list[PulseBullet]
     source_health: WeeklySourceHealth

@@ -287,6 +287,80 @@
       "summary": "Holding a candle to a small breach in Egypt's Valley of the Kings, archaeologist *Howard Carter* answered *Lord Carnarvon*'s question with **\"Yes, wonderful things!\"** — revealing the nearly intact royal burial."
     }
   ],
+  "around_the_world": [
+    {
+      "id": "geo-yellowstone",
+      "place": "Grand Prismatic Spring",
+      "region": "Wyoming, USA",
+      "country_code": "us",
+      "lat": 44.525,
+      "lon": -110.838,
+      "feature_type": "Hydrothermal",
+      "title": "A Supervolcano's Living Rainbow Thermometer",
+      "fact": "Fed by magma beneath the Yellowstone Caldera, Grand Prismatic Spring discharges **over 2,000 liters of near-boiling water per minute**. Its vivid rings of deep blue, emerald, orange, and crimson act as a natural thermometer formed by distinct heat-loving microbial mats arranged along the cooling temperature gradient.",
+      "wiki_title": "Grand Prismatic Spring"
+    },
+    {
+      "id": "geo-salar-uyuni",
+      "place": "Salar de Uyuni",
+      "region": "Bolivia",
+      "country_code": "bo",
+      "lat": -20.134,
+      "lon": -67.489,
+      "feature_type": "Geochemistry",
+      "title": "A Salt Flat So Level Satellites Calibrate Against It",
+      "fact": "Left behind when prehistoric Lake Minchin evaporated across the Andean Altiplano, Salar de Uyuni spans **10,582 square kilometers with less than one meter of elevation variation**. Its mirror-like flatness and high reflectance make it the preferred calibration target for Earth-observing satellites.",
+      "wiki_title": "Salar de Uyuni"
+    },
+    {
+      "id": "geo-giants-causeway",
+      "place": "Giant's Causeway",
+      "region": "Northern Ireland, UK",
+      "country_code": "gb",
+      "lat": 55.241,
+      "lon": -6.512,
+      "feature_type": "Volcanology",
+      "title": "40,000 Hexagonal Columns Sculpted by Cooling Physics",
+      "fact": "Roughly **60 million years ago**, thick Paleogene basalt lava flows cooled slowly and contracted uniformly, cracking into **around 40,000 interlocking hexagonal pillars**. The same fracture-energy physics that minimizes strain in drying mud carved these geometric coastal staircases.",
+      "wiki_title": "Giant's Causeway"
+    },
+    {
+      "id": "geo-richat-structure",
+      "place": "Richat Structure",
+      "region": "Mauritania",
+      "country_code": "mr",
+      "lat": 21.124,
+      "lon": -11.402,
+      "feature_type": "Geomorphology",
+      "title": "The 'Eye of the Sahara' Is Not an Impact Crater",
+      "fact": "Mistaken by early Gemini astronauts for a giant meteorite scar, this **40-kilometer-wide desert bullseye** is actually a deeply eroded geological dome uplifted by magma around 100 million years ago. Wind and ancient rivers selectively wore away softer sediments, leaving concentric rings of resistant quartzite standing proud.",
+      "wiki_title": "Richat Structure"
+    },
+    {
+      "id": "geo-zhangye-danxia",
+      "place": "Zhangye Danxia",
+      "region": "Gansu, China",
+      "country_code": "cn",
+      "lat": 38.926,
+      "lon": 100.068,
+      "feature_type": "Stratigraphy",
+      "title": "Painted Mountains Tilted Upward by the Himalayan Collision",
+      "fact": "These surreal bands of crimson, ochre, and teal accumulated over **24 million years of Cretaceous red sandstone and mineral-rich siltstone deposition**. Later, the same Indo-Eurasian tectonic collision that raised the Himalayas folded and tilted the flat strata skyward, exposing cross-sections of ancient desert basins.",
+      "wiki_title": "Zhangye National Geopark"
+    },
+    {
+      "id": "geo-shark-bay",
+      "place": "Hamelin Pool Stromatolites",
+      "region": "Western Australia",
+      "country_code": "au",
+      "lat": -26.4,
+      "lon": 114.21,
+      "feature_type": "Deep Time",
+      "title": "Living Rock Reefs From Earth's First Oxygen Revolution",
+      "fact": "Because Hamelin Pool is **twice as salty as ordinary seawater**, grazing marine animals cannot survive there — allowing ancient cyanobacterial colonies called stromatolites to build layered limestone mounds undisturbed. Similar microbial reefs helped **oxygenate Earth's atmosphere more than 2.4 billion years ago**.",
+      "wiki_title": "Hamelin Pool Marine Nature Reserve"
+    }
+  ],
   "long_reads": [
     {
       "id": "lr-el-nino-millennia",

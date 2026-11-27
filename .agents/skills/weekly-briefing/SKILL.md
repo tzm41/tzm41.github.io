@@ -34,6 +34,7 @@ Read `/tmp/raw_weekly.json`, inspect the `instructions`, `synthesis_schema`, and
 - `culture`: `{narrative, items}` with **4–5** grounded art, architecture, literature, film, music, or cultural stories.
 - `history`: `{narrative, items}` with **3–4** grounded archaeology, archival, or deep-history stories.
 - `this_week_in_history`: **4** well-verified historical, scientific, or artistic anniversaries falling within `week_label` (`{year, date_label, title, summary}`).
+- `around_the_world`: **6** surprising, verified geological fun facts spread across different continents (North America, South America, Europe, Africa, Asia, Oceania) with accurate decimal `lat`/`lon`, `country_code`, `feature_type`, `title`, `fact`, and `wiki_title` (avoiding any `Geo:` places in `recently_shown_weekly_headlines`).
 - `long_reads`: **4–5** curated essays (`{id, topic, reading_time, headline, summary, sources}`).
 - `week_in_brief`: **3–4** concise macro/world recap bullets (`{text, category, sentiment}`), keeping markets/politics light.
 

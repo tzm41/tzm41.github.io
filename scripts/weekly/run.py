@@ -101,9 +101,12 @@ def _build_synthesis_instructions(target_date: str, week_label: str) -> str:
         "and *single asterisks* around human names (scientists, artists, historians, authors, leaders) so the UI renders them cleanly.\n"
         "4. Populate 'this_week_in_history' with 4 genuine, well-verified historical, scientific, or artistic anniversaries "
         f"that occurred during the calendar dates covered by {week_label}.\n"
-        "5. Populate 'featured_quote' with a real, accurately attributed quote from a scientist, artist, historian, or writer "
+        "5. Populate 'around_the_world' with 6 surprising, verified geological fun facts distributed across different continents "
+        "(North America, South America, Europe, Africa, Asia, Oceania) with accurate decimal lat/lon coordinates, ISO 2-letter "
+        "country_code, wiki_title, and no places listed in recently_shown_weekly_headlines.\n"
+        "6. Populate 'featured_quote' with a real, accurately attributed quote from a scientist, artist, historian, or writer "
         "that resonates with this week's theme_title.\n"
-        "6. Output raw JSON conforming strictly to synthesis_schema."
+        "7. Output raw JSON conforming strictly to synthesis_schema."
     )
 
 
@@ -165,6 +168,7 @@ def apply_synthesis(raw_path_str: str, synthesis_path_str: str, dry_run: bool = 
         culture=synthesis.culture,
         history=synthesis.history,
         this_week_in_history=synthesis.this_week_in_history,
+        around_the_world=synthesis.around_the_world,
         long_reads=synthesis.long_reads,
         week_in_brief=synthesis.week_in_brief,
         source_health=health,

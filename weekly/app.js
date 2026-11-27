@@ -3,7 +3,7 @@
  * Inherits UI, theme, entity, Wikipedia link, and tooltip engines from ../shared/
  */
 
-import { initCountryMapTooltip } from "../briefing/country-map.js?v=13";
+import { initCountryMapTooltip, loadWorldAtlas } from "../briefing/country-map.js?v=14";
 import {
   escapeHtml,
   safeUrl,
@@ -22,7 +22,7 @@ import {
   createEntityFormatter,
   initFloatingTooltips,
   renderCountryFlagImg,
-} from "../shared/entities.js?v=1";
+} from "../shared/entities.js?v=2";
 
 const DATA_BASE = "./data";
 const SHARED_DATA_BASE = "../briefing/data";
@@ -59,6 +59,13 @@ const els = {
   milestonesBlock: document.getElementById("milestones-block"),
   milestonesNote: document.getElementById("milestones-note"),
   historyTimeline: document.getElementById("history-timeline"),
+  aroundWorldSection: document.getElementById("around-world"),
+  worldMapStage: document.getElementById("world-map-stage"),
+  worldMapSvg: document.getElementById("world-map-svg"),
+  worldMapPins: document.getElementById("world-map-pins"),
+  worldMapPopover: document.getElementById("world-map-popover"),
+  worldMapMobileSlot: document.getElementById("world-map-mobile-slot"),
+  worldMapLegend: document.getElementById("world-map-legend"),
   longreadsGrid: document.getElementById("longreads-grid"),
   pulseList: document.getElementById("pulse-list"),
   sourceHealth: document.getElementById("source-health"),
@@ -102,6 +109,9 @@ function collectEditionTexts(ed) {
   }
   for (const m of ed.this_week_in_history || []) {
     texts.push(m.title || "", m.summary || "");
+  }
+  for (const g of ed.around_the_world || []) {
+    texts.push(g.place || "", g.region || "", g.title || "", g.fact || "");
   }
   for (const lr of ed.long_reads || []) {
     texts.push(lr.headline || "", lr.summary || "");
@@ -241,6 +251,347 @@ function renderHistoryMilestones(ed) {
     .join("");
 }
 
+/* ---------- Around the World — Interactive Geological Map ---------- */
+
+const WORLD_MAP_W = 960;
+const WORLD_MAP_H = 440;
+const WORLD_LON_MIN = -170;
+const WORLD_LON_MAX = 180;
+const WORLD_LAT_MIN = -56;
+const WORLD_LAT_MAX = 78;
+
+function projectWorld(lon, lat) {
+  const x = ((lon - WORLD_LON_MIN) / (WORLD_LON_MAX - WORLD_LON_MIN)) * WORLD_MAP_W;
+  const y = ((WORLD_LAT_MAX - lat) / (WORLD_LAT_MAX - WORLD_LAT_MIN)) * WORLD_MAP_H;
+  return [x, y];
+}
+
+function fmtCoords(lat, lon) {
+  const ns = lat >= 0 ? "N" : "S";
+  const ew = lon >= 0 ? "E" : "W";
+  return `${Math.abs(lat).toFixed(1)}°${ns}, ${Math.abs(lon).toFixed(1)}°${ew}`;
+}
+
+function buildWorldBaseSvg(features) {
+  const ringToPath = (ring) => {
+    let d = "";
+    for (let i = 0; i < ring.length; i++) {
+      const [lon, lat] = ring[i];
+      const [x, y] = projectWorld(lon, lat);
+      if (i > 0 && Math.abs(lon - ring[i - 1][0]) > 180) {
+        d += `M${x.toFixed(1)},${y.toFixed(1)}`;
+        continue;
+      }
+      d += `${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`;
+    }
+    return d ? `${d}Z` : "";
+  };
+
+  let landPaths = "";
+  for (const f of features) {
+    if (f.id === "010") continue; // Skip Antarctica for cleaner inhabited-world framing
+    for (const r of f.rings) {
+      const p = ringToPath(r);
+      if (p) landPaths += p;
+    }
+  }
+
+  const latLines = [-30, 0, 30, 60]
+    .map((lat) => {
+      const [, y] = projectWorld(0, lat);
+      const cls = lat === 0 ? "world-map-equator" : "world-map-graticule";
+      return `<line class="${cls}" x1="0" y1="${y.toFixed(1)}" x2="${WORLD_MAP_W}" y2="${y.toFixed(1)}"/>`;
+    })
+    .join("");
+
+  const lonLines = [-120, -60, 0, 60, 120]
+    .map((lon) => {
+      const [x] = projectWorld(lon, 0);
+      return `<line class="world-map-graticule" x1="${x.toFixed(1)}" y1="0" x2="${x.toFixed(1)}" y2="${WORLD_MAP_H}"/>`;
+    })
+    .join("");
+
+  return `
+    <svg class="world-map-svg" viewBox="0 0 ${WORLD_MAP_W} ${WORLD_MAP_H}" preserveAspectRatio="none" aria-hidden="true">
+      ${latLines}
+      ${lonLines}
+      <path class="world-map-land" d="${landPaths}"/>
+    </svg>
+  `;
+}
+
+let worldMapSvgReady = false;
+let worldMapEventsBound = false;
+let activeGeoId = null;
+let pinnedGeoId = null;
+let geoHideTimer = null;
+let currentGeoItems = [];
+
+function buildGeoCardHtml(item, showClose = true) {
+  const flagHtml = item.country_code ? renderCountryFlagImg(item.country_code.toLowerCase()) : "";
+  const coords = fmtCoords(Number(item.lat ?? 0), Number(item.lon ?? 0));
+  const wikiTitle = item.wiki_title || item.place || "";
+  const wikiUrl = wikiTitle
+    ? `https://en.wikipedia.org/wiki/${encodeURIComponent(String(wikiTitle).replace(/ /g, "_"))}`
+    : "";
+  return `
+    <div class="geo-fact-head">
+      <div class="geo-fact-loc-row">
+        ${flagHtml}
+        <span class="geo-fact-place">${escapeHtml(item.place)}</span>
+        <span>&middot; ${escapeHtml(item.region || "")}</span>
+        <span class="geo-fact-coords">(${escapeHtml(coords)})</span>
+      </div>
+      ${showClose ? `<button type="button" class="geo-fact-close" aria-label="Close geological fact">&times;</button>` : ""}
+    </div>
+    <h4 class="geo-fact-title">${formatEntitiesInPlain(item.title)}</h4>
+    <p class="geo-fact-body">${highlightSummaryHtml(item.fact)}</p>
+    <div class="geo-fact-foot">
+      <span class="category-tag">${escapeHtml(item.feature_type || "Geology")}</span>
+      ${wikiUrl ? `<a class="geo-fact-wiki" href="${wikiUrl}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a>` : ""}
+    </div>
+  `;
+}
+
+function setGeoActiveState(id) {
+  activeGeoId = id;
+  els.worldMapPins?.querySelectorAll(".geo-pin").forEach((btn) => {
+    const active = btn.dataset.geoId === id;
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-pressed", String(active));
+  });
+  els.worldMapLegend?.querySelectorAll(".geo-chip").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.geoId === id);
+  });
+}
+
+function hideGeoCard(force = false) {
+  if (!force && pinnedGeoId) return;
+  if (force) pinnedGeoId = null;
+  setGeoActiveState(null);
+  els.worldMapPopover?.classList.add("hidden");
+  els.worldMapMobileSlot?.classList.add("hidden");
+}
+
+function showGeoCard(item, { pin = false } = {}) {
+  if (!item || !els.worldMapStage || !els.worldMapPopover) return;
+  if (geoHideTimer) {
+    clearTimeout(geoHideTimer);
+    geoHideTimer = null;
+  }
+  if (pin) pinnedGeoId = item.id;
+  setGeoActiveState(item.id);
+
+  // Desktop floating popover
+  els.worldMapPopover.innerHTML = buildGeoCardHtml(item, true);
+  els.worldMapPopover.classList.remove("hidden");
+
+  // Position cleanly inside the map stage
+  const stageW = els.worldMapStage.clientWidth || WORLD_MAP_W;
+  const stageH = els.worldMapStage.clientHeight || WORLD_MAP_H;
+  const [px, py] = projectWorld(Number(item.lon ?? 0), Number(item.lat ?? 0));
+  const pinX = (px / WORLD_MAP_W) * stageW;
+  const pinY = (py / WORLD_MAP_H) * stageH;
+  const cardW = els.worldMapPopover.offsetWidth || 320;
+  const cardH = els.worldMapPopover.offsetHeight || 190;
+  const margin = 10;
+
+  let left = pinX > stageW * 0.52 ? pinX - cardW - 18 : pinX + 18;
+  left = Math.max(margin, Math.min(stageW - cardW - margin, left));
+
+  let top = pinY > stageH * 0.56 ? pinY - cardH - 14 : pinY + 14;
+  top = Math.max(margin, Math.min(stageH - cardH - margin, top));
+
+  els.worldMapPopover.style.left = `${Math.round(left)}px`;
+  els.worldMapPopover.style.top = `${Math.round(top)}px`;
+
+  // Mobile docked card below map
+  if (els.worldMapMobileSlot) {
+    els.worldMapMobileSlot.innerHTML = buildGeoCardHtml(item, true);
+    els.worldMapMobileSlot.classList.remove("hidden");
+  }
+}
+
+function bindWorldMapEvents() {
+  if (worldMapEventsBound) return;
+  worldMapEventsBound = true;
+
+  const scheduleHide = () => {
+    if (pinnedGeoId) return;
+    if (geoHideTimer) clearTimeout(geoHideTimer);
+    geoHideTimer = setTimeout(() => hideGeoCard(false), 160);
+  };
+
+  const findItem = (id) => currentGeoItems.find((g) => g.id === id);
+
+  els.worldMapPins?.addEventListener("pointerenter", (e) => {
+    if (e.pointerType === "touch") return;
+    const btn = e.target.closest?.(".geo-pin");
+    if (!btn) return;
+    const item = findItem(btn.dataset.geoId);
+    if (item) showGeoCard(item, { pin: false });
+  }, true);
+
+  els.worldMapPins?.addEventListener("pointerleave", (e) => {
+    if (e.pointerType === "touch") return;
+    if (e.target.closest?.(".geo-pin")) scheduleHide();
+  }, true);
+
+  els.worldMapPins?.addEventListener("focusin", (e) => {
+    const btn = e.target.closest?.(".geo-pin");
+    if (!btn) return;
+    const item = findItem(btn.dataset.geoId);
+    if (item) showGeoCard(item, { pin: false });
+  });
+
+  els.worldMapPins?.addEventListener("click", (e) => {
+    const btn = e.target.closest?.(".geo-pin");
+    if (!btn) return;
+    e.stopPropagation();
+    const item = findItem(btn.dataset.geoId);
+    if (!item) return;
+    if (pinnedGeoId === item.id) {
+      hideGeoCard(true);
+    } else {
+      showGeoCard(item, { pin: true });
+    }
+  });
+
+  els.worldMapLegend?.addEventListener("pointerenter", (e) => {
+    if (e.pointerType === "touch") return;
+    const chip = e.target.closest?.(".geo-chip");
+    if (!chip) return;
+    const item = findItem(chip.dataset.geoId);
+    if (item) showGeoCard(item, { pin: false });
+  }, true);
+
+  els.worldMapLegend?.addEventListener("pointerleave", (e) => {
+    if (e.pointerType === "touch") return;
+    if (e.target.closest?.(".geo-chip")) scheduleHide();
+  }, true);
+
+  els.worldMapLegend?.addEventListener("click", (e) => {
+    const chip = e.target.closest?.(".geo-chip");
+    if (!chip) return;
+    e.stopPropagation();
+    const item = findItem(chip.dataset.geoId);
+    if (!item) return;
+    if (pinnedGeoId === item.id) {
+      hideGeoCard(true);
+    } else {
+      showGeoCard(item, { pin: true });
+    }
+  });
+
+  els.worldMapPopover?.addEventListener("pointerenter", () => {
+    if (geoHideTimer) {
+      clearTimeout(geoHideTimer);
+      geoHideTimer = null;
+    }
+  });
+
+  els.worldMapPopover?.addEventListener("pointerleave", () => {
+    scheduleHide();
+  });
+
+  els.worldMapPopover?.addEventListener("click", (e) => {
+    if (e.target.closest?.(".geo-fact-close")) {
+      e.stopPropagation();
+      hideGeoCard(true);
+    }
+  });
+
+  els.worldMapMobileSlot?.addEventListener("click", (e) => {
+    if (e.target.closest?.(".geo-fact-close")) {
+      e.stopPropagation();
+      hideGeoCard(true);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!activeGeoId && !pinnedGeoId) return;
+    if (
+      e.target.closest?.(".geo-pin") ||
+      e.target.closest?.(".geo-chip") ||
+      e.target.closest?.(".geo-fact-popover") ||
+      e.target.closest?.(".geo-mobile-card")
+    ) {
+      return;
+    }
+    hideGeoCard(true);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && (activeGeoId || pinnedGeoId)) hideGeoCard(true);
+  });
+}
+
+function renderAroundTheWorld(ed) {
+  const items = ed.around_the_world || [];
+  currentGeoItems = items;
+  hideGeoCard(true);
+
+  if (!items.length) {
+    els.aroundWorldSection?.classList.add("hidden");
+    return;
+  }
+  els.aroundWorldSection?.classList.remove("hidden");
+
+  if (!worldMapSvgReady && els.worldMapSvg) {
+    loadWorldAtlas()
+      .then((features) => {
+        if (!els.worldMapSvg) return;
+        els.worldMapSvg.innerHTML = buildWorldBaseSvg(features);
+        worldMapSvgReady = true;
+      })
+      .catch((err) => {
+        console.warn("[weekly] World map failed to load:", err);
+      });
+  }
+
+  if (els.worldMapPins) {
+    els.worldMapPins.innerHTML = items
+      .map((item) => {
+        const [x, y] = projectWorld(Number(item.lon ?? 0), Number(item.lat ?? 0));
+        const leftPct = Math.max(2, Math.min(98, (x / WORLD_MAP_W) * 100));
+        const topPct = Math.max(4, Math.min(96, (y / WORLD_MAP_H) * 100));
+        const label = `${item.place}, ${item.region} — ${item.title}`;
+        return `
+          <button
+            type="button"
+            class="geo-pin"
+            data-geo-id="${escapeHtml(item.id)}"
+            style="left:${leftPct.toFixed(2)}%;top:${topPct.toFixed(2)}%;"
+            aria-label="${escapeHtml(label)}"
+            aria-pressed="false"
+            title="${escapeHtml(item.place)}"
+          >
+            <span class="geo-pin-halo" aria-hidden="true"></span>
+            <span class="geo-pin-core" aria-hidden="true"></span>
+          </button>
+        `;
+      })
+      .join("");
+  }
+
+  if (els.worldMapLegend) {
+    els.worldMapLegend.innerHTML = items
+      .map((item) => {
+        const flagHtml = item.country_code ? renderCountryFlagImg(item.country_code.toLowerCase()) : "";
+        return `
+          <button type="button" class="geo-chip" data-geo-id="${escapeHtml(item.id)}">
+            <span class="geo-chip-dot" aria-hidden="true"></span>
+            ${flagHtml}
+            <span>${escapeHtml(item.place)}</span>
+          </button>
+        `;
+      })
+      .join("");
+  }
+
+  bindWorldMapEvents();
+}
+
 function renderLongReads(ed) {
   const items = ed.long_reads || [];
   if (!items.length) {
@@ -325,6 +676,7 @@ function renderEdition(ed) {
   renderLearningSection(ed.culture, els.cultureNarrative, els.cultureGrid, "No culture & arts stories available.");
   renderLearningSection(ed.history, els.historyNarrative, els.historyGrid, "No history stories available.");
   renderHistoryMilestones(ed);
+  renderAroundTheWorld(ed);
   renderLongReads(ed);
   renderWeekInBrief(ed);
   renderSourceHealth(ed.source_health);
@@ -404,15 +756,17 @@ async function bootstrap() {
     (code) => state.countryLeaders?.leaders?.[code] || null
   );
 
-  // Wire collapsible sections (Science, Culture, History open by default; Long Reads & Week in Brief collapsed)
+  // Wire collapsible sections (Science, Culture, History, Around the World open by default; Long Reads & Week in Brief collapsed)
   const setScienceOpen = collapsibles.wireCollapsible("btn-toggle-science", "science-body", "#science");
   const setCultureOpen = collapsibles.wireCollapsible("btn-toggle-culture", "culture-body", "#culture");
   const setHistoryOpen = collapsibles.wireCollapsible("btn-toggle-history", "history-body", "#history");
+  const setWorldOpen = collapsibles.wireCollapsible("btn-toggle-world", "around-world-body", "#around-world");
   collapsibles.wireCollapsible("btn-toggle-longreads", "longreads-body", "#longreads");
   collapsibles.wireCollapsible("btn-toggle-pulse", "pulse-body", "#pulse");
   setScienceOpen?.(true);
   setCultureOpen?.(true);
   setHistoryOpen?.(true);
+  setWorldOpen?.(true);
   collapsibles.syncExpandAllButton();
 
   els.dateSelect.addEventListener("change", () => {
