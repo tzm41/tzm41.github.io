@@ -916,17 +916,28 @@ async function handleDynamicOgSvg(kind, url) {
   });
 }
 
-async function handleHtmlRewriterPreview(request, url, kind, isExplicitPreviewRoute) {
+async function handleHtmlRewriterPreview(request, url, kind, isExplicitPreviewRoute, skipCard = false) {
   const requestedDate = url.searchParams.get("date") || "";
+  const requestedCard = (url.searchParams.get("card") || "").trim();
   const basePath = kind === "weekly" ? "weekly" : "briefing";
   const canonicalTarget = ISO_DATE_RE.test(requestedDate)
-    ? `${SITE_ORIGIN}/${basePath}/?date=${encodeURIComponent(requestedDate)}`
-    : `${SITE_ORIGIN}/${basePath}/`;
+    ? `${SITE_ORIGIN}/${basePath}/?date=${encodeURIComponent(requestedDate)}${requestedCard ? `&card=${encodeURIComponent(requestedCard)}` : ""}`
+    : `${SITE_ORIGIN}/${basePath}/${requestedCard ? `?card=${encodeURIComponent(requestedCard)}` : ""}`;
 
   const ua = request.headers.get("User-Agent") || "";
   const forcePreview = url.searchParams.get("preview") === "1";
-  if (isExplicitPreviewRoute && !forcePreview && !PREVIEW_BOT_RE.test(ua)) {
+  const isBot = PREVIEW_BOT_RE.test(ua);
+
+  if (isExplicitPreviewRoute && !forcePreview && !isBot) {
     return Response.redirect(canonicalTarget, 302);
+  }
+  // For normal human browsers visiting colintan.dev/briefing/ or /weekly/, pass straight through to GitHub Pages
+  if (!isExplicitPreviewRoute && !forcePreview && !isBot) {
+    return fetch(request);
+  }
+  // Bot/preview request with ?card=... -> serve dynamic card-specific OG preview
+  if (!skipCard && requestedCard && /^[A-Za-z0-9._-]{2,80}$/.test(requestedCard)) {
+    return handleCardShareRoute(request, url, kind, requestedDate, requestedCard);
   }
 
   const [originResp, fetched] = await Promise.all([
@@ -941,6 +952,14 @@ async function handleHtmlRewriterPreview(request, url, kind, isExplicitPreviewRo
     .on("title", {
       element(el) {
         el.setInnerContent(meta.title);
+      },
+    })
+    .on('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"], link[rel="apple-touch-icon-precomposed"]', {
+      element(el) {
+        const href = el.getAttribute("href") || "";
+        if (href.startsWith("/")) {
+          el.setAttribute("href", `${SITE_ORIGIN}${href}`);
+        }
       },
     })
     .on('meta[name="description"]', {
@@ -1065,7 +1084,9 @@ function findCardInEdition(kind, data, cardId) {
 
 async function handleCardShareRoute(request, url, kind, dateStr, cardId) {
   const basePath = kind === "weekly" ? "weekly" : "briefing";
-  const targetUrl = `${SITE_ORIGIN}/${basePath}/?date=${encodeURIComponent(dateStr)}&card=${encodeURIComponent(cardId)}`;
+  const targetUrl = ISO_DATE_RE.test(dateStr)
+    ? `${SITE_ORIGIN}/${basePath}/?date=${encodeURIComponent(dateStr)}&card=${encodeURIComponent(cardId)}`
+    : `${SITE_ORIGIN}/${basePath}/?card=${encodeURIComponent(cardId)}`;
   const ua = request.headers.get("User-Agent") || "";
   const forcePreview = url.searchParams.get("preview") === "1";
 
@@ -1082,7 +1103,7 @@ async function handleCardShareRoute(request, url, kind, dateStr, cardId) {
 
   const card = findCardInEdition(kind, fetched.data, cardId);
   if (!card) {
-    return handleHtmlRewriterPreview(request, url, kind, true);
+    return handleHtmlRewriterPreview(request, url, kind, true, true);
   }
 
   const readable = fmtReadableDateUtc(fetched.data?.date || dateStr);
@@ -1095,6 +1116,14 @@ async function handleCardShareRoute(request, url, kind, dateStr, cardId) {
     .on("title", {
       element(el) {
         el.setInnerContent(title);
+      },
+    })
+    .on('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"], link[rel="apple-touch-icon-precomposed"]', {
+      element(el) {
+        const href = el.getAttribute("href") || "";
+        if (href.startsWith("/")) {
+          el.setAttribute("href", `${SITE_ORIGIN}${href}`);
+        }
       },
     })
     .on('meta[name="description"]', {
