@@ -49,8 +49,70 @@ const SYMBOL_CACHE_TTL_MS = 100 * 1000; // 100s -> max 3 fetches per 5 min
 const RL_WINDOW_MS = 5 * 60 * 1000;
 const RL_MAX_FETCHES = 3;
 
-const QUOTES_CACHE_KEY = new Request("https://quote.briefing-markets.internal/v2/all");
+const QUOTES_CACHE_KEY = new Request("https://quote.briefing-markets.internal/v3/all");
 const RL_CACHE_KEY = new Request("https://rl.briefing-markets.internal/v2/all");
+
+const NY_PARTS_FMT = new Intl.DateTimeFormat("en-US", {
+  timeZone: "America/New_York",
+  weekday: "short",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
+});
+
+function isUsMarketHolidayEt(y, m, d) {
+  const iso = `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+  const fmt = (dt) => dt.toISOString().slice(0, 10);
+  const obs = (mo, da) => {
+    const dt = new Date(Date.UTC(y, mo - 1, da));
+    const wd = dt.getUTCDay();
+    if (wd === 6) dt.setUTCDate(dt.getUTCDate() - 1);
+    else if (wd === 0) dt.setUTCDate(dt.getUTCDate() + 1);
+    return fmt(dt);
+  };
+  const nth = (mo, wd, n) => {
+    const dt = new Date(Date.UTC(y, mo - 1, 1));
+    const off = (wd - dt.getUTCDay() + 7) % 7;
+    dt.setUTCDate(1 + off + (n - 1) * 7);
+    return fmt(dt);
+  };
+  const last = (mo, wd) => {
+    const dt = new Date(Date.UTC(y, mo, 0));
+    dt.setUTCDate(dt.getUTCDate() - ((dt.getUTCDay() - wd + 7) % 7));
+    return fmt(dt);
+  };
+  return new Set([
+    obs(1, 1), nth(1, 1, 3), nth(2, 1, 3), last(5, 1),
+    obs(6, 19), obs(7, 4), nth(9, 1, 1), nth(11, 4, 4), obs(12, 25),
+  ]).has(iso);
+}
+
+function isSymbolTradingNow(symbol, now = new Date()) {
+  if (symbol === "BTC-USD") return true;
+  const parts = Object.fromEntries(NY_PARTS_FMT.formatToParts(now).map((p) => [p.type, p.value]));
+  const wd = parts.weekday;
+  const mins = (Number(parts.hour) % 24) * 60 + Number(parts.minute);
+  const isWeekend = wd === "Sat" || wd === "Sun";
+  const isHoliday = isUsMarketHolidayEt(Number(parts.year), Number(parts.month), Number(parts.day));
+  if (symbol === "CL=F" || symbol === "GC=F") {
+    if (wd === "Sat") return false;
+    if (wd === "Sun") return mins >= 18 * 60;
+    if (wd === "Fri" && mins >= 17 * 60) return false;
+    if (mins >= 17 * 60 && mins < 18 * 60) return false;
+    if (isHoliday && mins >= 13 * 60) return false;
+    return true;
+  }
+  if (symbol === "^VIX") {
+    if (isWeekend) return false;
+    const endMin = isHoliday ? 11 * 60 + 30 : 16 * 60 + 15;
+    return mins >= 3 * 60 + 15 && mins <= endMin;
+  }
+  if (isWeekend || isHoliday) return false;
+  return mins >= 4 * 60 && mins <= 20 * 60;
+}
 
 function corsHeaders(request) {
   const origin = request.headers.get("Origin") || "";
@@ -231,6 +293,15 @@ export default {
 
       for (const sym of requested) {
         const entry = quoteStore[sym];
+        const trading = isSymbolTradingNow(sym);
+        if (!trading) {
+          // Market closed for this symbol: serve cached snapshot if present, skip upstream fetch
+          if (entry?.quote) {
+            quotes[sym] = entry.quote;
+            cacheHits += 1;
+          }
+          continue;
+        }
         if (!force && entry?.quote && typeof entry.ts === "number" && now - entry.ts < SYMBOL_CACHE_TTL_MS) {
           quotes[sym] = entry.quote;
           cacheHits += 1;

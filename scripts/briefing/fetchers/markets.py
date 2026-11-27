@@ -5,7 +5,9 @@ from __future__ import annotations
 import asyncio
 import re
 from concurrent.futures import ThreadPoolExecutor
+from datetime import date, datetime, timezone
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import httpx
 import pandas as pd
@@ -359,23 +361,128 @@ def _build_quote_list(
     return quotes
 
 
-def _fetch_markets_sync(prior_markets: dict[str, Any] | None = None) -> tuple[dict[str, Any], str]:
+_NY_TZ = ZoneInfo("America/New_York")
+
+
+def _us_market_holidays(year: int) -> set[date]:
+    """Fixed + nth-weekday major NYSE/US market holidays."""
+    from datetime import timedelta
+
+    def nth_weekday(month: int, weekday: int, n: int) -> date:
+        d = date(year, month, 1)
+        offset = (weekday - d.weekday()) % 7
+        return d + timedelta(days=offset + (n - 1) * 7)
+
+    def last_weekday(month: int, weekday: int) -> date:
+        nxt = date(year + (1 if month == 12 else 0), (month % 12) + 1, 1)
+        d = nxt - timedelta(days=1)
+        return d - timedelta(days=(d.weekday() - weekday) % 7)
+
+    def observed(d: date) -> date:
+        if d.weekday() == 5:
+            return d - timedelta(days=1)
+        if d.weekday() == 6:
+            return d + timedelta(days=1)
+        return d
+
+    return {
+        observed(date(year, 1, 1)),   # New Year's Day
+        nth_weekday(1, 0, 3),         # MLK Jr. Day (3rd Mon Jan)
+        nth_weekday(2, 0, 3),         # Presidents' Day (3rd Mon Feb)
+        last_weekday(5, 0),           # Memorial Day (last Mon May)
+        observed(date(year, 6, 19)),  # Juneteenth
+        observed(date(year, 7, 4)),   # Independence Day
+        nth_weekday(9, 0, 1),         # Labor Day (1st Mon Sep)
+        nth_weekday(11, 3, 4),        # Thanksgiving (4th Thu Nov)
+        observed(date(year, 12, 25)), # Christmas
+    }
+
+
+def is_symbol_trading_now(symbol: str, now_utc: datetime | None = None) -> bool:
+    """Return True if the given symbol is currently in an active trading session (ET)."""
+    if symbol == "BTC-USD":
+        return True
+    now_et = (now_utc or datetime.now(timezone.utc)).astimezone(_NY_TZ)
+    wd = now_et.weekday()  # 0=Mon .. 6=Sun
+    mins = now_et.hour * 60 + now_et.minute
+    is_holiday = now_et.date() in _us_market_holidays(now_et.year)
+
+    # CME Globex futures (WTI Crude, Gold): Sun 18:00 ET -> Fri 17:00 ET (17:00-18:00 ET break)
+    if symbol in {"CL=F", "GC=F"}:
+        if wd == 5:  # Saturday
+            return False
+        if wd == 6:  # Sunday opens 18:00 ET
+            return mins >= 18 * 60
+        if wd == 4 and mins >= 17 * 60:  # Friday closes 17:00 ET
+            return False
+        if 17 * 60 <= mins < 18 * 60:  # Daily maintenance break
+            return False
+        if is_holiday and mins >= 13 * 60:  # Holiday early halt
+            return False
+        return True
+
+    # CBOE VIX: Mon-Fri 03:15-16:15 ET (early holiday close 11:30 ET)
+    if symbol == "^VIX":
+        if wd >= 5:
+            return False
+        end_min = 11 * 60 + 30 if is_holiday else 16 * 60 + 15
+        return 3 * 60 + 15 <= mins <= end_min
+
+    # US equities, indices, sector ETFs, 10Y yield: Mon-Fri 04:00-20:00 ET (incl. pre/aftermarket)
+    if wd >= 5 or is_holiday:
+        return False
+    return 4 * 60 <= mins <= 20 * 60
+
+
+def _fetch_markets_sync(
+    prior_markets: dict[str, Any] | None = None,
+    active_only: bool = False,
+) -> tuple[dict[str, Any], str]:
     quote_symbols = [item["symbol"] for item in MARKET_WATCHLIST] + [
         item["symbol"] for item in MARKET_BIG7
     ]
     sector_symbols = [item["symbol"] for item in MARKET_SECTORS]
 
     prior_map: dict[str, dict[str, Any]] = {}
+    prior_sector_map: dict[str, dict[str, Any]] = {}
     if prior_markets:
         for q in prior_markets.get("watchlist", []) + prior_markets.get("big7", []):
             if q.get("symbol"):
                 prior_map[q["symbol"]] = q
+        for s in prior_markets.get("sectors", []):
+            if s.get("symbol"):
+                prior_sector_map[s["symbol"]] = s
 
-    tf_all = _download_timeframes(
-        quote_symbols,
-        sector_symbols=sector_symbols,
-        include_intraday=True,
-        prior_map=prior_map,
+    if active_only and prior_map:
+        active_quote_syms = [
+            s for s in quote_symbols if is_symbol_trading_now(s) or s not in prior_map
+        ]
+        active_sector_syms = [
+            s for s in sector_symbols if is_symbol_trading_now(s) or s not in prior_sector_map
+        ]
+        skipped = (len(quote_symbols) - len(active_quote_syms)) + (
+            len(sector_symbols) - len(active_sector_syms)
+        )
+        print(
+            f"[markets] Active-only refresh: fetching {len(active_quote_syms) + len(active_sector_syms)}/"
+            f"{len(quote_symbols) + len(sector_symbols)} trading symbols (reusing {skipped} closed-market snapshots)."
+        )
+    else:
+        active_quote_syms = quote_symbols
+        active_sector_syms = sector_symbols
+
+    active_quote_set = set(active_quote_syms)
+    active_sector_set = set(active_sector_syms)
+
+    tf_all = (
+        _download_timeframes(
+            active_quote_syms,
+            sector_symbols=active_sector_syms,
+            include_intraday=True,
+            prior_map=prior_map,
+        )
+        if (active_quote_syms or active_sector_syms)
+        else {"1d": lambda s: ([], []), "5d": lambda s: ([], []), "30d": lambda s: ([], [])}
     )
 
     gf_client: httpx.Client | None = None
@@ -389,19 +496,35 @@ def _fetch_markets_sync(prior_markets: dict[str, Any] | None = None) -> tuple[di
             )
         return gf_client
 
-    watchlist = _build_quote_list(MARKET_WATCHLIST, tf_all, get_gf_client)
-    big7 = _build_quote_list(MARKET_BIG7, tf_all, get_gf_client)
+    def build_or_reuse(configs: list[dict[str, str]]) -> list[dict[str, Any]]:
+        active_cfgs = [c for c in configs if c["symbol"] in active_quote_set]
+        fresh_map = {q["symbol"]: q for q in _build_quote_list(active_cfgs, tf_all, get_gf_client)}
+        out: list[dict[str, Any]] = []
+        for cfg in configs:
+            sym = cfg["symbol"]
+            if sym in fresh_map:
+                out.append(fresh_map[sym])
+            elif sym in prior_map:
+                out.append(prior_map[sym])
+        return out
+
+    watchlist = build_or_reuse(MARKET_WATCHLIST)
+    big7 = build_or_reuse(MARKET_BIG7)
 
     sectors: list[dict[str, Any]] = []
     for cfg in MARKET_SECTORS:
-        closes, _ = tf_all["30d"](cfg["symbol"])
+        sym = cfg["symbol"]
+        if sym not in active_sector_set and sym in prior_sector_map:
+            sectors.append(prior_sector_map[sym])
+            continue
+        closes, _ = tf_all["30d"](sym)
         if len(closes) >= 2:
             latest = closes[-1]
             prev_1d = closes[-2]
             prev_5d = closes[-6] if len(closes) >= 6 else closes[0]
             sectors.append(
                 {
-                    "symbol": cfg["symbol"],
+                    "symbol": sym,
                     "name": cfg["name"],
                     "change_pct": _pct_change(latest, prev_1d),
                     "change_5d_pct": _pct_change(latest, prev_5d),
@@ -409,20 +532,26 @@ def _fetch_markets_sync(prior_markets: dict[str, Any] | None = None) -> tuple[di
                 }
             )
         else:
-            gf = _fetch_google_finance_quote(get_gf_client(), cfg["symbol"])
+            gf = _fetch_google_finance_quote(get_gf_client(), sym)
             if gf:
                 _, chg = gf
                 sectors.append(
                     {
-                        "symbol": cfg["symbol"],
+                        "symbol": sym,
                         "name": cfg["name"],
                         "change_pct": chg,
                         "change_5d_pct": chg,
                         "change_30d_pct": chg,
                     }
                 )
+            elif sym in prior_sector_map:
+                sectors.append(prior_sector_map[sym])
 
-    fear_greed = _fetch_fear_greed(get_gf_client()) or (prior_markets or {}).get("fear_greed")
+    fear_greed = (
+        (prior_markets or {}).get("fear_greed")
+        if (active_only and not active_sector_syms and (prior_markets or {}).get("fear_greed"))
+        else (_fetch_fear_greed(get_gf_client()) or (prior_markets or {}).get("fear_greed"))
+    )
 
     if gf_client is not None:
         gf_client.close()
@@ -496,6 +625,9 @@ def fetch_mentioned_quotes(texts: list[str]) -> list[dict[str, Any]]:
     return results
 
 
-async def fetch_markets(prior_markets: dict[str, Any] | None = None) -> tuple[dict[str, Any], str]:
+async def fetch_markets(
+    prior_markets: dict[str, Any] | None = None,
+    active_only: bool = False,
+) -> tuple[dict[str, Any], str]:
     """Run yfinance download (with cached 30D reuse & Google Finance fallback) in a worker thread."""
-    return await asyncio.to_thread(_fetch_markets_sync, prior_markets)
+    return await asyncio.to_thread(_fetch_markets_sync, prior_markets, active_only)

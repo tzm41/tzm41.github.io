@@ -1590,7 +1590,7 @@ function renderQuoteGrid(container, quotes, tf, emptyMsg) {
       const lo = series.length ? fmtPrice(Math.min(...series), q.symbol) : "—";
       const prevBadge = getPriorSessionBadge(times, tf);
       const prevBadgeHtml = prevBadge
-        ? `<span class="quote-prev-badge" title="${escapeHtml(prevBadge.title)}">${escapeHtml(prevBadge.label)}</span>`
+        ? `<span class="quote-prev-badge" tabindex="0" data-tooltip="${escapeHtml(prevBadge.title)}">${escapeHtml(prevBadge.label)}</span>`
         : "";
       return `
         <div class="quote-card${isExpanded ? " is-expanded" : ""}" data-symbol="${escapeHtml(q.symbol)}" role="button" tabindex="0" aria-expanded="${isExpanded}">
@@ -2203,57 +2203,95 @@ async function fetchClientLiveQuotes(symbols, force = false) {
   return fetchViaPublicCorsFallback(symbols);
 }
 
-function getLatestEquityBarIso(markets) {
-  let latestMs = 0;
-  let latestIso = "";
-  const eqItems = [
-    ...(markets?.big7 || []),
-    ...(markets?.watchlist || []).filter((q) =>
-      ["^GSPC", "^IXIC", "^DJI", "^RUT"].includes(q?.symbol)
-    ),
-  ];
-  for (const item of eqItems) {
-    const times = item?.sparkline_1d_times;
-    if (!Array.isArray(times) || !times.length) continue;
-    const raw = times[times.length - 1];
-    const ms = Date.parse(raw);
-    if (!Number.isNaN(ms) && ms > latestMs) {
-      latestMs = ms;
-      latestIso = raw;
-    }
+const NY_PARTS_FMT = new Intl.DateTimeFormat("en-US", {
+  timeZone: "America/New_York",
+  weekday: "short",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
+});
+
+function isUsMarketHolidayEt(y, m, d) {
+  const iso = `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+  const fmt = (dt) => dt.toISOString().slice(0, 10);
+  const obs = (mo, da) => {
+    const dt = new Date(Date.UTC(y, mo - 1, da));
+    const wd = dt.getUTCDay();
+    if (wd === 6) dt.setUTCDate(dt.getUTCDate() - 1);
+    else if (wd === 0) dt.setUTCDate(dt.getUTCDate() + 1);
+    return fmt(dt);
+  };
+  const nth = (mo, wd, n) => {
+    const dt = new Date(Date.UTC(y, mo - 1, 1));
+    const off = (wd - dt.getUTCDay() + 7) % 7;
+    dt.setUTCDate(1 + off + (n - 1) * 7);
+    return fmt(dt);
+  };
+  const last = (mo, wd) => {
+    const dt = new Date(Date.UTC(y, mo, 0));
+    dt.setUTCDate(dt.getUTCDate() - ((dt.getUTCDay() - wd + 7) % 7));
+    return fmt(dt);
+  };
+  const holidays = new Set([
+    obs(1, 1),
+    nth(1, 1, 3),
+    nth(2, 1, 3),
+    last(5, 1),
+    obs(6, 19),
+    obs(7, 4),
+    nth(9, 1, 1),
+    nth(11, 4, 4),
+    obs(12, 25),
+  ]);
+  return holidays.has(iso);
+}
+
+function isSymbolTradingNow(symbol, now = new Date()) {
+  if (symbol === "BTC-USD") return true;
+  const parts = Object.fromEntries(NY_PARTS_FMT.formatToParts(now).map((p) => [p.type, p.value]));
+  const wd = parts.weekday;
+  const mins = (Number(parts.hour) % 24) * 60 + Number(parts.minute);
+  const isWeekend = wd === "Sat" || wd === "Sun";
+  const isHoliday = isUsMarketHolidayEt(Number(parts.year), Number(parts.month), Number(parts.day));
+
+  if (symbol === "CL=F" || symbol === "GC=F") {
+    if (wd === "Sat") return false;
+    if (wd === "Sun") return mins >= 18 * 60;
+    if (wd === "Fri" && mins >= 17 * 60) return false;
+    if (mins >= 17 * 60 && mins < 18 * 60) return false;
+    if (isHoliday && mins >= 13 * 60) return false;
+    return true;
   }
-  return latestIso;
+  if (symbol === "^VIX") {
+    if (isWeekend) return false;
+    const endMin = isHoliday ? 11 * 60 + 30 : 16 * 60 + 15;
+    return mins >= 3 * 60 + 15 && mins <= endMin;
+  }
+  if (isWeekend || isHoliday) return false;
+  return mins >= 4 * 60 && mins <= 20 * 60;
 }
 
 function updateMarketsLivePill(updatedAt, sourceTag = "") {
   if (!els.marketsLivePill || !updatedAt) return;
-  const latestEqIso = getLatestEquityBarIso(state.briefing?.markets);
-  const todayEt = NY_DATE_FMT.format(new Date());
-  const eqEt = latestEqIso ? NY_DATE_FMT.format(new Date(latestEqIso)) : "";
-  const marketClosedToday = Boolean(eqEt && eqEt < todayEt);
-
-  const effectiveIso = marketClosedToday ? latestEqIso : updatedAt;
-  const dt = new Date(effectiveIso);
+  const dt = new Date(updatedAt);
   const timeStr = Number.isNaN(dt.getTime())
-    ? effectiveIso
-    : marketClosedToday
-    ? dt.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })
+    ? updatedAt
     : dt.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit", timeZoneName: "short" });
   const ageMin = Number.isNaN(dt.getTime()) ? 999 : Math.max(0, (Date.now() - dt.getTime()) / 60000);
-  const freshness = marketClosedToday ? "aging" : ageMin < 45 ? "fresh" : ageMin < 180 ? "aging" : "stale";
+  const freshness = ageMin < 45 ? "fresh" : ageMin < 180 ? "aging" : "stale";
   const ageLabel =
     ageMin < 1 ? "just now" : ageMin < 60 ? `${Math.round(ageMin)}m ago` : `${Math.round(ageMin / 60)}h ago`;
-  const srcNote = marketClosedToday
-    ? " · US market closed today"
-    : sourceTag === "cloudflare"
-    ? " · live"
-    : sourceTag === "cors-fallback"
-    ? " · live (fallback)"
-    : "";
+  const srcNote =
+    sourceTag === "cloudflare"
+      ? " · live"
+      : sourceTag === "cors-fallback"
+      ? " · live (fallback)"
+      : "";
   els.marketsLivePill.innerHTML = `<span class="live-dot ${freshness}" aria-hidden="true"></span>${escapeHtml(timeStr)}`;
-  els.marketsLivePill.title = marketClosedToday
-    ? `Market closed · last session ${timeStr}`
-    : `${freshness} · ${ageLabel}${srcNote}`;
+  els.marketsLivePill.title = `${freshness} · ${ageLabel}${srcNote}`;
   els.marketsLivePill.classList.remove("hidden");
 }
 
@@ -2333,14 +2371,15 @@ async function refreshLiveMarkets(forceClientRefresh = false) {
     // Keep daily snapshot if markets_live.json is unavailable
   }
 
-  // Client-side live refresh with browser localStorage cache (Cloudflare Worker -> Option 3 fallback)
-  const symbols = [
+  // Only request symbols currently in an active trading session (e.g. BTC-USD on holidays/weekends)
+  const allSymbols = [
     ...(state.briefing.markets?.watchlist || []),
     ...(state.briefing.markets?.big7 || []),
     ...(state.briefing.markets?.sectors || []),
   ]
     .map((q) => q?.symbol)
     .filter(Boolean);
+  const symbols = allSymbols.filter((sym) => isSymbolTradingNow(sym));
   if (!symbols.length) return;
 
   const staticTs = Date.parse(staticUpdatedAt) || 0;
@@ -2776,7 +2815,7 @@ function initFloatingTooltips() {
   document.body.appendChild(tip);
 
   const SEL =
-    ".ticker-tag[data-ticker-tip], .ticker-tag[data-company-domain], .company-mention[data-company-domain], .quote-name[data-company-domain], .sentiment-gauge[data-tooltip]";
+    ".ticker-tag[data-ticker-tip], .ticker-tag[data-company-domain], .company-mention[data-company-domain], .quote-name[data-company-domain], .quote-prev-badge[data-tooltip], .sentiment-gauge[data-tooltip]";
   let activeEl = null;
 
   const hide = () => {
@@ -3082,7 +3121,7 @@ async function bootstrap() {
       sparkDragged = false;
       return;
     }
-    if (e.target.closest(".quote-name[data-company-domain]")) {
+    if (e.target.closest(".quote-name[data-company-domain], .quote-prev-badge[data-tooltip]")) {
       return;
     }
     const card = e.target.closest(".quote-card");

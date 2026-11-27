@@ -272,7 +272,7 @@ async def run_markets_only() -> dict[str, Any]:
             except Exception:
                 continue
 
-    raw_markets, health = await fetch_markets(prior_markets=prior_markets)
+    raw_markets, health = await fetch_markets(prior_markets=prior_markets, active_only=True)
     payload = {
         "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "health": health,
