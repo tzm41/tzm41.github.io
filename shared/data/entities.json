@@ -1,12 +1,12 @@
 {
   "schema_version": "2.0",
-  "updated_at": "2026-11-27T04:20:09Z",
+  "updated_at": "2026-11-28T03:59:51Z",
   "companies": {
     "nvidia.com": {
       "name": "Nvidia",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$3.61T",
+      "valuation": "~$3.63T",
       "leader": "Jensen Huang (CEO)",
       "public": true,
       "symbol": "NVDA",
@@ -15,14 +15,14 @@
         "NVIDIA",
         "英伟达"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:46Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "apple.com": {
       "name": "Apple",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$5.17T",
+      "valuation": "~$5.21T",
       "leader": "John Ternus (CEO)",
       "public": true,
       "symbol": "AAPL",
@@ -31,14 +31,14 @@
         "苹果"
       ],
       "wiki": "Apple_Inc.",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:46Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "microsoft.com": {
       "name": "Microsoft",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$3.64T",
+      "valuation": "~$3.66T",
       "leader": "Satya Nadella (CEO)",
       "public": true,
       "symbol": "MSFT",
@@ -46,14 +46,14 @@
         "Microsoft",
         "微软"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:46Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "google.com": {
       "name": "Alphabet / Google",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$3.36T",
+      "valuation": "~$3.38T",
       "leader": "Sundar Pichai (CEO)",
       "public": true,
       "symbol": "GOOGL",
@@ -63,14 +63,14 @@
         "谷歌"
       ],
       "wiki": "Alphabet_Inc.",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:46Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "amazon.com": {
       "name": "Amazon",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$2.64T",
+      "valuation": "~$2.75T",
       "leader": "Andy Jassy (CEO)",
       "public": true,
       "symbol": "AMZN",
@@ -79,14 +79,14 @@
         "亚马逊"
       ],
       "wiki": "Amazon_(company)",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:46Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "meta.com": {
       "name": "Meta",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$1.56T",
+      "valuation": "~$1.61T",
       "leader": "Mark Zuckerberg (CEO)",
       "public": true,
       "symbol": "META",
@@ -94,14 +94,14 @@
         "Meta"
       ],
       "wiki": "Meta_Platforms",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:46Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "tesla.com": {
       "name": "Tesla",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$1.50T",
+      "valuation": "~$1.58T",
       "leader": "Elon Musk (CEO)",
       "public": true,
       "symbol": "TSLA",
@@ -109,21 +109,21 @@
         "Tesla",
         "特斯拉"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:46Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "anthropic.com": {
       "name": "Anthropic",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$1.11T",
+      "valuation": "~$1.23T",
       "leader": "Dario Amodei (CEO)",
       "public": true,
       "symbol": "ANT",
       "aliases": [
         "Anthropic"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z",
       "inline_ticker": true,
       "currency": "$",
@@ -467,7 +467,7 @@
       "name": "Alibaba",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$218B",
+      "valuation": "~$225B",
       "leader": "Eddie Wu (CEO)",
       "public": true,
       "symbol": "9988.HK",
@@ -475,7 +475,7 @@
         "Alibaba",
         "阿里巴巴"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z",
       "inline_ticker": true,
       "currency": "HK$",
@@ -512,7 +512,7 @@
       "name": "Baidu",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$21B",
+      "valuation": "~$22B",
       "leader": "Robin Li (CEO)",
       "public": true,
       "symbol": "9888.HK",
@@ -520,7 +520,7 @@
         "Baidu",
         "百度"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z",
       "inline_ticker": true,
       "currency": "HK$",
@@ -557,7 +557,7 @@
       "name": "BYD",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$67B",
+      "valuation": "~$69B",
       "leader": "Wang Chuanfu (Chairman & CEO)",
       "public": true,
       "symbol": "1211.HK",
@@ -565,7 +565,7 @@
         "BYD",
         "比亚迪"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z",
       "inline_ticker": true,
       "currency": "HK$",
@@ -579,7 +579,7 @@
       "name": "CATL",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$130B",
+      "valuation": "~$138B",
       "leader": "Robin Zeng (Chairman & CEO)",
       "public": true,
       "symbol": "300750.SZ",
@@ -587,7 +587,7 @@
         "CATL",
         "宁德时代"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z",
       "inline_ticker": true,
       "currency": "¥",
@@ -660,14 +660,14 @@
       "name": "Intel",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$290B",
+      "valuation": "~$305B",
       "leader": "Lip-Bu Tan (CEO)",
       "public": true,
       "symbol": "INTC",
       "aliases": [
         "Intel"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:46Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z",
       "inline_ticker": true,
       "currency": "$",
@@ -680,14 +680,14 @@
       "name": "AMD",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$672B",
+      "valuation": "~$703B",
       "leader": "Lisa Su (CEO)",
       "public": true,
       "symbol": "AMD",
       "aliases": [
         "AMD"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z",
       "inline_ticker": true,
       "currency": "$",
@@ -699,14 +699,14 @@
       "name": "Broadcom",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$1.44T",
+      "valuation": "~$1.49T",
       "leader": "Hock Tan (CEO)",
       "public": true,
       "symbol": "AVGO",
       "aliases": [
         "Broadcom"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z",
       "inline_ticker": true,
       "currency": "$",
@@ -739,14 +739,14 @@
       "name": "ASML",
       "country": "Netherlands",
       "country_code": "nl",
-      "valuation": "~$502B",
+      "valuation": "~$511B",
       "leader": "Christophe Fouquet (CEO)",
       "public": true,
       "symbol": "ASML",
       "aliases": [
         "ASML"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "oracle.com": {
@@ -793,28 +793,28 @@
       "name": "SpaceX",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$1.73T",
+      "valuation": "~$1.81T",
       "leader": "Elon Musk (CEO)",
       "public": true,
       "symbol": "SPCX",
       "aliases": [
         "SpaceX"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:46Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "boeing.com": {
       "name": "Boeing",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$130B",
+      "valuation": "~$133B",
       "leader": "Kelly Ortberg (CEO)",
       "public": true,
       "symbol": "BA",
       "aliases": [
         "Boeing"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z",
       "inline_ticker": true,
       "currency": "$",
@@ -1018,7 +1018,7 @@
       "aliases": [
         "Adobe"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "uber.com": {
@@ -1266,14 +1266,14 @@
       "name": "Chevron",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$412B",
+      "valuation": "~$415B",
       "leader": "Mike Wirth (CEO)",
       "public": true,
       "symbol": "CVX",
       "aliases": [
         "Chevron"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "aramco.com": {
@@ -1287,7 +1287,7 @@
       "aliases": [
         "Saudi Aramco"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "bbc.com": {
@@ -1328,7 +1328,7 @@
       "name": "Reuters (Thomson Reuters)",
       "country": "Canada",
       "country_code": "ca",
-      "valuation": "~$47B",
+      "valuation": "~$48B",
       "leader": "Steve Hasker (CEO)",
       "public": true,
       "symbol": "TRI",
@@ -1341,7 +1341,7 @@
         "Reuters"
       ],
       "wiki": "Reuters",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:46Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "bloomberg.com": {
@@ -1741,14 +1741,14 @@
       "name": "Airbus",
       "country": "France",
       "country_code": "fr",
-      "valuation": "~$165B",
+      "valuation": "~$167B",
       "leader": "Guillaume Faury (CEO)",
       "public": true,
       "symbol": "AIR.PA",
       "aliases": [
         "Airbus"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "delta.com": {
@@ -1791,7 +1791,7 @@
       "aliases": [
         "American Airlines"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "southwest.com": {
@@ -1819,7 +1819,7 @@
       "aliases": [
         "Alaska Airlines"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "jetblue.com": {
@@ -1891,7 +1891,7 @@
         "British Airways"
       ],
       "wiki": "British_Airways",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "airfrance.com": {
@@ -1905,7 +1905,7 @@
       "aliases": [
         "Air France"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "emirates.com": {
@@ -1957,7 +1957,7 @@
       "aliases": [
         "Cathay Pacific"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "jal.co.jp": {
@@ -2000,7 +2000,7 @@
         "Air China",
         "中国国航"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "ceair.com": {
@@ -2015,7 +2015,7 @@
         "China Eastern",
         "东方航空"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "csair.com": {
@@ -2072,7 +2072,7 @@
       "aliases": [
         "Air Canada"
       ],
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "nasa.gov": {
@@ -2259,7 +2259,7 @@
       "name": "Agricultural Bank of China",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$270B",
+      "valuation": "~$291B",
       "leader": "Gu Shu (Chairman)",
       "public": true,
       "symbol": "1288.HK",
@@ -2274,14 +2274,14 @@
       ],
       "logo": "abchina.png",
       "wiki": "Agricultural_Bank_of_China",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:49Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "icbc.com.cn": {
       "name": "Industrial and Commercial Bank of China (ICBC)",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$310B",
+      "valuation": "~$348B",
       "leader": "Liao Lin (Chairman)",
       "public": true,
       "symbol": "1398.HK",
@@ -2293,14 +2293,14 @@
         "工行"
       ],
       "wiki": "Industrial_and_Commercial_Bank_of_China",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:46Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "ccb.com": {
       "name": "China Construction Bank (CCB)",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$230B",
+      "valuation": "~$339B",
       "leader": "Zhang Jinliang (Chairman)",
       "public": true,
       "symbol": "0939.HK",
@@ -2314,14 +2314,14 @@
         "CCB"
       ],
       "wiki": "China_Construction_Bank",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "boc.cn": {
       "name": "Bank of China (BOC)",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$200B",
+      "valuation": "~$253B",
       "leader": "Ge Haijiao (Chairman)",
       "public": true,
       "symbol": "3988.HK",
@@ -2335,14 +2335,14 @@
       ],
       "logo": "boc.png",
       "wiki": "Bank_of_China",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:46Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "bankcomm.com": {
       "name": "Bank of Communications",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$75B",
+      "valuation": "~$100B",
       "leader": "Ren Deqi (Chairman)",
       "public": true,
       "symbol": "3328.HK",
@@ -2353,7 +2353,7 @@
         "交行"
       ],
       "wiki": "Bank_of_Communications",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "psbc.com": {
@@ -2416,7 +2416,7 @@
       "name": "Ping An Bank",
       "country": "China",
       "country_code": "cn",
-      "valuation": "~$32B",
+      "valuation": "~$33B",
       "leader": "Xie Yonglin (Chairman)",
       "public": true,
       "symbol": "000001.SZ",
@@ -2425,7 +2425,7 @@
         "平安银行"
       ],
       "wiki": "Ping_An_Bank",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "spdb.com.cn": {
@@ -2484,7 +2484,7 @@
       "name": "Bank of America",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$340B",
+      "valuation": "~$339B",
       "leader": "Brian Moynihan (CEO)",
       "public": true,
       "symbol": "BAC",
@@ -2494,7 +2494,7 @@
         "美国银行"
       ],
       "wiki": "Bank_of_America",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "citigroup.com": {
@@ -2601,7 +2601,7 @@
       "name": "Capital One",
       "country": "United States",
       "country_code": "us",
-      "valuation": "~$115B",
+      "valuation": "~$111B",
       "leader": "Richard Fairbank (CEO)",
       "public": true,
       "symbol": "COF",
@@ -2609,7 +2609,7 @@
         "Capital One"
       ],
       "wiki": "Capital_One",
-      "refreshed_at": "2026-11-27T04:20:09Z",
+      "refreshed_at": "2026-11-28T03:59:51Z",
       "leader_refreshed_at": "2026-11-27T04:20:09Z"
     },
     "schwab.com": {
@@ -2678,8 +2678,8 @@
       "name": "Arm",
       "country": "United Kingdom",
       "country_code": "gb",
-      "valuation": "",
-      "leader": "",
+      "valuation": "~$184B",
+      "leader": "Rene Anthony Andrada Haas (CEO)",
       "public": true,
       "symbol": "ARM",
       "aliases": [],
@@ -2687,14 +2687,16 @@
       "currency": "$",
       "inline_aliases": [
         "ARM"
-      ]
+      ],
+      "refreshed_at": "2026-11-28T03:59:46Z",
+      "leader_refreshed_at": "2026-11-28T03:59:46Z"
     },
     "ford.com": {
       "name": "Ford",
       "country": "United States",
       "country_code": "us",
-      "valuation": "",
-      "leader": "",
+      "valuation": "~$49B",
+      "leader": "James Duncan Farley Jr. (CEO)",
       "public": true,
       "symbol": "F",
       "aliases": [
@@ -2704,14 +2706,16 @@
       "currency": "$",
       "inline_aliases": [
         "Ford"
-      ]
+      ],
+      "refreshed_at": "2026-11-28T03:59:46Z",
+      "leader_refreshed_at": "2026-11-28T03:59:46Z"
     },
     "smics.com": {
       "name": "SMIC",
       "country": "China",
       "country_code": "cn",
-      "valuation": "",
-      "leader": "",
+      "valuation": "~$59B",
+      "leader": "Haijun Zhao & Mong Song Liang (Co-CEOs)",
       "public": true,
       "symbol": "0981.HK",
       "aliases": [
@@ -2724,14 +2728,16 @@
         "SMIC",
         "中芯国际",
         "0981.HK"
-      ]
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-28T03:59:49Z"
     },
     "neteasegames.com": {
       "name": "NetEase",
       "country": "China",
       "country_code": "cn",
-      "valuation": "",
-      "leader": "",
+      "valuation": "~$69B",
+      "leader": "Lei Ding (CEO)",
       "public": true,
       "symbol": "9999.HK",
       "aliases": [
@@ -2744,13 +2750,15 @@
         "NetEase",
         "网易",
         "9999.HK"
-      ]
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-28T03:59:49Z"
     },
     "moutaichina.com": {
       "name": "Kweichow Moutai",
       "country": "China",
       "country_code": "cn",
-      "valuation": "",
+      "valuation": "~$254B",
       "leader": "",
       "public": true,
       "symbol": "600519.SS",
@@ -2764,7 +2772,9 @@
         "Moutai",
         "茅台",
         "600519.SS"
-      ]
+      ],
+      "refreshed_at": "2026-11-28T03:59:46Z",
+      "leader_refreshed_at": "2026-11-28T03:59:46Z"
     }
   },
   "indices": {
