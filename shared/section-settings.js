@@ -73,10 +73,22 @@ export function initSectionSettings({
   getInitialLayout = () => null,
   onSave = () => {},
   onApplied = null,
+  getBriefStyle = null,
+  onBriefStyleChange = null,
 } = {}) {
   const sectionMap = new Map(sections.map((s) => [s.id, s]));
   let current = normalizeSectionLayout(getInitialLayout(), sections);
   let modalEl = null;
+
+  const syncBriefStyleUi = (styleVal) => {
+    if (!modalEl) return;
+    const cur = styleVal === "bullets" ? "bullets" : "regular";
+    modalEl.querySelectorAll("[data-ss-brief-style]").forEach((btn) => {
+      const active = btn.dataset.ssBriefStyle === cur;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", String(active));
+    });
+  };
 
   const applyDomOrderAndVisibility = () => {
     const appRoot = document.getElementById("app-root");
@@ -179,16 +191,33 @@ export function initSectionSettings({
     modalEl.className = "ss-backdrop hidden";
     modalEl.setAttribute("role", "dialog");
     modalEl.setAttribute("aria-modal", "true");
-    modalEl.setAttribute("aria-label", `${pageLabel} Section Settings`);
+    modalEl.setAttribute("aria-label", `${pageLabel} Customization`);
+    const curStyle = typeof getBriefStyle === "function" && getBriefStyle() === "bullets" ? "bullets" : "regular";
+    const briefStyleHtml =
+      typeof onBriefStyleChange === "function"
+        ? `
+          <div class="ss-pref-row" role="group" aria-label="Brief display style">
+            <div class="ss-pref-meta">
+              <span class="ss-pref-label">Brief style</span>
+              <span class="ss-pref-hint">Paragraphs or one news item per bullet</span>
+            </div>
+            <div class="ss-seg">
+              <button type="button" class="ss-seg-btn${curStyle === "regular" ? " active" : ""}" data-ss-brief-style="regular" aria-pressed="${curStyle === "regular"}">Regular</button>
+              <button type="button" class="ss-seg-btn${curStyle === "bullets" ? " active" : ""}" data-ss-brief-style="bullets" aria-pressed="${curStyle === "bullets"}">Bullets</button>
+            </div>
+          </div>
+        `
+        : "";
     modalEl.innerHTML = `
       <div class="ss-modal">
         <div class="ss-header">
           <div>
-            <h3>Customize Sections</h3>
-            <p class="ss-sub">Reorder sections, toggle visibility, or choose whether each loads expanded or collapsed.</p>
+            <h3>Customize</h3>
+            <p class="ss-sub">Adjust brief style, reorder sections, toggle visibility, or choose default collapse state.</p>
           </div>
-          <button type="button" class="ss-close" data-ss-close aria-label="Close section settings">&times;</button>
+          <button type="button" class="ss-close" data-ss-close aria-label="Close customization">&times;</button>
         </div>
+        ${briefStyleHtml}
         <div class="ss-list" data-section-settings-list></div>
         <div class="ss-footer">
           <button type="button" class="ss-reset-btn" data-ss-reset>Reset to defaults</button>
@@ -203,9 +232,20 @@ export function initSectionSettings({
         closeModal();
         return;
       }
+      const styleBtn = e.target.closest("[data-ss-brief-style]");
+      if (styleBtn && typeof onBriefStyleChange === "function") {
+        const nextStyle = styleBtn.dataset.ssBriefStyle === "bullets" ? "bullets" : "regular";
+        syncBriefStyleUi(nextStyle);
+        onBriefStyleChange(nextStyle);
+        return;
+      }
       if (e.target.closest("[data-ss-reset]")) {
         current = normalizeSectionLayout(null, sections);
         commit();
+        if (typeof onBriefStyleChange === "function") {
+          syncBriefStyleUi("regular");
+          onBriefStyleChange("regular");
+        }
         return;
       }
       const actionBtn = e.target.closest("[data-ss-action]");
@@ -256,6 +296,9 @@ export function initSectionSettings({
 
   const openModal = () => {
     ensureModal();
+    if (typeof getBriefStyle === "function") {
+      syncBriefStyleUi(getBriefStyle());
+    }
     renderRows();
     modalEl.classList.remove("hidden");
     modalEl.querySelector("[data-ss-close]")?.focus();
@@ -277,6 +320,7 @@ export function initSectionSettings({
     openModal,
     closeModal,
     applyLayout,
+    syncBriefStyle: syncBriefStyleUi,
     getLayout: () => ({
       order: [...current.order],
       hidden: [...current.hidden],

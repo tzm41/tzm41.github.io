@@ -13,6 +13,7 @@ import {
 import {
   initTheme,
   initMasthead,
+  renderEditionDate,
   initScrollSpy,
   focusSharedCardFromUrl,
   createCollapsibleManager,
@@ -827,7 +828,7 @@ function renderAll(briefing) {
   ttsRegistry.clear();
   buildTickerMap(briefing.markets);
   buildPersonNameRegex(briefing, state.companyFacts);
-  els.editionDate.textContent = fmtReadableDate(briefing.date);
+  renderEditionDate(els.editionDate, briefing.date);
   const candidates = [
     briefing.generated_at,
     briefing.morning_brief?.generated_at,
@@ -1029,6 +1030,13 @@ async function bootstrap() {
     getInitialLayout: () => initialPrefs?.daily_sections || null,
     onSave: (layout) => setPreference("daily_sections", layout),
     onApplied: () => syncExpandAllButton(),
+    getBriefStyle: () => state.briefStyle,
+    onBriefStyleChange: (nextStyle) => {
+      state.briefStyle = nextStyle === "bullets" ? "bullets" : "regular";
+      setPreference("brief_style", state.briefStyle);
+      stopTtsIfSection("morning_brief", "afternoon_brief");
+      if (state.briefing) renderExecutiveBrief(state.briefing);
+    },
     sections: [
       { id: "executive", label: "Overview & Briefs", defaultCollapsed: false, setOpen: setExecutiveOpen },
       { id: "news", label: "Top News", defaultCollapsed: false, setOpen: setNewsOpen },
@@ -1196,6 +1204,7 @@ async function bootstrap() {
         prefs.brief_style !== state.briefStyle
       ) {
         state.briefStyle = prefs.brief_style;
+        sectionSettings.syncBriefStyle(state.briefStyle);
         stopTtsIfSection("morning_brief", "afternoon_brief");
         if (state.briefing) renderExecutiveBrief(state.briefing);
       }

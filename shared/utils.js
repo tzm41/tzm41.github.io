@@ -59,6 +59,13 @@ const SHORT_DATE_FMT = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC",
 });
 
+const COMPACT_DATE_FMT = new Intl.DateTimeFormat("en-US", {
+  weekday: "short",
+  month: "short",
+  day: "numeric",
+  timeZone: "UTC",
+});
+
 export function fmtReadableDate(dateStr) {
   if (!dateStr) return "";
   const [y, m, d] = String(dateStr).split("-").map(Number);
@@ -75,6 +82,15 @@ export function fmtShortDate(dateStr) {
   const dt = new Date(Date.UTC(y, m - 1, d));
   if (Number.isNaN(dt.getTime())) return String(dateStr);
   return SHORT_DATE_FMT.format(dt);
+}
+
+export function fmtCompactDate(dateStr) {
+  if (!dateStr) return "";
+  const [y, m, d] = String(dateStr).split("-").map(Number);
+  if (!y || !m || !d) return String(dateStr);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  if (Number.isNaN(dt.getTime())) return String(dateStr);
+  return COMPACT_DATE_FMT.format(dt);
 }
 
 export function fmtLocalTimestamp(isoStr) {

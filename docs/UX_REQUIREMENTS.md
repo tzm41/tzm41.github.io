@@ -17,8 +17,12 @@ Consolidated user-experience, visual, and interaction specification across `coli
 - **Shared Responsive Masthead (`initMasthead`):**
   - Unified breadcrumb row and responsive `<h1>` shrinking logic across Daily Briefing, Weekly Briefing, and Bookmarks (e.g., `Daily Briefing` → `Daily`, `Weekly Briefing` → `Weekly` on narrow screens `<= 768px`).
   - Archive date selector (`‹` / dropdown / `›`) is integrated directly into the `.title-row` beside the edition title.
-  - Compact `32px` control row: **Expand All / Collapse All**, **Refresh** (icon-only, spins while re-fetching with `cache: "no-store"`), **Customize Sections** (sliders icon), **Theme** toggle, and **Sign-In / Avatar** menu.
+  - Compact `32px` control row: **Expand All / Collapse All**, **Refresh** (icon-only, spins while re-fetching with `cache: "no-store"`), **Customize** (sliders icon), **Theme** toggle, and **Sign-In / Avatar** menu.
   - `Updated ...` timestamp reflects the latest edition update formatted in the viewer's local timezone.
+- **Sticky Shrunken Titlebar (On Scroll):**
+  - When scrolled past the full masthead, a compact sticky bar (sized cleanly to the `32px` control buttons, using a zero-layout-shift spacer) docks at the top of the viewport directly above the sticky section tab bar.
+  - **Desktop & Mobile Landscape:** Shrinks the title font size, displays only the title and date picker (left-aligned) plus the action buttons (right-aligned), omitting breadcrumbs and subtitle metadata.
+  - **Mobile Portrait (`<= 680px` portrait):** Shrinks the title font size, shows only the title and short-form date picker omitting the year (e.g., `Fri, Nov 27`, left-aligned), and collapses all action buttons into a single right-aligned three-dot (`⋮`) overflow menu.
 - **Sticky Section Tab Bar:**
   - Horizontal sticky nav with dynamic scroll-spy and centered auto-scroll on narrow viewports.
   - Tab order and visibility stay automatically synchronized with user Section Settings.
@@ -54,7 +58,7 @@ Consolidated user-experience, visual, and interaction specification across `coli
   - Each bullet stacks a 7-level sentiment half-ring gauge + category pill above the text.
   - Daily briefs include at most one item primarily about the stock market.
 - **Brief Display Style Toggle (`Regular` vs `Bullets`):**
-  - Available in the Sign-In / Avatar dropdown menu (default: `Regular`, persisted locally and synced with signed-in accounts via `brief_style`).
+  - Located inside the **Customize** modal (sliders icon in the masthead; default: `Regular`, persisted locally and synced with signed-in accounts via `brief_style`).
   - In `Bullets` mode, each brief item renders its structured LLM-generated `points[]` array with one distinct news item per line.
 
 ---

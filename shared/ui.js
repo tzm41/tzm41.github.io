@@ -16,6 +16,7 @@ import {
   escapeRegex,
   fmtReadableDate,
   fmtShortDate,
+  fmtCompactDate,
   fmtLocalTimestamp,
   fmtCoords,
   fetchJson,
@@ -31,6 +32,7 @@ export {
   escapeRegex,
   fmtReadableDate,
   fmtShortDate,
+  fmtCompactDate,
   fmtLocalTimestamp,
   fmtCoords,
   fetchJson,
@@ -182,9 +184,19 @@ export function renderResponsiveLabel(fullLabel, shortLabel = fullLabel) {
   return `<span class="label-full">${safeFull}</span><span class="label-short" aria-hidden="true">${escapeHtml(shortLabel)}</span>`;
 }
 
+const OVERFLOW_DOTS_SVG = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>`;
+
+export function renderEditionDate(el, dateStr) {
+  if (!el) return;
+  const full = fmtReadableDate(dateStr);
+  const compact = fmtCompactDate(dateStr);
+  el.innerHTML = `<span class="date-full">${escapeHtml(full)}</span><span class="date-short" aria-hidden="true">${escapeHtml(compact)}</span>`;
+}
+
 /**
- * Hydrate the shared masthead breadcrumb row and responsive <h1> title
- * so all pages share one canonical full/narrow-screen shrinking implementation.
+ * Hydrate the shared masthead breadcrumb row, responsive <h1> title,
+ * sticky shrunken scroll titlebar (above section tab bar), and mobile portrait
+ * three-dot overflow menu.
  */
 export function initMasthead({
   currentPage,
@@ -207,6 +219,133 @@ export function initMasthead({
       })
       .join('<span class="crumb-sep" aria-hidden="true">&middot;</span>');
   }
+
+  initStickyMasthead();
+}
+
+function initStickyMasthead() {
+  if (typeof window === "undefined" || typeof document === "undefined") return;
+  const masthead = document.querySelector(".masthead");
+  const mastheadInner = masthead?.querySelector(".masthead-inner");
+  const controls = masthead?.querySelector(".masthead-controls");
+  if (!masthead || !mastheadInner || masthead.dataset.stickyBound === "1") return;
+  masthead.dataset.stickyBound = "1";
+
+  // Insert zero-layout-shift spacer immediately after masthead
+  const spacer = document.createElement("div");
+  spacer.className = "masthead-spacer";
+  spacer.setAttribute("aria-hidden", "true");
+  masthead.insertAdjacentElement("afterend", spacer);
+
+  // Inject mobile-portrait three-dot overflow menu button (shown only when stuck in portrait)
+  let overflowBtn = mastheadInner.querySelector(".masthead-overflow-btn");
+  if (!overflowBtn && controls) {
+    overflowBtn = document.createElement("button");
+    overflowBtn.type = "button";
+    overflowBtn.className = "masthead-icon-btn masthead-overflow-btn";
+    overflowBtn.setAttribute("aria-label", "More actions");
+    overflowBtn.setAttribute("aria-haspopup", "true");
+    overflowBtn.setAttribute("aria-expanded", "false");
+    overflowBtn.setAttribute("title", "More actions");
+    overflowBtn.innerHTML = OVERFLOW_DOTS_SVG;
+    mastheadInner.appendChild(overflowBtn);
+  }
+
+  const closeOverflow = () => {
+    if (!masthead.classList.contains("is-overflow-open")) return;
+    masthead.classList.remove("is-overflow-open");
+    overflowBtn?.setAttribute("aria-expanded", "false");
+  };
+
+  overflowBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = masthead.classList.toggle("is-overflow-open");
+    overflowBtn.setAttribute("aria-expanded", String(open));
+  });
+
+  // Close overflow menu after activating non-auth controls (e.g. Customize, Refresh, Expand All)
+  controls?.addEventListener("click", (e) => {
+    if (!masthead.classList.contains("is-overflow-open")) return;
+    if (e.target.closest("#auth-mount, select")) return;
+    if (e.target.closest("button")) {
+      window.setTimeout(closeOverflow, 0);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!masthead.classList.contains("is-overflow-open")) return;
+    if (masthead.contains(e.target)) return;
+    closeOverflow();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeOverflow();
+  });
+
+  let fullHeight = Math.round(masthead.getBoundingClientRect().height);
+  let stuck = false;
+
+  const syncStickyHeightVar = () => {
+    if (stuck) {
+      const sh = Math.round(masthead.getBoundingClientRect().height);
+      document.documentElement.style.setProperty("--sticky-masthead-h", `${sh}px`);
+    } else {
+      document.documentElement.style.setProperty("--sticky-masthead-h", "0px");
+    }
+  };
+
+  const updateStuckState = () => {
+    if (!stuck) {
+      fullHeight = Math.round(masthead.getBoundingClientRect().height) || fullHeight;
+    }
+    const enterThreshold = Math.max(28, fullHeight - 48);
+    const exitThreshold = Math.max(8, enterThreshold - 14);
+    const y = window.scrollY;
+
+    if (!stuck && y > enterThreshold) {
+      stuck = true;
+      spacer.style.height = `${fullHeight}px`;
+      masthead.classList.add("is-stuck");
+      syncStickyHeightVar();
+    } else if (stuck && y <= exitThreshold) {
+      stuck = false;
+      closeOverflow();
+      masthead.classList.remove("is-stuck");
+      spacer.style.height = "0px";
+      syncStickyHeightVar();
+    }
+  };
+
+  let ticking = false;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(() => {
+        updateStuckState();
+        ticking = false;
+      });
+    },
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "resize",
+    () => {
+      closeOverflow();
+      if (!stuck) {
+        fullHeight = Math.round(masthead.getBoundingClientRect().height) || fullHeight;
+      } else {
+        syncStickyHeightVar();
+      }
+      updateStuckState();
+    },
+    { passive: true }
+  );
+
+  syncStickyHeightVar();
+  updateStuckState();
 }
 
 export function focusSharedCardFromUrl({ onBeforeFind = null } = {}) {
@@ -282,6 +421,7 @@ export function initScrollSpy() {
     if (!visiblePairs.length) return;
 
     const navH = nav ? nav.getBoundingClientRect().height : 44;
+    const stickyH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--sticky-masthead-h")) || 0;
     const atBottom =
       window.scrollY > 40 &&
       window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40;
@@ -290,7 +430,7 @@ export function initScrollSpy() {
     if (atBottom) {
       activePair = visiblePairs[visiblePairs.length - 1];
     } else if (window.scrollY > 40) {
-      const threshold = navH + 36;
+      const threshold = stickyH + navH + 36;
       for (const pair of visiblePairs) {
         if (pair.section.getBoundingClientRect().top <= threshold) {
           activePair = pair;

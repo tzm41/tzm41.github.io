@@ -13,6 +13,7 @@ import {
 import {
   initTheme,
   initMasthead,
+  renderEditionDate,
   initScrollSpy,
   focusSharedCardFromUrl,
   createCollapsibleManager,
@@ -181,7 +182,7 @@ function collectEditionTexts(ed) {
 /* ---------- Renderers ---------- */
 
 function renderHeader(ed) {
-  els.editionDate.textContent = fmtReadableDate(ed.date);
+  renderEditionDate(els.editionDate, ed.date);
   els.generatedMeta.textContent = `Published ${fmtLocalTimestamp(ed.generated_at)}`;
 }
 
@@ -872,6 +873,16 @@ async function bootstrap() {
     getInitialLayout: () => initialPrefs?.weekly_sections || null,
     onSave: (layout) => setPreference("weekly_sections", layout),
     onApplied: () => collapsibles.syncExpandAllButton(),
+    getBriefStyle: () => state.briefStyle,
+    onBriefStyleChange: (nextStyle) => {
+      state.briefStyle = nextStyle === "bullets" ? "bullets" : "regular";
+      setPreference("brief_style", state.briefStyle);
+      stopTtsIfSection("digest", "week_in_brief");
+      if (state.edition) {
+        renderDigest(state.edition);
+        renderWeekInBrief(state.edition);
+      }
+    },
     sections: [
       { id: "overview", label: "Sunday Digest", defaultCollapsed: false, setOpen: setOverviewOpen },
       { id: "science", label: "Science & Discovery", defaultCollapsed: false, setOpen: setScienceOpen },
@@ -920,6 +931,7 @@ async function bootstrap() {
         prefs.brief_style !== state.briefStyle
       ) {
         state.briefStyle = prefs.brief_style;
+        sectionSettings.syncBriefStyle(state.briefStyle);
         stopTtsIfSection("digest", "week_in_brief");
         if (state.edition) {
           renderDigest(state.edition);
