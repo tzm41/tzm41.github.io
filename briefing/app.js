@@ -998,7 +998,7 @@ async function bootstrap() {
   });
 
   // Collapsible sections: Overview, Top News, Markets, Global Conflicts, US Politics, Local News, Positive News
-  const { wireCollapsible, syncExpandAllButton: syncAll } = createCollapsibleManager(els.btnExpandAll, {
+  const { wireCollapsible, syncExpandAllButton: syncAll, areAllExpanded, toggleAll } = createCollapsibleManager(els.btnExpandAll, {
     extraIsOpen: () => {
       const localVisible =
         els.localSection &&
@@ -1033,6 +1033,8 @@ async function bootstrap() {
     getInitialLayout: () => initialPrefs?.daily_sections || null,
     onSave: (layout) => setPreference("daily_sections", layout),
     onApplied: () => syncExpandAllButton(),
+    areAllExpanded,
+    onToggleAll: toggleAll,
     getBriefStyle: () => state.briefStyle,
     onBriefStyleChange: (nextStyle) => {
       state.briefStyle = nextStyle === "bullets" ? "bullets" : "regular";

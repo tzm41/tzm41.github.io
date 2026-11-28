@@ -1808,10 +1808,10 @@ h3 {
 
 .ss-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 16px 18px 12px;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -1918,6 +1918,42 @@ h3 {
 
 .ss-seg-btn:hover:not(.active) {
   color: var(--ink);
+}
+
+.ss-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 18px 2px;
+}
+
+.ss-list-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-muted);
+}
+
+.ss-expand-all-btn {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 5px;
+  background: var(--surface-subtle);
+  color: var(--ink-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.ss-expand-all-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .ss-row {

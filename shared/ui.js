@@ -531,14 +531,17 @@ export function createCollapsibleManager(btnExpandAll, { extraIsOpen = null, ext
     return setOpen;
   };
 
-  btnExpandAll?.addEventListener("click", () => {
+  const toggleAll = () => {
     const open = !areAllExpanded();
     controllers.forEach((c) => c.setOpen(open));
     if (typeof extraSetOpen === "function") extraSetOpen(open);
     syncExpandAllButton();
-  });
+    return open;
+  };
 
-  return { wireCollapsible, syncExpandAllButton };
+  btnExpandAll?.addEventListener("click", toggleAll);
+
+  return { wireCollapsible, syncExpandAllButton, areAllExpanded, toggleAll };
 }
 
 /* ---------- Source Bias & 7-Level Sentiment Half-Ring Widgets ---------- */

@@ -17,7 +17,7 @@ Consolidated user-experience, visual, and interaction specification across `coli
 - **Shared Responsive Masthead (`initMasthead`):**
   - Unified breadcrumb row and responsive `<h1>` shrinking logic across Daily Briefing, Weekly Briefing, and Bookmarks (e.g., `Daily Briefing` → `Daily`, `Weekly Briefing` → `Weekly` on narrow screens `<= 768px`).
   - Archive date selector (`‹` / dropdown / `›`) is integrated directly into the `.title-row` beside the edition title.
-  - Compact `32px` control row: **Expand All / Collapse All**, **Refresh** (icon-only, spins while re-fetching with `cache: "no-store"`), **Customize** (sliders icon), **Theme** toggle, and **Sign-In / Avatar** menu.
+  - Compact `32px` control row: **Refresh** (icon-only, spins while re-fetching with `cache: "no-store"`), **Customize** (sliders icon), **Theme** toggle, and **Sign-In / Avatar** menu.
   - `Updated ...` timestamp reflects the latest edition update formatted in the viewer's local timezone.
 - **Sticky Shrunken Titlebar (On Scroll):**
   - When scrolled past the full masthead, a compact sticky bar (sized cleanly to the `32px` control buttons, using a zero-layout-shift spacer) docks at the top of the viewport directly above the sticky section tab bar.
@@ -37,8 +37,9 @@ Consolidated user-experience, visual, and interaction specification across `coli
 ---
 
 ## 3. Section Layout Settings (Show/Hide, Collapse on Load, Reorder)
-- **Accessible Everywhere:** Sliders button in the masthead on both **Daily Briefing** and **Weekly Briefing** opens a **Customize Sections** modal.
-- **Per-Section Controls:**
+- **Accessible Everywhere:** Sliders button in the masthead on both **Daily Briefing** and **Weekly Briefing** opens the **Customize** modal (header title only, no subtitle).
+- **Bulk & Per-Section Controls:**
+  - **Expand All / Collapse All:** Located directly above the sections list inside the Customize modal (toggles all currently visible sections).
   - **Reorder (`↑` / `↓`):** Reorders both `<section>` blocks in `<main>` and their corresponding sticky `<nav>` links. Replaces the old single-purpose Positive News placement button.
   - **Expanded / Collapsed on Load:** Chooses whether each section starts expanded or collapsed on page load (including Overview/Briefs and Top News).
   - **Show / Hide (Eye Toggle):** Hides both the section and its sticky nav link (at least one section must remain visible).

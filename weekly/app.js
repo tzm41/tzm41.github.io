@@ -876,6 +876,8 @@ async function bootstrap() {
     getInitialLayout: () => initialPrefs?.weekly_sections || null,
     onSave: (layout) => setPreference("weekly_sections", layout),
     onApplied: () => collapsibles.syncExpandAllButton(),
+    areAllExpanded: collapsibles.areAllExpanded,
+    onToggleAll: collapsibles.toggleAll,
     getBriefStyle: () => state.briefStyle,
     onBriefStyleChange: (nextStyle) => {
       state.briefStyle = nextStyle === "bullets" ? "bullets" : "regular";

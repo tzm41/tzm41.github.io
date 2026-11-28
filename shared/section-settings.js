@@ -77,10 +77,21 @@ export function initSectionSettings({
   onBriefStyleChange = null,
   getShowListen = null,
   onShowListenChange = null,
+  areAllExpanded = null,
+  onToggleAll = null,
 } = {}) {
   const sectionMap = new Map(sections.map((s) => [s.id, s]));
   let current = normalizeSectionLayout(getInitialLayout(), sections);
   let modalEl = null;
+
+  const syncExpandAllUi = () => {
+    if (!modalEl || typeof areAllExpanded !== "function") return;
+    const btn = modalEl.querySelector("[data-ss-expand-all]");
+    if (!btn) return;
+    const allOpen = Boolean(areAllExpanded());
+    btn.setAttribute("aria-expanded", String(allOpen));
+    btn.textContent = allOpen ? "Collapse All" : "Expand All";
+  };
 
   const syncBriefStyleUi = (styleVal) => {
     if (!modalEl) return;
@@ -137,6 +148,7 @@ export function initSectionSettings({
       applyCollapseStates();
     }
     if (typeof onApplied === "function") onApplied(current);
+    syncExpandAllUi();
     if (modalEl && !modalEl.classList.contains("hidden")) {
       renderRows();
     }
@@ -236,17 +248,24 @@ export function initSectionSettings({
           </div>
         `
         : "";
+    const listHeadHtml =
+      typeof onToggleAll === "function"
+        ? `
+          <div class="ss-list-head">
+            <span class="ss-list-title">Sections</span>
+            <button type="button" class="ss-expand-all-btn" data-ss-expand-all aria-expanded="false">Expand All</button>
+          </div>
+        `
+        : "";
     modalEl.innerHTML = `
       <div class="ss-modal">
         <div class="ss-header">
-          <div>
-            <h3>Customize</h3>
-            <p class="ss-sub">Adjust brief style, listen controls, section order, visibility, and default collapse state.</p>
-          </div>
+          <h3>Customize</h3>
           <button type="button" class="ss-close" data-ss-close aria-label="Close customization">&times;</button>
         </div>
         ${briefStyleHtml}
         ${showListenHtml}
+        ${listHeadHtml}
         <div class="ss-list" data-section-settings-list></div>
         <div class="ss-footer">
           <button type="button" class="ss-reset-btn" data-ss-reset>Reset to defaults</button>
@@ -259,6 +278,11 @@ export function initSectionSettings({
     modalEl.addEventListener("click", (e) => {
       if (e.target === modalEl || e.target.closest("[data-ss-close]")) {
         closeModal();
+        return;
+      }
+      if (e.target.closest("[data-ss-expand-all]") && typeof onToggleAll === "function") {
+        onToggleAll();
+        syncExpandAllUi();
         return;
       }
       const styleBtn = e.target.closest("[data-ss-brief-style]");
@@ -342,6 +366,7 @@ export function initSectionSettings({
     if (typeof getShowListen === "function") {
       syncShowListenUi(getShowListen());
     }
+    syncExpandAllUi();
     renderRows();
     modalEl.classList.remove("hidden");
     modalEl.querySelector("[data-ss-close]")?.focus();
@@ -365,6 +390,7 @@ export function initSectionSettings({
     applyLayout,
     syncBriefStyle: syncBriefStyleUi,
     syncShowListen: syncShowListenUi,
+    syncExpandAll: syncExpandAllUi,
     getLayout: () => ({
       order: [...current.order],
       hidden: [...current.hidden],
