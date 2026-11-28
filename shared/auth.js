@@ -15,7 +15,7 @@ import {
 } from "./bookmarks.js";
 import { escapeHtml } from "./utils.js";
 
-export const API_BASE = "https://briefing-markets-proxy.tzm41.workers.dev";
+export const API_BASE = "https://colintan.dev";
 export const GOOGLE_CLIENT_ID =
   "860276707063-9giqi2mtolon02mntnh0vjmi1uos9sge.apps.googleusercontent.com";
 

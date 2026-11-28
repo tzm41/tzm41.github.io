@@ -8,6 +8,9 @@ routes = [
   { pattern = "colintan.dev/briefing/", zone_name = "colintan.dev" },
   { pattern = "colintan.dev/weekly", zone_name = "colintan.dev" },
   { pattern = "colintan.dev/weekly/", zone_name = "colintan.dev" },
+  { pattern = "colintan.dev/auth/*", zone_name = "colintan.dev" },
+  { pattern = "colintan.dev/user/*", zone_name = "colintan.dev" },
+  { pattern = "colintan.dev/markets", zone_name = "colintan.dev" },
 ]
 
 [triggers]

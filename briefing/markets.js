@@ -300,7 +300,7 @@ function getPriorSessionBadge(times, tf, state) {
 }
 
 
-const CF_MARKETS_PROXY_URL = "https://briefing-markets-proxy.tzm41.workers.dev/markets";
+const CF_MARKETS_PROXY_URL = "https://colintan.dev/markets";
 const LIVE_CACHE_KEY = "briefing-live-markets-cache-v3";
 const CF_RL_KEY = "briefing-cf-rl-v1";
 const LIVE_CACHE_TTL_MS = 100 * 1000; // 100s TTL -> max 3 fetches per 5 min
