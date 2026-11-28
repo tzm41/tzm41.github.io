@@ -1,0 +1,414 @@
+{
+  "schema_version": "3.0",
+  "shard": "finance-banking",
+  "updated_at": "2026-11-28T03:59:51Z",
+  "companies": {
+    "jpmorganchase.com": {
+      "name": "JPMorgan Chase",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$841B",
+      "leader": "Jamie Dimon (CEO)",
+      "public": true,
+      "symbol": "JPM",
+      "aliases": [
+        "JPMorgan Chase",
+        "JPMorgan",
+        "JP Morgan",
+        "Chase Bank",
+        "摩根大通"
+      ],
+      "wiki": "JPMorgan_Chase",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "$",
+      "inline_aliases": [
+        "JPMorgan",
+        "JPM"
+      ],
+      "category": "finance-banking"
+    },
+    "stripe.com": {
+      "name": "Stripe",
+      "country": "United States / Ireland",
+      "country_code": "us",
+      "valuation": "~$159B+",
+      "leader": "Patrick Collison (CEO)",
+      "public": false,
+      "aliases": [
+        "Stripe"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "coinbase.com": {
+      "name": "Coinbase",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$27B",
+      "leader": "Brian Armstrong (CEO)",
+      "public": true,
+      "symbol": "COIN",
+      "aliases": [
+        "Coinbase"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "visa.com": {
+      "name": "Visa",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$792B",
+      "leader": "Ryan McInerney (CEO)",
+      "public": true,
+      "symbol": "V",
+      "aliases": [
+        "Visa"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "mastercard.com": {
+      "name": "Mastercard",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$575B",
+      "leader": "Michael Miebach (CEO)",
+      "public": true,
+      "symbol": "MA",
+      "aliases": [
+        "Mastercard"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "bankcomm.com": {
+      "name": "Bank of Communications",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$100B",
+      "leader": "Ren Deqi (Chairman)",
+      "public": true,
+      "symbol": "3328.HK",
+      "aliases": [
+        "Bank of Communications",
+        "BoCom",
+        "交通银行",
+        "交行"
+      ],
+      "wiki": "Bank_of_Communications",
+      "refreshed_at": "2026-11-28T03:59:51Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "psbc.com": {
+      "name": "Postal Savings Bank of China",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$70B",
+      "leader": "Zheng Guoyu (Chairman)",
+      "public": true,
+      "symbol": "1658.HK",
+      "aliases": [
+        "Postal Savings Bank of China",
+        "PSBC",
+        "中国邮政储蓄银行",
+        "邮储银行"
+      ],
+      "logo": "psbc.png",
+      "wiki": "Postal_Savings_Bank_of_China",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "cmbchina.com": {
+      "name": "China Merchants Bank",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$135B",
+      "leader": "Miao Jianmin (Chairman)",
+      "public": true,
+      "symbol": "3968.HK",
+      "aliases": [
+        "China Merchants Bank",
+        "招商银行",
+        "招行"
+      ],
+      "ambiguous_aliases": [
+        "CMB"
+      ],
+      "wiki": "China_Merchants_Bank",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "citicbank.com": {
+      "name": "China CITIC Bank",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$50B",
+      "leader": "Fang Heying (Chairman)",
+      "public": true,
+      "symbol": "0998.HK",
+      "aliases": [
+        "China CITIC Bank",
+        "中信银行"
+      ],
+      "logo": "citicbank.png",
+      "wiki": "China_CITIC_Bank",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "bank.pingan.com": {
+      "name": "Ping An Bank",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$33B",
+      "leader": "Xie Yonglin (Chairman)",
+      "public": true,
+      "symbol": "000001.SZ",
+      "aliases": [
+        "Ping An Bank",
+        "平安银行"
+      ],
+      "wiki": "Ping_An_Bank",
+      "refreshed_at": "2026-11-28T03:59:51Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "spdb.com.cn": {
+      "name": "Shanghai Pudong Development Bank",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$42B",
+      "leader": "Zhang Weizhong (Chairman)",
+      "public": true,
+      "symbol": "600000.SS",
+      "aliases": [
+        "Shanghai Pudong Development Bank",
+        "SPDB",
+        "浦发银行"
+      ],
+      "logo": "spdb.png",
+      "wiki": "Shanghai_Pudong_Development_Bank",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "cib.com.cn": {
+      "name": "Industrial Bank Co.",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$55B",
+      "leader": "Lyu Jiajin (Chairman)",
+      "public": true,
+      "symbol": "601166.SS",
+      "aliases": [
+        "Industrial Bank Co.",
+        "兴业银行"
+      ],
+      "logo": "cib.png",
+      "wiki": "Industrial_Bank_(China)",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "bankofamerica.com": {
+      "name": "Bank of America",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$339B",
+      "leader": "Brian Moynihan (CEO)",
+      "public": true,
+      "symbol": "BAC",
+      "aliases": [
+        "Bank of America",
+        "BofA",
+        "美国银行"
+      ],
+      "wiki": "Bank_of_America",
+      "refreshed_at": "2026-11-28T03:59:51Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "citigroup.com": {
+      "name": "Citigroup",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$145B",
+      "leader": "Jane Fraser (CEO)",
+      "public": true,
+      "symbol": "C",
+      "aliases": [
+        "Citigroup",
+        "Citibank",
+        "Citi",
+        "花旗银行",
+        "花旗"
+      ],
+      "wiki": "Citigroup",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "wellsfargo.com": {
+      "name": "Wells Fargo",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$240B",
+      "leader": "Charlie Scharf (CEO)",
+      "public": true,
+      "symbol": "WFC",
+      "aliases": [
+        "Wells Fargo",
+        "富国银行"
+      ],
+      "wiki": "Wells_Fargo",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "morganstanley.com": {
+      "name": "Morgan Stanley",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$215B",
+      "leader": "Ted Pick (CEO)",
+      "public": true,
+      "symbol": "MS",
+      "aliases": [
+        "Morgan Stanley",
+        "摩根士丹利"
+      ],
+      "wiki": "Morgan_Stanley",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "usbank.com": {
+      "name": "U.S. Bancorp",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$75B",
+      "leader": "Gunjan Kedia (CEO)",
+      "public": true,
+      "symbol": "USB",
+      "aliases": [
+        "U.S. Bancorp",
+        "U.S. Bank",
+        "US Bank"
+      ],
+      "wiki": "U.S._Bancorp",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "pnc.com": {
+      "name": "PNC Financial Services",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$78B",
+      "leader": "Bill Demchak (CEO)",
+      "public": true,
+      "symbol": "PNC",
+      "aliases": [
+        "PNC Financial",
+        "PNC Bank"
+      ],
+      "wiki": "PNC_Financial_Services",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "truist.com": {
+      "name": "Truist Financial",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$58B",
+      "leader": "Bill Rogers (CEO)",
+      "public": true,
+      "symbol": "TFC",
+      "aliases": [
+        "Truist Financial",
+        "Truist"
+      ],
+      "wiki": "Truist_Financial",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "capitalone.com": {
+      "name": "Capital One",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$111B",
+      "leader": "Richard Fairbank (CEO)",
+      "public": true,
+      "symbol": "COF",
+      "aliases": [
+        "Capital One"
+      ],
+      "wiki": "Capital_One",
+      "refreshed_at": "2026-11-28T03:59:51Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "schwab.com": {
+      "name": "Charles Schwab",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$155B",
+      "leader": "Rick Wurster (CEO)",
+      "public": true,
+      "symbol": "SCHW",
+      "aliases": [
+        "Charles Schwab",
+        "Schwab"
+      ],
+      "wiki": "Charles_Schwab_Corporation",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "bny.com": {
+      "name": "BNY Mellon",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$65B",
+      "leader": "Robin Vince (CEO)",
+      "public": true,
+      "symbol": "BK",
+      "aliases": [
+        "BNY Mellon",
+        "Bank of New York Mellon"
+      ],
+      "logo": "bny.png",
+      "wiki": "BNY_Mellon",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    },
+    "statestreet.com": {
+      "name": "State Street",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$28B",
+      "leader": "Ron O'Hanley (CEO)",
+      "public": true,
+      "symbol": "STT",
+      "aliases": [
+        "State Street"
+      ],
+      "wiki": "State_Street_Corporation",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "finance-banking"
+    }
+  }
+}

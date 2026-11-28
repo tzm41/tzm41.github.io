@@ -1,0 +1,172 @@
+{
+  "schema_version": "3.0",
+  "shard": "consumer-energy-health",
+  "updated_at": "2026-11-28T03:59:51Z",
+  "companies": {
+    "toyota.com": {
+      "name": "Toyota",
+      "country": "Japan",
+      "country_code": "jp",
+      "valuation": "~$259B",
+      "leader": "Kenta Kon (CEO)",
+      "public": true,
+      "symbol": "7203.T",
+      "aliases": [
+        "Toyota"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "¥",
+      "inline_aliases": [
+        "Toyota",
+        "丰田",
+        "7203.T"
+      ],
+      "category": "consumer-energy-health"
+    },
+    "walmart.com": {
+      "name": "Walmart",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$1.05T",
+      "leader": "John R. Furner (CEO)",
+      "public": true,
+      "symbol": "WMT",
+      "aliases": [
+        "Walmart"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "consumer-energy-health"
+    },
+    "costco.com": {
+      "name": "Costco",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$482B",
+      "leader": "Ron Vachris (CEO)",
+      "public": true,
+      "symbol": "COST",
+      "aliases": [
+        "Costco"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "consumer-energy-health"
+    },
+    "pfizer.com": {
+      "name": "Pfizer",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$162B",
+      "leader": "Albert Bourla (CEO)",
+      "public": true,
+      "symbol": "PFE",
+      "aliases": [
+        "Pfizer"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "consumer-energy-health"
+    },
+    "lilly.com": {
+      "name": "Eli Lilly",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$1.24T",
+      "leader": "David Ricks (CEO)",
+      "public": true,
+      "symbol": "LLY",
+      "aliases": [
+        "Eli Lilly"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "consumer-energy-health"
+    },
+    "novonordisk.com": {
+      "name": "Novo Nordisk",
+      "country": "Denmark",
+      "country_code": "dk",
+      "valuation": "~$181B",
+      "leader": "Maziar Mike Doustdar (CEO)",
+      "public": true,
+      "symbol": "NVO",
+      "aliases": [
+        "Novo Nordisk"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "consumer-energy-health"
+    },
+    "exxonmobil.com": {
+      "name": "ExxonMobil",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$645B",
+      "leader": "Darren Woods (CEO)",
+      "public": true,
+      "symbol": "XOM",
+      "aliases": [
+        "ExxonMobil"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "consumer-energy-health"
+    },
+    "chevron.com": {
+      "name": "Chevron",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$415B",
+      "leader": "Mike Wirth (CEO)",
+      "public": true,
+      "symbol": "CVX",
+      "aliases": [
+        "Chevron"
+      ],
+      "refreshed_at": "2026-11-28T03:59:51Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "consumer-energy-health"
+    },
+    "aramco.com": {
+      "name": "Saudi Aramco",
+      "country": "Saudi Arabia",
+      "country_code": "sa",
+      "valuation": "~$1.70T",
+      "leader": "Amin Nasser (CEO)",
+      "public": true,
+      "symbol": "2222.SR",
+      "aliases": [
+        "Saudi Aramco"
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "consumer-energy-health"
+    },
+    "moutaichina.com": {
+      "name": "Kweichow Moutai",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$254B",
+      "leader": "",
+      "public": true,
+      "symbol": "600519.SS",
+      "aliases": [
+        "Moutai",
+        "茅台"
+      ],
+      "inline_ticker": true,
+      "currency": "¥",
+      "inline_aliases": [
+        "Moutai",
+        "茅台",
+        "600519.SS"
+      ],
+      "refreshed_at": "2026-11-28T03:59:46Z",
+      "leader_refreshed_at": "2026-11-28T03:59:46Z",
+      "category": "consumer-energy-health"
+    }
+  }
+}

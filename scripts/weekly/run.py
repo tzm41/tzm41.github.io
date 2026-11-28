@@ -9,6 +9,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
+from ..common.entity_store import detect_edition_shards
 from .config import ARCHIVE_DIR, DATA_DIR, INDEX_PATH, LATEST_PATH, MAX_ARCHIVE_WEEKS
 from .fetchers import (
     fetch_all_weekly_sources,
@@ -194,6 +195,7 @@ def apply_synthesis(raw_path_str: str, synthesis_path_str: str, dry_run: bool = 
         source_health=health,
         entities=synthesis.entities,
     )
+    briefing.entity_shards = detect_edition_shards(briefing.model_dump())
 
     if dry_run:
         print(briefing.model_dump_json(indent=2))

@@ -103,7 +103,7 @@ Consolidated user-experience, visual, and interaction specification across `coli
 ---
 
 ## 9. Inline Entity Recognition & Hover/Tap Tooltips
-- **Unified Entity Database (`shared/data/entities.json`):** Single source of truth for companies, central banks, space agencies, media outlets, US parties, and known people, indexed via an `O(text)` Prefix Trie.
+- **Sharded Entity Database (`shared/data/entities/`):** Two-tier sharded source of truth (`hot.json` + domain-categorized cold shards + `manifest.json`) for companies, central banks, space agencies, media outlets, US parties, and known people, indexed via an incremental `O(text)` Prefix Trie.
 - **Formatting:**
   - `**bold**` key takeaways (cleanly supporting nested `*italic*` human names without markdown boundary artifacts).
   - Per-paragraph icon/flag/logo deduplication (first mention shows badge/flag + dashed underline; repeat mentions keep the underline without repeating the icon).

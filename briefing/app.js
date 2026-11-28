@@ -24,6 +24,7 @@ import {
 import {
   buildPersonNameRegexFromTexts,
   createEntityFormatter,
+  ensureEntityShards,
   initEntityOverlays,
   loadSharedEntityData,
 } from "../shared/entities.js";
@@ -62,6 +63,7 @@ import {
 } from "./markets.js";
 
 const DATA_BASE = "./data";
+const FALLBACK_DAILY_SHARDS = ["hot", "tech-ai", "finance-banking", "media-entertainment"];
 
 
 
@@ -904,18 +906,26 @@ async function loadBriefingForDate(dateStr) {
     archiveNav.syncUrlDate(data.date, isLatest);
     archiveNav.updateControls();
 
+    const requiredShards =
+      Array.isArray(data.entity_shards) && data.entity_shards.length
+        ? data.entity_shards
+        : FALLBACK_DAILY_SHARDS;
+
     state.priorBriefing = null;
     const dates = state.index?.dates || [];
     const curIdx = dates.indexOf(data.date);
-    if (curIdx !== -1 && curIdx + 1 < dates.length) {
-      try {
-        state.priorBriefing = await fetchJson(
-          `${DATA_BASE}/archive/${encodeURIComponent(dates[curIdx + 1])}.json`
-        );
-      } catch {
-        state.priorBriefing = null;
-      }
-    }
+    const priorPromise =
+      curIdx !== -1 && curIdx + 1 < dates.length
+        ? fetchJson(
+            `${DATA_BASE}/archive/${encodeURIComponent(dates[curIdx + 1])}.json`
+          ).catch(() => null)
+        : Promise.resolve(null);
+
+    const [priorData] = await Promise.all([
+      priorPromise,
+      ensureEntityShards(requiredShards),
+    ]);
+    state.priorBriefing = priorData;
 
     renderAll(data);
     if (isLatest) {

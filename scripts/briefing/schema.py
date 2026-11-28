@@ -294,6 +294,10 @@ class DailyBriefing(BaseModel):
         default_factory=list,
         description="Edition-wide semantically disambiguated entity identities for ambiguous acronyms, homonyms, or newly-mentioned entities across briefs and narratives.",
     )
+    entity_shards: list[str] = Field(
+        default_factory=list,
+        description="Entity shards required to render all companies mentioned in this edition (always starts with 'hot').",
+    )
 
     @model_validator(mode="after")
     def _dedupe_section_ids(self) -> DailyBriefing:

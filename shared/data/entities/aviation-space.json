@@ -1,0 +1,532 @@
+{
+  "schema_version": "3.0",
+  "shard": "aviation-space",
+  "updated_at": "2026-11-28T03:59:51Z",
+  "companies": {
+    "airbus.com": {
+      "name": "Airbus",
+      "country": "France",
+      "country_code": "fr",
+      "valuation": "~$167B",
+      "leader": "Guillaume Faury (CEO)",
+      "public": true,
+      "symbol": "AIR.PA",
+      "aliases": [
+        "Airbus"
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "delta.com": {
+      "name": "Delta Air Lines",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$55B",
+      "leader": "Ed Bastian (CEO)",
+      "public": true,
+      "symbol": "DAL",
+      "aliases": [
+        "Delta Air Lines"
+      ],
+      "wiki": "Delta_Air_Lines",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "united.com": {
+      "name": "United Airlines",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$34B",
+      "leader": "Scott Kirby (CEO)",
+      "public": true,
+      "symbol": "UAL",
+      "aliases": [
+        "United Airlines"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "aa.com": {
+      "name": "American Airlines",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$8B",
+      "leader": "Robert D. Isom Jr. (CEO)",
+      "public": true,
+      "symbol": "AAL",
+      "aliases": [
+        "American Airlines"
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "southwest.com": {
+      "name": "Southwest Airlines",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$22B",
+      "leader": "Bob Jordan (CEO)",
+      "public": true,
+      "symbol": "LUV",
+      "aliases": [
+        "Southwest Airlines"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "alaskaair.com": {
+      "name": "Alaska Airlines",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$4B",
+      "leader": "Ben Minicucci (CEO)",
+      "public": true,
+      "symbol": "ALK",
+      "aliases": [
+        "Alaska Airlines"
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "jetblue.com": {
+      "name": "JetBlue",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$1B",
+      "leader": "Joanna Geraghty (CEO)",
+      "public": true,
+      "symbol": "JBLU",
+      "aliases": [
+        "JetBlue"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "fedex.com": {
+      "name": "FedEx",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$72B",
+      "leader": "Raj Subramaniam (CEO)",
+      "public": true,
+      "symbol": "FDX",
+      "aliases": [
+        "FedEx"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "ups.com": {
+      "name": "UPS",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$95B",
+      "leader": "Carol B. Tome (CEO)",
+      "public": true,
+      "symbol": "UPS",
+      "aliases": [
+        "UPS"
+      ],
+      "wiki": "United_Parcel_Service",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "lufthansa.com": {
+      "name": "Lufthansa",
+      "country": "Germany",
+      "country_code": "de",
+      "valuation": "~$11B",
+      "leader": "Carsten Spohr (CEO)",
+      "public": true,
+      "symbol": "LHA.DE",
+      "aliases": [
+        "Lufthansa"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "britishairways.com": {
+      "name": "British Airways (IAG)",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "valuation": "~$24B",
+      "leader": "Luis Gallego Martin (CEO)",
+      "public": true,
+      "symbol": "IAG.L",
+      "aliases": [
+        "British Airways"
+      ],
+      "wiki": "British_Airways",
+      "refreshed_at": "2026-11-28T03:59:51Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "airfrance.com": {
+      "name": "Air France-KLM",
+      "country": "France",
+      "country_code": "fr",
+      "valuation": "~$4B",
+      "leader": "Ben Smith (CEO)",
+      "public": true,
+      "symbol": "AF.PA",
+      "aliases": [
+        "Air France"
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "emirates.com": {
+      "name": "Emirates",
+      "country": "United Arab Emirates",
+      "country_code": "ae",
+      "valuation": "State-owned (Dubai)",
+      "leader": "Ahmed bin Saeed Al Maktoum (CEO)",
+      "public": false,
+      "aliases": [
+        "Emirates"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "qatarairways.com": {
+      "name": "Qatar Airways",
+      "country": "Qatar",
+      "country_code": "qa",
+      "valuation": "State-owned (Qatar)",
+      "leader": "Badr Mohammed Al-Meer (CEO)",
+      "public": false,
+      "aliases": [
+        "Qatar Airways"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "singaporeair.com": {
+      "name": "Singapore Airlines",
+      "country": "Singapore",
+      "country_code": "sg",
+      "valuation": "~$16B",
+      "leader": "Choon Phong Goh (CSE) (CEO)",
+      "public": true,
+      "symbol": "C6L.SI",
+      "aliases": [
+        "Singapore Airlines"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "cathaypacific.com": {
+      "name": "Cathay Pacific",
+      "country": "Hong Kong",
+      "country_code": "hk",
+      "valuation": "~$11B",
+      "leader": "Ronald Lam (CEO)",
+      "public": true,
+      "symbol": "0293.HK",
+      "aliases": [
+        "Cathay Pacific"
+      ],
+      "refreshed_at": "2026-11-28T03:59:51Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "jal.co.jp": {
+      "name": "Japan Airlines",
+      "country": "Japan",
+      "country_code": "jp",
+      "valuation": "~$10B",
+      "leader": "Mitsuko Tottori (President & CEO)",
+      "public": true,
+      "symbol": "9201.T",
+      "aliases": [
+        "Japan Airlines"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "koreanair.com": {
+      "name": "Korean Air",
+      "country": "South Korea",
+      "country_code": "kr",
+      "valuation": "~$8B",
+      "leader": "Walter Cho (Chairman & CEO)",
+      "public": true,
+      "symbol": "003490.KS",
+      "aliases": [
+        "Korean Air"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "airchina.com.cn": {
+      "name": "Air China",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$9B",
+      "leader": "Ma Chongxian (Chairman)",
+      "public": true,
+      "symbol": "0753.HK",
+      "aliases": [
+        "Air China",
+        "中国国航"
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "ceair.com": {
+      "name": "China Eastern Airlines",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$6B",
+      "leader": "Wang Zhiqing (Chairman)",
+      "public": true,
+      "symbol": "0670.HK",
+      "aliases": [
+        "China Eastern",
+        "东方航空"
+      ],
+      "refreshed_at": "2026-11-28T03:59:51Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "csair.com": {
+      "name": "China Southern Airlines",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$6B",
+      "leader": "Ma Xulun (Chairman)",
+      "public": true,
+      "symbol": "1055.HK",
+      "aliases": [
+        "China Southern",
+        "南方航空"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "qantas.com": {
+      "name": "Qantas",
+      "country": "Australia",
+      "country_code": "au",
+      "valuation": "~$9B",
+      "leader": "Vanessa Hudson (CEO)",
+      "public": true,
+      "symbol": "QAN.AX",
+      "aliases": [
+        "Qantas"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "ryanair.com": {
+      "name": "Ryanair",
+      "country": "Ireland",
+      "country_code": "ie",
+      "valuation": "~$30B",
+      "leader": "Michael O'Leary (CEO)",
+      "public": true,
+      "symbol": "RYAAY",
+      "aliases": [
+        "Ryanair"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "aircanada.com": {
+      "name": "Air Canada",
+      "country": "Canada",
+      "country_code": "ca",
+      "valuation": "~$4B",
+      "leader": "Michael Rousseau (CEO)",
+      "public": true,
+      "symbol": "AC.TO",
+      "aliases": [
+        "Air Canada"
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "cnsa.gov.cn": {
+      "name": "China National Space Administration (CNSA)",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "Government agency",
+      "leader": "Shan Zhongde (Administrator)",
+      "public": false,
+      "budget": "~$14B / yr (est.)",
+      "aliases": [
+        "CNSA",
+        "China National Space Administration",
+        "国家航天局"
+      ],
+      "wiki": "China_National_Space_Administration",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "roscosmos.ru": {
+      "name": "Roscosmos",
+      "country": "Russia",
+      "country_code": "ru",
+      "valuation": "State corporation",
+      "leader": "Dmitry Bakanov (Director General)",
+      "public": false,
+      "budget": "~$3B / yr",
+      "aliases": [
+        "Roscosmos",
+        "俄罗斯航天局"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "jaxa.jp": {
+      "name": "JAXA",
+      "country": "Japan",
+      "country_code": "jp",
+      "valuation": "Government agency",
+      "leader": "Hiroshi Yamakawa (President)",
+      "public": false,
+      "budget": "~$1.6B / yr",
+      "aliases": [
+        "JAXA"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "isro.gov.in": {
+      "name": "ISRO",
+      "country": "India",
+      "country_code": "in",
+      "valuation": "Government agency",
+      "leader": "V. Narayanan (Chairman)",
+      "public": false,
+      "budget": "~$1.6B / yr",
+      "aliases": [
+        "ISRO",
+        "Indian Space Research Organisation"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "asc-csa.gc.ca": {
+      "name": "Canadian Space Agency",
+      "country": "Canada",
+      "country_code": "ca",
+      "valuation": "Government agency",
+      "leader": "Lisa Campbell (President)",
+      "public": false,
+      "budget": "~$320M / yr",
+      "aliases": [
+        "Canadian Space Agency"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "cnes.fr": {
+      "name": "CNES",
+      "country": "France",
+      "country_code": "fr",
+      "valuation": "Government agency",
+      "leader": "François Jacq (Chairman & CEO)",
+      "public": false,
+      "budget": "~$2.8B / yr",
+      "aliases": [
+        "CNES"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "dlr.de": {
+      "name": "DLR (German Aerospace Center)",
+      "country": "Germany",
+      "country_code": "de",
+      "valuation": "Government agency",
+      "leader": "Anke Kaysser-Pyzalla (Chair)",
+      "public": false,
+      "budget": "~$1.7B / yr",
+      "aliases": [
+        "DLR"
+      ],
+      "wiki": "German_Aerospace_Center",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "asi.it": {
+      "name": "Italian Space Agency (ASI)",
+      "country": "Italy",
+      "country_code": "it",
+      "valuation": "Government agency",
+      "leader": "Teodoro Valente (President)",
+      "public": false,
+      "budget": "~$1.4B / yr",
+      "aliases": [
+        "Italian Space Agency"
+      ],
+      "wiki": "Italian_Space_Agency",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "kasa.go.kr": {
+      "name": "Korea AeroSpace Administration (KASA)",
+      "country": "South Korea",
+      "country_code": "kr",
+      "valuation": "Government agency",
+      "leader": "Yoon Young-bin (Administrator)",
+      "public": false,
+      "budget": "~$700M / yr",
+      "aliases": [
+        "KASA",
+        "Korea AeroSpace Administration"
+      ],
+      "wiki": "Korea_AeroSpace_Administration",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "space.gov.ae": {
+      "name": "UAE Space Agency",
+      "country": "United Arab Emirates",
+      "country_code": "ae",
+      "valuation": "Government agency",
+      "leader": "Salem Butti Al Qubaisi (Director General)",
+      "public": false,
+      "budget": "~$150M / yr",
+      "aliases": [
+        "UAE Space Agency"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    },
+    "space.gov.au": {
+      "name": "Australian Space Agency",
+      "country": "Australia",
+      "country_code": "au",
+      "valuation": "Government agency",
+      "leader": "Enrico Palermo (Head)",
+      "public": false,
+      "budget": "~$50M / yr",
+      "aliases": [
+        "Australian Space Agency"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "aviation-space"
+    }
+  }
+}

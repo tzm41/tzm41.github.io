@@ -562,5 +562,8 @@
     "culture": "ok",
     "history": "ok",
     "long_reads": "ok"
-  }
+  },
+  "entity_shards": [
+    "hot"
+  ]
 }

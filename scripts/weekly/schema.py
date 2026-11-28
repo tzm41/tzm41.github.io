@@ -207,6 +207,10 @@ class WeeklyBriefing(BaseModel):
     week_in_brief: list[PulseBullet]
     source_health: WeeklySourceHealth
     entities: list[EntityIdentity] = Field(default_factory=list)
+    entity_shards: list[str] = Field(
+        default_factory=list,
+        description="Entity shards required to render all companies mentioned in this edition (always starts with 'hot').",
+    )
 
     @model_validator(mode="after")
     def _dedupe_section_ids(self) -> WeeklyBriefing:

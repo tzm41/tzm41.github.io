@@ -1,0 +1,294 @@
+{
+  "schema_version": "3.0",
+  "shard": "media-entertainment",
+  "updated_at": "2026-11-28T03:59:51Z",
+  "companies": {
+    "netflix.com": {
+      "name": "Netflix",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$244B",
+      "leader": "Ted Sarandos & Greg Peters (Co-CEOs)",
+      "public": true,
+      "symbol": "NFLX",
+      "aliases": [
+        "Netflix"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "$",
+      "inline_aliases": [
+        "Netflix",
+        "NFLX"
+      ],
+      "category": "media-entertainment"
+    },
+    "sony.com": {
+      "name": "Sony",
+      "country": "Japan",
+      "country_code": "jp",
+      "valuation": "~$167B",
+      "leader": "Hiroki Totoki (CEO)",
+      "public": true,
+      "symbol": "6758.T",
+      "aliases": [
+        "Sony"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "¥",
+      "inline_aliases": [
+        "Sony",
+        "索尼",
+        "6758.T"
+      ],
+      "category": "media-entertainment"
+    },
+    "nintendo.com": {
+      "name": "Nintendo",
+      "country": "Japan",
+      "country_code": "jp",
+      "valuation": "~$68B",
+      "leader": "Shuntaro Furukawa (President)",
+      "public": true,
+      "symbol": "7974.T",
+      "aliases": [
+        "Nintendo"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "¥",
+      "inline_aliases": [
+        "Nintendo",
+        "任天堂",
+        "7974.T"
+      ],
+      "category": "media-entertainment"
+    },
+    "disney.com": {
+      "name": "Disney",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$215B",
+      "leader": "Bob Iger (CEO)",
+      "public": true,
+      "symbol": "DIS",
+      "aliases": [
+        "Disney"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    },
+    "spotify.com": {
+      "name": "Spotify",
+      "country": "Sweden",
+      "country_code": "se",
+      "valuation": "~$127B",
+      "leader": "Alex Norström & Gustav Söderström (Co-CEOs)",
+      "public": true,
+      "symbol": "SPOT",
+      "aliases": [
+        "Spotify"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    },
+    "foxnews.com": {
+      "name": "Fox News (Fox Corp)",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$37B",
+      "leader": "Lachlan Murdoch (CEO)",
+      "public": true,
+      "symbol": "FOXA",
+      "bias": {
+        "text": "Right",
+        "tone": "right",
+        "pos": 0.82
+      },
+      "aliases": [
+        "Fox News"
+      ],
+      "wiki": "Fox_News",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    },
+    "nbcnews.com": {
+      "name": "NBC News",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (Comcast)",
+      "leader": "Cesar Conde (Chairman)",
+      "public": false,
+      "bias": {
+        "text": "Lean Left",
+        "tone": "left",
+        "pos": 0.28
+      },
+      "aliases": [
+        "NBC News",
+        "NBC"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    },
+    "cbsnews.com": {
+      "name": "CBS News",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (Paramount)",
+      "leader": "Tom Cibrowski (President)",
+      "public": false,
+      "bias": {
+        "text": "Center-Left",
+        "tone": "left",
+        "pos": 0.38
+      },
+      "aliases": [
+        "CBS News",
+        "CBS"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    },
+    "msnbc.com": {
+      "name": "MSNBC",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (Versant)",
+      "leader": "Rebecca Kutler (President)",
+      "public": false,
+      "bias": {
+        "text": "Left",
+        "tone": "left",
+        "pos": 0.15
+      },
+      "aliases": [
+        "MSNBC"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    },
+    "economist.com": {
+      "name": "The Economist",
+      "country": "United Kingdom",
+      "country_code": "gb",
+      "valuation": "Private (Economist Group)",
+      "leader": "Lara Boro (CEO)",
+      "public": false,
+      "bias": {
+        "text": "Center",
+        "tone": "center",
+        "pos": 0.48
+      },
+      "aliases": [
+        "The Economist"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    },
+    "theatlantic.com": {
+      "name": "The Atlantic",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Private (Emerson Collective)",
+      "leader": "Nicholas Thompson (CEO)",
+      "public": false,
+      "bias": {
+        "text": "Lean Left",
+        "tone": "left",
+        "pos": 0.22
+      },
+      "aliases": [
+        "The Atlantic"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    },
+    "axios.com": {
+      "name": "Axios",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Subsidiary (Cox Enterprises)",
+      "leader": "Jim VandeHei (CEO)",
+      "public": false,
+      "bias": {
+        "text": "Center-Left",
+        "tone": "left",
+        "pos": 0.38
+      },
+      "aliases": [
+        "Axios"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    },
+    "newscorp.com": {
+      "name": "News Corp",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$14B",
+      "leader": "Robert Thomson (CEO)",
+      "public": true,
+      "symbol": "NWSA",
+      "aliases": [
+        "News Corp"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    },
+    "comcastcorporation.com": {
+      "name": "Comcast",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$91B",
+      "leader": "Brian L. Roberts & Michael J. Cavanagh (Co-CEOs)",
+      "public": true,
+      "symbol": "CMCSA",
+      "aliases": [
+        "Comcast"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    },
+    "wbd.com": {
+      "name": "Warner Bros. Discovery",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$78B",
+      "leader": "David Zaslav (CEO)",
+      "public": true,
+      "symbol": "WBD",
+      "aliases": [
+        "Warner Bros. Discovery"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    },
+    "paramount.com": {
+      "name": "Paramount",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$11B",
+      "leader": "David Ellison (CEO)",
+      "public": true,
+      "symbol": "PSKY",
+      "aliases": [
+        "Paramount"
+      ],
+      "wiki": "Paramount_Skydance",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "media-entertainment"
+    }
+  }
+}

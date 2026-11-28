@@ -1,0 +1,731 @@
+{
+  "schema_version": "3.0",
+  "shard": "tech-ai",
+  "updated_at": "2026-11-28T03:59:51Z",
+  "companies": {
+    "deepmind.google": {
+      "name": "Google DeepMind",
+      "country": "United Kingdom / US",
+      "country_code": "gb",
+      "valuation": "Alphabet subsidiary",
+      "leader": "Demis Hassabis (CEO)",
+      "public": false,
+      "aliases": [
+        "Google DeepMind",
+        "DeepMind"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "deepseek.com": {
+      "name": "DeepSeek",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "Private (High-Flyer)",
+      "leader": "Liang Wenfeng (Founder & CEO)",
+      "public": false,
+      "aliases": [
+        "DeepSeek"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "x.ai": {
+      "name": "xAI",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "SpaceX subsidiary ($250B acq.)",
+      "leader": "Elon Musk (Founder)",
+      "public": false,
+      "aliases": [
+        "xAI"
+      ],
+      "wiki": "XAI_(company)",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "mistral.ai": {
+      "name": "Mistral AI",
+      "country": "France",
+      "country_code": "fr",
+      "valuation": "~$6B+",
+      "leader": "Arthur Mensch (CEO)",
+      "public": false,
+      "aliases": [
+        "Mistral AI",
+        "Mistral"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "perplexity.ai": {
+      "name": "Perplexity AI",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$14B",
+      "leader": "Aravind Srinivas (CEO)",
+      "public": false,
+      "aliases": [
+        "Perplexity AI",
+        "Perplexity"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "cohere.com": {
+      "name": "Cohere",
+      "country": "Canada",
+      "country_code": "ca",
+      "valuation": "~$5.5B",
+      "leader": "Aidan Gomez (CEO)",
+      "public": false,
+      "aliases": [
+        "Cohere"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "huggingface.co": {
+      "name": "Hugging Face",
+      "country": "United States / France",
+      "country_code": "us",
+      "valuation": "~$4.5B",
+      "leader": "Clément Delangue (CEO)",
+      "public": false,
+      "aliases": [
+        "Hugging Face"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "ai.meta.com": {
+      "name": "Meta AI",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Meta division",
+      "leader": "Mark Zuckerberg / Alexandr Wang",
+      "public": false,
+      "aliases": [
+        "Meta AI"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "ssi.inc": {
+      "name": "Safe Superintelligence",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$32B",
+      "leader": "Ilya Sutskever (Co-founder)",
+      "public": false,
+      "aliases": [
+        "Safe Superintelligence"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "thinkingmachines.ai": {
+      "name": "Thinking Machines Lab",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$10B+",
+      "leader": "Mira Murati (CEO)",
+      "public": false,
+      "aliases": [
+        "Thinking Machines Lab",
+        "Thinking Machines"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "scale.com": {
+      "name": "Scale AI",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$29B",
+      "leader": "Jason Droege (CEO)",
+      "public": false,
+      "aliases": [
+        "Scale AI"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "moonshot.cn": {
+      "name": "Moonshot AI",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$3.3B",
+      "leader": "Yang Zhilin (Founder & CEO)",
+      "public": false,
+      "aliases": [
+        "Moonshot AI"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "zhipuai.cn": {
+      "name": "Zhipu AI",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$3B+",
+      "leader": "Zhang Peng (CEO)",
+      "public": false,
+      "aliases": [
+        "Zhipu AI",
+        "智谱AI",
+        "智谱"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "minimax.io": {
+      "name": "MiniMax",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$2.5B+",
+      "leader": "Yan Junjie (CEO)",
+      "public": false,
+      "aliases": [
+        "MiniMax"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "midjourney.com": {
+      "name": "Midjourney",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "Private (bootstrapped)",
+      "leader": "David Holz (CEO)",
+      "public": false,
+      "aliases": [
+        "Midjourney"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "runwayml.com": {
+      "name": "Runway",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$3B+",
+      "leader": "Cristóbal Valenzuela (CEO)",
+      "public": false,
+      "aliases": [
+        "Runway"
+      ],
+      "wiki": "Runway_(company)",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "elevenlabs.io": {
+      "name": "ElevenLabs",
+      "country": "United States / UK",
+      "country_code": "us",
+      "valuation": "~$3.3B",
+      "leader": "Mati Staniszewski (CEO)",
+      "public": false,
+      "aliases": [
+        "ElevenLabs"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "cursor.com": {
+      "name": "Cursor (Anysphere)",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$9B+",
+      "leader": "Michael Truell (CEO)",
+      "public": false,
+      "aliases": [
+        "Cursor"
+      ],
+      "wiki": "Cursor_(code_editor)",
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "tsmc.com": {
+      "name": "TSMC",
+      "country": "Taiwan",
+      "country_code": "tw",
+      "valuation": "~$1.74T",
+      "leader": "C.C. Wei (Chairman & CEO)",
+      "public": true,
+      "symbol": "2330.TW",
+      "aliases": [
+        "TSMC",
+        "台积电"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "NT$",
+      "inline_aliases": [
+        "TSMC",
+        "台积电",
+        "2330.TW"
+      ],
+      "category": "tech-ai"
+    },
+    "samsung.com": {
+      "name": "Samsung Electronics",
+      "country": "South Korea",
+      "country_code": "kr",
+      "valuation": "~$836B",
+      "leader": "Jun Young-hyun (Co-CEO)",
+      "public": true,
+      "symbol": "005930.KS",
+      "aliases": [
+        "Samsung",
+        "三星"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "₩",
+      "inline_aliases": [
+        "Samsung",
+        "三星",
+        "005930.KS"
+      ],
+      "category": "tech-ai"
+    },
+    "bytedance.com": {
+      "name": "ByteDance",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$400B–$600B",
+      "leader": "Liang Rubo (CEO)",
+      "public": false,
+      "aliases": [
+        "ByteDance",
+        "字节跳动"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "tiktok.com": {
+      "name": "TikTok",
+      "country": "Singapore / China",
+      "country_code": "sg",
+      "valuation": "ByteDance subsidiary",
+      "leader": "Shou Zi Chew (CEO)",
+      "public": false,
+      "aliases": [
+        "TikTok"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "tencent.com": {
+      "name": "Tencent",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$398B",
+      "leader": "Ma Huateng / Pony Ma (CEO)",
+      "public": true,
+      "symbol": "0700.HK",
+      "aliases": [
+        "Tencent",
+        "腾讯"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "HK$",
+      "inline_aliases": [
+        "Tencent",
+        "腾讯",
+        "0700.HK"
+      ],
+      "category": "tech-ai"
+    },
+    "mi.com": {
+      "name": "Xiaomi",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$89B",
+      "leader": "Lei Jun (Founder & CEO)",
+      "public": true,
+      "symbol": "1810.HK",
+      "aliases": [
+        "Xiaomi",
+        "小米"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "HK$",
+      "inline_aliases": [
+        "Xiaomi",
+        "小米",
+        "1810.HK"
+      ],
+      "category": "tech-ai"
+    },
+    "meituan.com": {
+      "name": "Meituan",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$52B",
+      "leader": "Wang Xing (CEO)",
+      "public": true,
+      "symbol": "3690.HK",
+      "aliases": [
+        "Meituan",
+        "美团"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "HK$",
+      "inline_aliases": [
+        "Meituan",
+        "美团",
+        "3690.HK"
+      ],
+      "category": "tech-ai"
+    },
+    "jd.com": {
+      "name": "JD.com",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$36B",
+      "leader": "Sandy Xu (CEO)",
+      "public": true,
+      "symbol": "9618.HK",
+      "aliases": [
+        "JD.com",
+        "京东"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "HK$",
+      "inline_aliases": [
+        "JD.com",
+        "京东",
+        "9618.HK"
+      ],
+      "category": "tech-ai"
+    },
+    "pddholdings.com": {
+      "name": "PDD Holdings",
+      "country": "China / Ireland",
+      "country_code": "cn",
+      "valuation": "~$124B",
+      "leader": "Chen Lei & Zhao Jiazhen (Co-CEOs)",
+      "public": true,
+      "symbol": "PDD",
+      "aliases": [
+        "PDD",
+        "拼多多"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "intel.com": {
+      "name": "Intel",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$305B",
+      "leader": "Lip-Bu Tan (CEO)",
+      "public": true,
+      "symbol": "INTC",
+      "aliases": [
+        "Intel"
+      ],
+      "refreshed_at": "2026-11-28T03:59:46Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "$",
+      "inline_aliases": [
+        "Intel",
+        "INTC"
+      ],
+      "category": "tech-ai"
+    },
+    "qualcomm.com": {
+      "name": "Qualcomm",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$180B",
+      "leader": "Cristiano Amon (CEO)",
+      "public": true,
+      "symbol": "QCOM",
+      "aliases": [
+        "Qualcomm"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "$",
+      "inline_aliases": [
+        "Qualcomm",
+        "QCOM"
+      ],
+      "category": "tech-ai"
+    },
+    "asml.com": {
+      "name": "ASML",
+      "country": "Netherlands",
+      "country_code": "nl",
+      "valuation": "~$511B",
+      "leader": "Christophe Fouquet (CEO)",
+      "public": true,
+      "symbol": "ASML",
+      "aliases": [
+        "ASML"
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "oracle.com": {
+      "name": "Oracle",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$324B",
+      "leader": "Michael D. Sicilia & Clayton M. Magouyrk (Co-CEOs)",
+      "public": true,
+      "symbol": "ORCL",
+      "aliases": [
+        "Oracle"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "$",
+      "inline_aliases": [
+        "Oracle",
+        "ORCL"
+      ],
+      "category": "tech-ai"
+    },
+    "palantir.com": {
+      "name": "Palantir",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$394B",
+      "leader": "Alex Karp (CEO)",
+      "public": true,
+      "symbol": "PLTR",
+      "aliases": [
+        "Palantir"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "$",
+      "inline_aliases": [
+        "Palantir",
+        "PLTR"
+      ],
+      "category": "tech-ai"
+    },
+    "salesforce.com": {
+      "name": "Salesforce",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$162B",
+      "leader": "Marc R. Benioff & Parker Harris (Co-CEOs)",
+      "public": true,
+      "symbol": "CRM",
+      "aliases": [
+        "Salesforce"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "adobe.com": {
+      "name": "Adobe",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$91B",
+      "leader": "Shantanu Narayen (CEO)",
+      "public": true,
+      "symbol": "ADBE",
+      "aliases": [
+        "Adobe"
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "uber.com": {
+      "name": "Uber",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$135B",
+      "leader": "Dara Khosrowshahi (CEO)",
+      "public": true,
+      "symbol": "UBER",
+      "aliases": [
+        "Uber"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "ibm.com": {
+      "name": "IBM",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$230B",
+      "leader": "Arvind Krishna (CEO)",
+      "public": true,
+      "symbol": "IBM",
+      "aliases": [
+        "IBM"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "cisco.com": {
+      "name": "Cisco",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$371B",
+      "leader": "Chuck Robbins (CEO)",
+      "public": true,
+      "symbol": "CSCO",
+      "aliases": [
+        "Cisco"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "softbank.jp": {
+      "name": "SoftBank Group",
+      "country": "Japan",
+      "country_code": "jp",
+      "valuation": "~$110B",
+      "leader": "Masayoshi Son (CEO)",
+      "public": true,
+      "symbol": "9984.T",
+      "aliases": [
+        "SoftBank"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "inline_ticker": true,
+      "currency": "¥",
+      "inline_aliases": [
+        "SoftBank",
+        "软银",
+        "9984.T"
+      ],
+      "category": "tech-ai"
+    },
+    "cloudflare.com": {
+      "name": "Cloudflare",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$102B",
+      "leader": "Matthew Prince (CEO)",
+      "public": true,
+      "symbol": "NET",
+      "aliases": [
+        "Cloudflare"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "crowdstrike.com": {
+      "name": "CrowdStrike",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$216B",
+      "leader": "George Kurtz (CEO)",
+      "public": true,
+      "symbol": "CRWD",
+      "aliases": [
+        "CrowdStrike"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "snowflake.com": {
+      "name": "Snowflake",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$94B",
+      "leader": "Sridhar Ramaswamy (CEO)",
+      "public": true,
+      "symbol": "SNOW",
+      "aliases": [
+        "Snowflake"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "leader_refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "databricks.com": {
+      "name": "Databricks",
+      "country": "United States",
+      "country_code": "us",
+      "valuation": "~$62B",
+      "leader": "Ali Ghodsi (CEO)",
+      "public": false,
+      "aliases": [
+        "Databricks"
+      ],
+      "refreshed_at": "2026-11-27T04:20:09Z",
+      "category": "tech-ai"
+    },
+    "smics.com": {
+      "name": "SMIC",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$59B",
+      "leader": "Haijun Zhao & Mong Song Liang (Co-CEOs)",
+      "public": true,
+      "symbol": "0981.HK",
+      "aliases": [
+        "SMIC",
+        "中芯国际"
+      ],
+      "inline_ticker": true,
+      "currency": "HK$",
+      "inline_aliases": [
+        "SMIC",
+        "中芯国际",
+        "0981.HK"
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-28T03:59:49Z",
+      "category": "tech-ai"
+    },
+    "neteasegames.com": {
+      "name": "NetEase",
+      "country": "China",
+      "country_code": "cn",
+      "valuation": "~$69B",
+      "leader": "Lei Ding (CEO)",
+      "public": true,
+      "symbol": "9999.HK",
+      "aliases": [
+        "NetEase",
+        "网易"
+      ],
+      "inline_ticker": true,
+      "currency": "HK$",
+      "inline_aliases": [
+        "NetEase",
+        "网易",
+        "9999.HK"
+      ],
+      "refreshed_at": "2026-11-28T03:59:49Z",
+      "leader_refreshed_at": "2026-11-28T03:59:49Z",
+      "category": "tech-ai"
+    }
+  }
+}
