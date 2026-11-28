@@ -2,7 +2,7 @@
   "schema_version": "1.1",
   "archive_ttl_days": 60,
   "date": "2026-11-27",
-  "generated_at": "2026-11-27T15:01:04Z",
+  "generated_at": "2026-11-28T01:01:48Z",
   "synthesis_mode": "gemini",
   "source_health": {
     "news": "ok",
@@ -16,53 +16,169 @@
     "bullets": [
       {
         "text": "U.S. equities opened higher on Black Friday with the **S&P 500 (+0.54%)**, **Nasdaq (+0.56%)**, and **Dow (+0.56%)** advancing alongside **gold (+3.73% to $3,667.80)**, even as **Nvidia (-2.14%)** and **Bitcoin (-2.71%)** slipped and sentiment stayed in **Extreme Fear (21.6)**.",
-        "category": "Economy",
-        "sentiment": "slightly_positive",
         "points": [
           "U.S. equities opened higher on Black Friday with the **S&P 500 (+0.54%)**, **Nasdaq (+0.56%)**, and **Dow (+0.56%)** advancing alongside **gold (+3.73% to $3,667.80)**.",
           "**Nvidia (-2.14%)** and **Bitcoin (-2.71%)** slipped as sentiment stayed in **Extreme Fear (21.6)**."
-        ]
+        ],
+        "category": "Economy",
+        "sentiment": "slightly_positive"
       },
       {
         "text": "Hackers **breached the U.S. Air Force's Cloud One platform**, risking sensitive data in the latest major federal cyber incident, while **hundreds of thousands remain without power** across Pennsylvania and neighboring East Coast states after Thanksgiving storms.",
-        "category": "Policy",
-        "sentiment": "negative",
         "points": [
           "Hackers **breached the U.S. Air Force's Cloud One platform**, risking sensitive data in the latest major federal cyber incident.",
           "**Hundreds of thousands remain without power** across Pennsylvania and neighboring East Coast states after Thanksgiving storms."
-        ]
+        ],
+        "category": "Policy",
+        "sentiment": "negative"
       },
       {
         "text": "Ukrainian President *Volodymyr Zelensky* criticized *Donald Trump*'s **\"strange\" friendship with *Vladimir Putin*** in a BBC interview, warning Washington is **not pressuring Russia hard enough** in peace talks as **EU budget talks over Ukraine aid stall**.",
-        "category": "World",
-        "sentiment": "slightly_negative",
         "points": [
           "Ukrainian President *Volodymyr Zelensky* criticized *Donald Trump*'s **\"strange\" friendship with *Vladimir Putin*** in a BBC interview, warning Washington is **not pressuring Russia hard enough** in peace talks.",
           "**EU budget talks over Ukraine aid remain stalled**."
-        ]
+        ],
+        "category": "World",
+        "sentiment": "slightly_negative"
       },
       {
         "text": "The **U.S. Supreme Court** is set to weigh whether the *Trump* administration's sweeping **asylum overhaul violates due process**, while *Donald Trump* signaled **openness to bipartisan healthcare talks** with Democrats following GOP midterm losses.",
-        "category": "Policy",
-        "sentiment": "neutral",
         "points": [
           "The **U.S. Supreme Court** is set to weigh whether the *Trump* administration's sweeping **asylum overhaul violates due process**.",
           "*Donald Trump* signaled **openness to bipartisan healthcare talks** with Democrats following GOP midterm losses."
-        ]
+        ],
+        "category": "Policy",
+        "sentiment": "neutral"
       },
       {
         "text": "Aerial imagery confirmed **ecological recovery in Florida Bay** as Everglades restoration sends fresh water south, while archaeologists in Mongolia unearthed **Classical Roman glass** inside an elite **Xiongnu Silk Road tomb**.",
-        "category": "Science",
-        "sentiment": "positive",
         "points": [
           "Aerial imagery confirmed **ecological recovery in Florida Bay** as Everglades restoration sends fresh water south.",
           "Archaeologists in Mongolia unearthed **Classical Roman glass** inside an elite **Xiongnu Silk Road tomb**."
-        ]
+        ],
+        "category": "Science",
+        "sentiment": "positive"
       }
     ]
   },
-  "afternoon_brief": null,
+  "afternoon_brief": {
+    "generated_at": "2026-11-28T01:01:48Z",
+    "bullets": [
+      {
+        "text": "U.S. equities closed sharply higher in the shortened Black Friday session, with the **Nasdaq (+2.31%)**, **Russell 2000 (+1.71%)**, **S&P 500 (+1.60%)**, and **Dow (+1.18%)** rallying as the **VIX tumbled 11.16% to 23.81**, while **gold surged (+3.91% to $3,674.20)** and **Bitcoin slipped (-1.16%)**.",
+        "points": [
+          "The **Nasdaq (+2.31%)**, **Russell 2000 (+1.71%)**, **S&P 500 (+1.60%)**, and **Dow (+1.18%)** closed higher in Black Friday trading as the **VIX fell 11.16% to 23.81**.",
+          "**Gold surged 3.91% to $3,674.20** while **Bitcoin dipped 1.16%** and the Fear & Greed Index rose to **24.9 (Extreme Fear)**."
+        ],
+        "category": "Economy",
+        "sentiment": "positive"
+      },
+      {
+        "text": "The **U.S. military disabled a Palau-flagged merchant ship** attempting to breach the **Iran blockade**, while Italian Foreign Minister *Antonio Tajani* said the drone behind the **deadly Kuwait attack was made in Iran**.",
+        "points": [
+          "U.S. forces **disabled the propulsion of a merchant vessel** that ignored warnings after departing an Iranian port, leaving the crew unharmed.",
+          "Italian Foreign Minister *Antonio Tajani* stated the drone used in the **fatal Kuwait strike was Iranian-made**."
+        ],
+        "category": "World",
+        "sentiment": "negative"
+      },
+      {
+        "text": "**Canada's Supreme Court largely upheld Quebec's ban** on religious symbols for public servants, rejecting major constitutional challenges from teachers, while **Spanish Prime Minister *Pedro Sánchez* and rivals** made final campaign pitches ahead of voting.",
+        "points": [
+          "**Canada's top court largely upheld Quebec's religious symbols ban** for public-sector workers, turning back challenges from Muslim, Sikh, and Catholic teachers.",
+          "**Spanish Prime Minister *Pedro Sánchez*** and opposition leaders held final rallies in a tight race for votes."
+        ],
+        "category": "Policy",
+        "sentiment": "neutral"
+      },
+      {
+        "text": "**Taiwan votes Saturday on reviving nuclear power** to support surging **AI electricity demand**, while employees at *Grand Theft Auto VI* developer **Rockstar Games rejected unionization** by a **75.3% margin**.",
+        "points": [
+          "**Taiwanese voters decide Saturday** whether to scrap the island's nuclear-free policy to help power **AI data centers**.",
+          "**Rockstar Games workers voted 75.3% against unionizing** ahead of *Grand Theft Auto VI*'s release."
+        ],
+        "category": "Tech",
+        "sentiment": "neutral"
+      }
+    ]
+  },
   "top_news": [
+    {
+      "id": "story-u-s-disables-ship-breaching-iran-blockade-as-italy-links-kuwait-dro-ede317",
+      "category": "World",
+      "headline": "U.S. Disables Ship Breaching Iran Blockade as Italy Links Kuwait Drone to Tehran",
+      "summary": "The U.S. military disabled the propulsion of a Palau-flagged merchant ship on Friday after it departed an Iranian port and ignored warnings not to breach the blockade, leaving the crew unharmed. Separately, Italian Foreign Minister *Antonio Tajani* said the drone used in the deadly strike in Kuwait was manufactured in Iran.",
+      "why_it_matters": "Simultaneous maritime enforcement and European attribution of the Kuwait attack raise the risk of broader regional escalation and shipping disruptions around the Persian Gulf.",
+      "sources": [
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.aljazeera.com/news/2026/11/27/us-military-says-it-disabled-merchant-ship-trying-to-breach-iran-blockade?traffic_source=rss"
+        },
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.aljazeera.com/news/liveblog/2026/11/28/iran-war-live-italy-says-drone-in-deadly-kuwait-attack-was-made-in-iran?traffic_source=rss"
+        }
+      ],
+      "sentiment": "negative",
+      "continued_from_prior": false,
+      "is_afternoon": true,
+      "entities": []
+    },
+    {
+      "id": "story-canada-s-top-court-largely-upholds-quebec-religious-symbols-ban-for-72c8b5",
+      "category": "Policy",
+      "headline": "Canada's Top Court Largely Upholds Quebec Religious Symbols Ban for Public Servants",
+      "summary": "The Supreme Court of Canada largely upheld Quebec's secularism law barring public servants—including teachers, judges, and police officers—from wearing religious symbols at work. The ruling rejected key arguments from Muslim, Sikh, and Catholic educators who contended the measure violated fundamental rights.",
+      "why_it_matters": "The decision entrenches Quebec's use of Canada's constitutional notwithstanding clause to shield provincial identity laws from federal Charter challenges.",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/cq3dgpy9lem3o?at_medium=RSS&at_campaign=rss"
+        }
+      ],
+      "sentiment": "neutral",
+      "continued_from_prior": false,
+      "is_afternoon": true,
+      "entities": []
+    },
+    {
+      "id": "story-taiwan-votes-saturday-on-reviving-nuclear-power-to-meet-ai-energy-d-03634b",
+      "category": "Tech",
+      "headline": "Taiwan Votes Saturday on Reviving Nuclear Power to Meet AI Energy Demand",
+      "summary": "Voters in Taiwan head to the polls on Saturday to decide whether to overturn the island's longstanding 'nuclear-free homeland' policy and restart nuclear generation. Supporters argue reliable baseload power is essential as semiconductor fabs and AI data centers drive electricity demand higher.",
+      "why_it_matters": "The referendum outcome could reshape Taiwan's energy security and semiconductor supply-chain resilience at a time of intense global competition for AI compute.",
+      "sources": [
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.aljazeera.com/news/2026/11/27/will-taiwan-vote-to-revive-nuclear-power-and-why-does-that-matter-for-ai?traffic_source=rss"
+        }
+      ],
+      "sentiment": "neutral",
+      "continued_from_prior": false,
+      "is_afternoon": true,
+      "entities": []
+    },
+    {
+      "id": "story-kenyan-doomsday-cult-leader-convicted-over-123-more-starvation-deat-0beacf",
+      "category": "World",
+      "headline": "Kenyan Doomsday Cult Leader Convicted Over 123 More Starvation Deaths",
+      "summary": "Kenyan cult leader *Paul Mackenzie*, founder of the Good News International Church, was found guilty of manslaughter in connection with more than 123 additional starvation deaths of his followers. *Mackenzie* is already serving a 200-year sentence following an earlier conviction for the mass murder of children.",
+      "why_it_matters": "The verdict delivers further accountability in one of East Africa's deadliest cult tragedies and intensifies pressure on Kenyan authorities over religious oversight.",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/cmy49de4xx1zo?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.aljazeera.com/news/2026/11/27/kenyan-cult-leader-guilty-of-manslaughter-more-than-123-starvation-deaths?traffic_source=rss"
+        }
+      ],
+      "sentiment": "very_negative",
+      "continued_from_prior": false,
+      "is_afternoon": true,
+      "entities": []
+    },
     {
       "id": "story-hackers-breach-u-s-air-force-cloud-one-platform-risking-sensitive-d-d5f6c5",
       "category": "Policy",
@@ -217,8 +333,8 @@
     }
   ],
   "markets": {
-    "narrative": "U.S. equities advanced across the board on Black Friday, with the **S&P 500 (+0.54%)**, **Nasdaq (+0.56%)**, **Dow Jones (+0.56%)**, and **Russell 2000 (+0.91%)** all posting gains led by **Energy (+1.51%)**, **Communication Services (+1.26%)**, and **Materials (+1.03%)**. Among megacaps, **Tesla (+2.84%)**, **Meta (+2.31%)**, and **Amazon (+2.09%)** rallied, offsetting **Nvidia's (-2.14%)** pullback amid ongoing export scrutiny. Despite the equity bounce, **gold surged (+3.73% to $3,667.80)**, **Bitcoin fell (-2.71% to $58,856.76)**, and the **VIX held elevated at 26.87**, keeping the Fear & Greed Index in **Extreme Fear (21.6)**.",
-    "regime_tag": "Mixed",
+    "narrative": "U.S. stocks extended gains into the shortened Black Friday close, with the **Nasdaq (+2.31%)**, **Russell 2000 (+1.71%)**, **S&P 500 (+1.60%)**, and **Dow Jones (+1.18%)** finishing solidly higher as the **VIX dropped 11.16% to 23.81**. **Tesla (+4.92%)**, **Amazon (+4.34%)**, and **Meta (+3.22%)** led megacap advancers, though **Technology (-0.83%)** and **Health Care (-0.56%)** lagged among S&P sectors while **Materials (+2.07%)** outperformed. Safe-haven **gold jumped 3.91% to $3,674.20**, the **10-year Treasury yield climbed to 4.94% (+1.86%)**, and **Bitcoin eased 1.16% to $59,793.19**, lifting the Fear & Greed Index to **24.9 (Extreme Fear)**.",
+    "regime_tag": "Risk-On",
     "watchlist": [
       {
         "symbol": "^GSPC",

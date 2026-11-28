@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-27T15:05:23Z",
+  "updated_at": "2026-11-28T01:01:48Z",
   "latest_date": "2026-11-27",
   "archive_ttl_days": 60,
   "dates": [
@@ -30,7 +30,7 @@
     },
     {
       "date": "2026-11-27",
-      "regime": "Mixed",
+      "regime": "Risk-On",
       "sp500_price": 7221.59,
       "sp500_pct": 0.54,
       "vix": 26.87,

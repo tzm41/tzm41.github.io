@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-27T15:05:23Z",
+  "updated_at": "2026-11-28T01:01:48Z",
   "window_days": 3,
   "editions": [
     "2026-11-27",
@@ -69,6 +69,48 @@
     {
       "date": "2026-11-27",
       "section": "top_news",
+      "id": "story-u-s-disables-ship-breaching-iran-blockade-as-italy-links-kuwait-dro-ede317",
+      "headline": "U.S. Disables Ship Breaching Iran Blockade as Italy Links Kuwait Drone to Tehran",
+      "urls": [
+        "https://www.aljazeera.com/news/2026/11/27/us-military-says-it-disabled-merchant-ship-trying-to-breach-iran-blockade",
+        "https://www.aljazeera.com/news/liveblog/2026/11/28/iran-war-live-italy-says-drone-in-deadly-kuwait-attack-was-made-in-iran"
+      ],
+      "tokens": [
+        "blockade",
+        "breaching",
+        "disables",
+        "drone",
+        "iran",
+        "italy",
+        "kuwait",
+        "links",
+        "ship",
+        "tehran"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "top_news",
+      "id": "story-taiwan-votes-saturday-on-reviving-nuclear-power-to-meet-ai-energy-d-03634b",
+      "headline": "Taiwan Votes Saturday on Reviving Nuclear Power to Meet AI Energy Demand",
+      "urls": [
+        "https://www.aljazeera.com/news/2026/11/27/will-taiwan-vote-to-revive-nuclear-power-and-why-does-that-matter-for-ai"
+      ],
+      "tokens": [
+        "demand",
+        "energy",
+        "meet",
+        "nuclear",
+        "power",
+        "reviving",
+        "saturday",
+        "taiwan",
+        "votes"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "top_news",
       "id": "story-supreme-court-to-weigh-trump-asylum-overhaul-as-advocates-push-to-r-1713f4",
       "headline": "Supreme Court to Weigh Trump Asylum Overhaul as Advocates Push to Restore Access",
       "urls": [
@@ -85,6 +127,25 @@
         "supreme",
         "trump",
         "weigh"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "top_news",
+      "id": "story-kenyan-doomsday-cult-leader-convicted-over-123-more-starvation-deat-0beacf",
+      "headline": "Kenyan Doomsday Cult Leader Convicted Over 123 More Starvation Deaths",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cmy49de4xx1zo",
+        "https://www.aljazeera.com/news/2026/11/27/kenyan-cult-leader-guilty-of-manslaughter-more-than-123-starvation-deaths"
+      ],
+      "tokens": [
+        "convicted",
+        "cult",
+        "deaths",
+        "doomsday",
+        "kenyan",
+        "leader",
+        "starvation"
       ]
     },
     {
@@ -147,6 +208,26 @@
         "sexual",
         "stand",
         "trial"
+      ]
+    },
+    {
+      "date": "2026-11-27",
+      "section": "top_news",
+      "id": "story-canada-s-top-court-largely-upholds-quebec-religious-symbols-ban-for-72c8b5",
+      "headline": "Canada's Top Court Largely Upholds Quebec Religious Symbols Ban for Public Servants",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cq3dgpy9lem3o"
+      ],
+      "tokens": [
+        "canada",
+        "court",
+        "largely",
+        "public",
+        "quebec",
+        "religious",
+        "servants",
+        "symbols",
+        "upholds"
       ]
     },
     {
