@@ -103,7 +103,10 @@ Consolidated user-experience, visual, and interaction specification across `coli
 ---
 
 ## 9. Inline Entity Recognition & Hover/Tap Tooltips
-- **Sharded Entity Database (`shared/data/entities/`):** Two-tier sharded source of truth (`hot.json` + domain-categorized cold shards + `manifest.json`) for companies, central banks, space agencies, media outlets, US parties, and known people, indexed via an incremental `O(text)` Prefix Trie.
+- **Two-Tier Sharded Entity Database (`shared/data/entities/`):**
+  - Split into `hot.json` (45 frequent + 26 pinned entities, indices, US parties, core people), 6 domain cold shards (`tech-ai`, `finance-banking`, `media-entertainment`, `aviation-space`, `consumer-energy-health`, `science-culture`), and `manifest.json` (`domain_shard` lookup map).
+  - Pages fetch `hot.json` + `country_leaders.json` directly in parallel (zero manifest waterfall), load only the cold shards declared in each edition's `entity_shards` list via incremental `O(text)` Prefix Trie insertion, and lazily fetch cold shards on hover if an unloaded domain is encountered.
+  - Maintained automatically via weekly recency-weighted rebalancing (14-day half-life across 30 Daily + 8 Weekly archives, 1.5× Weekly weight, rank 35/55 hysteresis deadband) inside `scripts/briefing/refresh_company_facts.py`.
 - **Formatting:**
   - `**bold**` key takeaways (cleanly supporting nested `*italic*` human names without markdown boundary artifacts).
   - Per-paragraph icon/flag/logo deduplication (first mention shows badge/flag + dashed underline; repeat mentions keep the underline without repeating the icon).
@@ -113,6 +116,19 @@ Consolidated user-experience, visual, and interaction specification across `coli
 
 ---
 
-## 10. Auth, Sync & Architecture
-- **Google Sign-In (Zero-Bloat):** Lazy-loads Google Identity Services only when clicked; stores Bearer session token in `localStorage` and syncs preferences + bookmarks to Cloudflare KV via same-origin `https://colintan.dev/auth/*` and `/user/*` routes.
-- **Same-Origin API & DNS:** `colintan.dev` uses Cloudflare Free DNS (proxied with SSL `Full` over GitHub Pages) with Worker routes for `/s/*`, `/briefing/`, `/weekly/`, `/auth/*`, `/user/*`, and `/markets` — keeping all URLs first-party and preserving iCloud Custom Email DNS records.
+## 10. Reader-Friendly Text & Device-Native TTS Playback
+- **Progressive Feature Detection:** All `.tts-btn` and `.tts-player` UI is hidden by default (`html:not(.tts-supported)`) and revealed only on devices where `window.speechSynthesis` + `SpeechSynthesisUtterance` expose at least one voice.
+- **Reader-Friendly Speech Normalization (`shared/tts.js`):** Uses optional `reader_text` when present or composes clean prose from structured item fields, stripping markdown/URLs/arrows and expanding market deltas (`(+0.54%)` → `up 0.54 percent` / `上涨0.54%`) across both `en-US` and `zh-CN` (China Local News).
+- **Controls & Placement:**
+  - Per-card `Listen` pill right-aligned in `.source-links` (and `.geo-fact-foot-actions` on Around the World popovers) so it never crowds top-edge bookmark/share buttons.
+  - Compact per-bullet play icon in `.exec-meta` and section-level `Listen` buttons on Morning/Afternoon Brief, Sunday Digest, Top/Local/Positive News, Science, Culture, History, Long Reads, Week in Brief, and Bookmarks.
+- **Reliable Cross-Platform Playback:** Synchronous `speak()` inside click handlers (iOS Safari), abbreviation/decimal-safe sentence chunking (`<= 220` EN / `<= 110` ZH chars to prevent Chrome's 15s stall), ranked voice picker, deterministic chunk-level Pause/Resume, `.is-speaking` active highlight, and a compact floating bottom mini-player (`z-index: 88`, respecting `env(safe-area-inset-bottom)`) with Play/Pause, Next, Speed (`0.9×–1.5×`, persisted locally), and Stop.
+
+---
+
+## 11. Progressive Web App (PWA), Offline Support & Architecture
+- **Unified Root Manifest (`/manifest.json`):** `id: "/"`, `scope: "/"`, `start_url: "/briefing/?date=latest"`, `display: "standalone"`, app shortcuts (Daily Briefing, Weekly Briefing, Bookmarks), and `192×192` + `512×512` `any` + padded `512×512` `maskable` icons. Linked across all 4 pages (`/`, `/briefing/`, `/weekly/`, `/bookmarks/`) with canonical `/` home links so subpage navigation stays inside the standalone app shell on iOS and Android.
+- **Native Chrome & Safe-Area Polish:** Dynamic `<meta name="theme-color">` synchronized synchronously on boot and on every Light/Dark/Auto switch; `viewport-fit=cover` with `env(safe-area-inset-*)` padding across masthead, containers, footer, modals, toasts, and TTS mini-player.
+- **Root Service Worker (`/sw.js` + `shared/pwa.js`):** Network-first HTML (with ETag/Last-Modified `.js`/`.css` cache invalidation to prevent HTML/ES-module version skew), network-first mutable JSON (including `shared/data/entities/*.json`) with graceful offline notice banner/toast, bounded 60-entry LRU cache-first for immutable archive JSON, stale-while-revalidate for static assets, and strict bypass for `/auth/*`, `/user/*`, `/markets`, `/s/*`, and cross-origin requests.
+- **Google Sign-In & Same-Origin API:** Lazy-loads Google Identity Services only when clicked; stores Bearer session token in `localStorage` and syncs preferences + bookmarks to Cloudflare KV via same-origin `https://colintan.dev/auth/*` and `/user/*` routes.
+- **Cloudflare DNS & Edge Routing:** `colintan.dev` uses Cloudflare Free DNS (proxied with SSL `Full` over GitHub Pages) with Worker routes for `/s/*`, `/briefing/`, `/weekly/`, `/auth/*`, `/user/*`, and `/markets` — keeping all URLs first-party and preserving iCloud Custom Email DNS records.
