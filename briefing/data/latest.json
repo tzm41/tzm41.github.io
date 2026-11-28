@@ -1,8 +1,8 @@
 {
   "schema_version": "1.1",
   "archive_ttl_days": 60,
-  "date": "2026-11-27",
-  "generated_at": "2026-11-28T01:01:48Z",
+  "date": "2026-11-28",
+  "generated_at": "2026-11-28T15:01:02Z",
   "synthesis_mode": "gemini",
   "source_health": {
     "news": "ok",
@@ -12,208 +12,60 @@
     "local_news": "ok"
   },
   "morning_brief": {
-    "generated_at": "2026-11-27T15:01:04Z",
+    "generated_at": "2026-11-28T15:01:02Z",
     "bullets": [
       {
-        "text": "U.S. equities opened higher on Black Friday with the **S&P 500 (+0.54%)**, **Nasdaq (+0.56%)**, and **Dow (+0.56%)** advancing alongside **gold (+3.73% to $3,667.80)**, even as **Nvidia (-2.14%)** and **Bitcoin (-2.71%)** slipped and sentiment stayed in **Extreme Fear (21.6)**.",
+        "text": "UN **COP31 climate talks collapsed** without an agreement after the EU and several nations rejected a draft omitting fossil fuel language, while an **explosion near a munitions depot in eastern Afghanistan killed at least 7 to 10 students** and injured over 90.",
         "points": [
-          "U.S. equities opened higher on Black Friday with the **S&P 500 (+0.54%)**, **Nasdaq (+0.56%)**, and **Dow (+0.56%)** advancing alongside **gold (+3.73% to $3,667.80)**.",
-          "**Nvidia (-2.14%)** and **Bitcoin (-2.71%)** slipped as sentiment stayed in **Extreme Fear (21.6)**."
+          "UN **COP31 climate talks collapsed** after the EU and several countries refused a final proposal that omitted fossil fuel phaseout language.",
+          "An **explosion near a mining explosives depot at a school in eastern Afghanistan** killed at least 7 to 10 students and wounded more than 90."
         ],
-        "category": "Economy",
-        "sentiment": "slightly_positive"
-      },
-      {
-        "text": "Hackers **breached the U.S. Air Force's Cloud One platform**, risking sensitive data in the latest major federal cyber incident, while **hundreds of thousands remain without power** across Pennsylvania and neighboring East Coast states after Thanksgiving storms.",
-        "points": [
-          "Hackers **breached the U.S. Air Force's Cloud One platform**, risking sensitive data in the latest major federal cyber incident.",
-          "**Hundreds of thousands remain without power** across Pennsylvania and neighboring East Coast states after Thanksgiving storms."
-        ],
-        "category": "Policy",
+        "category": "World",
         "sentiment": "negative"
       },
       {
-        "text": "Ukrainian President *Volodymyr Zelensky* criticized *Donald Trump*'s **\"strange\" friendship with *Vladimir Putin*** in a BBC interview, warning Washington is **not pressuring Russia hard enough** in peace talks as **EU budget talks over Ukraine aid stall**.",
+        "text": "An **Israeli strike on a Gaza medical clinic killed two MSF staffers**, drawing condemnation from the WHO, while **Iran pointed to Europe's war role** after a Kuwait strike killed two Italian technicians and **Norse Atlantic ended flights** under Strait of Hormuz fuel costs.",
         "points": [
-          "Ukrainian President *Volodymyr Zelensky* criticized *Donald Trump*'s **\"strange\" friendship with *Vladimir Putin*** in a BBC interview, warning Washington is **not pressuring Russia hard enough** in peace talks.",
-          "**EU budget talks over Ukraine aid remain stalled**."
+          "An **Israeli strike on a Gaza medical clinic killed two MSF staffers**, which the WHO condemned as the Israeli military said it targeted Hamas operatives.",
+          "**Iran blamed European involvement** after an Iranian drone strike in Kuwait killed two Italian technicians, as **Norse Atlantic ended all flights** due to surging jet fuel costs."
         ],
         "category": "World",
+        "sentiment": "very_negative"
+      },
+      {
+        "text": "**OpenAI counter-sued Apple** over alleged trade secret theft through a former employee, while in Taiwan's local elections the **opposition party won re-election in the Taipei mayoral race**.",
+        "points": [
+          "**OpenAI counter-sued Apple**, alleging the iPhone maker stole trade secrets via a former employee.",
+          "Taiwan's **opposition party won re-election in the Taipei mayoral race** as voters cast ballots in island-wide local elections."
+        ],
+        "category": "Tech",
         "sentiment": "slightly_negative"
       },
       {
-        "text": "The **U.S. Supreme Court** is set to weigh whether the *Trump* administration's sweeping **asylum overhaul violates due process**, while *Donald Trump* signaled **openness to bipartisan healthcare talks** with Democrats following GOP midterm losses.",
+        "text": "The **ACLU sued the *Trump* administration** over investigations into anonymous online ICE critics, while **Texas AG-elect *Nathan Johnson* vowed not to defend the state's Ten Commandments classroom law** and the **EPA found no lead contamination** in Iowa drinking water after a controlled munitions detonation.",
         "points": [
-          "The **U.S. Supreme Court** is set to weigh whether the *Trump* administration's sweeping **asylum overhaul violates due process**.",
-          "*Donald Trump* signaled **openness to bipartisan healthcare talks** with Democrats following GOP midterm losses."
+          "The **ACLU filed a class-action lawsuit** seeking to halt *Trump* administration probes into anonymous social media critics of ICE.",
+          "Texas Attorney General-elect *Nathan Johnson* said he **will not defend the state's Ten Commandments school law** upon taking office in January.",
+          "The **EPA found no elevated lead** in 38 Iowa drinking water samples following a U.S. Army controlled munitions detonation."
         ],
         "category": "Policy",
-        "sentiment": "neutral"
-      },
-      {
-        "text": "Aerial imagery confirmed **ecological recovery in Florida Bay** as Everglades restoration sends fresh water south, while archaeologists in Mongolia unearthed **Classical Roman glass** inside an elite **Xiongnu Silk Road tomb**.",
-        "points": [
-          "Aerial imagery confirmed **ecological recovery in Florida Bay** as Everglades restoration sends fresh water south.",
-          "Archaeologists in Mongolia unearthed **Classical Roman glass** inside an elite **Xiongnu Silk Road tomb**."
-        ],
-        "category": "Science",
-        "sentiment": "positive"
-      }
-    ]
-  },
-  "afternoon_brief": {
-    "generated_at": "2026-11-28T01:01:48Z",
-    "bullets": [
-      {
-        "text": "U.S. equities closed sharply higher in the shortened Black Friday session, with the **Nasdaq (+2.31%)**, **Russell 2000 (+1.71%)**, **S&P 500 (+1.60%)**, and **Dow (+1.18%)** rallying as the **VIX tumbled 11.16% to 23.81**, while **gold surged (+3.91% to $3,674.20)** and **Bitcoin slipped (-1.16%)**.",
-        "points": [
-          "The **Nasdaq (+2.31%)**, **Russell 2000 (+1.71%)**, **S&P 500 (+1.60%)**, and **Dow (+1.18%)** closed higher in Black Friday trading as the **VIX fell 11.16% to 23.81**.",
-          "**Gold surged 3.91% to $3,674.20** while **Bitcoin dipped 1.16%** and the Fear & Greed Index rose to **24.9 (Extreme Fear)**."
-        ],
-        "category": "Economy",
-        "sentiment": "positive"
-      },
-      {
-        "text": "The **U.S. military disabled a Palau-flagged merchant ship** attempting to breach the **Iran blockade**, while Italian Foreign Minister *Antonio Tajani* said the drone behind the **deadly Kuwait attack was made in Iran**.",
-        "points": [
-          "U.S. forces **disabled the propulsion of a merchant vessel** that ignored warnings after departing an Iranian port, leaving the crew unharmed.",
-          "Italian Foreign Minister *Antonio Tajani* stated the drone used in the **fatal Kuwait strike was Iranian-made**."
-        ],
-        "category": "World",
-        "sentiment": "negative"
-      },
-      {
-        "text": "**Canada's Supreme Court largely upheld Quebec's ban** on religious symbols for public servants, rejecting major constitutional challenges from teachers, while **Spanish Prime Minister *Pedro Sánchez* and rivals** made final campaign pitches ahead of voting.",
-        "points": [
-          "**Canada's top court largely upheld Quebec's religious symbols ban** for public-sector workers, turning back challenges from Muslim, Sikh, and Catholic teachers.",
-          "**Spanish Prime Minister *Pedro Sánchez*** and opposition leaders held final rallies in a tight race for votes."
-        ],
-        "category": "Policy",
-        "sentiment": "neutral"
-      },
-      {
-        "text": "**Taiwan votes Saturday on reviving nuclear power** to support surging **AI electricity demand**, while employees at *Grand Theft Auto VI* developer **Rockstar Games rejected unionization** by a **75.3% margin**.",
-        "points": [
-          "**Taiwanese voters decide Saturday** whether to scrap the island's nuclear-free policy to help power **AI data centers**.",
-          "**Rockstar Games workers voted 75.3% against unionizing** ahead of *Grand Theft Auto VI*'s release."
-        ],
-        "category": "Tech",
         "sentiment": "neutral"
       }
     ]
   },
+  "afternoon_brief": null,
   "top_news": [
     {
-      "id": "story-u-s-disables-ship-breaching-iran-blockade-as-italy-links-kuwait-dro-ede317",
+      "id": "cop31-talks-collapse",
       "category": "World",
-      "headline": "U.S. Disables Ship Breaching Iran Blockade as Italy Links Kuwait Drone to Tehran",
-      "summary": "The U.S. military disabled the propulsion of a Palau-flagged merchant ship on Friday after it departed an Iranian port and ignored warnings not to breach the blockade, leaving the crew unharmed. Separately, Italian Foreign Minister *Antonio Tajani* said the drone used in the deadly strike in Kuwait was manufactured in Iran.",
-      "why_it_matters": "Simultaneous maritime enforcement and European attribution of the Kuwait attack raise the risk of broader regional escalation and shipping disruptions around the Persian Gulf.",
+      "headline": "COP31 Climate Talks Collapse Over Fossil Fuel Language",
+      "summary": "United Nations **COP31 climate negotiations fell apart** after delegates failed to reach consensus on whether to explicitly mention fossil fuels in the final agreement. The **European Union and several participating nations rejected the closing proposal**, arguing it failed to address the primary driver of global warming.",
+      "why_it_matters": "The breakdown **stalls multilateral momentum on emissions targets** and underscores deepening divisions between major economies and fossil-fuel-producing states.",
+      "reader_text": "",
       "sources": [
         {
-          "name": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/11/27/us-military-says-it-disabled-merchant-ship-trying-to-breach-iran-blockade?traffic_source=rss"
-        },
-        {
-          "name": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/liveblog/2026/11/28/iran-war-live-italy-says-drone-in-deadly-kuwait-attack-was-made-in-iran?traffic_source=rss"
-        }
-      ],
-      "sentiment": "negative",
-      "continued_from_prior": false,
-      "is_afternoon": true,
-      "entities": []
-    },
-    {
-      "id": "story-canada-s-top-court-largely-upholds-quebec-religious-symbols-ban-for-72c8b5",
-      "category": "Policy",
-      "headline": "Canada's Top Court Largely Upholds Quebec Religious Symbols Ban for Public Servants",
-      "summary": "The Supreme Court of Canada largely upheld Quebec's secularism law barring public servants—including teachers, judges, and police officers—from wearing religious symbols at work. The ruling rejected key arguments from Muslim, Sikh, and Catholic educators who contended the measure violated fundamental rights.",
-      "why_it_matters": "The decision entrenches Quebec's use of Canada's constitutional notwithstanding clause to shield provincial identity laws from federal Charter challenges.",
-      "sources": [
-        {
-          "name": "BBC World",
-          "url": "https://www.bbc.co.uk/news/articles/cq3dgpy9lem3o?at_medium=RSS&at_campaign=rss"
-        }
-      ],
-      "sentiment": "neutral",
-      "continued_from_prior": false,
-      "is_afternoon": true,
-      "entities": []
-    },
-    {
-      "id": "story-taiwan-votes-saturday-on-reviving-nuclear-power-to-meet-ai-energy-d-03634b",
-      "category": "Tech",
-      "headline": "Taiwan Votes Saturday on Reviving Nuclear Power to Meet AI Energy Demand",
-      "summary": "Voters in Taiwan head to the polls on Saturday to decide whether to overturn the island's longstanding 'nuclear-free homeland' policy and restart nuclear generation. Supporters argue reliable baseload power is essential as semiconductor fabs and AI data centers drive electricity demand higher.",
-      "why_it_matters": "The referendum outcome could reshape Taiwan's energy security and semiconductor supply-chain resilience at a time of intense global competition for AI compute.",
-      "sources": [
-        {
-          "name": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/11/27/will-taiwan-vote-to-revive-nuclear-power-and-why-does-that-matter-for-ai?traffic_source=rss"
-        }
-      ],
-      "sentiment": "neutral",
-      "continued_from_prior": false,
-      "is_afternoon": true,
-      "entities": []
-    },
-    {
-      "id": "story-kenyan-doomsday-cult-leader-convicted-over-123-more-starvation-deat-0beacf",
-      "category": "World",
-      "headline": "Kenyan Doomsday Cult Leader Convicted Over 123 More Starvation Deaths",
-      "summary": "Kenyan cult leader *Paul Mackenzie*, founder of the Good News International Church, was found guilty of manslaughter in connection with more than 123 additional starvation deaths of his followers. *Mackenzie* is already serving a 200-year sentence following an earlier conviction for the mass murder of children.",
-      "why_it_matters": "The verdict delivers further accountability in one of East Africa's deadliest cult tragedies and intensifies pressure on Kenyan authorities over religious oversight.",
-      "sources": [
-        {
-          "name": "BBC World",
-          "url": "https://www.bbc.co.uk/news/articles/cmy49de4xx1zo?at_medium=RSS&at_campaign=rss"
-        },
-        {
-          "name": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/11/27/kenyan-cult-leader-guilty-of-manslaughter-more-than-123-starvation-deaths?traffic_source=rss"
-        }
-      ],
-      "sentiment": "very_negative",
-      "continued_from_prior": false,
-      "is_afternoon": true,
-      "entities": []
-    },
-    {
-      "id": "story-hackers-breach-u-s-air-force-cloud-one-platform-risking-sensitive-d-d5f6c5",
-      "category": "Policy",
-      "headline": "Hackers Breach U.S. Air Force Cloud One Platform, Risking Sensitive Data",
-      "summary": "Hackers breached the **U.S. Air Force's primary cloud computing platform, Cloud One**, in recent weeks, potentially exposing sensitive data, according to a Reuters report. The intrusion marks the latest in a **string of cyber incidents and outages** targeting federal agencies.",
-      "why_it_matters": "Compromising a core defense cloud environment underscores persistent **vulnerabilities in U.S. military IT infrastructure** and could prompt tighter federal cybersecurity mandates.",
-      "sources": [
-        {
-          "name": "The Hill",
-          "url": "https://thehill.com/policy/defense/6245197-air-force-cloud-one-hack/"
-        }
-      ],
-      "sentiment": "very_negative",
-      "continued_from_prior": false,
-      "is_afternoon": false,
-      "entities": []
-    },
-    {
-      "id": "story-zelensky-criticizes-trump-putin-ties-as-eu-deadlocks-on-ukraine-aid-39afca",
-      "category": "World",
-      "headline": "Zelensky Criticizes Trump-Putin Ties as EU Deadlocks on Ukraine Aid Budget",
-      "summary": "In a BBC interview, Ukrainian President *Volodymyr Zelensky* called *Donald Trump*'s characterization of Russian President *Vladimir Putin* as a friend **\"strange\" and akin to appeasing *Hitler* in WWII**, arguing the U.S. is not pressing Moscow hard enough in peace talks. Separately, **EU leaders failed to resolve budget disputes**—including aid for Ukraine—as talks stalled ahead of a year-end deadline.",
-      "why_it_matters": "Deepening friction between Kyiv and Washington alongside **stalled European financing** increases diplomatic and fiscal pressure on Ukraine as it braces for **potential Russian winter grid strikes**.",
-      "sources": [
-        {
-          "name": "BBC World",
-          "url": "https://www.bbc.co.uk/news/articles/c820q9wgrpyyo?at_medium=RSS&at_campaign=rss"
-        },
-        {
-          "name": "The Hill",
-          "url": "https://thehill.com/policy/international/6245089-zelensky-calls-for-us-peace-progress/"
-        },
-        {
-          "name": "BBC World",
-          "url": "https://www.bbc.co.uk/news/articles/cw4gnm3m9deno?at_medium=RSS&at_campaign=rss"
+          "name": "NPR News",
+          "url": "https://www.npr.org/2026/11/28/nx-s1-6050187/cop31-talks-fall-apart"
         }
       ],
       "sentiment": "negative",
@@ -222,23 +74,16 @@
       "entities": []
     },
     {
-      "id": "story-hundreds-of-thousands-without-power-after-thanksgiving-storms-as-bl-7980ed",
-      "category": "World",
-      "headline": "Hundreds of Thousands Without Power After Thanksgiving Storms as Black Friday Begins",
-      "summary": "Severe Thanksgiving storms battering both U.S. coasts left **hundreds of thousands of customers without power** on Friday, with Pennsylvania and neighboring states among the hardest hit. Despite weather disruptions that also forced **New York City to postpone Macy's Thanksgiving Day Parade to Saturday**, analysts expect **Black Friday holiday spending to reach record levels**.",
-      "why_it_matters": "Prolonged grid outages test regional emergency response while **resilient holiday retail demand** offers a key gauge of U.S. consumer health amid elevated prices.",
+      "id": "openai-countersues-apple",
+      "category": "Tech",
+      "headline": "OpenAI Counter-Sues Apple Over Alleged Trade Secret Theft",
+      "summary": "**OpenAI has filed a countersuit against Apple**, alleging that the technology giant misappropriated proprietary trade secrets through a former OpenAI employee. The legal escalation **deepens the rivalry between two major AI and consumer-tech players** as both compete for talent and platform dominance.",
+      "why_it_matters": "High-stakes intellectual property litigation between leading AI developers and hardware platforms could **shape talent mobility and partnership dynamics** across Silicon Valley.",
+      "reader_text": "",
       "sources": [
         {
           "name": "BBC World",
-          "url": "https://www.bbc.co.uk/news/articles/cre3dj5n7dpwo?at_medium=RSS&at_campaign=rss"
-        },
-        {
-          "name": "NPR News",
-          "url": "https://www.npr.org/2026/11/27/nx-s1-6054884/thanksgiving-weather-black-friday"
-        },
-        {
-          "name": "NPR News",
-          "url": "https://www.npr.org/2026/11/27/g-s1-156004/up-first-newsletter-thanksgiving-storm-black-friday-shopping-asylum-supreme-court"
+          "url": "https://www.bbc.co.uk/news/articles/cm15ekqvlezeo?at_medium=RSS&at_campaign=rss"
         }
       ],
       "sentiment": "slightly_negative",
@@ -247,32 +92,16 @@
       "entities": []
     },
     {
-      "id": "story-supreme-court-to-weigh-trump-asylum-overhaul-as-advocates-push-to-r-1713f4",
-      "category": "Policy",
-      "headline": "Supreme Court to Weigh Trump Asylum Overhaul as Advocates Push to Restore Access",
-      "summary": "The U.S. Supreme Court will soon review whether key elements of President *Donald Trump*'s **asylum ban, mass firings, and procedural shifts** unlawfully deny migrants due process. Legal advocates say the sweeping measures have **effectively ended asylum access** at the U.S. border.",
-      "why_it_matters": "The high court's ruling will define the **constitutional limits of executive immigration authority** and determine whether asylum seekers can regain legal pathways to protection.",
-      "sources": [
-        {
-          "name": "NPR News",
-          "url": "https://www.npr.org/2026/11/27/nx-s1-6037854/trump-effectively-ended-asylum-supreme-court"
-        }
-      ],
-      "sentiment": "neutral",
-      "continued_from_prior": false,
-      "is_afternoon": false,
-      "entities": []
-    },
-    {
-      "id": "story-un-warns-famine-risks-are-rising-across-16-global-hotspots-amid-con-86b6d6",
+      "id": "gaza-msf-clinic-strike",
       "category": "World",
-      "headline": "UN Warns Famine Risks Are Rising Across 16 Global Hotspots Amid Conflict and El Niño",
-      "summary": "The United Nations warned that **acute hunger and famine risks are escalating** across 16 global hotspots, driven by **armed conflict, high fuel costs, aid cuts, and El Niño weather shocks**. Three of the four newly identified hunger hotspots are located in **Africa**, alongside worsening food insecurity in the Middle East.",
-      "why_it_matters": "Converging climate and geopolitical shocks threaten to overwhelm **shrinking international humanitarian budgets**, raising the risk of mass displacement and instability.",
+      "headline": "Israeli Strike on Gaza Medical Clinic Kills Two MSF Staffers",
+      "summary": "An **Israeli military strike hit a medical clinic in Gaza**, killing two Doctors Without Borders (MSF) staff members and drawing **sharp condemnation from the World Health Organization**. Israel's military stated that the operation targeted Hamas operatives in the area.",
+      "why_it_matters": "Attacks affecting humanitarian medical facilities **further restrict emergency care for civilians** and intensify international scrutiny over protections for aid workers.",
+      "reader_text": "",
       "sources": [
         {
-          "name": "Al Jazeera",
-          "url": "https://www.aljazeera.com/news/2026/11/27/famine-expect-to-rise-due-to-global-conflict-el-nino-warns-un?traffic_source=rss"
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/cm5y10yydln3o?at_medium=RSS&at_campaign=rss"
         }
       ],
       "sentiment": "very_negative",
@@ -281,15 +110,78 @@
       "entities": []
     },
     {
-      "id": "story-french-actor-gerard-depardieu-ordered-to-stand-trial-for-rape-and-s-e98ad5",
+      "id": "afghanistan-school-explosion",
       "category": "World",
-      "headline": "French Actor Gérard Depardieu Ordered to Stand Trial for Rape and Sexual Assault",
-      "summary": "French cinema star *Gérard Depardieu* has been **ordered to stand trial on charges of rape and sexual assault**, advancing one of France's highest-profile accountability cases. The prosecution comes amid ongoing debate over how **France's #MeToo movement** has been received within the country's arts establishment.",
-      "why_it_matters": "The trial represents a **watershed legal test** for how French courts handle allegations against prominent cultural figures.",
+      "headline": "Explosion Near Depot at Eastern Afghanistan School Kills Students, Injures Over 90",
+      "summary": "A **massive blast at a school in eastern Afghanistan killed between seven and ten students** and injured more than 90 people, according to local and interior ministry officials. Authorities said the explosion **originated from a neighboring mining explosives depot**, citing carelessness at the storage site.",
+      "why_it_matters": "The tragedy highlights **lax safety enforcement around industrial explosives** stored near civilian infrastructure and schools in Afghanistan.",
+      "reader_text": "",
       "sources": [
         {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/ckp80jyz6dl8o?at_medium=RSS&at_campaign=rss"
+        },
+        {
           "name": "NPR News",
-          "url": "https://www.npr.org/2026/11/27/nx-s1-6055559/gerard-depardieu-trial-rape-france"
+          "url": "https://www.npr.org/2026/11/28/nx-s1-6056284/explosion-school-eastern-afghanistan"
+        }
+      ],
+      "sentiment": "very_negative",
+      "continued_from_prior": false,
+      "is_afternoon": false,
+      "entities": []
+    },
+    {
+      "id": "falklands-oil-drilling-ruling",
+      "category": "World",
+      "headline": "International Tribunal Rejects Argentina's Bid to Halt Falklands Oil Drilling",
+      "summary": "An international tribunal **dismissed Argentina's request to block a UK-Israeli joint venture** from beginning oil and gas exploration near the Falkland Islands. Buenos Aires had sought to halt the project as part of its **long-standing sovereignty claim** over the South Atlantic archipelago.",
+      "why_it_matters": "The ruling **clears a major legal hurdle for offshore energy development** in the region while keeping diplomatic tensions between London and Buenos Aires elevated.",
+      "reader_text": "",
+      "sources": [
+        {
+          "name": "BBC World",
+          "url": "https://www.bbc.co.uk/news/articles/c84gnq3qq9rno?at_medium=RSS&at_campaign=rss"
+        },
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.aljazeera.com/news/2026/11/28/court-rejects-argentinas-request-to-stop-uk-oil-activity-near-falklands?traffic_source=rss"
+        }
+      ],
+      "sentiment": "neutral",
+      "continued_from_prior": false,
+      "is_afternoon": false,
+      "entities": []
+    },
+    {
+      "id": "taiwan-taipei-mayoral-election",
+      "category": "World",
+      "headline": "Taiwan Opposition Party Wins Re-Election in Taipei Mayoral Race",
+      "summary": "Taiwan's **opposition party retained control of the Taipei mayor's office** as voters across the island cast ballots for mayors, council members, and local officials. The local elections serve as a **key political bellwether** ahead of future national contests.",
+      "why_it_matters": "Strong opposition performance in the capital **shapes domestic legislative leverage and cross-strait political messaging** in Taipei.",
+      "reader_text": "",
+      "sources": [
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.aljazeera.com/news/2026/11/28/taiwan-opposition-party-wins-re-election-in-taipei-mayoral-race?traffic_source=rss"
+        }
+      ],
+      "sentiment": "neutral",
+      "continued_from_prior": false,
+      "is_afternoon": false,
+      "entities": []
+    },
+    {
+      "id": "israel-unity-talks-stall",
+      "category": "World",
+      "headline": "Israel Unity Government Talks Stall Over Rotation Deal",
+      "summary": "Coalition negotiations in Israel **hit an impasse as *Gadi Eisenkot* struggled to form a unity government** with *Benjamin Netanyahu*. Talks stalled over **disagreements on a prime ministerial rotation arrangement** and broader coalition compromises.",
+      "why_it_matters": "Prolonged political deadlock **complicates strategic decision-making** as Israel manages ongoing regional conflicts and domestic pressures.",
+      "reader_text": "",
+      "sources": [
+        {
+          "name": "Al Jazeera",
+          "url": "https://www.aljazeera.com/news/2026/11/28/israel-unity-government-talks-stall-what-happens-now?traffic_source=rss"
         }
       ],
       "sentiment": "slightly_negative",
@@ -298,61 +190,69 @@
       "entities": []
     },
     {
-      "id": "story-venezuela-moves-to-scrap-law-barring-opposition-figures-from-public-117588",
-      "category": "World",
-      "headline": "Venezuela Moves to Scrap Law Barring Opposition Figures From Public Office",
-      "summary": "Venezuela is moving to **repeal legislation introduced two years ago** that barred opposition politicians from holding public office. Critics have long condemned the measure as a tool for **systematic political persecution**.",
-      "why_it_matters": "Eliminating the ban could reopen **formal political participation for opposition leaders**, though its practical impact on future elections remains to be seen.",
+      "id": "congo-ebola-outbreak",
+      "category": "Science",
+      "headline": "Congo Battles Deadliest Ebola Outbreak Amid Conflict and Strained Health System",
+      "summary": "Health workers and patients in the Democratic Republic of the Congo are facing **what observers describe as the country's deadliest Ebola outbreak**. Ongoing **armed conflict and a fragile healthcare infrastructure** have severely hampered containment and treatment efforts.",
+      "why_it_matters": "The convergence of **active violence and viral transmission** raises the risk of wider regional spread and strains international humanitarian response capacity.",
+      "reader_text": "",
       "sources": [
         {
-          "name": "BBC World",
-          "url": "https://www.bbc.co.uk/news/articles/c58j4pw9xjrlo?at_medium=RSS&at_campaign=rss"
+          "name": "Al Jazeera",
+          "url": "https://www.aljazeera.com/features/longform/2026/11/28/the-perfect-storm-behind-congos-deadliest-ebola-outbreak?traffic_source=rss"
         }
       ],
-      "sentiment": "slightly_positive",
-      "continued_from_prior": false,
-      "is_afternoon": false,
-      "entities": []
-    },
-    {
-      "id": "story-android-rolls-out-ai-powered-diy-widgets-with-gemini-https-www-thev-072acf",
-      "category": "Tech",
-      "headline": "Android Rolls Out AI-Powered DIY Widgets With Gemini",
-      "summary": "Google's Android is introducing **AI-generated DIY widgets powered by Gemini**, enabling users to \"vibe-code\" custom home-screen tools using natural language. Early use cases include **real-time local bus arrival trackers** without opening dedicated transit apps.",
-      "why_it_matters": "Bringing **on-demand micro-app creation** directly to mobile home screens signals a shift from static app ecosystems toward personalized AI utilities.",
-      "sources": [
-        {
-          "name": "The Verge",
-          "url": "https://www.theverge.com/tech/1041801/android-intelligence-create-my-widget-gemini"
-        }
-      ],
-      "sentiment": "slightly_positive",
+      "sentiment": "very_negative",
       "continued_from_prior": false,
       "is_afternoon": false,
       "entities": []
     }
   ],
   "markets": {
-    "narrative": "U.S. stocks extended gains into the shortened Black Friday close, with the **Nasdaq (+2.31%)**, **Russell 2000 (+1.71%)**, **S&P 500 (+1.60%)**, and **Dow Jones (+1.18%)** finishing solidly higher as the **VIX dropped 11.16% to 23.81**. **Tesla (+4.92%)**, **Amazon (+4.34%)**, and **Meta (+3.22%)** led megacap advancers, though **Technology (-0.83%)** and **Health Care (-0.56%)** lagged among S&P sectors while **Materials (+2.07%)** outperformed. Safe-haven **gold jumped 3.91% to $3,674.20**, the **10-year Treasury yield climbed to 4.94% (+1.86%)**, and **Bitcoin eased 1.16% to $59,793.19**, lifting the Fear & Greed Index to **24.9 (Extreme Fear)**.",
+    "narrative": "U.S. markets are closed today for the weekend after Friday's broad rally pushed the **S&P 500 (+1.60% to 7,297.49)**, **Nasdaq (+2.31% to 24,129.50)**, and **Dow (+1.18% to 50,774.94)** higher alongside a sharp **11.16% drop in the VIX to 23.81**. **Technology (+2.80%)**, **Consumer Discretionary (+2.11%)**, and mega-caps like **Tesla (+4.92%)** and **Amazon (+4.34%)** led gains, while **Gold jumped 3.91% to $3,674.20** and the **10-year Treasury yield climbed to 4.94%**. Despite the rebound, the Fear & Greed Index remains in **Extreme Fear (24.9)** and **Bitcoin slipped 1.01% to $59,261.76**.",
     "regime_tag": "Risk-On",
     "watchlist": [
       {
         "symbol": "^GSPC",
         "name": "S&P 500",
         "group": "Equity",
-        "price": 7221.59,
-        "change_pct": 0.54,
-        "change_5d_pct": 0.64,
-        "change_30d_pct": -5.72,
+        "price": 7297.49,
+        "change_pct": 1.6,
+        "change_5d_pct": 1.7,
+        "change_30d_pct": -4.73,
         "sparkline_1d": [
           7240.2,
           7215.57,
-          7221.59
+          7238.12,
+          7245.17,
+          7271.75,
+          7267.99,
+          7260.62,
+          7269.5,
+          7278.21,
+          7281.03,
+          7276.14,
+          7284.08,
+          7278.3,
+          7304.1,
+          7297.49
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
           "2026-11-27T14:45:00Z",
-          "2026-11-27T15:00:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z"
         ],
         "sparkline_5d": [
           7120.57,
@@ -383,7 +283,9 @@
           7193.37,
           7171.2,
           7182.73,
-          7219.57
+          7245.17,
+          7269.5,
+          7284.08
         ],
         "sparkline_5d_times": [
           "2026-11-20T14:30:00Z",
@@ -414,7 +316,9 @@
           "2026-11-25T18:30:00Z",
           "2026-11-25T19:30:00Z",
           "2026-11-25T20:30:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z"
         ],
         "sparkline_30d": [
           7659.44,
@@ -446,7 +350,7 @@
           7237.17,
           7201.09,
           7182.78,
-          7221.59
+          7297.49
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -485,19 +389,43 @@
         "symbol": "^IXIC",
         "name": "Nasdaq",
         "group": "Equity",
-        "price": 23717.97,
-        "change_pct": 0.56,
-        "change_5d_pct": -0.68,
-        "change_30d_pct": -9.27,
+        "price": 24129.5,
+        "change_pct": 2.31,
+        "change_5d_pct": 1.05,
+        "change_30d_pct": -7.69,
         "sparkline_1d": [
           23807.55,
           23716.25,
-          23717.97
+          23828.4,
+          23847.54,
+          23986.18,
+          23967.92,
+          23939.07,
+          23974.15,
+          24005.29,
+          24018.37,
+          24009.65,
+          24037.92,
+          24016.16,
+          24149.09,
+          24129.5
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
           "2026-11-27T14:45:00Z",
-          "2026-11-27T15:00:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z"
         ],
         "sparkline_5d": [
           23436.19,
@@ -528,7 +456,9 @@
           23602.46,
           23523.0,
           23580.62,
-          23717.97
+          23847.54,
+          23974.15,
+          24037.92
         ],
         "sparkline_5d_times": [
           "2026-11-20T14:30:00Z",
@@ -559,7 +489,9 @@
           "2026-11-25T18:30:00Z",
           "2026-11-25T19:30:00Z",
           "2026-11-25T20:30:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z"
         ],
         "sparkline_30d": [
           26140.03,
@@ -591,7 +523,7 @@
           24089.56,
           23733.54,
           23585.8,
-          23717.97
+          24129.5
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -630,19 +562,43 @@
         "symbol": "^DJI",
         "name": "Dow Jones",
         "group": "Equity",
-        "price": 50464.78,
-        "change_pct": 0.56,
-        "change_5d_pct": 2.79,
-        "change_30d_pct": -2.96,
+        "price": 50774.94,
+        "change_pct": 1.18,
+        "change_5d_pct": 3.42,
+        "change_30d_pct": -2.36,
         "sparkline_1d": [
           50569.53,
           50399.1,
-          50464.78
+          50527.15,
+          50564.66,
+          50690.52,
+          50679.78,
+          50637.69,
+          50679.04,
+          50749.24,
+          50748.01,
+          50718.62,
+          50764.52,
+          50712.35,
+          50807.39,
+          50774.94
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
           "2026-11-27T14:45:00Z",
-          "2026-11-27T15:00:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z"
         ],
         "sparkline_5d": [
           49271.52,
@@ -673,7 +629,9 @@
           50356.56,
           50188.17,
           50180.34,
-          50464.78
+          50564.66,
+          50679.04,
+          50764.52
         ],
         "sparkline_5d_times": [
           "2026-11-20T14:30:00Z",
@@ -704,7 +662,9 @@
           "2026-11-25T18:30:00Z",
           "2026-11-25T19:30:00Z",
           "2026-11-25T20:30:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z"
         ],
         "sparkline_30d": [
           52002.41,
@@ -736,7 +696,7 @@
           49595.31,
           50018.7,
           50182.95,
-          50455.82
+          50774.94
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -775,19 +735,43 @@
         "symbol": "^RUT",
         "name": "Russell 2000",
         "group": "Equity",
-        "price": 2728.71,
-        "change_pct": 0.91,
-        "change_5d_pct": 2.77,
-        "change_30d_pct": 0.27,
+        "price": 2750.3,
+        "change_pct": 1.71,
+        "change_5d_pct": 3.59,
+        "change_30d_pct": 1.06,
         "sparkline_1d": [
           2728.57,
-          2728.62,
-          2728.71
+          2723.35,
+          2726.83,
+          2730.06,
+          2738.23,
+          2738.58,
+          2737.13,
+          2740.27,
+          2742.88,
+          2745.61,
+          2744.06,
+          2744.49,
+          2738.89,
+          2750.42,
+          2750.3
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
           "2026-11-27T14:45:00Z",
-          "2026-11-27T14:46:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z"
         ],
         "sparkline_5d": [
           2641.2,
@@ -818,7 +802,9 @@
           2707.89,
           2702.82,
           2703.51,
-          2728.71
+          2730.06,
+          2740.27,
+          2744.49
         ],
         "sparkline_5d_times": [
           "2026-11-20T14:30:00Z",
@@ -849,7 +835,9 @@
           "2026-11-25T18:30:00Z",
           "2026-11-25T19:30:00Z",
           "2026-11-25T20:30:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z"
         ],
         "sparkline_30d": [
           2721.37,
@@ -881,7 +869,7 @@
           2669.66,
           2684.94,
           2704.06,
-          2728.71
+          2750.3
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -920,17 +908,45 @@
         "symbol": "^VIX",
         "name": "VIX",
         "group": "Volatility",
-        "price": 26.87,
-        "change_pct": 0.26,
-        "change_5d_pct": -25.13,
-        "change_30d_pct": 45.72,
+        "price": 23.81,
+        "change_pct": -11.16,
+        "change_5d_pct": -33.66,
+        "change_30d_pct": 29.12,
         "sparkline_1d": [
           26.99,
-          26.87
+          27.33,
+          26.61,
+          26.42,
+          25.47,
+          25.38,
+          25.53,
+          25.14,
+          24.73,
+          24.62,
+          24.87,
+          24.56,
+          24.72,
+          24.17,
+          23.86,
+          23.81
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
-          "2026-11-27T14:45:00Z"
+          "2026-11-27T14:45:00Z",
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z",
+          "2026-11-27T18:15:00Z"
         ],
         "sparkline_5d": [
           30.58,
@@ -990,7 +1006,11 @@
           25.35,
           25.21,
           25.43,
-          26.87
+          27.33,
+          25.38,
+          24.62,
+          24.17,
+          23.81
         ],
         "sparkline_5d_times": [
           "2026-11-23T08:00:00Z",
@@ -1050,7 +1070,11 @@
           "2026-11-27T11:00:00Z",
           "2026-11-27T12:00:00Z",
           "2026-11-27T13:00:00Z",
-          "2026-11-27T14:00:00Z"
+          "2026-11-27T14:00:00Z",
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T18:00:00Z"
         ],
         "sparkline_30d": [
           18.44,
@@ -1082,7 +1106,7 @@
           26.36,
           28.29,
           26.8,
-          26.87
+          23.81
         ],
         "sparkline_30d_times": [
           "2026-10-19",
@@ -1121,66 +1145,45 @@
         "symbol": "^TNX",
         "name": "US 10Y Yield",
         "group": "Rates",
-        "price": 4.89,
-        "change_pct": 0.82,
-        "change_5d_pct": -3.17,
-        "change_30d_pct": -4.12,
+        "price": 4.94,
+        "change_pct": 1.86,
+        "change_5d_pct": -2.18,
+        "change_30d_pct": -3.14,
         "sparkline_1d": [
-          4.82,
-          4.84,
-          4.82,
-          4.82,
-          4.82,
-          4.8,
-          4.81,
-          4.82,
-          4.81,
-          4.82,
-          4.84,
-          4.83,
-          4.84,
-          4.83,
-          4.84,
-          4.83,
-          4.84,
-          4.84,
-          4.83,
-          4.84,
-          4.84,
-          4.85
+          4.91,
+          4.91,
+          4.91,
+          4.92,
+          4.93,
+          4.93,
+          4.93,
+          4.93,
+          4.93,
+          4.93,
+          4.94,
+          4.94,
+          4.94,
+          4.94,
+          4.94
         ],
         "sparkline_1d_times": [
-          "2026-11-25T14:35:00Z",
-          "2026-11-25T14:50:00Z",
-          "2026-11-25T15:05:00Z",
-          "2026-11-25T15:20:00Z",
-          "2026-11-25T15:35:00Z",
-          "2026-11-25T15:50:00Z",
-          "2026-11-25T16:05:00Z",
-          "2026-11-25T16:20:00Z",
-          "2026-11-25T16:35:00Z",
-          "2026-11-25T16:50:00Z",
-          "2026-11-25T17:05:00Z",
-          "2026-11-25T17:20:00Z",
-          "2026-11-25T17:35:00Z",
-          "2026-11-25T17:50:00Z",
-          "2026-11-25T18:05:00Z",
-          "2026-11-25T18:20:00Z",
-          "2026-11-25T18:35:00Z",
-          "2026-11-25T18:50:00Z",
-          "2026-11-25T19:05:00Z",
-          "2026-11-25T19:20:00Z",
-          "2026-11-25T19:35:00Z",
-          "2026-11-25T19:50:00Z"
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z",
+          "2026-11-27T18:15:00Z",
+          "2026-11-27T18:30:00Z",
+          "2026-11-27T18:45:00Z",
+          "2026-11-27T19:00:00Z"
         ],
         "sparkline_5d": [
-          5.09,
-          5.08,
-          5.07,
-          5.05,
-          5.05,
-          5.06,
-          5.05,
           4.99,
           4.96,
           4.95,
@@ -1208,16 +1211,13 @@
           4.84,
           4.84,
           4.83,
-          4.85
+          4.85,
+          4.92,
+          4.93,
+          4.94,
+          4.94
         ],
         "sparkline_5d_times": [
-          "2026-11-19T13:20:00Z",
-          "2026-11-19T14:20:00Z",
-          "2026-11-19T15:20:00Z",
-          "2026-11-19T16:20:00Z",
-          "2026-11-19T17:20:00Z",
-          "2026-11-19T18:20:00Z",
-          "2026-11-19T19:20:00Z",
           "2026-11-20T13:20:00Z",
           "2026-11-20T14:20:00Z",
           "2026-11-20T15:20:00Z",
@@ -1245,7 +1245,11 @@
           "2026-11-25T16:20:00Z",
           "2026-11-25T17:20:00Z",
           "2026-11-25T18:20:00Z",
-          "2026-11-25T19:20:00Z"
+          "2026-11-25T19:20:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T18:30:00Z"
         ],
         "sparkline_30d": [
           5.1,
@@ -1277,7 +1281,7 @@
           4.92,
           4.9,
           4.85,
-          4.89
+          4.94
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -1316,17 +1320,43 @@
         "symbol": "CL=F",
         "name": "WTI Crude",
         "group": "Commodities",
-        "price": 84.01,
-        "change_pct": 0.39,
-        "change_5d_pct": 0.96,
-        "change_30d_pct": -17.16,
+        "price": 83.0,
+        "change_pct": -0.81,
+        "change_5d_pct": -0.25,
+        "change_30d_pct": -18.15,
         "sparkline_1d": [
           84.07,
-          84.01
+          84.01,
+          83.85,
+          84.01,
+          83.78,
+          83.45,
+          83.25,
+          83.44,
+          82.89,
+          82.9,
+          82.97,
+          82.73,
+          82.65,
+          82.82,
+          83.0
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
-          "2026-11-27T14:45:00Z"
+          "2026-11-27T14:45:00Z",
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z"
         ],
         "sparkline_5d": [
           82.88,
@@ -1404,7 +1434,10 @@
           84.0,
           84.31,
           84.42,
-          83.99
+          84.01,
+          83.45,
+          82.9,
+          82.82
         ],
         "sparkline_5d_times": [
           "2026-11-22T23:00:00Z",
@@ -1482,7 +1515,10 @@
           "2026-11-26T02:00:00Z",
           "2026-11-26T03:00:00Z",
           "2026-11-26T04:00:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T17:30:00Z"
         ],
         "sparkline_30d": [
           101.41,
@@ -1514,7 +1550,7 @@
           80.17,
           82.05,
           83.68,
-          83.99
+          83.08
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -1553,17 +1589,43 @@
         "symbol": "GC=F",
         "name": "Gold",
         "group": "Commodities",
-        "price": 3667.8,
-        "change_pct": 3.73,
-        "change_5d_pct": -0.48,
-        "change_30d_pct": -12.28,
+        "price": 3674.2,
+        "change_pct": 3.91,
+        "change_5d_pct": -0.31,
+        "change_30d_pct": -12.12,
         "sparkline_1d": [
           3663.1,
-          3667.8
+          3664.4,
+          3658.0,
+          3655.6,
+          3658.4,
+          3654.1,
+          3647.7,
+          3652.9,
+          3657.6,
+          3661.0,
+          3660.6,
+          3666.6,
+          3659.5,
+          3674.7,
+          3674.2
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
-          "2026-11-27T14:45:00Z"
+          "2026-11-27T14:45:00Z",
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z"
         ],
         "sparkline_5d": [
           3584.4,
@@ -1641,7 +1703,10 @@
           3615.4,
           3602.1,
           3620.4,
-          3668.1
+          3664.4,
+          3654.1,
+          3661.0,
+          3674.7
         ],
         "sparkline_5d_times": [
           "2026-11-22T23:00:00Z",
@@ -1719,7 +1784,10 @@
           "2026-11-26T02:00:00Z",
           "2026-11-26T03:00:00Z",
           "2026-11-26T04:00:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T17:30:00Z"
         ],
         "sparkline_30d": [
           4181.1,
@@ -1751,7 +1819,7 @@
           3651.4,
           3561.9,
           3535.8,
-          3668.1
+          3639.6
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -1790,233 +1858,209 @@
         "symbol": "BTC-USD",
         "name": "Bitcoin",
         "group": "Crypto",
-        "price": 58856.76,
-        "change_pct": -2.71,
-        "change_5d_pct": -3.77,
-        "change_30d_pct": -24.32,
+        "price": 59261.76,
+        "change_pct": -1.01,
+        "change_5d_pct": -3.18,
+        "change_30d_pct": -23.23,
         "sparkline_1d": [
-          60150.48,
-          60246.51,
-          60373.2,
-          60549.3,
-          60512.65,
-          60357.63,
-          60480.46,
-          60453.75,
-          60481.08,
-          60442.84,
-          60368.65,
-          60455.42,
-          60430.0,
-          60629.27,
-          60572.48,
-          60401.02,
-          60461.93,
-          60547.57,
-          60587.6,
-          60627.69,
-          60660.43,
-          60632.51,
-          60716.38,
-          60687.3,
-          60737.13,
-          60824.99,
-          60816.53,
-          60740.49,
-          60490.17,
-          60528.24,
-          60571.81,
-          60467.17,
-          60382.12,
-          60380.58,
-          60416.08,
-          60493.5,
-          60458.69,
-          60467.2,
-          60653.25,
-          60611.93,
-          60721.33,
-          60711.44,
-          60614.26,
-          60644.68,
-          61183.85,
-          61443.18,
-          61429.85,
-          61239.9,
-          61477.53,
-          61520.52,
-          61377.21,
-          61331.96,
-          61417.81,
-          61391.61,
-          61440.19,
-          61338.05,
-          61556.64,
-          61670.18,
-          61664.55,
-          61694.35,
-          61834.87,
-          61636.8,
-          61603.19,
-          61624.06,
-          61701.55,
-          61750.69,
-          61432.13,
-          61588.98,
-          61787.24,
-          61753.5,
-          61709.6,
-          61648.9,
-          61618.32,
-          61652.53,
-          61621.14,
-          61558.29,
-          61585.96,
-          61634.85,
-          61549.97,
-          61584.38,
-          61558.01,
-          61604.51,
-          61598.52,
-          61577.51,
-          61546.4,
-          61502.19,
-          61459.67,
-          61551.3,
-          61420.66,
-          61367.18,
-          61344.76,
-          61403.45,
-          61411.0,
-          61351.12,
-          60137.29,
-          59130.74,
-          58856.76
+          59585.02,
+          59753.48,
+          60106.9,
+          60055.0,
+          59939.43,
+          59967.82,
+          60222.94,
+          59886.62,
+          59918.12,
+          59604.51,
+          59523.96,
+          59840.85,
+          59853.0,
+          59779.62,
+          59744.57,
+          59843.27,
+          59768.21,
+          59898.89,
+          59953.31,
+          59834.09,
+          59706.74,
+          59735.63,
+          59758.64,
+          59733.06,
+          59779.03,
+          59760.56,
+          59753.35,
+          59722.14,
+          59610.03,
+          59691.89,
+          59689.64,
+          59674.85,
+          59753.48,
+          59776.79,
+          59790.16,
+          59858.49,
+          59916.28,
+          59919.75,
+          59921.06,
+          59833.8,
+          60004.78,
+          60049.02,
+          60125.6,
+          60119.76,
+          60169.05,
+          60073.73,
+          59908.92,
+          59891.31,
+          59919.66,
+          59839.18,
+          59900.38,
+          59955.68,
+          59976.45,
+          59964.12,
+          59957.17,
+          59925.6,
+          59709.8,
+          59752.28,
+          59661.44,
+          59670.48,
+          59692.9,
+          59801.82,
+          59812.74,
+          59684.45,
+          59631.57,
+          59641.05,
+          59690.86,
+          59777.9,
+          59633.63,
+          59604.6,
+          59542.83,
+          59505.39,
+          59544.65,
+          59576.16,
+          59486.27,
+          59526.24,
+          59376.3,
+          59273.35,
+          59183.42,
+          59193.51,
+          59206.85,
+          59197.89,
+          59114.54,
+          59176.49,
+          59241.15,
+          59216.81,
+          59170.46,
+          59149.75,
+          59172.72,
+          59165.19,
+          58977.06,
+          59042.05,
+          59099.69,
+          59244.03,
+          59246.97,
+          59263.43,
+          59261.76
         ],
         "sparkline_1d_times": [
-          "2026-11-26T15:00:00Z",
-          "2026-11-26T15:15:00Z",
-          "2026-11-26T15:30:00Z",
-          "2026-11-26T15:45:00Z",
-          "2026-11-26T16:00:00Z",
-          "2026-11-26T16:15:00Z",
-          "2026-11-26T16:30:00Z",
-          "2026-11-26T16:45:00Z",
-          "2026-11-26T17:00:00Z",
-          "2026-11-26T17:15:00Z",
-          "2026-11-26T17:30:00Z",
-          "2026-11-26T17:45:00Z",
-          "2026-11-26T18:00:00Z",
-          "2026-11-26T18:15:00Z",
-          "2026-11-26T18:30:00Z",
-          "2026-11-26T18:45:00Z",
-          "2026-11-26T19:00:00Z",
-          "2026-11-26T19:15:00Z",
-          "2026-11-26T19:30:00Z",
-          "2026-11-26T19:45:00Z",
-          "2026-11-26T20:00:00Z",
-          "2026-11-26T20:15:00Z",
-          "2026-11-26T20:30:00Z",
-          "2026-11-26T20:45:00Z",
-          "2026-11-26T21:00:00Z",
-          "2026-11-26T21:15:00Z",
-          "2026-11-26T21:30:00Z",
-          "2026-11-26T21:45:00Z",
-          "2026-11-26T22:00:00Z",
-          "2026-11-26T22:15:00Z",
-          "2026-11-26T22:30:00Z",
-          "2026-11-26T22:45:00Z",
-          "2026-11-26T23:00:00Z",
-          "2026-11-26T23:15:00Z",
-          "2026-11-26T23:30:00Z",
-          "2026-11-26T23:45:00Z",
-          "2026-11-27T00:00:00Z",
-          "2026-11-27T00:15:00Z",
-          "2026-11-27T00:30:00Z",
-          "2026-11-27T00:45:00Z",
-          "2026-11-27T01:00:00Z",
-          "2026-11-27T01:15:00Z",
-          "2026-11-27T01:30:00Z",
-          "2026-11-27T01:45:00Z",
-          "2026-11-27T02:00:00Z",
-          "2026-11-27T02:15:00Z",
-          "2026-11-27T02:30:00Z",
-          "2026-11-27T02:45:00Z",
-          "2026-11-27T03:00:00Z",
-          "2026-11-27T03:15:00Z",
-          "2026-11-27T03:30:00Z",
-          "2026-11-27T03:45:00Z",
-          "2026-11-27T04:00:00Z",
-          "2026-11-27T04:15:00Z",
-          "2026-11-27T04:30:00Z",
-          "2026-11-27T04:45:00Z",
-          "2026-11-27T05:00:00Z",
-          "2026-11-27T05:15:00Z",
-          "2026-11-27T05:30:00Z",
-          "2026-11-27T05:45:00Z",
-          "2026-11-27T06:00:00Z",
-          "2026-11-27T06:15:00Z",
-          "2026-11-27T06:30:00Z",
-          "2026-11-27T06:45:00Z",
-          "2026-11-27T07:00:00Z",
-          "2026-11-27T07:15:00Z",
-          "2026-11-27T07:30:00Z",
-          "2026-11-27T07:45:00Z",
-          "2026-11-27T08:00:00Z",
-          "2026-11-27T08:15:00Z",
-          "2026-11-27T08:30:00Z",
-          "2026-11-27T08:45:00Z",
-          "2026-11-27T09:00:00Z",
-          "2026-11-27T09:15:00Z",
-          "2026-11-27T09:30:00Z",
-          "2026-11-27T09:45:00Z",
-          "2026-11-27T10:00:00Z",
-          "2026-11-27T10:15:00Z",
-          "2026-11-27T10:30:00Z",
-          "2026-11-27T10:45:00Z",
-          "2026-11-27T11:00:00Z",
-          "2026-11-27T11:15:00Z",
-          "2026-11-27T11:30:00Z",
-          "2026-11-27T11:45:00Z",
-          "2026-11-27T12:00:00Z",
-          "2026-11-27T12:15:00Z",
-          "2026-11-27T12:30:00Z",
-          "2026-11-27T12:45:00Z",
-          "2026-11-27T13:00:00Z",
-          "2026-11-27T13:15:00Z",
-          "2026-11-27T13:30:00Z",
-          "2026-11-27T13:45:00Z",
-          "2026-11-27T14:00:00Z",
-          "2026-11-27T14:15:00Z",
-          "2026-11-27T14:30:00Z",
-          "2026-11-27T14:45:00Z",
-          "2026-11-27T15:00:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z",
+          "2026-11-27T18:15:00Z",
+          "2026-11-27T18:30:00Z",
+          "2026-11-27T18:45:00Z",
+          "2026-11-27T19:00:00Z",
+          "2026-11-27T19:15:00Z",
+          "2026-11-27T19:30:00Z",
+          "2026-11-27T19:45:00Z",
+          "2026-11-27T20:00:00Z",
+          "2026-11-27T20:15:00Z",
+          "2026-11-27T20:30:00Z",
+          "2026-11-27T20:45:00Z",
+          "2026-11-27T21:00:00Z",
+          "2026-11-27T21:15:00Z",
+          "2026-11-27T21:30:00Z",
+          "2026-11-27T21:45:00Z",
+          "2026-11-27T22:00:00Z",
+          "2026-11-27T22:15:00Z",
+          "2026-11-27T22:30:00Z",
+          "2026-11-27T22:45:00Z",
+          "2026-11-27T23:00:00Z",
+          "2026-11-27T23:15:00Z",
+          "2026-11-27T23:30:00Z",
+          "2026-11-27T23:45:00Z",
+          "2026-11-28T00:00:00Z",
+          "2026-11-28T00:15:00Z",
+          "2026-11-28T00:30:00Z",
+          "2026-11-28T00:45:00Z",
+          "2026-11-28T01:00:00Z",
+          "2026-11-28T01:15:00Z",
+          "2026-11-28T01:30:00Z",
+          "2026-11-28T01:45:00Z",
+          "2026-11-28T02:00:00Z",
+          "2026-11-28T02:15:00Z",
+          "2026-11-28T02:30:00Z",
+          "2026-11-28T02:45:00Z",
+          "2026-11-28T03:00:00Z",
+          "2026-11-28T03:15:00Z",
+          "2026-11-28T03:30:00Z",
+          "2026-11-28T03:45:00Z",
+          "2026-11-28T04:00:00Z",
+          "2026-11-28T04:15:00Z",
+          "2026-11-28T04:30:00Z",
+          "2026-11-28T04:45:00Z",
+          "2026-11-28T05:00:00Z",
+          "2026-11-28T05:15:00Z",
+          "2026-11-28T05:30:00Z",
+          "2026-11-28T05:45:00Z",
+          "2026-11-28T06:00:00Z",
+          "2026-11-28T06:15:00Z",
+          "2026-11-28T06:30:00Z",
+          "2026-11-28T06:45:00Z",
+          "2026-11-28T07:00:00Z",
+          "2026-11-28T07:15:00Z",
+          "2026-11-28T07:30:00Z",
+          "2026-11-28T07:45:00Z",
+          "2026-11-28T08:00:00Z",
+          "2026-11-28T08:15:00Z",
+          "2026-11-28T08:30:00Z",
+          "2026-11-28T08:45:00Z",
+          "2026-11-28T09:00:00Z",
+          "2026-11-28T09:15:00Z",
+          "2026-11-28T09:30:00Z",
+          "2026-11-28T09:45:00Z",
+          "2026-11-28T10:00:00Z",
+          "2026-11-28T10:15:00Z",
+          "2026-11-28T10:30:00Z",
+          "2026-11-28T10:45:00Z",
+          "2026-11-28T11:00:00Z",
+          "2026-11-28T11:15:00Z",
+          "2026-11-28T11:30:00Z",
+          "2026-11-28T11:45:00Z",
+          "2026-11-28T12:00:00Z",
+          "2026-11-28T12:15:00Z",
+          "2026-11-28T12:30:00Z",
+          "2026-11-28T12:45:00Z",
+          "2026-11-28T13:00:00Z",
+          "2026-11-28T13:15:00Z",
+          "2026-11-28T13:30:00Z",
+          "2026-11-28T13:45:00Z",
+          "2026-11-28T14:00:00Z",
+          "2026-11-28T14:15:00Z",
+          "2026-11-28T14:30:00Z",
+          "2026-11-28T14:45:00Z",
+          "2026-11-28T15:00:00Z"
         ],
         "sparkline_5d": [
-          61251.29,
-          60762.27,
-          60516.92,
-          61190.72,
-          61154.56,
-          61596.5,
-          61375.36,
-          61365.92,
-          61429.48,
-          61361.27,
-          61351.34,
-          61355.17,
-          61253.44,
-          63793.32,
-          62802.12,
-          62822.8,
-          62180.42,
-          61602.23,
-          61313.17,
-          61190.87,
-          61146.54,
-          61261.43,
-          61176.9,
-          61196.28,
           61239.31,
           61002.79,
           60036.61,
@@ -2104,33 +2148,33 @@
           61551.3,
           61403.45,
           59130.74,
-          58856.76
+          60055.0,
+          59886.62,
+          59840.85,
+          59843.27,
+          59834.09,
+          59733.06,
+          59722.14,
+          59674.85,
+          59858.49,
+          59833.8,
+          60119.76,
+          59891.31,
+          59955.68,
+          59925.6,
+          59670.48,
+          59684.45,
+          59777.9,
+          59505.39,
+          59526.24,
+          59193.51,
+          59176.49,
+          59149.75,
+          59042.05,
+          59263.43,
+          59261.76
         ],
         "sparkline_5d_times": [
-          "2026-11-23T00:00:00Z",
-          "2026-11-23T01:00:00Z",
-          "2026-11-23T02:00:00Z",
-          "2026-11-23T03:00:00Z",
-          "2026-11-23T04:00:00Z",
-          "2026-11-23T05:00:00Z",
-          "2026-11-23T06:00:00Z",
-          "2026-11-23T07:00:00Z",
-          "2026-11-23T08:00:00Z",
-          "2026-11-23T09:00:00Z",
-          "2026-11-23T10:00:00Z",
-          "2026-11-23T11:00:00Z",
-          "2026-11-23T12:00:00Z",
-          "2026-11-23T13:00:00Z",
-          "2026-11-23T14:00:00Z",
-          "2026-11-23T15:00:00Z",
-          "2026-11-23T16:00:00Z",
-          "2026-11-23T17:00:00Z",
-          "2026-11-23T18:00:00Z",
-          "2026-11-23T19:00:00Z",
-          "2026-11-23T20:00:00Z",
-          "2026-11-23T21:00:00Z",
-          "2026-11-23T22:00:00Z",
-          "2026-11-23T23:00:00Z",
           "2026-11-24T00:00:00Z",
           "2026-11-24T01:00:00Z",
           "2026-11-24T02:00:00Z",
@@ -2218,10 +2262,33 @@
           "2026-11-27T12:00:00Z",
           "2026-11-27T13:00:00Z",
           "2026-11-27T14:00:00Z",
-          "2026-11-27T15:00:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T18:00:00Z",
+          "2026-11-27T19:00:00Z",
+          "2026-11-27T20:00:00Z",
+          "2026-11-27T21:00:00Z",
+          "2026-11-27T22:00:00Z",
+          "2026-11-27T23:00:00Z",
+          "2026-11-28T00:00:00Z",
+          "2026-11-28T01:00:00Z",
+          "2026-11-28T02:00:00Z",
+          "2026-11-28T03:00:00Z",
+          "2026-11-28T04:00:00Z",
+          "2026-11-28T05:00:00Z",
+          "2026-11-28T06:00:00Z",
+          "2026-11-28T07:00:00Z",
+          "2026-11-28T08:00:00Z",
+          "2026-11-28T09:00:00Z",
+          "2026-11-28T10:00:00Z",
+          "2026-11-28T11:00:00Z",
+          "2026-11-28T12:00:00Z",
+          "2026-11-28T13:00:00Z",
+          "2026-11-28T14:00:00Z",
+          "2026-11-28T15:00:00Z"
         ],
         "sparkline_30d": [
-          77775.11,
           77198.21,
           77434.75,
           78248.45,
@@ -2250,10 +2317,10 @@
           59747.77,
           60378.2,
           60494.71,
-          58856.76
+          59866.37,
+          59261.76
         ],
         "sparkline_30d_times": [
-          "2026-10-29",
           "2026-10-30",
           "2026-10-31",
           "2026-11-01",
@@ -2282,7 +2349,8 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ]
       }
     ],
@@ -2291,19 +2359,73 @@
         "symbol": "AAPL",
         "name": "Apple",
         "group": "Big 7",
-        "price": 356.45,
-        "change_pct": 0.24,
-        "change_5d_pct": 2.07,
-        "change_30d_pct": 3.86,
+        "price": 359.29,
+        "change_pct": 1.04,
+        "change_5d_pct": 2.89,
+        "change_30d_pct": 4.69,
         "sparkline_1d": [
           356.94,
           355.86,
-          356.45
+          357.36,
+          358.42,
+          359.18,
+          359.18,
+          358.18,
+          356.93,
+          357.23,
+          358.01,
+          357.57,
+          357.99,
+          358.46,
+          358.7,
+          358.89,
+          358.75,
+          358.28,
+          358.43,
+          358.42,
+          358.52,
+          358.39,
+          358.38,
+          358.48,
+          358.5,
+          358.54,
+          359.0,
+          359.11,
+          359.0,
+          358.99,
+          359.29
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
           "2026-11-27T14:45:00Z",
-          "2026-11-27T15:00:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z",
+          "2026-11-27T18:15:00Z",
+          "2026-11-27T18:30:00Z",
+          "2026-11-27T18:45:00Z",
+          "2026-11-27T19:00:00Z",
+          "2026-11-27T19:15:00Z",
+          "2026-11-27T19:30:00Z",
+          "2026-11-27T19:45:00Z",
+          "2026-11-27T20:00:00Z",
+          "2026-11-27T20:15:00Z",
+          "2026-11-27T20:30:00Z",
+          "2026-11-27T20:45:00Z",
+          "2026-11-27T21:00:00Z",
+          "2026-11-27T21:15:00Z",
+          "2026-11-27T21:30:00Z",
+          "2026-11-27T21:45:00Z"
         ],
         "sparkline_5d": [
           348.91,
@@ -2334,7 +2456,9 @@
           355.44,
           354.35,
           355.45,
-          356.48
+          358.42,
+          356.93,
+          357.99
         ],
         "sparkline_5d_times": [
           "2026-11-20T14:30:00Z",
@@ -2365,7 +2489,9 @@
           "2026-11-25T18:30:00Z",
           "2026-11-25T19:30:00Z",
           "2026-11-25T20:30:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z"
         ],
         "sparkline_30d": [
           343.2,
@@ -2397,7 +2523,7 @@
           349.08,
           354.07,
           355.58,
-          356.45
+          358.54
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -2436,19 +2562,73 @@
         "symbol": "MSFT",
         "name": "Microsoft",
         "group": "Big 7",
-        "price": 490.43,
-        "change_pct": 0.1,
-        "change_5d_pct": -1.58,
-        "change_30d_pct": -7.12,
+        "price": 495.98,
+        "change_pct": 1.23,
+        "change_5d_pct": -0.47,
+        "change_30d_pct": -6.07,
         "sparkline_1d": [
           494.04,
           490.35,
-          490.43
+          490.99,
+          490.36,
+          492.11,
+          491.41,
+          489.23,
+          490.46,
+          490.74,
+          491.11,
+          490.85,
+          491.66,
+          491.43,
+          493.38,
+          493.65,
+          493.85,
+          493.98,
+          493.95,
+          493.9,
+          496.31,
+          494.15,
+          494.15,
+          494.15,
+          494.24,
+          495.5,
+          496.0,
+          495.5,
+          495.19,
+          495.0,
+          495.98
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
           "2026-11-27T14:45:00Z",
-          "2026-11-27T15:00:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z",
+          "2026-11-27T18:15:00Z",
+          "2026-11-27T18:30:00Z",
+          "2026-11-27T18:45:00Z",
+          "2026-11-27T19:00:00Z",
+          "2026-11-27T19:15:00Z",
+          "2026-11-27T19:30:00Z",
+          "2026-11-27T19:45:00Z",
+          "2026-11-27T20:00:00Z",
+          "2026-11-27T20:15:00Z",
+          "2026-11-27T20:30:00Z",
+          "2026-11-27T20:45:00Z",
+          "2026-11-27T21:00:00Z",
+          "2026-11-27T21:15:00Z",
+          "2026-11-27T21:30:00Z",
+          "2026-11-27T21:45:00Z"
         ],
         "sparkline_5d": [
           497.39,
@@ -2479,7 +2659,9 @@
           492.99,
           489.54,
           489.75,
-          490.35
+          490.36,
+          490.46,
+          491.66
         ],
         "sparkline_5d_times": [
           "2026-11-20T14:30:00Z",
@@ -2510,7 +2692,9 @@
           "2026-11-25T18:30:00Z",
           "2026-11-25T19:30:00Z",
           "2026-11-25T20:30:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z"
         ],
         "sparkline_30d": [
           528.03,
@@ -2542,7 +2726,7 @@
           492.5,
           496.13,
           489.93,
-          490.43
+          492.85
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -2581,19 +2765,73 @@
         "symbol": "GOOGL",
         "name": "Alphabet",
         "group": "Big 7",
-        "price": 271.58,
-        "change_pct": -0.56,
-        "change_5d_pct": -0.4,
-        "change_30d_pct": -20.26,
+        "price": 275.95,
+        "change_pct": 1.04,
+        "change_5d_pct": 1.21,
+        "change_30d_pct": -18.98,
         "sparkline_1d": [
           274.75,
           271.79,
-          271.58
+          271.47,
+          270.84,
+          272.85,
+          272.82,
+          272.15,
+          273.23,
+          273.52,
+          273.4,
+          273.21,
+          273.71,
+          273.22,
+          274.78,
+          274.82,
+          274.83,
+          274.72,
+          275.02,
+          275.1,
+          275.73,
+          275.16,
+          275.15,
+          275.72,
+          275.86,
+          276.34,
+          276.0,
+          275.74,
+          275.79,
+          275.65,
+          275.95
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
           "2026-11-27T14:45:00Z",
-          "2026-11-27T15:00:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z",
+          "2026-11-27T18:15:00Z",
+          "2026-11-27T18:30:00Z",
+          "2026-11-27T18:45:00Z",
+          "2026-11-27T19:00:00Z",
+          "2026-11-27T19:15:00Z",
+          "2026-11-27T19:30:00Z",
+          "2026-11-27T19:45:00Z",
+          "2026-11-27T20:00:00Z",
+          "2026-11-27T20:15:00Z",
+          "2026-11-27T20:30:00Z",
+          "2026-11-27T20:45:00Z",
+          "2026-11-27T21:00:00Z",
+          "2026-11-27T21:15:00Z",
+          "2026-11-27T21:30:00Z",
+          "2026-11-27T21:45:00Z"
         ],
         "sparkline_5d": [
           278.67,
@@ -2624,7 +2862,9 @@
           273.04,
           272.1,
           272.98,
-          271.58
+          270.84,
+          273.23,
+          273.71
         ],
         "sparkline_5d_times": [
           "2026-11-20T14:30:00Z",
@@ -2655,7 +2895,9 @@
           "2026-11-25T18:30:00Z",
           "2026-11-25T19:30:00Z",
           "2026-11-25T20:30:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z"
         ],
         "sparkline_30d": [
           340.59,
@@ -2687,7 +2929,7 @@
           282.1,
           279.05,
           273.1,
-          271.58
+          274.96
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -2726,19 +2968,73 @@
         "symbol": "AMZN",
         "name": "Amazon",
         "group": "Big 7",
-        "price": 249.55,
-        "change_pct": 2.09,
-        "change_5d_pct": -3.04,
-        "change_30d_pct": -0.18,
+        "price": 255.05,
+        "change_pct": 4.34,
+        "change_5d_pct": -0.9,
+        "change_30d_pct": 2.02,
         "sparkline_1d": [
           250.9,
           249.38,
-          249.55
+          251.01,
+          251.28,
+          253.71,
+          253.87,
+          253.62,
+          253.8,
+          253.81,
+          253.59,
+          253.89,
+          254.78,
+          254.92,
+          254.24,
+          254.86,
+          254.68,
+          254.15,
+          254.35,
+          254.27,
+          254.3,
+          254.22,
+          254.21,
+          254.22,
+          254.5,
+          254.84,
+          254.63,
+          254.76,
+          254.92,
+          254.7,
+          255.05
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
           "2026-11-27T14:45:00Z",
-          "2026-11-27T15:00:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z",
+          "2026-11-27T18:15:00Z",
+          "2026-11-27T18:30:00Z",
+          "2026-11-27T18:45:00Z",
+          "2026-11-27T19:00:00Z",
+          "2026-11-27T19:15:00Z",
+          "2026-11-27T19:30:00Z",
+          "2026-11-27T19:45:00Z",
+          "2026-11-27T20:00:00Z",
+          "2026-11-27T20:15:00Z",
+          "2026-11-27T20:30:00Z",
+          "2026-11-27T20:45:00Z",
+          "2026-11-27T21:00:00Z",
+          "2026-11-27T21:15:00Z",
+          "2026-11-27T21:30:00Z",
+          "2026-11-27T21:45:00Z"
         ],
         "sparkline_5d": [
           255.88,
@@ -2769,7 +3065,9 @@
           246.21,
           245.03,
           244.24,
-          249.55
+          251.28,
+          253.8,
+          254.78
         ],
         "sparkline_5d_times": [
           "2026-11-20T14:30:00Z",
@@ -2800,7 +3098,9 @@
           "2026-11-25T18:30:00Z",
           "2026-11-25T19:30:00Z",
           "2026-11-25T20:30:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z"
         ],
         "sparkline_30d": [
           250.0,
@@ -2832,7 +3132,7 @@
           255.39,
           252.29,
           244.43,
-          249.55
+          254.12
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -2871,19 +3171,73 @@
         "symbol": "NVDA",
         "name": "Nvidia",
         "group": "Big 7",
-        "price": 146.11,
-        "change_pct": -2.14,
-        "change_5d_pct": 0.09,
-        "change_30d_pct": -31.77,
+        "price": 149.8,
+        "change_pct": 0.33,
+        "change_5d_pct": 2.62,
+        "change_30d_pct": -30.04,
         "sparkline_1d": [
           147.57,
           146.33,
-          146.11
+          147.21,
+          146.97,
+          147.95,
+          147.45,
+          148.0,
+          148.77,
+          148.87,
+          148.86,
+          148.91,
+          149.35,
+          149.12,
+          150.62,
+          149.98,
+          149.61,
+          149.66,
+          149.55,
+          149.8,
+          149.93,
+          149.78,
+          149.68,
+          149.81,
+          149.9,
+          150.19,
+          150.03,
+          149.86,
+          149.93,
+          149.7,
+          149.8
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
           "2026-11-27T14:45:00Z",
-          "2026-11-27T15:00:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z",
+          "2026-11-27T18:15:00Z",
+          "2026-11-27T18:30:00Z",
+          "2026-11-27T18:45:00Z",
+          "2026-11-27T19:00:00Z",
+          "2026-11-27T19:15:00Z",
+          "2026-11-27T19:30:00Z",
+          "2026-11-27T19:45:00Z",
+          "2026-11-27T20:00:00Z",
+          "2026-11-27T20:15:00Z",
+          "2026-11-27T20:30:00Z",
+          "2026-11-27T20:45:00Z",
+          "2026-11-27T21:00:00Z",
+          "2026-11-27T21:15:00Z",
+          "2026-11-27T21:30:00Z",
+          "2026-11-27T21:45:00Z"
         ],
         "sparkline_5d": [
           138.72,
@@ -2914,7 +3268,9 @@
           148.08,
           148.18,
           149.27,
-          146.04
+          146.97,
+          148.77,
+          149.35
         ],
         "sparkline_5d_times": [
           "2026-11-20T14:30:00Z",
@@ -2945,7 +3301,9 @@
           "2026-11-25T18:30:00Z",
           "2026-11-25T19:30:00Z",
           "2026-11-25T20:30:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z"
         ],
         "sparkline_30d": [
           214.13,
@@ -2977,7 +3335,7 @@
           165.05,
           155.38,
           149.3,
-          146.11
+          150.49
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -3016,19 +3374,73 @@
         "symbol": "META",
         "name": "Meta",
         "group": "Big 7",
-        "price": 623.99,
-        "change_pct": 2.31,
-        "change_5d_pct": 4.66,
-        "change_30d_pct": -12.03,
+        "price": 629.5,
+        "change_pct": 3.22,
+        "change_5d_pct": 5.58,
+        "change_30d_pct": -11.25,
         "sparkline_1d": [
           622.91,
           623.82,
-          623.99
+          627.56,
+          630.7,
+          634.44,
+          634.48,
+          630.64,
+          632.1,
+          631.71,
+          630.02,
+          627.38,
+          629.49,
+          627.58,
+          630.0,
+          629.58,
+          629.0,
+          628.56,
+          628.57,
+          628.07,
+          628.08,
+          628.21,
+          628.0,
+          628.7,
+          629.0,
+          629.0,
+          629.5,
+          629.31,
+          629.0,
+          628.55,
+          629.5
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
           "2026-11-27T14:45:00Z",
-          "2026-11-27T15:00:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z",
+          "2026-11-27T18:15:00Z",
+          "2026-11-27T18:30:00Z",
+          "2026-11-27T18:45:00Z",
+          "2026-11-27T19:00:00Z",
+          "2026-11-27T19:15:00Z",
+          "2026-11-27T19:30:00Z",
+          "2026-11-27T19:45:00Z",
+          "2026-11-27T20:00:00Z",
+          "2026-11-27T20:15:00Z",
+          "2026-11-27T20:30:00Z",
+          "2026-11-27T20:45:00Z",
+          "2026-11-27T21:00:00Z",
+          "2026-11-27T21:15:00Z",
+          "2026-11-27T21:30:00Z",
+          "2026-11-27T21:45:00Z"
         ],
         "sparkline_5d": [
           577.52,
@@ -3059,7 +3471,9 @@
           606.18,
           604.06,
           609.8,
-          624.28
+          630.7,
+          632.1,
+          629.49
         ],
         "sparkline_5d_times": [
           "2026-11-20T14:30:00Z",
@@ -3090,7 +3504,9 @@
           "2026-11-25T18:30:00Z",
           "2026-11-25T19:30:00Z",
           "2026-11-25T20:30:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z"
         ],
         "sparkline_30d": [
           709.33,
@@ -3122,7 +3538,7 @@
           597.6,
           589.82,
           609.89,
-          623.99
+          628.96
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -3161,19 +3577,73 @@
         "symbol": "TSLA",
         "name": "Tesla",
         "group": "Big 7",
-        "price": 390.92,
-        "change_pct": 2.84,
-        "change_5d_pct": 4.41,
-        "change_30d_pct": 10.21,
+        "price": 398.85,
+        "change_pct": 4.92,
+        "change_5d_pct": 6.53,
+        "change_30d_pct": 12.44,
         "sparkline_1d": [
           391.86,
           392.05,
-          390.92
+          392.79,
+          397.7,
+          400.14,
+          398.22,
+          397.59,
+          397.76,
+          399.29,
+          399.45,
+          398.9,
+          399.19,
+          398.66,
+          400.36,
+          399.94,
+          399.63,
+          397.92,
+          398.37,
+          398.66,
+          399.0,
+          398.67,
+          398.6,
+          398.46,
+          398.55,
+          398.91,
+          398.85,
+          398.8,
+          398.79,
+          398.7,
+          398.85
         ],
         "sparkline_1d_times": [
           "2026-11-27T14:30:00Z",
           "2026-11-27T14:45:00Z",
-          "2026-11-27T15:00:00Z"
+          "2026-11-27T15:00:00Z",
+          "2026-11-27T15:15:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T15:45:00Z",
+          "2026-11-27T16:00:00Z",
+          "2026-11-27T16:15:00Z",
+          "2026-11-27T16:30:00Z",
+          "2026-11-27T16:45:00Z",
+          "2026-11-27T17:00:00Z",
+          "2026-11-27T17:15:00Z",
+          "2026-11-27T17:30:00Z",
+          "2026-11-27T17:45:00Z",
+          "2026-11-27T18:00:00Z",
+          "2026-11-27T18:15:00Z",
+          "2026-11-27T18:30:00Z",
+          "2026-11-27T18:45:00Z",
+          "2026-11-27T19:00:00Z",
+          "2026-11-27T19:15:00Z",
+          "2026-11-27T19:30:00Z",
+          "2026-11-27T19:45:00Z",
+          "2026-11-27T20:00:00Z",
+          "2026-11-27T20:15:00Z",
+          "2026-11-27T20:30:00Z",
+          "2026-11-27T20:45:00Z",
+          "2026-11-27T21:00:00Z",
+          "2026-11-27T21:15:00Z",
+          "2026-11-27T21:30:00Z",
+          "2026-11-27T21:45:00Z"
         ],
         "sparkline_5d": [
           363.51,
@@ -3204,7 +3674,9 @@
           382.82,
           381.31,
           380.15,
-          390.92
+          397.7,
+          397.76,
+          399.19
         ],
         "sparkline_5d_times": [
           "2026-11-20T14:30:00Z",
@@ -3235,7 +3707,9 @@
           "2026-11-25T18:30:00Z",
           "2026-11-25T19:30:00Z",
           "2026-11-25T20:30:00Z",
-          "2026-11-27T14:30:00Z"
+          "2026-11-27T14:30:00Z",
+          "2026-11-27T15:30:00Z",
+          "2026-11-27T16:30:00Z"
         ],
         "sparkline_30d": [
           354.72,
@@ -3267,7 +3741,7 @@
           385.46,
           384.68,
           380.14,
-          390.92
+          400.0
         ],
         "sparkline_30d_times": [
           "2026-10-16",
@@ -3304,7 +3778,7 @@
       }
     ],
     "fear_greed": {
-      "score": 21.6,
+      "score": 24.9,
       "rating": "Extreme Fear",
       "previous_close": 15.6,
       "previous_1_week": 18.6,
@@ -3315,85 +3789,85 @@
       {
         "symbol": "XLK",
         "name": "Technology",
-        "change_pct": 0.53,
-        "change_5d_pct": -2.53,
-        "change_30d_pct": -14.63
+        "change_pct": 2.8,
+        "change_5d_pct": -0.34,
+        "change_30d_pct": -12.71
       },
       {
         "symbol": "XLF",
         "name": "Financials",
-        "change_pct": 0.81,
-        "change_5d_pct": 2.5,
-        "change_30d_pct": 2.61
+        "change_pct": 1.15,
+        "change_5d_pct": 2.84,
+        "change_30d_pct": 2.95
       },
       {
         "symbol": "XLV",
         "name": "Health Care",
-        "change_pct": -0.41,
-        "change_5d_pct": 3.08,
-        "change_30d_pct": 3.51
+        "change_pct": 0.28,
+        "change_5d_pct": 3.8,
+        "change_30d_pct": 4.24
       },
       {
         "symbol": "XLE",
         "name": "Energy",
-        "change_pct": 1.51,
-        "change_5d_pct": 1.53,
-        "change_30d_pct": -9.41
+        "change_pct": 1.26,
+        "change_5d_pct": 1.28,
+        "change_30d_pct": -9.63
       },
       {
         "symbol": "XLI",
         "name": "Industrials",
-        "change_pct": 0.9,
-        "change_5d_pct": 1.9,
-        "change_30d_pct": -1.99
+        "change_pct": 1.6,
+        "change_5d_pct": 2.6,
+        "change_30d_pct": -1.31
       },
       {
         "symbol": "XLY",
         "name": "Cons. Discret.",
-        "change_pct": 0.97,
-        "change_5d_pct": 2.37,
-        "change_30d_pct": 5.49
+        "change_pct": 2.11,
+        "change_5d_pct": 3.53,
+        "change_30d_pct": 6.68
       },
       {
         "symbol": "XLP",
         "name": "Cons. Staples",
-        "change_pct": 0.15,
-        "change_5d_pct": 2.87,
-        "change_30d_pct": 5.5
+        "change_pct": 0.41,
+        "change_5d_pct": 3.14,
+        "change_30d_pct": 5.77
       },
       {
         "symbol": "XLU",
         "name": "Utilities",
-        "change_pct": -0.02,
-        "change_5d_pct": 1.37,
-        "change_30d_pct": 3.29
+        "change_pct": 0.28,
+        "change_5d_pct": 1.67,
+        "change_30d_pct": 3.6
       },
       {
         "symbol": "XLRE",
         "name": "Real Estate",
-        "change_pct": 0.48,
-        "change_5d_pct": 2.78,
-        "change_30d_pct": 4.53
+        "change_pct": 0.64,
+        "change_5d_pct": 2.94,
+        "change_30d_pct": 4.7
       },
       {
         "symbol": "XLB",
         "name": "Materials",
-        "change_pct": 1.03,
-        "change_5d_pct": 4.69,
-        "change_30d_pct": 1.61
+        "change_pct": 1.84,
+        "change_5d_pct": 5.52,
+        "change_30d_pct": 2.42
       },
       {
         "symbol": "XLC",
         "name": "Comm. Services",
-        "change_pct": 1.26,
-        "change_5d_pct": 3.84,
-        "change_30d_pct": -3.27
+        "change_pct": 1.99,
+        "change_5d_pct": 4.59,
+        "change_30d_pct": -2.57
       }
     ],
     "mentioned_quotes": []
   },
   "conflicts": {
-    "overview": "Global conflict intensity remains **elevated across major theaters**, with Ukraine-Russia hostilities and Middle East tensions driving diplomatic friction over peace terms and coalition stability. Meanwhile, the UN warned that **overlapping conflicts and El Niño** are pushing 16 global hotspots toward acute famine.",
+    "overview": "Global conflict intensity remains **elevated across multiple theaters**, with active hostilities in Gaza, Ukraine, and Sudan compounded by maritime and energy disruptions in the Middle East. Diplomatic efforts—including **stalled Israeli coalition talks** and **deadlocked European aid discussions**—have yet to produce near-term de-escalation.",
     "theaters": [
       {
         "id": "ukraine",
@@ -3432,22 +3906,22 @@
           "2026-11-25",
           "2026-11-26"
         ],
-        "summary": "Ukraine reported **damaging five Russian jets** at the Savasleyka airbase and destroying a **secret Russian forest fuel depot**, while *Volodymyr Zelensky* warned of an **imminent major attack on Ukraine's power grid**. Diplomatically, *Zelensky* criticized U.S. pressure in peace talks as **EU budget negotiations over Ukraine aid stalled**.",
+        "summary": "Frontline fighting remains intense as Ukrainian President *Volodymyr Zelenskyy* warned of an **imminent major Russian attack on Ukraine's power grid**. Kyiv hailed heavy Russian personnel and equipment losses in a recent operation, while Russian President *Vladimir Putin* attended the **commissioning of a new nuclear-powered submarine**.",
         "timeline_events": [
           {
-            "headline": "Russia Moved Fuel by Train to a Secret Forest Depot—Ukraine Found and Destroyed the Supply Hub - UNITED24 Media",
-            "source": "UNITED24 Media",
-            "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNY1ZJSktfcUhmc2xGMFBzSkpnOWx0TFlLTndnaUhWVkRPNDgyT2dNa0xiUmk2N3hhSTM3eERUMHRaX29pR0tfbXBCMUdDMjdUdmE5SktaVHVCZnVQTUtLT1lVSThadzN6Q1Z5ZjU1ZEdKOXBmSXlEdnVsNjZDVHFLQjQ3TEk2S05HanVMWXhFaEdoaTBpemxYR05pR1d3LWhwZ0xobjlfQ1NhRzVSUnlZR2swb0VjRUxTQ2dBNlBvSU13LWx4Y0p2dnMwYkxpNTJ3cklLcVdGTHk?oc=5"
-          },
-          {
-            "headline": "Ukraine says five jets damaged in attack on Russia’s Savasleyka airbase - Al Jazeera",
-            "source": "Al Jazeera",
-            "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOcnZLbDdzMzg2dFlMM0c3d2FkbHpsRTB5Uk1QampGSXI4Sk9lZDRxZDA1LWFBVDVtaGlFS0k0ajljeVBDbEhlS0YwZUQ3bkVDalhCREV3RkhoZEcxamNwMTI1c0E0RUhhdzhhX0h3cnFqOXp1UTNYemRUZ1RwUGFYelBnSlZhekZaeXU2WF9oNU1ja0kxV2hXOGd3V3FwN1dleGg5eGZR0gGrAUFVX3lxTE4xZ05BNnZGZ3J0QWtNeFJ0b0hOSXRkZEJDX2RhR3hNRjluNHFRNTQ2YmhaSFFPR3hCd1luNE1WYUhJaE5YWmFZX3hIcEJXQlJJc1JjdjJKTjYzdVdiUWJ1anBpVF9QaTZBNndlRDlNX0hWWDZaLUVuU2phSm9maVFST3lUNUxtTWJ0MTY1SV9fU0pVVVhYYW1UcU01bEd4WEhteURlMXVMQWxwNA?oc=5"
-          },
-          {
-            "headline": "Russian Offensive Campaign Assessment, November 25, 2026 - Institute for the Study of War",
+            "headline": "Russian Offensive Campaign Assessment, November 27, 2026 - Institute for the Study of War",
             "source": "Institute for the Study of War",
-            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPUkpYNWJheFpTc3l5ZjdodEktRGpjcDVVZVo5ZDA1cW9DLVJ5X2wwMFJPZzhBcnhTUHJwRTR1bXN4eURKLXJVUmp6NWFTRzBTVnBxekd2aXJnSV9rMThJdHo0LTdVU2U2bk1Zd0s3VFpDSGtEekpxZjhDelVtNlI5TXpkTFlHZUJWampYc0Y0Mlp6VXVNMzZJLUI5OUF2NlFyQWlfZThSYmt4enZD?oc=5"
+            "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNRGxVTU85TTRHNEhYeE1zTXVoTzBDd2owY3p2X3hYa0ozd0FqSllRNlM5TnRCaFpVWFJBVXVId1FKbTc4R1pEOVI3azNXM3RfN1NLNjNJc1AtamJydTd6ZTJ6WjFYbjFuT2RRUThKNjFNdDF2alc3V0ctQW95eEtaREk1STE4QWIzU1hfVUdQN2JZeXp0SW1NS0M0UmozSFBnYU1sVDBoc0dSajIy?oc=5"
+          },
+          {
+            "headline": "Ukraine War Update for 28 November: Latest Frontline Developments - Военное дело",
+            "source": "Военное дело",
+            "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPa2Q1UHVnZ0Z2ZTJjNDZIQTNCTWh6VDZrb0kyS2x2dXFUbFNiRUxPY3VoeUhCUG1Nckt2b3dzbFhEcXBoeTlOd3RMenRCS2FXQi1kYUJmX2lxbXpuV2E0T1pLS3hqRmZVUVBFTlZkQXVxRDdnYlJSQmxyTzd1R1FuZDJaS3l3OVU4eFJ6NlRHR1lCSFJhTWdiXzhUcVF6TGtlZmw5M2ViYUw?oc=5"
+          },
+          {
+            "headline": "Daily Update: Russia Loses 2,825 Troops, 10 Air Defense Systems and 42 Artillery Systems in One Day - UNITED24 Media",
+            "source": "UNITED24 Media",
+            "url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxOalh0SXFra2owV2kxU1pacjY2Y2JkZUVfTHVoWkNnb21UaEMzc2lLMlczbGp0eGkzX0plOWNvdlR3NUx2U2dBQi10enJkYktrMDRVOWJISDU3YXR1bGlrQ0M3d3hyQ0tZeHJSMUJxeF95TlhBdnM2c1FTSlI1c0JBdnZSTHd1OTRvRElyS1lfcm5tRFFGSElrMngwaHlJSDZNdTdZWFVJcm1Kd2Nha2swNHloSDZpS1M3eEdPUmVzSnd4LXFZNU1uY3VpdWdHNzZ5azhSelpVd2ZNN2s?oc=5"
           },
           {
             "headline": "Zelenskyy warns of imminent major Russian attack on Ukraine's power grid - PBS",
@@ -3493,7 +3967,7 @@
           "2026-11-24",
           "2026-11-25"
         ],
-        "summary": "President *Donald Trump* stated the **nine-month-old Iran war** will end \"whenever I want it to be\" amid growing domestic pushback, while Israeli rival factions including *Benjamin Netanyahu* and *Gadi Eisenkot* navigated **tricky coalition power-sharing talks**. Palestinian families also raised alarm over **detainees held past completed sentences**, and the UN warned of deepening regional hunger.",
+        "summary": "An **Israeli strike on a Gaza medical clinic killed two MSF staffers**, while Israel's domestic unity government talks between *Gadi Eisenkot* and *Benjamin Netanyahu* stalled. Separately, **Iran pointed to Europe's role in the regional conflict** after a drone strike in Kuwait killed two Italian technicians, and **Strait of Hormuz fuel-cost pressures forced Norse Atlantic to end flights**.",
         "timeline_events": []
       },
       {
@@ -3533,7 +4007,7 @@
           "2026-11-25",
           "2026-11-26"
         ],
-        "summary": "Regional security tensions remain **elevated along key maritime flashpoints**, though no new major military incidents were reported in the past 24 hours. Strategic competition continues to center on **advanced semiconductor export controls** and U.S.-China trade friction.",
+        "summary": "Regional attention focused on **Taiwan's island-wide local elections**, where the opposition party won re-election in the Taipei mayoral race. Underlying **cross-strait and South China Sea military tensions** remain elevated.",
         "timeline_events": []
       },
       {
@@ -3573,7 +4047,7 @@
           "2026-11-25",
           "2026-11-26"
         ],
-        "summary": "The UN warned that **famine risks are rising sharply** across African hunger hotspots—including Sudan and the Horn of Africa—as **armed conflict, fuel costs, aid cuts, and El Niño** collide. Red Sea shipping security and **Houthi regional leverage** remain ongoing destabilizing factors.",
+        "summary": "Three years of **war in Sudan continue to displace millions of children** and deepen acute hunger across the region, while the UN warns of rising famine risks. In the Red Sea corridor, **Houthi forces claimed 104 attacks in Yemen in a single day** amid ongoing Saudi strikes.",
         "timeline_events": [
           {
             "headline": "The Houthis Have Taken the Middle East Hostage - Fair Observer",
@@ -3581,19 +4055,19 @@
             "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNandtWVN1bTE0cWxqdndBdmlCTlhvNkdQeXVuaUxEQmNhWmdMWk9oUktHaGhSRjJrZ3cwMktJWlYyV1FmTFhwczdCLXA5UzI2ZjJmZU0wRDFiSXhsclNBTE1LbzZBZXoyTG8xWDNURTROZjN0SVp5WUFUU2FhQ0RndlpwY3lRekFF?oc=5"
           },
           {
-            "headline": "UN warns hunger will deepen in the Middle East as war, fuel costs and aid cuts collide - The Washington Post",
-            "source": "The Washington Post",
-            "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQNnR6VlZfSldhc1F6MnN6cVlON2hfRV9qa1pvU2tTRDY2VDg2Mm5wYWZvVWpzM0swc1liMFR6SG9pWFM4UXh4bVZvbVpYWG1KSjU1SzY4VkNOd1l6WWFoX3diZ3ZvcEhEdzJXMmE2elBNaXgzbGdWSmRBMmNSYmJlOUNOLXJJMTZ5WGJmdkdQdGFNTGFYZXhZLThRQ3prOVdyUV9qMmFtODUtU1BJV0ZOTzBoMlpzMlRFTWExNEl3OHBmbXBrdEFwejhGbDFTUQ?oc=5"
+            "headline": "OPINION: Soldiers for hire: How Colombian veterans ended up in Sudan’s war - Jackson Advocate",
+            "source": "Jackson Advocate",
+            "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPQ3JOaWVLX2tKVWIyZlR6d2YxWDJod3I2LXRTeWR6Qi16ZEF5MXpPTzhoU0xOeHhsbUUyVW9uejJ0eFQ5bkJETW9kc3BDaFpGOHNhcmtEZHZ3MlJxcDE2bGg0NnZsVG1UOHFJSU9JZEJLcHdKTXF0S0FuNDZCdHQ4bldPWldMazNzcC1ZZDBOaDAxU1A2c1VrS29RUWUtNDJYLUlqeS1yOFNJQQ?oc=5"
           },
           {
-            "headline": "U.N. warns hunger will deepen in Middle East as war, fuel costs and aid cuts collide - The Tribune-Democrat",
-            "source": "The Tribune-Democrat",
-            "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxOdWwwdFlLeWl0WlZFUFA0eVY3LTBJUVZxNUJjQXB4SWFTM2hmU3VjbWZaZnlMLUd0SWdHaVBlV1hVRndFcndmVU9zTTltV1hMMmtseU80NkZPREdqQ00wT0hrY2c4T3pyM2cyMzNQd3plREd4bnZEcS02bzM4ZWF0X0RYZkppQU5NWHZjb0Z6dS1GdTBodTB6cmxKR016c29wbmxpaEFpZXpGRlhJMXdoOEhWR2J4Z2VVOEpuRnlKdmQ5NVNONDJ5TUxzZ1Fmb2RyWjRQd1JPWi0zTjF1WjNhWV9INS1kMzZQcVlINVRpY1hOdw?oc=5"
+            "headline": "Saudi strikes: Houthis claim 104 attacks on Yemen in a day - DNE Africa",
+            "source": "DNE Africa",
+            "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5XcDM1X1VpYVdUWmVEOG9FUXBQc0hIaWN1a0xCZEJmaTJkZ2lqUHhKeHNhbHB2c2tCTWhZb2pVUUlnZXVORERTaGxmbFRCdmUwSl9IQmFidmNEblNoMWNYTUk5ME05c013VW00SHVLaw?oc=5"
           },
           {
-            "headline": "UN warns famine risks rising as hunger hotspots increase - Reuters",
-            "source": "Reuters",
-            "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQNWNhM3c3WEpxa095UE53ZEF2eFVxSVZLQ2kzWlFuTzFoekNXV0p1OGJITENvbjJ6REwxMWI3VXAxUExJTXBHUzRoRGVCYnY4QzBkZ2tOQlNuTnhPQ05XN2NsNl9vZ2ZaTkJIZDNQSFB5MDRPcU1tLXJXSWQ0MHNMRDcySGV3QjVxSlloeVozUXYyRElfdW9EcVk5blZMR2ktZjdQb0tkU2x5cjI1R0lr?oc=5"
+            "headline": "UN warns hunger will deepen in the Middle East as war, fuel costs and aid cuts collide - WSLS",
+            "source": "WSLS",
+            "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOZk9kekhSaGl5WUtVNGU0blZGQ0N1Nll6Z0NEZHUxLUFUY0hJcjg0VjV2VHVJSGZJaXdNNEZmMU5naHVudVl6R2R0OFJlaUxuSmwtaWUxa21hemtpcVM5enJpS0M3NHNQd2U4TzlGRFEzSm9qSUlXT1R4eS1iT0NBWUhvN21NaGEzTW9oeW16MXY3ZzFlTlpqbGIxWVJaTkZmeGZORG5tVHRQVUFJVnZHV090Ui1VRVVNQV9ZcmpkaXdxbnp0Z1VJNQ?oc=5"
           }
         ]
       },
@@ -3603,9 +4077,8 @@
         "region": "Global Flashpoints",
         "status": "elevated",
         "trend_7d": "up",
-        "intensity_score": 7.0,
+        "intensity_score": 20.0,
         "intensity_series_14d": [
-          1.0,
           1.0,
           3.0,
           1.0,
@@ -3617,10 +4090,10 @@
           23.0,
           21.0,
           10.0,
-          7.0
+          9.0,
+          20.0
         ],
         "intensity_dates_14d": [
-          "2026-11-14",
           "2026-11-15",
           "2026-11-16",
           "2026-11-18",
@@ -3632,137 +4105,127 @@
           "2026-11-24",
           "2026-11-25",
           "2026-11-26",
-          "2026-11-27"
+          "2026-11-27",
+          "2026-11-28"
         ],
-        "summary": "Insurgency and humanitarian pressures persist across the **Sahel and Myanmar**, with the UN flagging **worsening food insecurity** in multiple African conflict zones. Broader instability continues to strain local governance and international relief operations.",
+        "summary": "In Central Africa, **armed conflict and a failing health system have fueled Congo's deadliest Ebola outbreak**, putting severe strain on medical responders. Broader **insurgency and political instability across the Sahel and Myanmar** persist.",
         "timeline_events": []
       }
     ]
   },
   "us_politics": {
-    "pulse_summary": "Washington's post-midterm political landscape is defined by **intensifying oversight of AI chip exports** to China, **legal challenges to *Trump*'s asylum overhaul**, and **early 2028 positioning**. While *Donald Trump* signaled **openness to bipartisan healthcare talks** with the incoming Democratic Congress, **Republicans face an internal RNC leadership reckoning** over their November losses.",
+    "pulse_summary": "In U.S. politics, **post-midterm state and federal power shifts** are taking shape as incoming Democratic attorneys general signal major legal pivots and the **ACLU challenges *Trump* administration probes into online ICE critics**. Meanwhile, Republicans are grappling with **internal leadership challenges at the RNC** as Congress faces a compressed pre-holiday legislative agenda.",
     "prediction_markets": [
       {
-        "question": "Will Puma Shen win the next Taipei Mayor election?",
-        "yes_prob": 0.383,
-        "delta_24h": -0.023,
-        "volume_usd": 9961274.54,
+        "question": "Will Candidate A win the next Taipei Mayor election?",
+        "yes_prob": 0.5,
+        "delta_24h": 0.0,
+        "volume_usd": 14701208.39,
         "url": "https://polymarket.com/event/taipei-mayor-election-winner-20260813125857100",
         "source": "Polymarket"
       },
       {
         "question": "Will David Lisnard win the 2027 French presidential election?",
-        "yes_prob": 0.2395,
-        "delta_24h": 0.033,
-        "volume_usd": 185577437.7,
+        "yes_prob": 0.2625,
+        "delta_24h": 0.023,
+        "volume_usd": 186782560.62,
         "url": "https://polymarket.com/event/next-french-presidential-election",
         "source": "Polymarket"
       },
       {
-        "question": "Will Benjamin Netanyahu be the next Prime Minister of Israel?",
-        "yes_prob": 0.1185,
-        "delta_24h": -0.0455,
-        "volume_usd": 95548111.82,
-        "url": "https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election",
-        "source": "Polymarket"
-      },
-      {
         "question": "Will Raphael Warnock win the 2028 Democratic presidential nomination?",
-        "yes_prob": 0.035,
-        "delta_24h": -0.0015,
-        "volume_usd": 1333039218.31,
+        "yes_prob": 0.036,
+        "delta_24h": 0.001,
+        "volume_usd": 1334197076.22,
         "url": "https://polymarket.com/event/democratic-presidential-nominee-2028",
         "source": "Polymarket"
       },
       {
-        "question": "Will Nick Fuentes become President of the United States before 2045?",
-        "yes_prob": 0.22,
+        "question": "Will Candidate A win the next New Taipei Mayor election?",
+        "yes_prob": 0.5,
         "delta_24h": 0.0,
-        "volume_usd": 60604.26,
+        "volume_usd": 2195126.23,
+        "url": "https://polymarket.com/event/new-taipei-mayor-election-winner-20260813125857200",
+        "source": "Polymarket"
+      },
+      {
+        "question": "Will Nick Fuentes become President of the United States before 2045?",
+        "yes_prob": 0.19,
+        "delta_24h": -0.03,
+        "volume_usd": 60610.3,
         "url": "https://kalshi.com/markets/kxpersonpresfuentes",
         "source": "Kalshi"
       },
       {
         "question": "Will Zohran Mamdani become President of the United States before Jan 22, 2045?",
         "yes_prob": 0.14,
-        "delta_24h": 0.02,
-        "volume_usd": 45721.27,
+        "delta_24h": 0.0,
+        "volume_usd": 45728.9,
         "url": "https://kalshi.com/markets/kxpersonpresmam",
         "source": "Kalshi"
       }
     ],
     "legislative_and_executive": [
       {
-        "title": "Supreme Court Review of Trump Asylum Overhaul",
-        "chamber_or_branch": "Supreme Court / Executive",
-        "summary": "The Supreme Court will examine whether the *Trump* administration's **asylum ban and procedural changes** unlawfully deny due process to migrants.",
-        "url": "https://www.npr.org/2026/11/27/nx-s1-6037854/trump-effectively-ended-asylum-supreme-court"
+        "title": "ACLU Sues Trump Administration Over Online Critic Probes",
+        "chamber_or_branch": "Federal Court / Executive",
+        "summary": "The **ACLU filed a class-action lawsuit** seeking to block *Trump* administration investigations into anonymous social media users who criticized **Immigration and Customs Enforcement (ICE)**.",
+        "url": "https://thehill.com/regulation/court-battles/6245957-aclu-lawsuit-trump-anonymous-users/"
       },
       {
-        "title": "Bipartisan Senate Scrutiny of AI Chip Leaks to China",
-        "chamber_or_branch": "U.S. Senate / Commerce Dept.",
-        "summary": "Senators from both parties pressed **Commerce Secretary *Howard Lutnick*** after revelations that Nvidia sold billions in high-tech chips to a Singapore firm linked to alleged Chinese diversion.",
-        "url": "https://thehill.com/homenews/senate/6243590-lutnick-nvidia-chip-export-controversy/"
+        "title": "Texas AG-Elect Refuses to Defend Ten Commandments School Law",
+        "chamber_or_branch": "State Executive / Judiciary",
+        "summary": "Incoming Democratic Texas Attorney General *Nathan Johnson* announced he **will not defend the state law requiring Ten Commandments displays in public classrooms** once he takes office in January.",
+        "url": "https://thehill.com/homenews/state-watch/6245846-texas-ag-johnson-ten-commandments/"
       },
       {
-        "title": "Court Allows Puerto Rico to Terminate LUMA Energy Contract",
-        "chamber_or_branch": "Federal / Territorial Courts",
-        "summary": "A court ruling **nullified LUMA Energy's troubled power grid contract**, giving Puerto Rico's governor one year to secure a new operator.",
-        "url": "https://www.npr.org/2026/11/26/nx-s1-6054139/court-rules-puerto-ricos-governor-can-fire-company-that-runs-troubled-power-grid"
+        "title": "EPA Finds No Drinking Water Lead After Iowa Detonation",
+        "chamber_or_branch": "Executive / EPA",
+        "summary": "Initial lab testing by the **EPA detected no elevated lead in 38 drinking water samples** collected after the U.S. Army's controlled munitions detonation in Iowa.",
+        "url": "https://thehill.com/policy/energy-environment/6245987-epa-finds-no-water-lead/"
       },
       {
-        "title": "Trump Signals Bipartisan Healthcare Talks With Democrats",
-        "chamber_or_branch": "White House / Congress",
-        "summary": "Following Democrats' **sweep of the House and Senate in the midterms**, *Donald Trump* said he expects a **bipartisan working relationship on healthcare**.",
-        "url": "https://thehill.com/homenews/administration/6245011-trump-democrats-healthcare-bipartisanship/"
+        "title": "Congress Faces Pre-Holiday Agenda Ahead of Democratic Takeover",
+        "chamber_or_branch": "Congress",
+        "summary": "Lawmakers are navigating a **compressed pre-holiday legislative to-do list** while incoming Democratic majorities prepare to **assume control of both chambers** and act on cost-of-living and oversight pledges.",
+        "url": "https://www.npr.org/2026/11/28/nx-s1-6052169/week-in-politics-trumps-thanksgiving-messaging-congress-pre-holiday-to-do-list"
       }
     ],
     "trending_topics": [
       {
-        "topic": "Post-Midterm Party Realignment & RNC Shakeup",
+        "topic": "Democratic Attorneys General Wave",
         "momentum": "rising",
-        "framing_note": "Republicans are debating **accountability at the RNC** after midterm defeats, while **Senate Democrats push to elevate freshman lawmakers** into party leadership."
+        "framing_note": "Analysts note that **newly elected Democratic state attorneys general** could significantly reshape state-level investigations, multistate lawsuits, and court battles."
       },
       {
-        "topic": "2028 Presidential Early Positioning",
+        "topic": "Post-Abbott Texas Data Center Policy",
         "momentum": "steady",
-        "framing_note": "Early endorsements and *Trump*'s sway over potential GOP successors like ***JD Vance* and *Marco Rubio*** continue to shape 2028 speculation, alongside **progressive backing for *Ro Khanna***."
+        "framing_note": "Observers are weighing whether **Texas's welcoming stance toward AI data centers** will shift under an incoming governor."
       },
       {
-        "topic": "Prediction Market Federal Regulation",
-        "momentum": "steady",
-        "framing_note": "Legal clashes over **event contracts and sports-related markets** are fueling calls for **Congress to clarify federal statutory rules**."
+        "topic": "AI Political Ad Targeting & Regulation",
+        "momentum": "rising",
+        "framing_note": "Post-election commentary focuses on how **AI firms use accumulated voter data for hyper-targeted ads** and whether Congress can pass regulatory guardrails."
+      },
+      {
+        "topic": "RNC Leadership & Midterm Reckoning",
+        "momentum": "rising",
+        "framing_note": "*Donald Trump*'s **handpicked RNC chair is fending off an internal challenge** as Republicans debate accountability for recent midterm losses."
       }
     ]
   },
   "positive_news": [
     {
-      "id": "story-aerial-photos-show-florida-bay-recovering-as-everglades-restoration-3455bd",
-      "category": "Science",
-      "headline": "Aerial Photos Show Florida Bay Recovering as Everglades Restoration Flows",
-      "summary": "New aerial imagery reveals **noticeable ecological recovery across Florida Bay** as Everglades restoration projects channel **fresh water southward into the estuary**. The restored flow is helping **rebalance salinity levels** and revive seagrass habitats.",
-      "why_it_matters": "The visual turnaround demonstrates that **large-scale wetland restoration** can measurably reverse decades of coastal habitat degradation.",
-      "sources": [
-        {
-          "name": "Mongabay",
-          "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOU0FxcDBkcF90cDhMenZuTnN0Tm9KZjRMd3RLTVBGREtpQWpWOXd4Y09VRkY0bGhtc29mOXR3eEVqNGJHLWc2U092S2tweFZ3ajc2YnJtbnFzTVdBWkJoWWJfOV9jVGJjU1BQd2JpdTBPNlFCeW1YeVlUMUlpUXZlN09INUI0T2NiMjFreTBKUG9SYVRMTHZyNkZxUU5DZXg1eG1lUldmUXFKSm1iNlpzdko4UDVwWHh2dTlQTC1ONGdhNUtteHFNaWVzcw?oc=5"
-        }
-      ],
-      "sentiment": "very_positive",
-      "continued_from_prior": false,
-      "is_afternoon": false,
-      "entities": []
-    },
-    {
-      "id": "story-classical-roman-glass-unearthed-in-elite-xiongnu-silk-road-tomb-in-aeb4d9",
-      "category": "Science",
-      "headline": "Classical Roman Glass Unearthed in Elite Xiongnu Silk Road Tomb in Mongolia",
-      "summary": "Archaeologists excavating a **nomadic Xiongnu noble's tomb in Mongolia** discovered **objects originating from Classical Rome**, including rare Roman glassware. The find highlights the **extraordinary geographic reach of ancient Silk Road trade networks**.",
-      "why_it_matters": "Linking Central Asian nomadic elites to **Mediterranean craftsmanship** deepens historians' understanding of early trans-Eurasian cultural and economic exchange.",
+      "id": "stolen-sculpture-recovered",
+      "category": "World",
+      "headline": "Detectives Recover 13th-Century Sculpture Stolen Nearly Half a Century Ago",
+      "summary": "Spanish investigators **recovered a 13th-century Romanesque carving of the Virgin Mary** that vanished in 1979 from the Church of San Pedro de Meoz. The breakthrough **solves another heist linked to notorious art thief *Erik the Belgian*** after decades in police databases.",
+      "why_it_matters": "Returning cultural heritage to local parishes **restores irreplaceable historical art** and demonstrates the value of persistent cold-case art policing.",
+      "reader_text": "",
       "sources": [
         {
           "name": "Good News Network",
-          "url": "https://www.goodnewsnetwork.org/roman-glass-among-the-silk-road-treasures-unearthed-in-nomadic-nobles-tomb/"
+          "url": "https://www.goodnewsnetwork.org/detectives-recover-13th-century-sculpture-stolen-by-notorious-gentleman-thief-erik-the-belgian/"
         }
       ],
       "sentiment": "positive",
@@ -3771,15 +4234,34 @@
       "entities": []
     },
     {
-      "id": "story-texas-volunteers-farm-borrowed-land-to-fund-3-million-in-college-sc-515e48",
+      "id": "instruments-to-bird-feeders",
       "category": "World",
-      "headline": "Texas Volunteers Farm Borrowed Land to Fund $3 Million in College Scholarships",
-      "summary": "For 15 years, Texas residents have **volunteered their time farming land they do not own** to raise money for local students' higher education. The community effort has generated **$3 million in college scholarships** for hundreds of high schoolers.",
-      "why_it_matters": "Sustained grassroots generosity shows how **collective civic effort** can create lasting educational opportunities across generations.",
+      "headline": "Retired Canadian Teacher Transforms Scrapped Musical Instruments Into Bird Feeders",
+      "summary": "Retired Prince Edward Island teacher *Rob Burke* is **upcycling discarded musical instruments into backyard bird feeders** at his Frets and Feathers Cafe. The creative project **gives damaged instruments a second life** while offering free seed to local birds.",
+      "why_it_matters": "Community upcycling initiatives **reduce landfill waste and foster everyday appreciation for local wildlife**.",
+      "reader_text": "",
       "sources": [
         {
           "name": "Good News Network",
-          "url": "https://www.goodnewsnetwork.org/texans-work-for-free-on-farms-that-arent-theirs-to-send-others-kids-to-college/"
+          "url": "https://www.goodnewsnetwork.org/retired-teacher-turns-retired-musical-instruments-into-bird-feeders-look/"
+        }
+      ],
+      "sentiment": "positive",
+      "continued_from_prior": false,
+      "is_afternoon": false,
+      "entities": []
+    },
+    {
+      "id": "thanksgiving-heroes-meals",
+      "category": "World",
+      "headline": "'Thanksgiving Heroes' Mobilizes Volunteers to Serve Thousands of Holiday Meals",
+      "summary": "Founded by *Rob Adams* from a childhood promise to his mother, **Thanksgiving Heroes is delivering holiday meals to thousands of families nationwide**, including **3,600 families in Utah alone** this season. Volunteers coordinate groceries and warm meals for households facing food insecurity.",
+      "why_it_matters": "Grassroots holiday meal networks **deliver immediate relief to food-insecure families** and strengthen civic solidarity.",
+      "reader_text": "",
+      "sources": [
+        {
+          "name": "Good News Network",
+          "url": "https://www.goodnewsnetwork.org/thanksgiving-heroes-rob-adams-childhood-promise/"
         }
       ],
       "sentiment": "very_positive",
@@ -3794,49 +4276,34 @@
       "name": "Bay Area",
       "stories": [
         {
-          "id": "story-coastal-flood-advisory-extended-for-san-francisco-county-through-su-c2f781",
-          "category": "Weather",
-          "headline": "Coastal Flood Advisory Extended for San Francisco County Through Sunday Evening",
-          "summary": "Forecasters issued an updated **coastal flood advisory for San Francisco County** remaining in effect **until early Sunday evening**. Residents along low-lying shorelines are advised to prepare for **minor tidal flooding**.",
-          "why_it_matters": "Extended **high-water advisories** over the holiday weekend can disrupt coastal roadways, transit, and waterfront businesses.",
+          "id": "bay-area-diapers-program",
+          "category": "Health",
+          "headline": "San Jose and Fremont Hospitals Send Newborns Home With 400 Diapers Under State Program",
+          "summary": "Families delivering newborns at hospitals in **San Jose and Fremont are receiving 400 free diapers** at discharge as part of a **new California statewide support initiative**. The effort aims to ease early childcare costs for new parents.",
+          "why_it_matters": "Direct postpartum supplies **reduce financial stress on Bay Area families** during the critical first months after birth.",
+          "reader_text": "",
           "sources": [
             {
-              "name": "Sacramento Bee",
-              "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE01Vzgzd3B3WW5ZN3VadHpaNzVxdWNCdG9qNzByYVEwUFNfa2lLRDJxTUxHUVhmbTFxLVJYazhFQjVQeExiR2lZQnphMW1YT3lIajJyWEVpc0pzWnJBcERpb3VCbXFod25ZcHhJOUdXNA?oc=5"
+              "name": "The Mercury News",
+              "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxPV056cW1EMkJ1TjdheTFQc0JOMVZfTm8yNnNsUTJMRk9tcWVxdnVNeUNCeGQ3b0ZyZjB0V1k2czlLNDRRc0xSWUo1dWpIdmYxUWxyaVVmRkdqTnBhcGRaN2dVTVQtTndhQXdFTDM1N3BGakktRlE0X1Vtalp1VWZOSTAwLVhYMUthdGlVVVdJQUVsdGx5NDEzX2tmalJ6Y0wtdm5KSzFmdnhYdWFUT01ock1jTzFzMnFoOGxhYlh0VkRaWllxOFdsZ0Z1UThqcnFVXzRmRld0U05rS1BnWUFnRm1fVHZ0Njg1X0dJWDVSQ0xRajVhcUNEd0lXTm9vRTcwOGc?oc=5"
             }
           ],
-          "sentiment": "slightly_negative",
+          "sentiment": "positive",
           "continued_from_prior": false,
           "is_afternoon": false,
           "entities": []
         },
         {
-          "id": "story-ai-giants-continue-to-dominate-bay-area-s-largest-venture-capital-d-7e33bf",
+          "id": "bay-area-siemens-ai-jobs",
           "category": "Tech",
-          "headline": "AI Giants Continue to Dominate Bay Area's Largest Venture Capital Deals",
-          "summary": "Artificial intelligence firms captured the **largest share of Bay Area venture funding** in recent deals, outpacing other local tech sectors. Investors continue to concentrate capital in **frontier AI startups** across San Francisco and Silicon Valley.",
-          "why_it_matters": "Heavy capital concentration in AI **reinforces the Bay Area's startup ecosystem** even as broader tech hiring and valuations remain selective.",
+          "headline": "Siemens Automation Chief Calls Silicon Valley's AI Jobs Narrative 'Toxic and Self-Serving'",
+          "summary": "The head of **Siemens' automation division criticized Silicon Valley's prevailing AI-jobs narrative** as \"toxic and self-serving.\" The remarks **push back against hype-driven claims** about rapid, sweeping workforce replacement.",
+          "why_it_matters": "Pushback from major industrial technology leaders **highlights growing tension between Bay Area AI rhetoric and factory-floor realities**.",
+          "reader_text": "",
           "sources": [
             {
-              "name": "The Business Journals",
-              "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQa3ZjYkd4anBPbG5jNTFOQjZkZzlyMFU2MHJhSTRhRG1jUVNpdU9fSUlleXNlb015V1NwZ194Y3RrQ0JvXzFpMkFtcnlaZkVNS1cwYzJkWVZZbmpIOURacjhfYjZRU3Jua3Q2U29OQUZ5TE9Xazh0SmhUeEpjVTBER2J0Z0ZrTXRtTEJhNXlvYXREN2twT0ZhdlIwZ3dpX1dsZmxRdXNnaw?oc=5"
-            }
-          ],
-          "sentiment": "slightly_positive",
-          "continued_from_prior": false,
-          "is_afternoon": false,
-          "entities": []
-        },
-        {
-          "id": "story-oakland-s-underground-art-scene-endures-and-evolves-ten-years-after-a1aae4",
-          "category": "Culture",
-          "headline": "Oakland's Underground Art Scene Endures and Evolves Ten Years After Ghost Ship",
-          "summary": "A decade after the tragic **Ghost Ship warehouse fire**, Oakland's **underground art community has adapted** rather than disappeared. Artists and organizers have reshaped spaces around **safer, more sustainable venues** while preserving creative experimentation.",
-          "why_it_matters": "The evolution highlights how **grassroots cultural hubs** balance fire-safety compliance with affordability in the East Bay.",
-          "sources": [
-            {
-              "name": "San Francisco Chronicle",
-              "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOVjNnUVFzUUtvdGlZRVhwYlk0RkVFNlVaVGEwOHNZU255U3kxS0ozWVl6SDFqenhlRG00ZEUzWHJFTDVvMVJYQkp1OC1KU3B6ZFZDUmxRWmhtZXFGbTVvTDh3YTFIZkZxSno5NlZXZHlOc0NqMXo0UDBGYzVoZk1WcWtKeTBieDh4cDJjTmJqY0JweVQ1VGVlSzhYUUpUN2c?oc=5"
+              "name": "Fortune",
+              "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPWngydlR3Zm81SHRIQ2NpT3NVRUZ5TjlJNnpsdmM1U3dtQ3BKRmhvdWNGNWVQcWs4Yi1TYkpfR1hyanBZaTk2dlBIT1RXUFZKNVN6N1BsWUxCT19PU1paQnpOV1VGLW45UUotaklJdmpZUmtYX0NHR1NPTHBDM3ZZSmtFazdRUmhEWS1JUkJveU9sR1ZKWFlOcnhBcndzVUF3OWM3NGZVUWRmb1hlTmxBRGNfR2Z0Zw?oc=5"
             }
           ],
           "sentiment": "neutral",
@@ -3845,15 +4312,34 @@
           "entities": []
         },
         {
-          "id": "story-san-jose-s-christmas-in-the-park-opens-with-two-new-holiday-display-efa5e5",
-          "category": "Community",
-          "headline": "San Jose's Christmas in the Park Opens With Two New Holiday Displays",
-          "summary": "San Jose's annual **Christmas in the Park** tradition is opening for the season featuring **two brand-new displays**. The downtown event draws **thousands of Bay Area families** throughout the winter holidays.",
-          "why_it_matters": "Expanding **free community holiday attractions** helps drive foot traffic to downtown San Jose small businesses.",
+          "id": "bay-area-49ers-mckivitz",
+          "category": "Sports",
+          "headline": "49ers GM John Lynch Addresses Team's Reaction to Colton McKivitz Injury",
+          "summary": "San Francisco 49ers general manager *John Lynch* spoke on the **team's emotional response to offensive tackle *Colton McKivitz*'s \"heartbreaking\" injury**. The setback **forces roster adjustments along the 49ers' offensive line**.",
+          "why_it_matters": "Losing a starting lineman **tests San Francisco's depth** as the team navigates the late-season schedule.",
+          "reader_text": "",
           "sources": [
             {
-              "name": "The Mercury News",
-              "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxPZmNVWFZZMUhiWHdPQ0hOWVh5blU5TzhiOGhsWWhOY3FRUWtPVE1UVkJBQW1zSDg5RG9BRHl2amYtTDh1QngyWkJfNGd1Mno3ZGo0N0FLZ25JdU9IQ1B1V08xRG02cE9Na09WZ3lmazI1WjlCTWtOcDlKZ1p0bHpXTkhlZmhIb3VOSGI0YmZCaS1KQlBDQTBMSEVvOXZfdUdpZWtF?oc=5"
+              "name": "NBC Sports Bay Area & California",
+              "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNeUl4MWJSSlZQM3BmdmJ1QUg0RHBKR3NRNzJLcTBUWDhqTlJDZXlIdVg1eG0tS2t3YmFCSlZtQ3VlWG5wTXlBYU9mOG11SHZhM1VfaUF3ZE1fekZ1SFVRdzh0SzZxbkh5STR1V1daT0tybXRac3ZfcDR3TlphalE2c1ViWWhCSko1U2lrVGhDdG9Rd21rdFZVSXU0MlBTbnZ20gGoAUFVX3lxTE9PWWRkNW5LRW9UTkJFQnNGRk1PZWNOQkVMZ3JMQWh0UlZLVEsxVW9kTmJOdGt3YjRxUF94QkVqalRXTXBmTEN0YjB5SHpQcmhqVDBZMXk5ZWw2S1pZeU1aMmtDR1ZDZFdJWUFGNlRKcDJpRElTcmh1enAzeF9neE1rS1RjU05tSk9VeGxjcVotcEpFNzkwWlhQS0FCTHpaeUdMUkFXdnMwTQ?oc=5"
+            }
+          ],
+          "sentiment": "slightly_negative",
+          "continued_from_prior": false,
+          "is_afternoon": false,
+          "entities": []
+        },
+        {
+          "id": "bay-area-sf-street-stories",
+          "category": "Community",
+          "headline": "Street Interviewer Chronicles Everyday Stories Across San Francisco",
+          "summary": "A local creator profiled by The San Francisco Standard is **documenting San Francisco's neighborhoods and residents one street interview at a time**. Her short-form videos **capture candid perspectives on daily life** across the city.",
+          "why_it_matters": "Grassroots street journalism **offers an unvarnished portrait of San Francisco's communities** beyond national headlines.",
+          "reader_text": "",
+          "sources": [
+            {
+              "name": "The San Francisco Standard",
+              "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNNndSeU9VYmZUYXVlUHk0a1J6dmE3anFzMWFWOEFBRGd2ckcwNkJwZFhGVTdxOERvMlVwQlBNQzJRN204WlNMMTdHa1h3VHF6S2hUSjVmRndFck1pQnRubjlka3dWc1N6alU1YkZlWGRCUEFCS2piMUN5ZDVvem1Hd29vQmZVQjNsV1ZITjhxODQwcl9ZVjdzUTdTLXZVSE5UTnNvMVR3?oc=5"
             }
           ],
           "sentiment": "positive",
@@ -3869,85 +4355,102 @@
       "name": "China",
       "stories": [
         {
-          "id": "story-04-https-www-chinanews-com-cn-gn-2026-11-27-10739085-shtml-ee09b9",
-          "category": "Science",
-          "headline": "中国成功发射遥感五十号04星",
-          "summary": "北京时间11月27日21时05分，中国在太原卫星发射中心使用**长征六号改运载火箭**，将**遥感五十号04星**成功发射升空。卫星顺利进入预定轨道，发射任务取得圆满成功。",
-          "why_it_matters": "此次发射进一步完善了**中国对地观测卫星星座布局**，为国土资源监测和防灾减灾提供数据支撑。",
+          "id": "china-hk-honors-ceremony",
+          "category": "Policy",
+          "headline": "香港举行2026年度勋衔颁授典礼，3人获颁大紫荆勋章",
+          "summary": "香港特区**2026年度勋衔颁授典礼28日起一连两日在礼宾府举行**，行政长官*李家超*在首日为**302名受勋人士颁授勋衔及奖状**，其中3人获颁最高荣誉大紫荆勋章。",
+          "why_it_matters": "年度勋衔颁授旨在**表彰在公共服务、社会建设及专业领域作出突出贡献的人士**。",
+          "reader_text": "",
           "sources": [
             {
               "name": "中新网",
-              "url": "https://www.chinanews.com.cn/gn/2026/11-27/10739085.shtml"
+              "url": "https://www.chinanews.com.cn/dwq/2026/11-28/10739451.shtml"
+            },
+            {
+              "name": "BBC 中文",
+              "url": "https://www.bbc.com/zhongwen/articles/cp931k7xx4do/trad?at_medium=RSS&at_campaign=rss"
             }
           ],
           "sentiment": "positive",
-          "continued_from_prior": false,
-          "is_afternoon": false,
-          "entities": []
-        },
-        {
-          "id": "story-90-https-news-google-com-rss-articles-cbmivkfvx3lxte1twwhjtgxtwu5vs-4573b7",
-          "category": "Science",
-          "headline": "中国科大实现效率超过90%的可集成量子存储",
-          "summary": "中国科学技术大学科研团队在量子信息领域取得突破，成功实现**效率超过90%的可集成量子存储**。该成果为构建**大规模实用化量子网络**提供了关键器件基础。",
-          "why_it_matters": "高效率集成量子存储器是**量子中继和长距离量子通信**的核心环节，有助于推动量子互联网技术走向工程化。",
-          "sources": [
-            {
-              "name": "中国科大新闻网",
-              "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1tWWhJTGxtWU5vSVNyRWUwMlBJVDhHNGtZOFdRZkUwSW1KMGZtLWR2MkljRHRLQ1NhNWhxcGRGbmV2YlNFUXcxSUh5c3Jwek1GODFicnpB?oc=5"
-            }
-          ],
-          "sentiment": "very_positive",
-          "continued_from_prior": false,
-          "is_afternoon": false,
-          "entities": []
-        },
-        {
-          "id": "story-6g-https-news-google-com-rss-articles-cbmiyefvx3lxte9bckvpb0x3b2jnu-9611b8",
-          "category": "Tech",
-          "headline": "中国正式启动6G试点工作",
-          "summary": "据澎湃新闻报道，中国**6G试点已正式启动**，标志着下一代移动通信技术从标准预研迈向**关键技术验证与场景试验**阶段。产业界将围绕空天地一体化、通感算融合等方向展开测试。",
-          "why_it_matters": "率先推进6G试点有助于中国在**全球下一代通信标准竞争与产业链布局**中占据先发优势。",
-          "sources": [
-            {
-              "name": "澎湃/财新/一财/界面",
-              "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9BckVPb0x3b2JNUlZmTlNoVThRTjlzTzNZLWlMNVduUUJOeUR3RF9WaXFZM3EyX1pyc1FHUjlwbG5Fc0d6VVVpSDE2UTlNZEpRdkprb3FFaUFtNWZqUjAyVg?oc=5"
-            }
-          ],
-          "sentiment": "positive",
-          "continued_from_prior": false,
-          "is_afternoon": false,
-          "entities": []
-        },
-        {
-          "id": "story-2026-https-www-chinanews-com-cn-cj-2026-11-27-10739072-shtml-666ee0",
-          "category": "Industry",
-          "headline": "2026兴隆湖能源电力创新发展大会在成都举行 聚焦“人工智能+能源”",
-          "summary": "11月27日，由清华四川能源互联网研究院与四川省电力行业协会联合主办的**2026兴隆湖能源电力创新发展大会**在成都举行。会议聚焦**“人工智能+能源”深度融合**，探讨新型电力系统的智能化升级路径。",
-          "why_it_matters": "AI大模型与能源电网的结合有望提升**新能源消纳能力与电网调度效率**，加速能源产业数字化转型。",
-          "sources": [
-            {
-              "name": "中新网",
-              "url": "https://www.chinanews.com.cn/cj/2026/11-27/10739072.shtml"
-            }
-          ],
-          "sentiment": "slightly_positive",
           "continued_from_prior": true,
+          "is_afternoon": false,
+          "entities": []
+        },
+        {
+          "id": "china-shihan-ausopen-wildcard",
+          "category": "Sports",
+          "headline": "施晗夺得2027澳网亚太区外卡赛女单冠军",
+          "summary": "2027澳大利亚网球公开赛亚太区外卡赛28日在成都收官，**头号种子、中国球员*施晗*夺得女单冠军**，收获**2027年澳网女单正赛外卡**，职业生涯首次跻身大满贯正赛。",
+          "why_it_matters": "本土新生代球员在国际赛事外卡赛中突围，**为中国网球在大满贯赛场增添新的突破**。",
+          "reader_text": "",
+          "sources": [
+            {
+              "name": "中新网",
+              "url": "https://www.chinanews.com.cn/ty/2026/11-28/10739453.shtml"
+            }
+          ],
+          "sentiment": "positive",
+          "continued_from_prior": false,
+          "is_afternoon": false,
+          "entities": []
+        },
+        {
+          "id": "china-world-life-science-conference",
+          "category": "Science",
+          "headline": "2026世界生命科学大会在广州举行",
+          "summary": "由中山大学共同主办的**2026世界生命科学大会在广州举行**，汇聚国内外学者围绕**生命科学前沿研究与产业发展**展开交流。",
+          "why_it_matters": "高规格国际学术会议落地大湾区，有助于**推动生命科学领域的跨国科研合作与成果转化**。",
+          "reader_text": "",
+          "sources": [
+            {
+              "name": "Google News 中国",
+              "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE8xRTJHc0RZczRFMUQtc045X3NpS0hTcl9BSnhlRkc0RXZJVGtTdmp1Q3RzQWRaeFFnR0xTN010TWt1OENzblJldC1pNVp2eTllQUxDbVZScFNxRUxMMnZR?oc=5"
+            }
+          ],
+          "sentiment": "positive",
+          "continued_from_prior": true,
+          "is_afternoon": false,
+          "entities": []
+        },
+        {
+          "id": "china-ai-era-career-regulation",
+          "category": "Tech",
+          "headline": "AI时代职业选择与技术监管引热议",
+          "summary": "清华大学学者*蒙克*近日受访探讨**AI时代“做自己喜欢的事”为何更具现实意义**；与此同时，外媒分析指出政策讨论常聚焦中美AI竞争，但**北京同样会对本国科技企业实施严格监管**。",
+          "why_it_matters": "围绕人工智能发展、**人才职业路径与国内监管边界的讨论**正成为观察中国科技生态的重要窗口。",
+          "reader_text": "",
+          "sources": [
+            {
+              "name": "FT中文网",
+              "url": "https://www.ftchinese.com/story/df786819-2c28-4e17-84da-76f9333d72b7"
+            },
+            {
+              "name": "纽约时报中文网",
+              "url": "https://cn.nytimes.com/opinion/20261126/china-ai-race-control/?utm_source=RSS"
+            }
+          ],
+          "sentiment": "neutral",
+          "continued_from_prior": false,
           "is_afternoon": false,
           "entities": []
         }
       ],
       "stories_en": [
         {
-          "id": "story-04-https-www-chinanews-com-cn-gn-2026-11-27-10739085-shtml-ee09b9",
-          "category": "Science",
-          "headline": "China Successfully Launches Yaogan-50 04 Remote Sensing Satellite",
-          "summary": "At 21:05 Beijing Time on November 27, China launched the **Yaogan-50 04 satellite** atop a **Long March-6A carrier rocket** from the Taiyuan Satellite Launch Center. The satellite entered its **preset orbit**, marking a complete success for the mission.",
-          "why_it_matters": "The launch further expands **China's Earth-observation constellation**, strengthening capabilities for land monitoring and disaster response.",
+          "id": "china-hk-honors-ceremony",
+          "category": "Policy",
+          "headline": "Hong Kong Holds 2026 Honors Ceremony, Awarding Three Grand Bauhinia Medals",
+          "summary": "Hong Kong's **2026 Honors and Awards Presentation Ceremony began a two-day run at Government House on November 28**, with Chief Executive *John Lee* presenting honors to **302 recipients on the first day**, including three Grand Bauhinia Medals.",
+          "why_it_matters": "The annual ceremony **recognizes individuals for distinguished public service, community leadership, and professional contributions**.",
+          "reader_text": "",
           "sources": [
             {
               "name": "中新网",
-              "url": "https://www.chinanews.com.cn/gn/2026/11-27/10739085.shtml"
+              "url": "https://www.chinanews.com.cn/dwq/2026/11-28/10739451.shtml"
+            },
+            {
+              "name": "BBC 中文",
+              "url": "https://www.bbc.com/zhongwen/articles/cp931k7xx4do/trad?at_medium=RSS&at_campaign=rss"
             }
           ],
           "sentiment": "positive",
@@ -3956,52 +4459,59 @@
           "entities": []
         },
         {
-          "id": "story-90-https-news-google-com-rss-articles-cbmivkfvx3lxte1twwhjtgxtwu5vs-4573b7",
-          "category": "Science",
-          "headline": "USTC Achieves Over 90% Efficiency in Integrable Quantum Memory",
-          "summary": "Researchers at the **University of Science and Technology of China (USTC)** achieved a breakthrough in quantum information by demonstrating **integrable quantum memory with efficiency exceeding 90%**. The advance lays key hardware groundwork for **large-scale practical quantum networks**.",
-          "why_it_matters": "High-efficiency integrable memory is a **critical building block for quantum repeaters** and long-distance quantum communication.",
+          "id": "china-shihan-ausopen-wildcard",
+          "category": "Sports",
+          "headline": "Shi Han Wins 2027 Australian Open Asia-Pacific Wildcard Playoff",
+          "summary": "Top-seeded Chinese player *Shi Han* **captured the women's singles title at the 2027 Australian Open Asia-Pacific Wildcard Playoff** in Chengdu on November 28, earning her **first career Grand Slam main-draw berth**.",
+          "why_it_matters": "The breakthrough **adds fresh momentum for emerging Chinese tennis players** on the international Grand Slam stage.",
+          "reader_text": "",
           "sources": [
             {
-              "name": "中国科大新闻网",
-              "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE1tWWhJTGxtWU5vSVNyRWUwMlBJVDhHNGtZOFdRZkUwSW1KMGZtLWR2MkljRHRLQ1NhNWhxcGRGbmV2YlNFUXcxSUh5c3Jwek1GODFicnpB?oc=5"
+              "name": "中新网",
+              "url": "https://www.chinanews.com.cn/ty/2026/11-28/10739453.shtml"
             }
           ],
-          "sentiment": "very_positive",
+          "sentiment": "positive",
           "continued_from_prior": false,
           "is_afternoon": false,
           "entities": []
         },
         {
-          "id": "story-6g-https-news-google-com-rss-articles-cbmiyefvx3lxte9bckvpb0x3b2jnu-9611b8",
+          "id": "china-world-life-science-conference",
+          "category": "Science",
+          "headline": "2026 World Life Science Conference Convenes in Guangzhou",
+          "summary": "Co-hosted by Sun Yat-sen University, the **2026 World Life Science Conference opened in Guangzhou**, bringing together domestic and international researchers to discuss **frontiers in life sciences and biotech innovation**.",
+          "why_it_matters": "Hosting major international scientific forums in the Greater Bay Area **strengthens cross-border research collaboration and translational medicine**.",
+          "reader_text": "",
+          "sources": [
+            {
+              "name": "Google News 中国",
+              "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE8xRTJHc0RZczRFMUQtc045X3NpS0hTcl9BSnhlRkc0RXZJVGtTdmp1Q3RzQWRaeFFnR0xTN010TWt1OENzblJldC1pNVp2eTllQUxDbVZScFNxRUxMMnZR?oc=5"
+            }
+          ],
+          "sentiment": "positive",
+          "continued_from_prior": false,
+          "is_afternoon": false,
+          "entities": []
+        },
+        {
+          "id": "china-ai-era-career-regulation",
           "category": "Tech",
-          "headline": "China Officially Launches 6G Pilot Trials",
-          "summary": "China has **officially launched 6G pilot trials**, signaling a shift from early research toward **key technology validation and real-world scenario testing**. Industry participants will test **integrated space-air-ground networks** and joint sensing-communication architectures.",
-          "why_it_matters": "Early pilot deployment helps position Chinese telecom firms in the **global race to shape 6G standards** and hardware supply chains.",
+          "headline": "Debate Grows Over AI-Era Career Paths and Domestic Tech Regulation in China",
+          "summary": "Tsinghua University scholar *Meng Ke* discussed why **pursuing personal passion carries practical weight in the AI era**, while foreign commentary noted that **Beijing remains willing to enforce strict oversight on domestic tech firms** despite U.S.-China AI competition.",
+          "why_it_matters": "Discussions around **workforce adaptation and regulatory boundaries** remain central to understanding China's evolving AI ecosystem.",
+          "reader_text": "",
           "sources": [
             {
-              "name": "澎湃/财新/一财/界面",
-              "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9BckVPb0x3b2JNUlZmTlNoVThRTjlzTzNZLWlMNVduUUJOeUR3RF9WaXFZM3EyX1pyc1FHUjlwbG5Fc0d6VVVpSDE2UTlNZEpRdkprb3FFaUFtNWZqUjAyVg?oc=5"
-            }
-          ],
-          "sentiment": "positive",
-          "continued_from_prior": false,
-          "is_afternoon": false,
-          "entities": []
-        },
-        {
-          "id": "story-2026-https-www-chinanews-com-cn-cj-2026-11-27-10739072-shtml-666ee0",
-          "category": "Industry",
-          "headline": "2026 Xinglong Lake Energy Innovation Conference in Chengdu Focuses on 'AI + Energy'",
-          "summary": "Co-hosted by Tsinghua Sichuan Energy Internet Research Institute and the Sichuan Electric Power Industry Association, the **2026 Xinglong Lake Energy & Power Innovation Conference** convened in Chengdu on November 27. Discussions centered on **integrating AI with modern power grids** to accelerate intelligent upgrades.",
-          "why_it_matters": "Pairing AI models with grid operations can improve **renewable energy integration and dispatch efficiency** across China's power sector.",
-          "sources": [
+              "name": "FT中文网",
+              "url": "https://www.ftchinese.com/story/df786819-2c28-4e17-84da-76f9333d72b7"
+            },
             {
-              "name": "中新网",
-              "url": "https://www.chinanews.com.cn/cj/2026/11-27/10739072.shtml"
+              "name": "纽约时报中文网",
+              "url": "https://cn.nytimes.com/opinion/20261126/china-ai-race-control/?utm_source=RSS"
             }
           ],
-          "sentiment": "slightly_positive",
+          "sentiment": "neutral",
           "continued_from_prior": false,
           "is_afternoon": false,
           "entities": []
@@ -4016,23 +4526,7 @@
       "canonical_name": "Donald Trump",
       "domain": "",
       "country_code": "",
-      "wiki_title": "Donald Trump"
-    },
-    {
-      "mention": "Zelensky",
-      "type": "person",
-      "canonical_name": "Volodymyr Zelenskyy",
-      "domain": "",
-      "country_code": "",
-      "wiki_title": "Volodymyr Zelenskyy"
-    },
-    {
-      "mention": "Volodymyr Zelensky",
-      "type": "person",
-      "canonical_name": "Volodymyr Zelenskyy",
-      "domain": "",
-      "country_code": "",
-      "wiki_title": "Volodymyr Zelenskyy"
+      "wiki_title": "Donald_Trump"
     },
     {
       "mention": "Donald Trump",
@@ -4040,79 +4534,15 @@
       "canonical_name": "Donald Trump",
       "domain": "",
       "country_code": "",
-      "wiki_title": "Donald Trump"
+      "wiki_title": "Donald_Trump"
     },
     {
-      "mention": "Vladimir Putin",
+      "mention": "Nathan Johnson",
       "type": "person",
-      "canonical_name": "Vladimir Putin",
+      "canonical_name": "Nathan Johnson",
       "domain": "",
       "country_code": "",
-      "wiki_title": "Vladimir Putin"
-    },
-    {
-      "mention": "Antonio Tajani",
-      "type": "person",
-      "canonical_name": "Antonio Tajani",
-      "domain": "",
-      "country_code": "",
-      "wiki_title": "Antonio Tajani"
-    },
-    {
-      "mention": "Pedro Sánchez",
-      "type": "person",
-      "canonical_name": "Pedro Sánchez",
-      "domain": "",
-      "country_code": "",
-      "wiki_title": "Pedro Sánchez"
-    },
-    {
-      "mention": "Grand Theft Auto VI",
-      "type": "work",
-      "canonical_name": "Grand Theft Auto VI",
-      "domain": "",
-      "country_code": "",
-      "wiki_title": "Grand Theft Auto VI"
-    },
-    {
-      "mention": "Paul Mackenzie",
-      "type": "person",
-      "canonical_name": "Paul Nthenge Mackenzie",
-      "domain": "",
-      "country_code": "",
-      "wiki_title": "Paul Nthenge Mackenzie"
-    },
-    {
-      "mention": "Mackenzie",
-      "type": "person",
-      "canonical_name": "Paul Nthenge Mackenzie",
-      "domain": "",
-      "country_code": "",
-      "wiki_title": "Paul Nthenge Mackenzie"
-    },
-    {
-      "mention": "Hitler",
-      "type": "person",
-      "canonical_name": "Adolf Hitler",
-      "domain": "",
-      "country_code": "",
-      "wiki_title": "Adolf Hitler"
-    },
-    {
-      "mention": "Gérard Depardieu",
-      "type": "person",
-      "canonical_name": "Gérard Depardieu",
-      "domain": "",
-      "country_code": "",
-      "wiki_title": "Gérard Depardieu"
-    },
-    {
-      "mention": "Benjamin Netanyahu",
-      "type": "person",
-      "canonical_name": "Benjamin Netanyahu",
-      "domain": "",
-      "country_code": "",
-      "wiki_title": "Benjamin Netanyahu"
+      "wiki_title": "Nathan_Johnson_(politician)"
     },
     {
       "mention": "Gadi Eisenkot",
@@ -4120,39 +4550,127 @@
       "canonical_name": "Gadi Eisenkot",
       "domain": "",
       "country_code": "",
-      "wiki_title": "Gadi Eisenkot"
+      "wiki_title": "Gadi_Eisenkot"
     },
     {
-      "mention": "Howard Lutnick",
+      "mention": "Benjamin Netanyahu",
       "type": "person",
-      "canonical_name": "Howard Lutnick",
+      "canonical_name": "Benjamin Netanyahu",
       "domain": "",
       "country_code": "",
-      "wiki_title": "Howard Lutnick"
+      "wiki_title": "Benjamin_Netanyahu"
     },
     {
-      "mention": "JD Vance",
+      "mention": "Volodymyr Zelenskyy",
       "type": "person",
-      "canonical_name": "JD Vance",
+      "canonical_name": "Volodymyr Zelenskyy",
       "domain": "",
       "country_code": "",
-      "wiki_title": "JD Vance"
+      "wiki_title": "Volodymyr_Zelenskyy"
     },
     {
-      "mention": "Marco Rubio",
+      "mention": "Vladimir Putin",
       "type": "person",
-      "canonical_name": "Marco Rubio",
+      "canonical_name": "Vladimir Putin",
       "domain": "",
       "country_code": "",
-      "wiki_title": "Marco Rubio"
+      "wiki_title": "Vladimir_Putin"
     },
     {
-      "mention": "Ro Khanna",
+      "mention": "Erik the Belgian",
       "type": "person",
-      "canonical_name": "Ro Khanna",
+      "canonical_name": "René Alphonse van den Berghe",
       "domain": "",
       "country_code": "",
-      "wiki_title": "Ro Khanna"
+      "wiki_title": "Ren%C3%A9_Alphonse_van_den_Berghe"
+    },
+    {
+      "mention": "Rob Burke",
+      "type": "person",
+      "canonical_name": "Rob Burke",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": ""
+    },
+    {
+      "mention": "Rob Adams",
+      "type": "person",
+      "canonical_name": "Rob Adams",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": ""
+    },
+    {
+      "mention": "John Lynch",
+      "type": "person",
+      "canonical_name": "John Lynch",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "John_Lynch_(American_football)"
+    },
+    {
+      "mention": "Colton McKivitz",
+      "type": "person",
+      "canonical_name": "Colton McKivitz",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Colton_McKivitz"
+    },
+    {
+      "mention": "李家超",
+      "type": "person",
+      "canonical_name": "John Lee Ka-chiu",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "John_Lee_(politician)"
+    },
+    {
+      "mention": "John Lee",
+      "type": "person",
+      "canonical_name": "John Lee Ka-chiu",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "John_Lee_(politician)"
+    },
+    {
+      "mention": "施晗",
+      "type": "person",
+      "canonical_name": "Shi Han",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": ""
+    },
+    {
+      "mention": "Shi Han",
+      "type": "person",
+      "canonical_name": "Shi Han",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": ""
+    },
+    {
+      "mention": "蒙克",
+      "type": "person",
+      "canonical_name": "Meng Ke",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": ""
+    },
+    {
+      "mention": "Meng Ke",
+      "type": "person",
+      "canonical_name": "Meng Ke",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": ""
+    },
+    {
+      "mention": "Apple",
+      "type": "company",
+      "canonical_name": "Apple Inc.",
+      "domain": "apple.com",
+      "country_code": "",
+      "wiki_title": "Apple_Inc."
     }
   ]
 }

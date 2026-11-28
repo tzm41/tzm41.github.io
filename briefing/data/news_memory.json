@@ -1,12 +1,439 @@
 {
-  "updated_at": "2026-11-28T01:01:48Z",
+  "updated_at": "2026-11-28T15:05:48Z",
   "window_days": 3,
   "editions": [
+    "2026-11-28",
     "2026-11-27",
     "2026-11-26",
     "2026-11-25"
   ],
   "items": [
+    {
+      "date": "2026-11-28",
+      "section": "top_news",
+      "id": "taiwan-taipei-mayoral-election",
+      "headline": "Taiwan Opposition Party Wins Re-Election in Taipei Mayoral Race",
+      "urls": [
+        "https://www.aljazeera.com/news/2026/11/28/taiwan-opposition-party-wins-re-election-in-taipei-mayoral-race"
+      ],
+      "tokens": [
+        "election",
+        "mayoral",
+        "opposition",
+        "party",
+        "race",
+        "taipei",
+        "taiwan",
+        "wins"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "top_news",
+      "id": "openai-countersues-apple",
+      "headline": "OpenAI Counter-Sues Apple Over Alleged Trade Secret Theft",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cm15ekqvlezeo"
+      ],
+      "tokens": [
+        "alleged",
+        "apple",
+        "counter",
+        "openai",
+        "secret",
+        "sues",
+        "theft",
+        "trade"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "top_news",
+      "id": "gaza-msf-clinic-strike",
+      "headline": "Israeli Strike on Gaza Medical Clinic Kills Two MSF Staffers",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/cm5y10yydln3o"
+      ],
+      "tokens": [
+        "clinic",
+        "gaza",
+        "israeli",
+        "kills",
+        "medical",
+        "staffers",
+        "strike"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "top_news",
+      "id": "israel-unity-talks-stall",
+      "headline": "Israel Unity Government Talks Stall Over Rotation Deal",
+      "urls": [
+        "https://www.aljazeera.com/news/2026/11/28/israel-unity-government-talks-stall-what-happens-now"
+      ],
+      "tokens": [
+        "deal",
+        "government",
+        "israel",
+        "rotation",
+        "stall",
+        "talks",
+        "unity"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "top_news",
+      "id": "falklands-oil-drilling-ruling",
+      "headline": "International Tribunal Rejects Argentina's Bid to Halt Falklands Oil Drilling",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/c84gnq3qq9rno",
+        "https://www.aljazeera.com/news/2026/11/28/court-rejects-argentinas-request-to-stop-uk-oil-activity-near-falklands"
+      ],
+      "tokens": [
+        "argentina",
+        "drilling",
+        "falklands",
+        "halt",
+        "international",
+        "rejects",
+        "tribunal"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "top_news",
+      "id": "afghanistan-school-explosion",
+      "headline": "Explosion Near Depot at Eastern Afghanistan School Kills Students, Injures Over 90",
+      "urls": [
+        "https://www.bbc.co.uk/news/articles/ckp80jyz6dl8o",
+        "https://www.npr.org/2026/11/28/nx-s1-6056284/explosion-school-eastern-afghanistan"
+      ],
+      "tokens": [
+        "afghanistan",
+        "depot",
+        "eastern",
+        "explosion",
+        "injures",
+        "kills",
+        "near",
+        "school",
+        "students"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "top_news",
+      "id": "congo-ebola-outbreak",
+      "headline": "Congo Battles Deadliest Ebola Outbreak Amid Conflict and Strained Health System",
+      "urls": [
+        "https://www.aljazeera.com/features/longform/2026/11/28/the-perfect-storm-behind-congos-deadliest-ebola-outbreak"
+      ],
+      "tokens": [
+        "battles",
+        "conflict",
+        "congo",
+        "deadliest",
+        "ebola",
+        "health",
+        "outbreak",
+        "strained",
+        "system"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "top_news",
+      "id": "cop31-talks-collapse",
+      "headline": "COP31 Climate Talks Collapse Over Fossil Fuel Language",
+      "urls": [
+        "https://www.npr.org/2026/11/28/nx-s1-6050187/cop31-talks-fall-apart"
+      ],
+      "tokens": [
+        "climate",
+        "collapse",
+        "cop31",
+        "fossil",
+        "fuel",
+        "language",
+        "talks"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "positive_news",
+      "id": "instruments-to-bird-feeders",
+      "headline": "Retired Canadian Teacher Transforms Scrapped Musical Instruments Into Bird Feeders",
+      "urls": [
+        "https://www.goodnewsnetwork.org/retired-teacher-turns-retired-musical-instruments-into-bird-feeders-look"
+      ],
+      "tokens": [
+        "bird",
+        "canadian",
+        "feeders",
+        "instruments",
+        "musical",
+        "retired",
+        "scrapped",
+        "teacher",
+        "transforms"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "positive_news",
+      "id": "stolen-sculpture-recovered",
+      "headline": "Detectives Recover 13th-Century Sculpture Stolen Nearly Half a Century Ago",
+      "urls": [
+        "https://www.goodnewsnetwork.org/detectives-recover-13th-century-sculpture-stolen-by-notorious-gentleman-thief-erik-the-belgian"
+      ],
+      "tokens": [
+        "13th",
+        "century",
+        "detectives",
+        "half",
+        "nearly",
+        "recover",
+        "sculpture",
+        "stolen"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "positive_news",
+      "id": "thanksgiving-heroes-meals",
+      "headline": "'Thanksgiving Heroes' Mobilizes Volunteers to Serve Thousands of Holiday Meals",
+      "urls": [
+        "https://www.goodnewsnetwork.org/thanksgiving-heroes-rob-adams-childhood-promise"
+      ],
+      "tokens": [
+        "heroes",
+        "holiday",
+        "meals",
+        "mobilizes",
+        "serve",
+        "thanksgiving",
+        "thousands",
+        "volunteers"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "local:china",
+      "id": "china-hk-honors-ceremony",
+      "headline": "香港举行2026年度勋衔颁授典礼，3人获颁大紫荆勋章",
+      "urls": [
+        "https://www.chinanews.com.cn/dwq/2026/11-28/10739451.shtml",
+        "https://www.bbc.com/zhongwen/articles/cp931k7xx4do/trad"
+      ],
+      "tokens": [
+        "2026",
+        "人获颁大紫荆勋章",
+        "年度勋衔颁授典礼",
+        "香港举行"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "local:china",
+      "id": "china-shihan-ausopen-wildcard",
+      "headline": "施晗夺得2027澳网亚太区外卡赛女单冠军",
+      "urls": [
+        "https://www.chinanews.com.cn/ty/2026/11-28/10739453.shtml"
+      ],
+      "tokens": [
+        "2027",
+        "施晗夺得",
+        "澳网亚太区外卡赛女单冠军"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "local:china",
+      "id": "china-shihan-ausopen-wildcard",
+      "headline": "Shi Han Wins 2027 Australian Open Asia-Pacific Wildcard Playoff",
+      "urls": [
+        "https://www.chinanews.com.cn/ty/2026/11-28/10739453.shtml"
+      ],
+      "tokens": [
+        "2027",
+        "asia",
+        "australian",
+        "open",
+        "pacific",
+        "playoff",
+        "wildcard",
+        "wins"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "local:china",
+      "id": "china-hk-honors-ceremony",
+      "headline": "Hong Kong Holds 2026 Honors Ceremony, Awarding Three Grand Bauhinia Medals",
+      "urls": [
+        "https://www.chinanews.com.cn/dwq/2026/11-28/10739451.shtml",
+        "https://www.bbc.com/zhongwen/articles/cp931k7xx4do/trad"
+      ],
+      "tokens": [
+        "2026",
+        "awarding",
+        "bauhinia",
+        "ceremony",
+        "grand",
+        "holds",
+        "hong",
+        "honors",
+        "kong",
+        "medals",
+        "three"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "local:china",
+      "id": "china-ai-era-career-regulation",
+      "headline": "Debate Grows Over AI-Era Career Paths and Domestic Tech Regulation in China",
+      "urls": [
+        "https://www.ftchinese.com/story/df786819-2c28-4e17-84da-76f9333d72b7",
+        "https://cn.nytimes.com/opinion/20261126/china-ai-race-control"
+      ],
+      "tokens": [
+        "career",
+        "china",
+        "debate",
+        "domestic",
+        "grows",
+        "paths",
+        "regulation",
+        "tech"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "local:china",
+      "id": "china-ai-era-career-regulation",
+      "headline": "AI时代职业选择与技术监管引热议",
+      "urls": [
+        "https://www.ftchinese.com/story/df786819-2c28-4e17-84da-76f9333d72b7",
+        "https://cn.nytimes.com/opinion/20261126/china-ai-race-control"
+      ],
+      "tokens": [
+        "时代职业选择与技术监管引热议"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "local:china",
+      "id": "china-world-life-science-conference",
+      "headline": "2026世界生命科学大会在广州举行",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiX0FVX3lxTE8xRTJHc0RZczRFMUQtc045X3NpS0hTcl9BSnhlRkc0RXZJVGtTdmp1Q3RzQWRaeFFnR0xTN010TWt1OENzblJldC1pNVp2eTllQUxDbVZScFNxRUxMMnZR"
+      ],
+      "tokens": [
+        "2026",
+        "世界生命科学大会在广州举行"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "local:china",
+      "id": "china-world-life-science-conference",
+      "headline": "2026 World Life Science Conference Convenes in Guangzhou",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiX0FVX3lxTE8xRTJHc0RZczRFMUQtc045X3NpS0hTcl9BSnhlRkc0RXZJVGtTdmp1Q3RzQWRaeFFnR0xTN010TWt1OENzblJldC1pNVp2eTllQUxDbVZScFNxRUxMMnZR"
+      ],
+      "tokens": [
+        "2026",
+        "conference",
+        "convenes",
+        "guangzhou",
+        "life",
+        "science",
+        "world"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "local:bay-area",
+      "id": "bay-area-sf-street-stories",
+      "headline": "Street Interviewer Chronicles Everyday Stories Across San Francisco",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMipgFBVV95cUxNNndSeU9VYmZUYXVlUHk0a1J6dmE3anFzMWFWOEFBRGd2ckcwNkJwZFhGVTdxOERvMlVwQlBNQzJRN204WlNMMTdHa1h3VHF6S2hUSjVmRndFck1pQnRubjlka3dWc1N6alU1YkZlWGRCUEFCS2piMUN5ZDVvem1Hd29vQmZVQjNsV1ZITjhxODQwcl9ZVjdzUTdTLXZVSE5UTnNvMVR3"
+      ],
+      "tokens": [
+        "across",
+        "chronicles",
+        "everyday",
+        "francisco",
+        "interviewer",
+        "stories",
+        "street"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "local:bay-area",
+      "id": "bay-area-siemens-ai-jobs",
+      "headline": "Siemens Automation Chief Calls Silicon Valley's AI Jobs Narrative 'Toxic and Self-Serving'",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMitgFBVV95cUxPWngydlR3Zm81SHRIQ2NpT3NVRUZ5TjlJNnpsdmM1U3dtQ3BKRmhvdWNGNWVQcWs4Yi1TYkpfR1hyanBZaTk2dlBIT1RXUFZKNVN6N1BsWUxCT19PU1paQnpOV1VGLW45UUotaklJdmpZUmtYX0NHR1NPTHBDM3ZZSmtFazdRUmhEWS1JUkJveU9sR1ZKWFlOcnhBcndzVUF3OWM3NGZVUWRmb1hlTmxBRGNfR2Z0Zw"
+      ],
+      "tokens": [
+        "automation",
+        "calls",
+        "chief",
+        "jobs",
+        "narrative",
+        "self",
+        "serving",
+        "siemens",
+        "silicon",
+        "toxic",
+        "valley"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "local:bay-area",
+      "id": "bay-area-diapers-program",
+      "headline": "San Jose and Fremont Hospitals Send Newborns Home With 400 Diapers Under State Program",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMiggJBVV95cUxPV056cW1EMkJ1TjdheTFQc0JOMVZfTm8yNnNsUTJMRk9tcWVxdnVNeUNCeGQ3b0ZyZjB0V1k2czlLNDRRc0xSWUo1dWpIdmYxUWxyaVVmRkdqTnBhcGRaN2dVTVQtTndhQXdFTDM1N3BGakktRlE0X1Vtalp1VWZOSTAwLVhYMUthdGlVVVdJQUVsdGx5NDEzX2tmalJ6Y0wtdm5KSzFmdnhYdWFUT01ock1jTzFzMnFoOGxhYlh0VkRaWllxOFdsZ0Z1UThqcnFVXzRmRld0U05rS1BnWUFnRm1fVHZ0Njg1X0dJWDVSQ0xRajVhcUNEd0lXTm9vRTcwOGc"
+      ],
+      "tokens": [
+        "diapers",
+        "fremont",
+        "home",
+        "hospitals",
+        "jose",
+        "newborns",
+        "program",
+        "send",
+        "state"
+      ]
+    },
+    {
+      "date": "2026-11-28",
+      "section": "local:bay-area",
+      "id": "bay-area-49ers-mckivitz",
+      "headline": "49ers GM John Lynch Addresses Team's Reaction to Colton McKivitz Injury",
+      "urls": [
+        "https://news.google.com/rss/articles/CBMioAFBVV95cUxNeUl4MWJSSlZQM3BmdmJ1QUg0RHBKR3NRNzJLcTBUWDhqTlJDZXlIdVg1eG0tS2t3YmFCSlZtQ3VlWG5wTXlBYU9mOG11SHZhM1VfaUF3ZE1fekZ1SFVRdzh0SzZxbkh5STR1V1daT0tybXRac3ZfcDR3TlphalE2c1ViWWhCSko1U2lrVGhDdG9Rd21rdFZVSXU0MlBTbnZ20gGoAUFVX3lxTE9PWWRkNW5LRW9UTkJFQnNGRk1PZWNOQkVMZ3JMQWh0UlZLVEsxVW9kTmJOdGt3YjRxUF94QkVqalRXTXBmTEN0YjB5SHpQcmhqVDBZMXk5ZWw2S1pZeU1aMmtDR1ZDZFdJWUFGNlRKcDJpRElTcmh1enAzeF9neE1rS1RjU05tSk9VeGxjcVotcEpFNzkwWlhQS0FCTHpaeUdMUkFXdnMwTQ"
+      ],
+      "tokens": [
+        "49ers",
+        "addresses",
+        "colton",
+        "injury",
+        "john",
+        "lynch",
+        "mckivitz",
+        "reaction",
+        "team"
+      ]
+    },
     {
       "date": "2026-11-27",
       "section": "top_news",
