@@ -1,0 +1,77 @@
+{
+  "id": "/",
+  "name": "colintan.dev Briefings",
+  "short_name": "Briefings",
+  "description": "Daily and weekly intelligence briefings covering world news, markets, conflicts, US politics, science, culture, and saved bookmarks.",
+  "start_url": "/briefing/?date=latest",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "background_color": "#faf8f5",
+  "theme_color": "#faf8f5",
+  "icons": [
+    {
+      "src": "/briefing/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/briefing/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/briefing/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Daily Briefing",
+      "short_name": "Daily",
+      "description": "Open the latest Daily Briefing",
+      "url": "/briefing/?date=latest",
+      "icons": [
+        {
+          "src": "/briefing/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Weekly Briefing",
+      "short_name": "Weekly",
+      "description": "Open the latest Weekly Briefing",
+      "url": "/weekly/?date=latest",
+      "icons": [
+        {
+          "src": "/briefing/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Bookmarks",
+      "short_name": "Bookmarks",
+      "description": "Open your saved stories",
+      "url": "/bookmarks/",
+      "icons": [
+        {
+          "src": "/briefing/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

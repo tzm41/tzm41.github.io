@@ -12,6 +12,10 @@
         ? "dark"
         : "light";
     document.documentElement.setAttribute("data-theme", resolved);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+      meta.setAttribute("content", resolved === "dark" ? "#1d2430" : "#faf8f5");
+    }
   } catch (e) {
     // Ignore storage access errors in restricted contexts
   }

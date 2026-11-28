@@ -9,6 +9,8 @@
  */
 
 import {
+  THEME_COLORS,
+  syncThemeColorMeta,
   escapeHtml,
   safeUrl,
   escapeRegex,
@@ -22,6 +24,8 @@ import {
 } from "./utils.js";
 
 export {
+  THEME_COLORS,
+  syncThemeColorMeta,
   escapeHtml,
   safeUrl,
   escapeRegex,
@@ -67,6 +71,7 @@ export function initTheme(themeToggleEl, onThemeChange = null) {
     }
     const resolved = resolveTheme(validPref);
     document.documentElement.setAttribute("data-theme", resolved);
+    syncThemeColorMeta(resolved);
 
     if (themeToggleEl) {
       themeToggleEl.dataset.themePref = validPref;
@@ -138,7 +143,7 @@ const MASTHEAD_PAGES = {
   home: {
     label: "colintan.dev",
     shortLabel: "colintan.dev",
-    href: "../index.html",
+    href: "/",
     title: "Back to main site",
     prefix: "&larr; ",
   },

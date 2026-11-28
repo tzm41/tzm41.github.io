@@ -25,6 +25,7 @@ import {
   onBookmarksChange,
 } from "../shared/bookmarks.js";
 import { initAuth, setPreference, getSyncState, onSyncStatusChange } from "../shared/auth.js";
+import { initPwa } from "../shared/pwa.js";
 import {
   renderCardShell,
   renderDailyStoryCard,
@@ -943,6 +944,7 @@ function renderFooterSyncIndicator(syncState = getSyncState()) {
 async function bootstrap() {
   // 1. UI primitives & auth (zero cold-load requests when signed out)
   initMasthead({ currentPage: "bookmarks" });
+  initPwa();
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
     setPreference("theme", pref);
   });

@@ -97,11 +97,36 @@ export function fmtCoords(lat, lon) {
   return `${Math.abs(lat).toFixed(1)}°${ns}, ${Math.abs(lon).toFixed(1)}°${ew}`;
 }
 
+export const THEME_COLORS = { light: "#faf8f5", dark: "#1d2430" };
+
+export function syncThemeColorMeta(resolvedTheme) {
+  if (typeof document === "undefined") return;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (!meta) return;
+  meta.setAttribute(
+    "content",
+    resolvedTheme === "dark" ? THEME_COLORS.dark : THEME_COLORS.light
+  );
+}
+
 export async function fetchJson(url, { cache = "no-store", signal } = {}) {
   const opts = { cache };
   if (signal) opts.signal = signal;
   const resp = await fetch(url, opts);
   if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${url}`);
+  if (
+    typeof window !== "undefined" &&
+    resp.headers?.get("X-SW-Cache") === "offline-fallback"
+  ) {
+    window.dispatchEvent(
+      new CustomEvent("pwa:offline-data", {
+        detail: {
+          url: String(url),
+          dateHeader: resp.headers.get("date") || "",
+        },
+      })
+    );
+  }
   return resp.json();
 }
 

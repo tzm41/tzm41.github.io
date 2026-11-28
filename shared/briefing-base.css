@@ -3,7 +3,12 @@
    Loaded by /briefing/, /weekly/, and /bookmarks/
    ========================================================================== */
 
-/* ---------- Masthead ---------- */
+/* ---------- Safe-Area Container & Masthead ---------- */
+
+.container {
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
 
 .masthead {
   background: var(--surface);
@@ -14,7 +19,7 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 20px;
-  padding-top: 16px;
+  padding-top: calc(16px + env(safe-area-inset-top, 0px));
   padding-bottom: 14px;
   flex-wrap: wrap;
 }
@@ -327,6 +332,26 @@
   border-radius: var(--radius);
   margin-bottom: 20px;
   font-size: 13.5px;
+}
+
+.status-banner.is-offline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-subtle);
+  border-color: var(--border-strong);
+  color: var(--ink-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.status-banner.is-offline::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--warn);
+  flex-shrink: 0;
 }
 
 .section {
@@ -1541,7 +1566,7 @@ h3 {
 .site-footer {
   border-top: 1px solid var(--border);
   background: var(--surface);
-  padding: 20px 0;
+  padding: 20px 0 calc(20px + env(safe-area-inset-bottom, 0px));
   font-size: 12.5px;
   color: var(--ink-muted);
 }
@@ -1632,7 +1657,7 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
 }
 
 .ss-backdrop.hidden {
@@ -1850,4 +1875,27 @@ h3 {
 
 .ss-done-btn:hover {
   filter: brightness(1.06);
+}
+
+/* ---------- Standalone PWA Display Polish ---------- */
+
+@media (display-mode: standalone) {
+  html,
+  body {
+    overscroll-behavior-y: contain;
+  }
+
+  .masthead,
+  .section-nav,
+  .masthead-btn,
+  .masthead-icon-btn,
+  .edition-picker,
+  .collapse-btn,
+  .back-home,
+  .nav-links a,
+  .bm-filter-tab {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
 }

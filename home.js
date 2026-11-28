@@ -3,8 +3,10 @@
  * External ES module under strict CSP — zero cold-load Worker/GIS calls when signed out.
  */
 
+import { syncThemeColorMeta } from "./shared/utils.js";
 import { bindBookmarkCountBadge } from "./shared/bookmarks.js";
 import { initAuth, setPreference } from "./shared/auth.js";
+import { initPwa } from "./shared/pwa.js";
 
 const switcher = document.getElementById("theme-switcher");
 const countEl = document.getElementById("home-bookmarks-count");
@@ -24,7 +26,9 @@ function applyHomeTheme(pref, { persist = false } = {}) {
       // Ignore storage errors
     }
   }
-  document.documentElement.setAttribute("data-theme", resolveHomeTheme(valid));
+  const resolved = resolveHomeTheme(valid);
+  document.documentElement.setAttribute("data-theme", resolved);
+  syncThemeColorMeta(resolved);
   if (switcher) {
     switcher.querySelectorAll(".seg-btn").forEach((btn) => {
       const active = btn.dataset.themePref === valid;
@@ -51,6 +55,7 @@ media?.addEventListener?.("change", () => {
 });
 
 bindBookmarkCountBadge(countEl, { format: (n) => String(n) });
+initPwa();
 
 initAuth({
   mountEl: document.getElementById("auth-mount"),

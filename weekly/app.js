@@ -40,6 +40,7 @@ import {
 } from "../shared/auth.js";
 import { initSectionSettings } from "../shared/section-settings.js";
 import { createArchiveController } from "../shared/archive-nav.js";
+import { initPwa } from "../shared/pwa.js";
 import {
   renderBriefBullets as renderSharedBriefBullets,
   renderWeeklyStoryCard,
@@ -758,6 +759,7 @@ async function bootstrap() {
   }
 
   initMasthead({ currentPage: "weekly" });
+  initPwa();
   els.navBookmarksCount = document.getElementById("nav-bookmarks-count");
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
     setPreference("theme", pref);
