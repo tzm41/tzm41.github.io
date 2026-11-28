@@ -76,12 +76,19 @@ export function initSectionSettings({
   onBriefStyleChange = null,
   getShowListen = null,
   onShowListenChange = null,
+  sortConfig = null,
   areAllExpanded = null,
   onToggleAll = null,
 } = {}) {
   const sectionMap = new Map(sections.map((s) => [s.id, s]));
   let current = normalizeSectionLayout(getInitialLayout(), sections);
   let modalEl = null;
+
+  const syncSortUi = (val) => {
+    if (!modalEl || !sortConfig) return;
+    const sel = modalEl.querySelector("[data-ss-sort]");
+    if (sel && sel.value !== val) sel.value = val;
+  };
 
   const areVisibleSettingsExpanded = () => {
     const hiddenSet = new Set(current.hidden);
@@ -252,8 +259,27 @@ export function initSectionSettings({
           </div>
         `
         : "";
+    const sortHtml =
+      sortConfig && Array.isArray(sortConfig.options) && sortConfig.options.length
+        ? `
+          <div class="ss-pref-row">
+            <div class="ss-pref-meta">
+              <span class="ss-pref-label">${escapeHtml(sortConfig.label || "Sort order")}</span>
+              ${sortConfig.hint ? `<span class="ss-pref-hint">${escapeHtml(sortConfig.hint)}</span>` : ""}
+            </div>
+            <select class="ss-select" data-ss-sort aria-label="${escapeHtml(sortConfig.label || "Sort order")}">
+              ${sortConfig.options
+                .map((opt) => {
+                  const curVal = typeof sortConfig.getValue === "function" ? sortConfig.getValue() : sortConfig.defaultValue;
+                  return `<option value="${escapeHtml(opt.value)}"${opt.value === curVal ? " selected" : ""}>${escapeHtml(opt.label)}</option>`;
+                })
+                .join("")}
+            </select>
+          </div>
+        `
+        : "";
     const listHeadHtml =
-      typeof onToggleAll === "function"
+      sections.length && typeof onToggleAll === "function"
         ? `
           <div class="ss-list-head">
             <span class="ss-list-title">Sections</span>
@@ -261,16 +287,18 @@ export function initSectionSettings({
           </div>
         `
         : "";
+    const listHtml = sections.length ? `<div class="ss-list" data-section-settings-list></div>` : "";
     modalEl.innerHTML = `
       <div class="ss-modal">
         <div class="ss-header">
           <h3>Customize</h3>
           <button type="button" class="ss-close" data-ss-close aria-label="Close customization">&times;</button>
         </div>
+        ${sortHtml}
         ${briefStyleHtml}
         ${showListenHtml}
         ${listHeadHtml}
-        <div class="ss-list" data-section-settings-list></div>
+        ${listHtml}
         <div class="ss-footer">
           <button type="button" class="ss-reset-btn" data-ss-reset>Reset to defaults</button>
           <button type="button" class="ss-done-btn" data-ss-close>Done</button>
@@ -278,6 +306,12 @@ export function initSectionSettings({
       </div>
     `;
     document.body.appendChild(modalEl);
+
+    modalEl.querySelector("[data-ss-sort]")?.addEventListener("change", (e) => {
+      if (typeof sortConfig?.onChange === "function") {
+        sortConfig.onChange(e.target.value);
+      }
+    });
 
     modalEl.addEventListener("click", (e) => {
       if (e.target === modalEl || e.target.closest("[data-ss-close]")) {
@@ -312,8 +346,15 @@ export function initSectionSettings({
         return;
       }
       if (e.target.closest("[data-ss-reset]")) {
-        current = normalizeSectionLayout(null, sections);
-        commit();
+        if (sections.length) {
+          current = normalizeSectionLayout(null, sections);
+          commit();
+        }
+        if (sortConfig && typeof sortConfig.onChange === "function") {
+          const defVal = sortConfig.defaultValue ?? sortConfig.options?.[0]?.value ?? "";
+          syncSortUi(defVal);
+          sortConfig.onChange(defVal);
+        }
         if (typeof onBriefStyleChange === "function") {
           syncBriefStyleUi("regular");
           onBriefStyleChange("regular");
@@ -457,6 +498,9 @@ export function initSectionSettings({
     if (typeof getShowListen === "function") {
       syncShowListenUi(getShowListen());
     }
+    if (sortConfig && typeof sortConfig.getValue === "function") {
+      syncSortUi(sortConfig.getValue());
+    }
     syncExpandAllUi();
     renderRows();
     modalEl.classList.remove("hidden");
@@ -472,7 +516,9 @@ export function initSectionSettings({
   triggerBtn?.addEventListener("click", openModal);
 
   // Initial apply on page boot
-  applyLayout(current, { applyCollapse: true });
+  if (sections.length) {
+    applyLayout(current, { applyCollapse: true });
+  }
 
   return {
     prefKey,
@@ -481,6 +527,7 @@ export function initSectionSettings({
     applyLayout,
     syncBriefStyle: syncBriefStyleUi,
     syncShowListen: syncShowListenUi,
+    syncSort: syncSortUi,
     syncExpandAll: syncExpandAllUi,
     getLayout: () => ({
       order: [...current.order],

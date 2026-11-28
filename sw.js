@@ -3,7 +3,7 @@
  * Scope: / (Home, Daily Briefing, Weekly Briefing, Bookmarks)
  */
 
-const SW_VERSION = "2026-11-28-8";
+const SW_VERSION = "2026-11-28-9";
 const STATIC_CACHE = `briefings-static-${SW_VERSION}`;
 const DATA_CACHE = `briefings-data-${SW_VERSION}`;
 const ARCHIVE_CACHE = `briefings-archive-${SW_VERSION}`;
@@ -22,11 +22,11 @@ const PRECACHE_URLS = [
   "/briefing/icon-512-maskable.png",
   "/shared/tokens.css?v=2",
   "/shared/auth.css?v=3",
-  "/shared/briefing-base.css?v=16",
+  "/shared/briefing-base.css?v=17",
   "/shared/theme-boot.js?v=2",
   "/briefing/styles.css?v=64",
   "/weekly/styles.css?v=11",
-  "/bookmarks/styles.css?v=4",
+  "/bookmarks/styles.css?v=5",
 ];
 
 const BYPASS_PATH_RE = /^\/(?:auth|user|markets|s)(?:\/|$)/;

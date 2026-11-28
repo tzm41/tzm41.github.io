@@ -26,6 +26,7 @@ import {
   onBookmarksChange,
 } from "../shared/bookmarks.js";
 import { initAuth, getLocalPreferences, setPreference, getSyncState, onSyncStatusChange } from "../shared/auth.js";
+import { initSectionSettings } from "../shared/section-settings.js";
 import { initPwa } from "../shared/pwa.js";
 import {
   renderCardShell,
@@ -77,7 +78,7 @@ const els = {
   appRoot: document.getElementById("app-root"),
   countLabel: document.getElementById("bookmarks-count-label"),
   btnTtsBookmarks: document.getElementById("btn-tts-bookmarks"),
-  sortSelect: document.getElementById("bookmarks-sort"),
+  btnSectionSettings: document.getElementById("btn-section-settings"),
   btnClearExpired: document.getElementById("btn-clear-expired"),
   btnClearExpiredSection: document.getElementById("btn-clear-expired-section"),
   themeToggle: document.getElementById("theme-toggle"),
@@ -1033,9 +1034,40 @@ async function bootstrap() {
   initMasthead({ currentPage: "bookmarks" });
   initPwa();
   initTts();
-  setTtsEnabled(Boolean(getLocalPreferences()?.show_listen));
+  state.showListen = Boolean(getLocalPreferences()?.show_listen);
+  setTtsEnabled(state.showListen);
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
     setPreference("theme", pref);
+  });
+
+  const sectionSettings = initSectionSettings({
+    prefKey: "bookmarks_settings",
+    pageLabel: "Bookmarks",
+    triggerBtn: els.btnSectionSettings,
+    sections: [],
+    sortConfig: {
+      label: "Sort order",
+      options: [
+        { value: "saved_desc", label: "Newest Saved" },
+        { value: "date_desc", label: "Edition Date" },
+        { value: "expiry_asc", label: "Expiring Soonest" },
+      ],
+      defaultValue: "saved_desc",
+      getValue: () => state.sort,
+      onChange: (val) => {
+        state.sort = val || "saved_desc";
+        const visible = renderLists();
+        if (state.indicesLoaded) {
+          hydrateVisibleEntries(visible);
+        }
+      },
+    },
+    getShowListen: () => state.showListen,
+    onShowListenChange: (nextOn) => {
+      state.showListen = Boolean(nextOn);
+      setPreference("show_listen", state.showListen);
+      setTtsEnabled(state.showListen);
+    },
   });
 
   initEntityOverlays({
@@ -1050,7 +1082,9 @@ async function bootstrap() {
         themeCtrl.apply(prefs.theme, { silent: true, persist: true });
       }
       if (typeof prefs?.show_listen === "boolean") {
-        setTtsEnabled(prefs.show_listen);
+        state.showListen = prefs.show_listen;
+        sectionSettings.syncShowListen(state.showListen);
+        setTtsEnabled(state.showListen);
       }
     },
     onAuthChange: () => renderFooterSyncIndicator(),
