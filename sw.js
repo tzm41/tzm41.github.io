@@ -3,7 +3,7 @@
  * Scope: / (Home, Daily Briefing, Weekly Briefing, Bookmarks)
  */
 
-const SW_VERSION = "2026-11-28-5";
+const SW_VERSION = "2026-11-28-6";
 const STATIC_CACHE = `briefings-static-${SW_VERSION}`;
 const DATA_CACHE = `briefings-data-${SW_VERSION}`;
 const ARCHIVE_CACHE = `briefings-archive-${SW_VERSION}`;
@@ -273,6 +273,22 @@ async function handleMutableJson(request, url) {
   }
 }
 
+async function handleCodeAsset(request) {
+  const cache = await caches.open(STATIC_CACHE);
+  try {
+    const resp = await fetch(request, { cache: "no-cache" });
+    if (resp && resp.ok) {
+      await cache.put(request, resp.clone());
+      return resp;
+    }
+    const cached = await cache.match(request);
+    return cached || resp;
+  } catch {
+    const cached = await cache.match(request);
+    return cached || new Response("", { status: 504 });
+  }
+}
+
 async function handleStaticAsset(event, request) {
   const cache = await caches.open(STATIC_CACHE);
   const cached = await cache.match(request);
@@ -325,6 +341,11 @@ self.addEventListener("fetch", (event) => {
 
   if (MUTABLE_JSON_RE.test(url.pathname)) {
     event.respondWith(handleMutableJson(request, url));
+    return;
+  }
+
+  if (url.pathname.endsWith(".js") || url.pathname.endsWith(".css")) {
+    event.respondWith(handleCodeAsset(request));
     return;
   }
 
