@@ -745,6 +745,16 @@ export function createTtsEngine({ synth, UtteranceCtor, storage, isMobile } = {}
     return true;
   };
 
+  const cancelIfActive = (s) => {
+    try {
+      if (s && (s.speaking || s.pending)) {
+        s.cancel?.();
+      }
+    } catch {
+      // Ignore cancel errors
+    }
+  };
+
   const stop = () => {
     sessionId += 1;
     currentUtterance = null;
@@ -774,11 +784,7 @@ export function createTtsEngine({ synth, UtteranceCtor, storage, isMobile } = {}
     sessionId += 1;
     const expected = sessionId;
     currentUtterance = null;
-    try {
-      getSynth()?.cancel?.();
-    } catch {
-      // Ignore cancel errors
-    }
+    cancelIfActive(getSynth());
 
     queue = prepared;
     sectionId = nextSectionId;
@@ -812,11 +818,7 @@ export function createTtsEngine({ synth, UtteranceCtor, storage, isMobile } = {}
     sessionId += 1;
     const expected = sessionId;
     currentUtterance = null;
-    try {
-      getSynth()?.cancel?.();
-    } catch {
-      // Ignore cancel errors
-    }
+    cancelIfActive(getSynth());
     status = "playing";
     emit();
     return speakCurrentChunk(expected);
