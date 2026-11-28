@@ -8,7 +8,7 @@
  */
 
 import { escapeHtml, safeUrl, fmtShortDate, fetchJson } from "../shared/utils.js";
-import { initTheme, initMasthead, renderSourceChip, syncButtonGroup } from "../shared/ui.js";
+import { initTheme, initMasthead, renderSourceChip, syncButtonGroup, showToast } from "../shared/ui.js";
 import {
   ensureEntityShards,
   initEntityOverlays,
@@ -21,6 +21,9 @@ import {
   computeBookmarkTtl,
   getBookmarks,
   clearExpiredBookmarks,
+  countStaleBookmarks,
+  clearStaleBookmarks,
+  clearAllBookmarks,
   renderBookmarkButton,
   bindBookmarkToggle,
   onBookmarksChange,
@@ -1068,6 +1071,53 @@ async function bootstrap() {
       setPreference("show_listen", state.showListen);
       setTtsEnabled(state.showListen);
     },
+    actionRows: [
+      {
+        label: "Manage bookmarks",
+        hint: "Stale means saved more than 7 days ago",
+        buttons: [
+          {
+            getLabel: () => {
+              const n = countStaleBookmarks({ maxAgeDays: 7 });
+              return n > 0 ? `Delete stale (${n})` : "Delete stale";
+            },
+            isDisabled: () => countStaleBookmarks({ maxAgeDays: 7 }) === 0,
+            onClick: () => {
+              const n = countStaleBookmarks({ maxAgeDays: 7 });
+              if (!n) return;
+              if (!window.confirm(`Delete ${n} stale ${n === 1 ? "bookmark" : "bookmarks"} saved more than 7 days ago?`)) {
+                return;
+              }
+              tts.stop();
+              const res = clearStaleBookmarks({ maxAgeDays: 7 });
+              syncCardCacheFromStore();
+              renderLists();
+              showToast(`Deleted ${res.removedCount} stale ${res.removedCount === 1 ? "bookmark" : "bookmarks"}.`);
+            },
+          },
+          {
+            danger: true,
+            getLabel: () => {
+              const n = getBookmarks().length;
+              return n > 0 ? `Delete all (${n})` : "Delete all";
+            },
+            isDisabled: () => getBookmarks().length === 0,
+            onClick: () => {
+              const n = getBookmarks().length;
+              if (!n) return;
+              if (!window.confirm(`Delete all ${n} saved ${n === 1 ? "bookmark" : "bookmarks"}?`)) {
+                return;
+              }
+              tts.stop();
+              const res = clearAllBookmarks();
+              syncCardCacheFromStore();
+              renderLists();
+              showToast(`Deleted all ${res.removedCount} ${res.removedCount === 1 ? "bookmark" : "bookmarks"}.`);
+            },
+          },
+        ],
+      },
+    ],
   });
 
   initEntityOverlays({

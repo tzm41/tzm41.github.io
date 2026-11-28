@@ -439,6 +439,66 @@ export function clearExpiredBookmarks(
   return { removedCount: removedKeys.length, removedKeys, count: cacheMap.size };
 }
 
+function isRecordStale(rec, maxAgeSec, nowSec) {
+  const savedAt = Number(rec?.saved_at || 0);
+  if (Number.isFinite(savedAt) && savedAt > 0) {
+    return nowSec - savedAt > maxAgeSec;
+  }
+  const dateMs = Date.parse(`${rec?.date || ""}T00:00:00Z`);
+  if (!Number.isNaN(dateMs)) {
+    return nowSec - Math.floor(dateMs / 1000) > maxAgeSec;
+  }
+  return false;
+}
+
+export function countStaleBookmarks({ maxAgeDays = 7, nowMs = Date.now() } = {}) {
+  ensureCache();
+  const nowSec = Math.floor(nowMs / 1000);
+  const maxAgeSec = Math.max(1, Number(maxAgeDays) || 7) * 86400;
+  let n = 0;
+  for (const rec of cacheMap.values()) {
+    if (isRecordStale(rec, maxAgeSec, nowSec)) n += 1;
+  }
+  return n;
+}
+
+export function clearStaleBookmarks({ maxAgeDays = 7, nowMs = Date.now() } = {}) {
+  ensureCache();
+  const nowSec = Math.floor(nowMs / 1000);
+  const maxAgeSec = Math.max(1, Number(maxAgeDays) || 7) * 86400;
+  const removedKeys = [];
+  for (const [key, rec] of cacheMap.entries()) {
+    if (isRecordStale(rec, maxAgeSec, nowSec)) {
+      removedKeys.push(key);
+      const delTs = Math.max(nowSec, (rec.saved_at || 0) + 1);
+      cacheMap.delete(key);
+      deletedMap.set(key, delTs);
+    }
+  }
+  if (removedKeys.length > 0) {
+    persistCache();
+    notifyLocalMutation({ removedKeys, saved: false });
+  }
+  return { removedCount: removedKeys.length, removedKeys, count: cacheMap.size };
+}
+
+export function clearAllBookmarks({ nowMs = Date.now() } = {}) {
+  ensureCache();
+  const nowSec = Math.floor(nowMs / 1000);
+  const removedKeys = [];
+  for (const [key, rec] of cacheMap.entries()) {
+    removedKeys.push(key);
+    const delTs = Math.max(nowSec, (rec.saved_at || 0) + 1);
+    cacheMap.delete(key);
+    deletedMap.set(key, delTs);
+  }
+  if (removedKeys.length > 0) {
+    persistCache();
+    notifyLocalMutation({ removedKeys, saved: false });
+  }
+  return { removedCount: removedKeys.length, removedKeys, count: cacheMap.size };
+}
+
 export function getBookmarkStats(
   ttlOverrides = null,
   availableDatesByEdition = null,

@@ -1947,6 +1947,54 @@ h3 {
   outline: none;
 }
 
+.ss-action-row {
+  flex-wrap: wrap;
+}
+
+.ss-action-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.ss-action-btn {
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.ss-action-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.ss-action-btn.is-danger {
+  color: var(--neg);
+  border-color: color-mix(in srgb, var(--neg) 38%, transparent);
+}
+
+.ss-action-btn.is-danger:hover:not(:disabled) {
+  border-color: var(--neg);
+  background: var(--neg-soft);
+  color: var(--neg);
+}
+
+.ss-action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .ss-list-head {
   display: flex;
   align-items: center;

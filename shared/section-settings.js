@@ -77,6 +77,7 @@ export function initSectionSettings({
   getShowListen = null,
   onShowListenChange = null,
   sortConfig = null,
+  actionRows = [],
   areAllExpanded = null,
   onToggleAll = null,
 } = {}) {
@@ -88,6 +89,31 @@ export function initSectionSettings({
     if (!modalEl || !sortConfig) return;
     const sel = modalEl.querySelector("[data-ss-sort]");
     if (sel && sel.value !== val) sel.value = val;
+  };
+
+  const renderActionRows = () => {
+    const slot = modalEl?.querySelector("[data-ss-action-rows]");
+    if (!slot) return;
+    slot.innerHTML = (actionRows || [])
+      .map((row, rowIdx) => {
+        const btns = (row.buttons || [])
+          .map((b, btnIdx) => {
+            const label = typeof b.getLabel === "function" ? b.getLabel() : b.label;
+            const disabled = typeof b.isDisabled === "function" ? Boolean(b.isDisabled()) : Boolean(b.disabled);
+            return `<button type="button" class="ss-action-btn${b.danger ? " is-danger" : ""}" data-ss-custom-action="${rowIdx}:${btnIdx}" ${disabled ? "disabled" : ""}>${escapeHtml(label)}</button>`;
+          })
+          .join("");
+        return `
+          <div class="ss-pref-row ss-action-row">
+            <div class="ss-pref-meta">
+              <span class="ss-pref-label">${escapeHtml(row.label || "")}</span>
+              ${row.hint ? `<span class="ss-pref-hint">${escapeHtml(row.hint)}</span>` : ""}
+            </div>
+            <div class="ss-action-group">${btns}</div>
+          </div>
+        `;
+      })
+      .join("");
   };
 
   const areVisibleSettingsExpanded = () => {
@@ -288,6 +314,7 @@ export function initSectionSettings({
         `
         : "";
     const listHtml = sections.length ? `<div class="ss-list" data-section-settings-list></div>` : "";
+    const actionsSlotHtml = actionRows && actionRows.length ? `<div data-ss-action-rows></div>` : "";
     modalEl.innerHTML = `
       <div class="ss-modal">
         <div class="ss-header">
@@ -297,6 +324,7 @@ export function initSectionSettings({
         ${sortHtml}
         ${briefStyleHtml}
         ${showListenHtml}
+        ${actionsSlotHtml}
         ${listHeadHtml}
         ${listHtml}
         <div class="ss-footer">
@@ -316,6 +344,16 @@ export function initSectionSettings({
     modalEl.addEventListener("click", (e) => {
       if (e.target === modalEl || e.target.closest("[data-ss-close]")) {
         closeModal();
+        return;
+      }
+      const customBtn = e.target.closest("[data-ss-custom-action]");
+      if (customBtn && !customBtn.disabled) {
+        const [rIdx, bIdx] = String(customBtn.dataset.ssCustomAction || "").split(":").map(Number);
+        const btnCfg = actionRows?.[rIdx]?.buttons?.[bIdx];
+        if (typeof btnCfg?.onClick === "function") {
+          btnCfg.onClick();
+          renderActionRows();
+        }
         return;
       }
       if (e.target.closest("[data-ss-expand-all]")) {
@@ -501,6 +539,7 @@ export function initSectionSettings({
     if (sortConfig && typeof sortConfig.getValue === "function") {
       syncSortUi(sortConfig.getValue());
     }
+    renderActionRows();
     syncExpandAllUi();
     renderRows();
     modalEl.classList.remove("hidden");
