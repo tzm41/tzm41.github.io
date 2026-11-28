@@ -1236,17 +1236,20 @@ h3 {
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
 }
 
-.news-card:hover > .bookmark-btn:not(.is-saved),
-.news-card:focus-within > .bookmark-btn:not(.is-saved),
+@media (hover: hover) and (pointer: fine) {
+  .news-card:hover > .bookmark-btn:not(.is-saved),
+  .positive-card:hover > .bookmark-btn:not(.is-saved),
+  .geo-fact-popover:hover > .bookmark-btn:not(.is-saved),
+  .geo-mobile-card:hover > .bookmark-btn:not(.is-saved) {
+    opacity: 0.78;
+    pointer-events: auto;
+    transform: translateY(-10px);
+  }
+}
+
 .news-card.bm-card-revealed > .bookmark-btn:not(.is-saved),
-.positive-card:hover > .bookmark-btn:not(.is-saved),
-.positive-card:focus-within > .bookmark-btn:not(.is-saved),
 .positive-card.bm-card-revealed > .bookmark-btn:not(.is-saved),
-.geo-fact-popover:hover > .bookmark-btn:not(.is-saved),
-.geo-fact-popover:focus-within > .bookmark-btn:not(.is-saved),
 .geo-fact-popover.bm-card-revealed > .bookmark-btn:not(.is-saved),
-.geo-mobile-card:hover > .bookmark-btn:not(.is-saved),
-.geo-mobile-card:focus-within > .bookmark-btn:not(.is-saved),
 .geo-mobile-card.bm-card-revealed > .bookmark-btn:not(.is-saved) {
   opacity: 0.78;
   pointer-events: auto;
@@ -1265,29 +1268,28 @@ h3 {
   fill: currentColor;
 }
 
-.bookmark-btn:hover,
 .bookmark-btn:focus-visible {
   opacity: 1;
+  pointer-events: auto;
   color: var(--accent);
   transform: translateY(-4px);
 }
 
-.news-card:hover > .bookmark-btn:hover,
-.news-card:focus-within > .bookmark-btn:focus-visible,
-.news-card.bm-card-revealed > .bookmark-btn:hover,
-.positive-card:hover > .bookmark-btn:hover,
-.positive-card:focus-within > .bookmark-btn:focus-visible,
-.positive-card.bm-card-revealed > .bookmark-btn:hover,
-.geo-fact-popover:hover > .bookmark-btn:hover,
-.geo-fact-popover:focus-within > .bookmark-btn:focus-visible,
-.geo-fact-popover.bm-card-revealed > .bookmark-btn:hover,
-.geo-mobile-card:hover > .bookmark-btn:hover,
-.geo-mobile-card:focus-within > .bookmark-btn:focus-visible,
-.geo-mobile-card.bm-card-revealed > .bookmark-btn:hover,
-.bookmark-btn.is-saved:hover {
-  opacity: 1;
-  color: var(--accent);
-  transform: translateY(-4px);
+@media (hover: hover) and (pointer: fine) {
+  .bookmark-btn:hover,
+  .news-card:hover > .bookmark-btn:hover,
+  .news-card.bm-card-revealed > .bookmark-btn:hover,
+  .positive-card:hover > .bookmark-btn:hover,
+  .positive-card.bm-card-revealed > .bookmark-btn:hover,
+  .geo-fact-popover:hover > .bookmark-btn:hover,
+  .geo-fact-popover.bm-card-revealed > .bookmark-btn:hover,
+  .geo-mobile-card:hover > .bookmark-btn:hover,
+  .geo-mobile-card.bm-card-revealed > .bookmark-btn:hover,
+  .bookmark-btn.is-saved:hover {
+    opacity: 1;
+    color: var(--accent);
+    transform: translateY(-4px);
+  }
 }
 
 .share-btn {
@@ -1331,40 +1333,47 @@ h3 {
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
 }
 
-.news-card:hover > .share-btn:not(.is-copied),
-.news-card:focus-within > .share-btn:not(.is-copied),
+@media (hover: hover) and (pointer: fine) {
+  .news-card:hover > .share-btn:not(.is-copied),
+  .positive-card:hover > .share-btn:not(.is-copied),
+  .geo-fact-popover:hover > .share-btn:not(.is-copied),
+  .geo-mobile-card:hover > .share-btn:not(.is-copied) {
+    opacity: 0.78;
+    pointer-events: auto;
+    transform: translateY(-7px);
+  }
+}
+
 .news-card.bm-card-revealed > .share-btn:not(.is-copied),
-.positive-card:hover > .share-btn:not(.is-copied),
-.positive-card:focus-within > .share-btn:not(.is-copied),
 .positive-card.bm-card-revealed > .share-btn:not(.is-copied),
-.geo-fact-popover:hover > .share-btn:not(.is-copied),
-.geo-fact-popover:focus-within > .share-btn:not(.is-copied),
 .geo-fact-popover.bm-card-revealed > .share-btn:not(.is-copied),
-.geo-mobile-card:hover > .share-btn:not(.is-copied),
-.geo-mobile-card:focus-within > .share-btn:not(.is-copied),
 .geo-mobile-card.bm-card-revealed > .share-btn:not(.is-copied) {
   opacity: 0.78;
   pointer-events: auto;
   transform: translateY(-7px);
 }
 
-.share-btn:hover,
-.share-btn:focus-visible,
-.news-card:hover > .share-btn:hover,
-.news-card:focus-within > .share-btn:focus-visible,
-.news-card.bm-card-revealed > .share-btn:hover,
-.positive-card:hover > .share-btn:hover,
-.positive-card:focus-within > .share-btn:focus-visible,
-.positive-card.bm-card-revealed > .share-btn:hover,
-.geo-fact-popover:hover > .share-btn:hover,
-.geo-fact-popover:focus-within > .share-btn:focus-visible,
-.geo-fact-popover.bm-card-revealed > .share-btn:hover,
-.geo-mobile-card:hover > .share-btn:hover,
-.geo-mobile-card:focus-within > .share-btn:focus-visible,
-.geo-mobile-card.bm-card-revealed > .share-btn:hover {
+.share-btn:focus-visible {
   opacity: 1;
+  pointer-events: auto;
   color: var(--accent);
   transform: translateY(1px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .share-btn:hover,
+  .news-card:hover > .share-btn:hover,
+  .news-card.bm-card-revealed > .share-btn:hover,
+  .positive-card:hover > .share-btn:hover,
+  .positive-card.bm-card-revealed > .share-btn:hover,
+  .geo-fact-popover:hover > .share-btn:hover,
+  .geo-fact-popover.bm-card-revealed > .share-btn:hover,
+  .geo-mobile-card:hover > .share-btn:hover,
+  .geo-mobile-card.bm-card-revealed > .share-btn:hover {
+    opacity: 1;
+    color: var(--accent);
+    transform: translateY(1px);
+  }
 }
 
 .share-btn.is-copied {
@@ -1593,20 +1602,27 @@ h3 {
   margin-top: auto;
 }
 
+.section-title-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
 .collapse-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   padding: 0;
-  background: var(--surface-subtle);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--ink-secondary);
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  color: var(--ink-muted);
   cursor: pointer;
   flex-shrink: 0;
-  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 
 .collapse-btn .collapse-label {
@@ -1614,8 +1630,8 @@ h3 {
 }
 
 .collapse-btn:hover {
-  border-color: var(--border-strong);
   color: var(--ink);
+  background: var(--surface-subtle);
 }
 
 .collapsible-title {
@@ -1630,7 +1646,7 @@ h3 {
 
 .collapse-chevron {
   display: inline-block;
-  font-size: 13px;
+  font-size: 17px;
   line-height: 1;
   transition: transform 0.18s ease;
 }

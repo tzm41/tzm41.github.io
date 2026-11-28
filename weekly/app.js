@@ -591,6 +591,9 @@ function bindWorldMapEvents() {
       e.target.closest?.(".geo-chip") ||
       e.target.closest?.(".geo-fact-popover") ||
       e.target.closest?.(".geo-mobile-card") ||
+      e.target.closest?.(".floating-tip") ||
+      e.target.closest?.(".country-map-tip") ||
+      e.target.closest?.(".source-popover") ||
       e.target.closest?.(".tts-player")
     ) {
       return;

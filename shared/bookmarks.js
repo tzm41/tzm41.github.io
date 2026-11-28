@@ -875,10 +875,17 @@ export function bindBookmarkToggle(
     }
   };
 
+  const INTERACTIVE_SKIP_SEL =
+    ".bookmark-btn, .share-btn, .tts-btn, .card-toggle-btn, .bm-lang-btn, .source-chip, .country-mention[data-country-code], [data-company-domain], [data-wiki-title], [data-tooltip], .ticker-tag, a, button";
+
   const revealHandler = (e) => {
     if (e.pointerType !== "touch" && e.pointerType !== "pen") return;
     const target = e.target;
-    if (target?.closest?.(".bookmark-btn, .share-btn, .tts-btn")) return;
+    if (target?.closest?.(".bookmark-btn, .share-btn")) return;
+    if (target?.closest?.(INTERACTIVE_SKIP_SEL)) {
+      setRevealedCard(null);
+      return;
+    }
     const card = target?.closest?.(CARD_SELECTOR);
     if (card && root.contains(card)) {
       setRevealedCard(card);

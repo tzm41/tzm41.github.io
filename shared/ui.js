@@ -479,6 +479,16 @@ export function initScrollSpy() {
 
 /* ---------- Collapsible Sections & Expand/Collapse All ---------- */
 
+export function attachCollapseToHeading(btn, heading) {
+  if (!btn || !heading || !heading.parentElement) return;
+  if (heading.parentElement.classList.contains("section-title-group")) return;
+  const group = document.createElement("div");
+  group.className = "section-title-group";
+  heading.parentElement.insertBefore(group, heading);
+  group.appendChild(heading);
+  group.appendChild(btn);
+}
+
 export function anchorCollapsedSection(sectionEl) {
   if (!sectionEl || typeof window === "undefined") return;
   const rootStyle = getComputedStyle(document.documentElement);
@@ -542,10 +552,13 @@ export function createCollapsibleManager(btnExpandAll, { extraIsOpen = null, ext
     };
 
     btn.addEventListener("click", toggleFromUser);
-    const heading = btn.closest(".section-header, .sub-header")?.querySelector("h2, h3");
+    const heading = btn.closest(".section-header, .sub-header, .section-collapsed-bar")?.querySelector("h2, h3");
     if (heading) {
       heading.classList.add("collapsible-title");
       heading.addEventListener("click", toggleFromUser);
+      if (!btn.closest(".section-collapsed-bar")) {
+        attachCollapseToHeading(btn, heading);
+      }
     }
     if (navHash) {
       document.querySelector(`.nav-links a[href="${navHash}"]`)?.addEventListener("click", () => {

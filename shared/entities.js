@@ -796,6 +796,8 @@ export function initFloatingTooltips(getCompanyFacts = () => null) {
   });
 
   document.addEventListener("focusout", (e) => {
+    if (lastPointerType === "touch" || !canHover()) return;
+    if (e.relatedTarget && tip.contains(e.relatedTarget)) return;
     const el = e.target.closest?.(SEL);
     if (el && el === activeEl) hide();
   });

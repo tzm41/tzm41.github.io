@@ -1492,6 +1492,8 @@ export function initCountryMapTooltip(escapeHtml, renderFlagImg, getLeader = nul
   });
 
   document.addEventListener("focusout", (e) => {
+    if (lastPointerType === "touch" || !canHover()) return;
+    if (e.relatedTarget && card.contains(e.relatedTarget)) return;
     const el = e.target.closest?.(".country-mention[data-country-code]");
     if (el && el === activeEl) hide();
   });

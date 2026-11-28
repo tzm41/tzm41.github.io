@@ -16,6 +16,7 @@ import {
   renderEditionDate,
   initScrollSpy,
   focusSharedCardFromUrl,
+  attachCollapseToHeading,
   anchorCollapsedSection,
   createCollapsibleManager,
   renderSourceChip,
@@ -1166,6 +1167,7 @@ async function bootstrap() {
   if (localHeading) {
     localHeading.classList.add("collapsible-title");
     localHeading.addEventListener("click", () => setLocalExpanded(!state.localExpanded, { anchor: true }));
+    attachCollapseToHeading(els.btnToggleLocal, localHeading);
   }
 
   els.localLocationToggle?.addEventListener("click", (e) => {
