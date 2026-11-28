@@ -1971,11 +1971,46 @@ h3 {
   opacity: 0.52;
 }
 
-.ss-move-group {
+.ss-row.is-dragging {
+  position: relative;
+  z-index: 2;
+  background: var(--surface);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+}
+
+.ss-drag-handle {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  justify-content: center;
+  width: 24px;
+  height: 26px;
+  color: var(--ink-muted);
+  cursor: grab;
   flex-shrink: 0;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  border-radius: 4px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.ss-drag-handle svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.ss-drag-handle:hover,
+.ss-drag-handle:focus-visible {
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.ss-drag-handle:active,
+.ss-row.is-dragging .ss-drag-handle {
+  cursor: grabbing;
+  color: var(--accent);
 }
 
 .ss-label {

@@ -5,8 +5,7 @@
 
 import { escapeHtml } from "./utils.js";
 
-const UP_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>`;
-const DOWN_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>`;
+const GRIP_SVG = `<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="5.5" cy="3.5" r="1.25"/><circle cx="10.5" cy="3.5" r="1.25"/><circle cx="5.5" cy="8" r="1.25"/><circle cx="10.5" cy="8" r="1.25"/><circle cx="5.5" cy="12.5" r="1.25"/><circle cx="10.5" cy="12.5" r="1.25"/></svg>`;
 const EYE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
 const EYE_OFF_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
 
@@ -84,11 +83,18 @@ export function initSectionSettings({
   let current = normalizeSectionLayout(getInitialLayout(), sections);
   let modalEl = null;
 
+  const areVisibleSettingsExpanded = () => {
+    const hiddenSet = new Set(current.hidden);
+    const collapsedSet = new Set(current.collapsed);
+    const visibleIds = current.order.filter((id) => !hiddenSet.has(id));
+    return visibleIds.length > 0 && visibleIds.every((id) => !collapsedSet.has(id));
+  };
+
   const syncExpandAllUi = () => {
-    if (!modalEl || typeof areAllExpanded !== "function") return;
+    if (!modalEl) return;
     const btn = modalEl.querySelector("[data-ss-expand-all]");
     if (!btn) return;
-    const allOpen = Boolean(areAllExpanded());
+    const allOpen = areVisibleSettingsExpanded();
     btn.setAttribute("aria-expanded", String(allOpen));
     btn.textContent = allOpen ? "Collapse All" : "Expand All";
   };
@@ -171,6 +177,7 @@ export function initSectionSettings({
       collapsed: [...current.collapsed],
     });
     if (typeof onApplied === "function") onApplied(current);
+    syncExpandAllUi();
     renderRows();
   };
 
@@ -182,7 +189,7 @@ export function initSectionSettings({
     const visibleCount = current.order.length - hiddenSet.size;
 
     listEl.innerHTML = current.order
-      .map((id, idx) => {
+      .map((id) => {
         const def = sectionMap.get(id);
         if (!def) return "";
         const isHidden = hiddenSet.has(id);
@@ -190,10 +197,7 @@ export function initSectionSettings({
         const disableHide = !isHidden && visibleCount <= 1;
         return `
           <div class="ss-row${isHidden ? " is-hidden" : ""}" data-sec-id="${escapeHtml(id)}">
-            <div class="ss-move-group">
-              <button type="button" class="ss-icon-btn" data-ss-action="up" ${idx === 0 ? "disabled" : ""} aria-label="Move ${escapeHtml(def.label)} up" title="Move up">${UP_SVG}</button>
-              <button type="button" class="ss-icon-btn" data-ss-action="down" ${idx === current.order.length - 1 ? "disabled" : ""} aria-label="Move ${escapeHtml(def.label)} down" title="Move down">${DOWN_SVG}</button>
-            </div>
+            <span class="ss-drag-handle" role="button" tabindex="0" aria-label="Drag to reorder ${escapeHtml(def.label)}" title="Drag to reorder (or use Arrow Up/Down)">${GRIP_SVG}</span>
             <span class="ss-label">${escapeHtml(def.label)}</span>
             <div class="ss-controls">
               <button type="button" class="ss-pill-btn${isCollapsed ? " is-collapsed" : ""}" data-ss-action="toggle-collapse" ${isHidden ? "disabled" : ""} title="Default state on page load">
@@ -280,9 +284,17 @@ export function initSectionSettings({
         closeModal();
         return;
       }
-      if (e.target.closest("[data-ss-expand-all]") && typeof onToggleAll === "function") {
-        onToggleAll();
-        syncExpandAllUi();
+      if (e.target.closest("[data-ss-expand-all]")) {
+        const hiddenSet = new Set(current.hidden);
+        const visibleIds = current.order.filter((id) => !hiddenSet.has(id));
+        const nextCollapsed = new Set(current.collapsed);
+        if (areVisibleSettingsExpanded()) {
+          for (const id of visibleIds) nextCollapsed.add(id);
+        } else {
+          for (const id of visibleIds) nextCollapsed.delete(id);
+        }
+        current.collapsed = [...nextCollapsed];
+        commit();
         return;
       }
       const styleBtn = e.target.closest("[data-ss-brief-style]");
@@ -319,16 +331,7 @@ export function initSectionSettings({
       if (!id) return;
       const action = actionBtn.dataset.ssAction;
 
-      if (action === "up" || action === "down") {
-        const idx = current.order.indexOf(id);
-        const swap = action === "up" ? idx - 1 : idx + 1;
-        if (idx >= 0 && swap >= 0 && swap < current.order.length) {
-          const nextOrder = [...current.order];
-          [nextOrder[idx], nextOrder[swap]] = [nextOrder[swap], nextOrder[idx]];
-          current.order = nextOrder;
-          commit({ applyCollapseForId: "__none__" });
-        }
-      } else if (action === "toggle-hide") {
+      if (action === "toggle-hide") {
         const set = new Set(current.hidden);
         if (set.has(id)) {
           set.delete(id);
@@ -346,6 +349,94 @@ export function initSectionSettings({
         }
         current.collapsed = [...set];
         commit({ applyCollapseForId: id });
+      }
+    });
+
+    // Pointer-based drag-and-drop reordering on left drag handle (works on desktop + touch)
+    const listEl = modalEl.querySelector("[data-section-settings-list]");
+    let dragState = null;
+
+    listEl?.addEventListener("pointerdown", (e) => {
+      const handle = e.target.closest(".ss-drag-handle");
+      if (!handle || (e.pointerType === "mouse" && e.button !== 0)) return;
+      const row = handle.closest(".ss-row");
+      if (!row) return;
+      e.preventDefault();
+      try {
+        handle.setPointerCapture(e.pointerId);
+      } catch {
+        // Ignore capture failures
+      }
+      row.classList.add("is-dragging");
+      dragState = {
+        pointerId: e.pointerId,
+        handle,
+        row,
+        initialOrder: current.order.join(","),
+      };
+    });
+
+    listEl?.addEventListener("pointermove", (e) => {
+      if (!dragState || e.pointerId !== dragState.pointerId) return;
+      e.preventDefault();
+      const { row } = dragState;
+      const siblings = [...listEl.querySelectorAll(".ss-row:not(.is-dragging)")];
+      let insertBeforeEl = null;
+      for (const sib of siblings) {
+        const rect = sib.getBoundingClientRect();
+        if (e.clientY < rect.top + rect.height / 2) {
+          insertBeforeEl = sib;
+          break;
+        }
+      }
+      if (insertBeforeEl) {
+        if (row.nextElementSibling !== insertBeforeEl) {
+          listEl.insertBefore(row, insertBeforeEl);
+        }
+      } else if (listEl.lastElementChild !== row) {
+        listEl.appendChild(row);
+      }
+    });
+
+    const finishDrag = (e) => {
+      if (!dragState || e.pointerId !== dragState.pointerId) return;
+      const { handle, row, initialOrder } = dragState;
+      dragState = null;
+      try {
+        handle.releasePointerCapture(e.pointerId);
+      } catch {
+        // Ignore
+      }
+      row.classList.remove("is-dragging");
+      const nextOrder = [...listEl.querySelectorAll(".ss-row")]
+        .map((el) => el.dataset.secId)
+        .filter(Boolean);
+      if (nextOrder.length === current.order.length && nextOrder.join(",") !== initialOrder) {
+        current.order = nextOrder;
+        commit({ applyCollapseForId: "__none__" });
+      }
+    };
+
+    listEl?.addEventListener("pointerup", finishDrag);
+    listEl?.addEventListener("pointercancel", finishDrag);
+
+    // Keyboard ArrowUp / ArrowDown reordering on focused drag handle
+    listEl?.addEventListener("keydown", (e) => {
+      if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+      const handle = e.target.closest(".ss-drag-handle");
+      if (!handle) return;
+      const row = handle.closest(".ss-row");
+      const id = row?.dataset?.secId;
+      if (!id) return;
+      const idx = current.order.indexOf(id);
+      const swap = e.key === "ArrowUp" ? idx - 1 : idx + 1;
+      if (idx >= 0 && swap >= 0 && swap < current.order.length) {
+        e.preventDefault();
+        const nextOrder = [...current.order];
+        [nextOrder[idx], nextOrder[swap]] = [nextOrder[swap], nextOrder[idx]];
+        current.order = nextOrder;
+        commit({ applyCollapseForId: "__none__" });
+        listEl.querySelector(`.ss-row[data-sec-id="${CSS.escape(id)}"] .ss-drag-handle`)?.focus();
       }
     });
 

@@ -39,8 +39,8 @@ Consolidated user-experience, visual, and interaction specification across `coli
 ## 3. Section Layout Settings (Show/Hide, Collapse on Load, Reorder)
 - **Accessible Everywhere:** Sliders button in the masthead on both **Daily Briefing** and **Weekly Briefing** opens the **Customize** modal (header title only, no subtitle).
 - **Bulk & Per-Section Controls:**
-  - **Expand All / Collapse All:** Located directly above the sections list inside the Customize modal (toggles all currently visible sections).
-  - **Reorder (`↑` / `↓`):** Reorders both `<section>` blocks in `<main>` and their corresponding sticky `<nav>` links. Replaces the old single-purpose Positive News placement button.
+  - **Expand All / Collapse All:** Located directly above the sections list inside the Customize modal; toggles and persists the `Expanded`/`Collapsed` state of all visible individual sections in sync.
+  - **Reorder (Drag Handle):** Left-side 6-dot drag-and-drop handle (pointer-based for both desktop and touch, plus keyboard `ArrowUp`/`ArrowDown`) reorders both `<section>` blocks in `<main>` and their corresponding sticky `<nav>` links. Replaces the old single-purpose Positive News placement button.
   - **Expanded / Collapsed on Load:** Chooses whether each section starts expanded or collapsed on page load (including Overview/Briefs and Top News).
   - **Show / Hide (Eye Toggle):** Hides both the section and its sticky nav link (at least one section must remain visible).
   - **Reset to Defaults:** Restores default order, visibility, and collapse states in one click.
