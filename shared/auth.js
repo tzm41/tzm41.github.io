@@ -423,13 +423,12 @@ function updateBookmarkCountUi() {
 
 function buildStatePayload() {
   const { items, deleted } = exportForSync();
-  const { show_listen: _localOnlyListen, ...syncPrefs } = getLocalPreferences();
   return {
     schema_version: 1,
     base_rev: session?.rev ?? 0,
     base_hash: session?.hash ?? "",
     rev_sig: session?.rev_sig ?? "",
-    preferences: syncPrefs,
+    preferences: getLocalPreferences(),
     bookmarks: items,
     deleted,
   };
