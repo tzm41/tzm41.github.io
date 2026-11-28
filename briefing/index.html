@@ -38,7 +38,7 @@
   <script src="../shared/theme-boot.js"></script>
   <link rel="stylesheet" href="../shared/tokens.css?v=2">
   <link rel="stylesheet" href="../shared/auth.css?v=2">
-  <link rel="stylesheet" href="../shared/briefing-base.css?v=9">
+  <link rel="stylesheet" href="../shared/briefing-base.css?v=10">
   <link rel="stylesheet" href="./styles.css?v=64">
 </head>
 <body>
@@ -79,6 +79,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
         </button>
 
+        <button type="button" id="btn-section-settings" class="masthead-icon-btn" aria-label="Customize sections" title="Customize sections">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+        </button>
+
         <button type="button" id="theme-toggle" class="masthead-icon-btn" aria-label="Toggle color theme" title="Toggle color theme"></button>
         <div id="auth-mount" class="auth-mount"></div>
       </div>
@@ -105,40 +109,49 @@
 
     <!-- 1. Executive Brief & KPI Strip -->
     <section id="executive" class="section executive-section">
-      <div class="kpi-wrapper" id="kpi-wrapper">
-        <button type="button" class="kpi-mobile-toggle" id="btn-toggle-kpi" aria-expanded="false" aria-controls="kpi-strip">
-          <span class="kpi-toggle-title" id="kpi-toggle-summary">Snapshot &amp; Signals</span>
-          <span class="kpi-toggle-action">
-            <span class="collapse-label">Expand</span>
-            <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
-          </span>
+      <div class="section-collapsed-bar">
+        <h2>Overview &amp; Briefs</h2>
+        <button type="button" class="collapse-btn" id="btn-toggle-executive" aria-expanded="true" aria-controls="executive-body">
+          <span class="collapse-label">Collapse</span>
+          <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
         </button>
-        <div class="kpi-strip" id="kpi-strip"></div>
       </div>
-
-      <article class="brief-panel">
-        <div class="panel-header">
-          <div>
-            <h2>Morning Brief</h2>
-          </div>
-          <span class="mode-tag" id="synthesis-mode-tag"></span>
+      <div id="executive-body">
+        <div class="kpi-wrapper" id="kpi-wrapper">
+          <button type="button" class="kpi-mobile-toggle" id="btn-toggle-kpi" aria-expanded="false" aria-controls="kpi-strip">
+            <span class="kpi-toggle-title" id="kpi-toggle-summary">Snapshot &amp; Signals</span>
+            <span class="kpi-toggle-action">
+              <span class="collapse-label">Expand</span>
+              <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+            </span>
+          </button>
+          <div class="kpi-strip" id="kpi-strip"></div>
         </div>
-        <ul class="executive-list" id="executive-list">
-          <li class="skeleton-line"></li>
-          <li class="skeleton-line"></li>
-          <li class="skeleton-line"></li>
-        </ul>
-      </article>
 
-      <article class="brief-panel afternoon-panel hidden" id="afternoon-panel">
-        <div class="panel-header">
-          <div>
-            <h2>Afternoon Brief</h2>
+        <article class="brief-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Morning Brief</h2>
+            </div>
+            <span class="mode-tag" id="synthesis-mode-tag"></span>
           </div>
-          <span class="mode-tag" id="afternoon-time-tag"></span>
-        </div>
-        <ul class="executive-list" id="afternoon-list"></ul>
-      </article>
+          <ul class="executive-list" id="executive-list">
+            <li class="skeleton-line"></li>
+            <li class="skeleton-line"></li>
+            <li class="skeleton-line"></li>
+          </ul>
+        </article>
+
+        <article class="brief-panel afternoon-panel hidden" id="afternoon-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Afternoon Brief</h2>
+            </div>
+            <span class="mode-tag" id="afternoon-time-tag"></span>
+          </div>
+          <ul class="executive-list" id="afternoon-list"></ul>
+        </article>
+      </div>
     </section>
 
     <!-- 2. Top News -->
@@ -147,15 +160,23 @@
         <div>
           <h2>Top News</h2>
         </div>
-        <div class="filter-group" id="news-filters" role="tablist" aria-label="Filter news by category">
-          <button type="button" class="filter-btn" data-category="World" role="tab" aria-selected="false">World</button>
-          <button type="button" class="filter-btn" data-category="Economy" role="tab" aria-selected="false">Economy</button>
-          <button type="button" class="filter-btn" data-category="Tech" role="tab" aria-selected="false">Tech</button>
-          <button type="button" class="filter-btn" data-category="Policy" role="tab" aria-selected="false">Policy</button>
-          <button type="button" class="filter-btn" data-category="Science" role="tab" aria-selected="false">Science</button>
+        <div class="section-actions">
+          <div class="filter-group" id="news-filters" role="tablist" aria-label="Filter news by category">
+            <button type="button" class="filter-btn" data-category="World" role="tab" aria-selected="false">World</button>
+            <button type="button" class="filter-btn" data-category="Economy" role="tab" aria-selected="false">Economy</button>
+            <button type="button" class="filter-btn" data-category="Tech" role="tab" aria-selected="false">Tech</button>
+            <button type="button" class="filter-btn" data-category="Policy" role="tab" aria-selected="false">Policy</button>
+            <button type="button" class="filter-btn" data-category="Science" role="tab" aria-selected="false">Science</button>
+          </div>
+          <button type="button" class="collapse-btn" id="btn-toggle-news" aria-expanded="true" aria-controls="news-body">
+            <span class="collapse-label">Collapse</span>
+            <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
+          </button>
         </div>
       </div>
-      <div class="news-grid" id="news-grid"></div>
+      <div id="news-body">
+        <div class="news-grid" id="news-grid"></div>
+      </div>
     </section>
 
     <!-- 3. Markets & Sector Heatmap -->
@@ -299,7 +320,6 @@
           <h2>Positive News</h2>
         </div>
         <div class="section-actions">
-          <button type="button" class="collapse-btn" id="btn-move-positive" title="Toggle Positive News placement">Move below Brief &uarr;</button>
           <button type="button" class="collapse-btn" id="btn-toggle-positive" aria-expanded="false" aria-controls="positive-news-slot">
             <span class="collapse-label">Expand</span>
             <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
@@ -318,6 +338,6 @@
     </div>
   </footer>
 
-  <script type="module" src="./app.js?v=115"></script>
+  <script type="module" src="./app.js?v=116"></script>
 </body>
 </html>

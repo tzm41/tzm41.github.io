@@ -37,6 +37,7 @@ import {
   getLocalPreferences,
   setPreference,
 } from "../shared/auth.js";
+import { initSectionSettings } from "../shared/section-settings.js";
 import { createArchiveController } from "../shared/archive-nav.js";
 import {
   renderBriefBullets as renderSharedBriefBullets,
@@ -118,7 +119,7 @@ const els = {
   topicsList: document.getElementById("topics-list"),
   positiveSection: document.getElementById("positive"),
   positiveNewsSlot: document.getElementById("positive-news-slot"),
-  btnMovePositive: document.getElementById("btn-move-positive"),
+  btnSectionSettings: document.getElementById("btn-section-settings"),
   localSection: document.getElementById("local-news"),
   localLocationToggle: document.getElementById("local-location-toggle"),
   localLangToggle: document.getElementById("local-lang-toggle"),
@@ -869,36 +870,6 @@ async function loadBriefingForDate(dateStr) {
   }
 }
 
-function applyPositivePlacement(pos) {
-  const placement = pos === "top" ? "top" : "bottom";
-  const positiveSec = els.positiveSection;
-  const execSec = document.getElementById("executive");
-  const appRoot = document.getElementById("app-root");
-  if (positiveSec && execSec && appRoot) {
-    if (placement === "top") {
-      execSec.insertAdjacentElement("afterend", positiveSec);
-    } else {
-      appRoot.appendChild(positiveSec);
-    }
-  }
-
-  const navLinks = document.querySelector(".nav-links");
-  const posLink = navLinks?.querySelector('a[href="#positive"]');
-  const execLink = navLinks?.querySelector('a[href="#executive"]');
-  if (posLink && execLink && navLinks) {
-    if (placement === "top") {
-      execLink.insertAdjacentElement("afterend", posLink);
-    } else {
-      navLinks.appendChild(posLink);
-    }
-  }
-
-  if (els.btnMovePositive) {
-    els.btnMovePositive.innerHTML =
-      placement === "top" ? "Move to bottom &darr;" : "Move below Brief &uarr;";
-  }
-}
-
 async function bootstrap() {
   const initialPrefs = getLocalPreferences();
   if (initialPrefs?.local_region) state.localRegionId = initialPrefs.local_region;
@@ -916,9 +887,6 @@ async function bootstrap() {
     if (state.briefing) renderSectorHeatmap(state.briefing.markets);
   });
 
-  applyPositivePlacement(
-    initialPrefs?.positive_pos || localStorage.getItem("briefing-positive-pos") || "bottom"
-  );
   initScrollSpy();
   initSparklineHover();
   initEntityOverlays({
@@ -954,35 +922,53 @@ async function bootstrap() {
     setKpiOpen(next);
   });
 
-  // Collapsible sections (collapsed by default on load): Markets, Global Conflicts, US Politics, Positive News
+  // Collapsible sections: Overview, Top News, Markets, Global Conflicts, US Politics, Local News, Positive News
   const { wireCollapsible, syncExpandAllButton: syncAll } = createCollapsibleManager(els.btnExpandAll, {
     extraIsOpen: () => {
-      const localVisible = els.localSection && !els.localSection.classList.contains("hidden");
+      const localVisible =
+        els.localSection &&
+        !els.localSection.classList.contains("hidden") &&
+        !els.localSection.classList.contains("section-user-hidden");
       return !localVisible || state.localExpanded;
     },
     extraSetOpen: (open) => {
       setKpiOpen(open);
-      if (els.localSection && !els.localSection.classList.contains("hidden")) {
+      if (
+        els.localSection &&
+        !els.localSection.classList.contains("hidden") &&
+        !els.localSection.classList.contains("section-user-hidden")
+      ) {
         setLocalExpanded(open);
       }
     },
   });
   syncExpandAllButton = syncAll;
+  const setExecutiveOpen = wireCollapsible("btn-toggle-executive", "executive-body", "#executive");
+  const setNewsOpen = wireCollapsible("btn-toggle-news", "news-body", "#news");
   const setMarketsOpen = wireCollapsible("btn-toggle-markets", "markets-body", "#markets");
   wireCollapsible("btn-toggle-heatmap", "sector-heatmap");
-  wireCollapsible("btn-toggle-conflicts", "conflicts-body", "#conflicts");
-  wireCollapsible("btn-toggle-politics", "politics-body", "#politics");
-  wireCollapsible("btn-toggle-positive", "positive-news-slot", "#positive");
-  syncExpandAllButton();
+  const setConflictsOpen = wireCollapsible("btn-toggle-conflicts", "conflicts-body", "#conflicts");
+  const setPoliticsOpen = wireCollapsible("btn-toggle-politics", "politics-body", "#politics");
+  const setPositiveOpen = wireCollapsible("btn-toggle-positive", "positive-news-slot", "#positive");
 
-  // Positive News placement toggle (above Top News vs bottom)
-  els.btnMovePositive?.addEventListener("click", () => {
-    const cur = localStorage.getItem("briefing-positive-pos") || "bottom";
-    const next = cur === "top" ? "bottom" : "top";
-    setPreference("positive_pos", next);
-    applyPositivePlacement(next);
-    els.positiveSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const sectionSettings = initSectionSettings({
+    prefKey: "daily_sections",
+    pageLabel: "Daily Briefing",
+    triggerBtn: els.btnSectionSettings,
+    getInitialLayout: () => initialPrefs?.daily_sections || null,
+    onSave: (layout) => setPreference("daily_sections", layout),
+    onApplied: () => syncExpandAllButton(),
+    sections: [
+      { id: "executive", label: "Overview & Briefs", defaultCollapsed: false, setOpen: setExecutiveOpen },
+      { id: "news", label: "Top News", defaultCollapsed: false, setOpen: setNewsOpen },
+      { id: "markets", label: "Stock Market Trends", defaultCollapsed: true, setOpen: setMarketsOpen },
+      { id: "conflicts", label: "Global Conflict Tracker", defaultCollapsed: true, setOpen: setConflictsOpen },
+      { id: "politics", label: "US Politics Pulse", defaultCollapsed: true, setOpen: setPoliticsOpen },
+      { id: "local-news", label: "Local News", defaultCollapsed: true, setOpen: (open) => setLocalExpanded(open) },
+      { id: "positive", label: "Positive News", defaultCollapsed: true, setOpen: setPositiveOpen },
+    ],
   });
+  syncExpandAllButton();
 
   // Delegated expand/collapse for continued-from-yesterday news cards
   document.getElementById("app-root")?.addEventListener("click", (e) => {
@@ -1100,9 +1086,8 @@ async function bootstrap() {
         themeCtrl.apply(prefs.theme, { silent: true, persist: true });
         if (state.briefing) renderSectorHeatmap(state.briefing.markets);
       }
-      if (prefs.positive_pos && (prefs.positive_pos === "top" || prefs.positive_pos === "bottom")) {
-        localStorage.setItem("briefing-positive-pos", prefs.positive_pos);
-        applyPositivePlacement(prefs.positive_pos);
+      if (prefs.daily_sections !== undefined) {
+        sectionSettings.applyLayout(prefs.daily_sections, { applyCollapse: true });
       }
       let localChanged = false;
       if (prefs.local_region && prefs.local_region !== state.localRegionId) {

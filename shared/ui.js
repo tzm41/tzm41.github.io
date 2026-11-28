@@ -272,7 +272,7 @@ export function initScrollSpy() {
 
   const updateActive = () => {
     const visiblePairs = pairs
-      .filter(({ section }) => !section.classList.contains("hidden"))
+      .filter(({ section }) => !section.classList.contains("hidden") && !section.classList.contains("section-user-hidden"))
       .sort((a, b) => a.section.getBoundingClientRect().top - b.section.getBoundingClientRect().top);
     if (!visiblePairs.length) return;
 
@@ -338,7 +338,7 @@ export function createCollapsibleManager(btnExpandAll, { extraIsOpen = null, ext
   const controllers = [];
 
   const areAllExpanded = () => {
-    const coreOpen = controllers.every((c) => c.isOpen());
+    const coreOpen = controllers.every((c) => !c.isVisible() || c.isOpen());
     return coreOpen && (typeof extraIsOpen === "function" ? extraIsOpen() : true);
   };
 
@@ -354,16 +354,21 @@ export function createCollapsibleManager(btnExpandAll, { extraIsOpen = null, ext
     const btn = document.getElementById(btnId);
     const body = document.getElementById(bodyId);
     if (!btn || !body) return null;
+    const sectionEl = body.closest("section");
 
     const setOpen = (open) => {
       body.classList.toggle("hidden", !open);
+      if (sectionEl) sectionEl.classList.toggle("is-section-collapsed", !open);
       btn.setAttribute("aria-expanded", String(open));
       const lbl = btn.querySelector(".collapse-label");
       if (lbl) lbl.textContent = open ? "Collapse" : "Expand";
       syncExpandAllButton();
     };
     const isOpen = () => !body.classList.contains("hidden");
-    controllers.push({ setOpen, isOpen });
+    const isVisible = () =>
+      !sectionEl ||
+      (!sectionEl.classList.contains("hidden") && !sectionEl.classList.contains("section-user-hidden"));
+    controllers.push({ setOpen, isOpen, isVisible });
 
     btn.addEventListener("click", () => {
       setOpen(body.classList.contains("hidden"));

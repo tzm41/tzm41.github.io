@@ -30,6 +30,8 @@ const PREF_KEYS = new Set([
   "market_tf",
   "world_kind_filter",
   "brief_style",
+  "daily_sections",
+  "weekly_sections",
   "updated_at",
 ]);
 const THEME_VALS = new Set(["system", "light", "dark"]);
@@ -38,6 +40,9 @@ const LANG_VALS = new Set(["native", "en"]);
 const MARKET_TF_VALS = new Set(["1d", "5d", "30d"]);
 const WORLD_KIND_VALS = new Set(["all", "geology", "cuisine"]);
 const BRIEF_STYLE_VALS = new Set(["regular", "bullets"]);
+const DAILY_SECTION_IDS = new Set(["executive", "news", "markets", "conflicts", "politics", "local-news", "positive"]);
+const WEEKLY_SECTION_IDS = new Set(["overview", "science", "culture", "history", "around-world", "longreads", "pulse"]);
+const SECTION_LAYOUT_KEYS = new Set(["order", "hidden", "collapsed"]);
 
 const BOOKMARK_KEYS = new Set([
   "edition",
@@ -313,6 +318,41 @@ function validatePreferences(raw) {
         }
         out.brief_style = val;
         break;
+      case "daily_sections":
+      case "weekly_sections": {
+        if (val === null) {
+          out[key] = null;
+          break;
+        }
+        if (!isPlainObject(val)) {
+          return { ok: false, message: `Invalid preferences.${key}.` };
+        }
+        const allowedIds = key === "daily_sections" ? DAILY_SECTION_IDS : WEEKLY_SECTION_IDS;
+        const cleanLayout = {};
+        for (const sub of Object.keys(val)) {
+          if (FORBIDDEN_KEYS.has(sub) || !SECTION_LAYOUT_KEYS.has(sub)) {
+            return { ok: false, message: `Unknown key in preferences.${key}: ${sub}` };
+          }
+          const arr = val[sub];
+          if (!Array.isArray(arr) || arr.length > allowedIds.size) {
+            return { ok: false, message: `Invalid preferences.${key}.${sub}.` };
+          }
+          const deduped = [];
+          const seen = new Set();
+          for (const id of arr) {
+            if (typeof id !== "string" || !allowedIds.has(id)) {
+              return { ok: false, message: `Invalid section id in preferences.${key}.${sub}.` };
+            }
+            if (!seen.has(id)) {
+              seen.add(id);
+              deduped.push(id);
+            }
+          }
+          cleanLayout[sub] = deduped;
+        }
+        out[key] = cleanLayout;
+        break;
+      }
       case "updated_at":
         if (!isNonNegativeInt(val)) {
           return { ok: false, message: "Invalid preferences.updated_at." };

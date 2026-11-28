@@ -24,7 +24,6 @@ const PREFS_KEY = "briefing-prefs-v1";
 const DIRTY_KEY = "briefing-sync-dirty-v1";
 const LAST_SYNC_SESSION_KEY = "briefing-last-sync-ms";
 const THEME_KEY = "briefing-theme";
-const POSITIVE_POS_KEY = "briefing-positive-pos";
 
 const GIS_SCRIPT_URL = "https://accounts.google.com/gsi/client";
 const GIS_LOAD_TIMEOUT_MS = 8000;
@@ -32,7 +31,15 @@ const DEBOUNCE_PUSH_MS = 2000;
 const FRESH_SYNC_SKIP_MS = 30000;
 const KEEPALIVE_MAX_BYTES = 48 * 1024;
 
-const PREF_SUBKEYS = ["local_region", "local_lang", "market_tf", "world_kind_filter", "brief_style"];
+const PREF_SUBKEYS = [
+  "local_region",
+  "local_lang",
+  "market_tf",
+  "world_kind_filter",
+  "brief_style",
+  "daily_sections",
+  "weekly_sections",
+];
 
 /* ---------- State ---------- */
 
@@ -151,21 +158,20 @@ function recordLastSyncNow() {
 export function getLocalPreferences() {
   const blob = readJson(typeof localStorage !== "undefined" ? localStorage : null, PREFS_KEY) || {};
   let theme = "system";
-  let positivePos = null;
   try {
     theme = localStorage.getItem(THEME_KEY) || "system";
-    positivePos = localStorage.getItem(POSITIVE_POS_KEY) || null;
   } catch {
     // Ignore
   }
   return {
     theme,
-    positive_pos: positivePos,
     local_region: blob.local_region ?? null,
     local_lang: blob.local_lang ?? null,
     market_tf: blob.market_tf ?? null,
     world_kind_filter: blob.world_kind_filter ?? null,
     brief_style: blob.brief_style ?? "regular",
+    daily_sections: blob.daily_sections ?? null,
+    weekly_sections: blob.weekly_sections ?? null,
     updated_at: Number.isFinite(Number(blob.updated_at)) ? Math.floor(Number(blob.updated_at)) : 0,
   };
 }
@@ -175,9 +181,6 @@ function persistLocalPreferencesRaw(prefs) {
     if (prefs.theme === "system" || prefs.theme === "light" || prefs.theme === "dark") {
       localStorage.setItem(THEME_KEY, prefs.theme);
     }
-    if (prefs.positive_pos === "top" || prefs.positive_pos === "bottom") {
-      localStorage.setItem(POSITIVE_POS_KEY, prefs.positive_pos);
-    }
     const existing = readJson(localStorage, PREFS_KEY) || {};
     const nextBlob = {
       ...existing,
@@ -186,6 +189,8 @@ function persistLocalPreferencesRaw(prefs) {
       market_tf: prefs.market_tf ?? existing.market_tf ?? null,
       world_kind_filter: prefs.world_kind_filter ?? existing.world_kind_filter ?? null,
       brief_style: prefs.brief_style ?? existing.brief_style ?? "regular",
+      daily_sections: prefs.daily_sections !== undefined ? prefs.daily_sections : (existing.daily_sections ?? null),
+      weekly_sections: prefs.weekly_sections !== undefined ? prefs.weekly_sections : (existing.weekly_sections ?? null),
       updated_at: Number.isFinite(Number(prefs.updated_at))
         ? Math.floor(Number(prefs.updated_at))
         : Math.floor(Date.now() / 1000),
@@ -202,8 +207,6 @@ export function setPreference(key, value) {
     const blob = readJson(localStorage, PREFS_KEY) || {};
     if (key === "theme") {
       localStorage.setItem(THEME_KEY, String(value));
-    } else if (key === "positive_pos") {
-      localStorage.setItem(POSITIVE_POS_KEY, String(value));
     } else if (PREF_SUBKEYS.includes(key)) {
       blob[key] = value;
     } else {
@@ -229,7 +232,7 @@ function mergePreferences(localPrefs, remotePrefs) {
   const remoteTs = Number(remotePrefs?.updated_at || 0);
   const cloudWins = remoteTs > localTs;
 
-  const keys = ["theme", "positive_pos", ...PREF_SUBKEYS];
+  const keys = ["theme", ...PREF_SUBKEYS];
   const merged = { updated_at: Math.max(localTs, remoteTs) };
   for (const k of keys) {
     const lv = localPrefs?.[k] ?? null;
@@ -242,9 +245,10 @@ function mergePreferences(localPrefs, remotePrefs) {
   }
   if (!merged.theme) merged.theme = "system";
 
-  const localChanged = keys.some((k) => (merged[k] ?? null) !== (localPrefs?.[k] ?? null)) ||
+  const eq = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+  const localChanged = keys.some((k) => !eq(merged[k], localPrefs?.[k])) ||
     merged.updated_at !== localTs;
-  const differsFromRemote = keys.some((k) => (merged[k] ?? null) !== (remotePrefs?.[k] ?? null));
+  const differsFromRemote = keys.some((k) => !eq(merged[k], remotePrefs?.[k]));
 
   return { merged, localChanged, differsFromRemote };
 }

@@ -38,6 +38,7 @@ import {
   getLocalPreferences,
   setPreference,
 } from "../shared/auth.js";
+import { initSectionSettings } from "../shared/section-settings.js";
 import { createArchiveController } from "../shared/archive-nav.js";
 import {
   renderBriefBullets as renderSharedBriefBullets,
@@ -775,6 +776,34 @@ async function bootstrap() {
   });
   bindBookmarkCountBadge(els.navBookmarksCount, { syncButtons: true });
 
+  // Wire collapsible sections and section layout settings
+  const setOverviewOpen = collapsibles.wireCollapsible("btn-toggle-overview", "overview-body", "#overview");
+  const setScienceOpen = collapsibles.wireCollapsible("btn-toggle-science", "science-body", "#science");
+  const setCultureOpen = collapsibles.wireCollapsible("btn-toggle-culture", "culture-body", "#culture");
+  const setHistoryOpen = collapsibles.wireCollapsible("btn-toggle-history", "history-body", "#history");
+  const setWorldOpen = collapsibles.wireCollapsible("btn-toggle-world", "around-world-body", "#around-world");
+  const setLongreadsOpen = collapsibles.wireCollapsible("btn-toggle-longreads", "longreads-body", "#longreads");
+  const setPulseOpen = collapsibles.wireCollapsible("btn-toggle-pulse", "pulse-body", "#pulse");
+
+  const sectionSettings = initSectionSettings({
+    prefKey: "weekly_sections",
+    pageLabel: "Weekly Briefing",
+    triggerBtn: document.getElementById("btn-section-settings"),
+    getInitialLayout: () => initialPrefs?.weekly_sections || null,
+    onSave: (layout) => setPreference("weekly_sections", layout),
+    onApplied: () => collapsibles.syncExpandAllButton(),
+    sections: [
+      { id: "overview", label: "Sunday Digest", defaultCollapsed: false, setOpen: setOverviewOpen },
+      { id: "science", label: "Science & Discovery", defaultCollapsed: false, setOpen: setScienceOpen },
+      { id: "culture", label: "Culture & Arts", defaultCollapsed: false, setOpen: setCultureOpen },
+      { id: "history", label: "History & Archaeology", defaultCollapsed: false, setOpen: setHistoryOpen },
+      { id: "around-world", label: "Around the World", defaultCollapsed: false, setOpen: setWorldOpen },
+      { id: "longreads", label: "Long Reads & Essays", defaultCollapsed: true, setOpen: setLongreadsOpen },
+      { id: "pulse", label: "Week in Brief", defaultCollapsed: true, setOpen: setPulseOpen },
+    ],
+  });
+  collapsibles.syncExpandAllButton();
+
   initAuth({
     mountEl: els.authMount,
     bookmarksHref: "../bookmarks/",
@@ -782,6 +811,9 @@ async function bootstrap() {
       if (!prefs || typeof prefs !== "object") return;
       if (prefs.theme && ["system", "light", "dark"].includes(prefs.theme)) {
         themeCtrl.apply(prefs.theme, { silent: true, persist: true });
+      }
+      if (prefs.weekly_sections !== undefined) {
+        sectionSettings.applyLayout(prefs.weekly_sections, { applyCollapse: true });
       }
       if (
         prefs.world_kind_filter &&
@@ -802,19 +834,6 @@ async function bootstrap() {
       }
     },
   });
-
-  // Wire collapsible sections (Science, Culture, History, Around the World open by default; Long Reads & Week in Brief collapsed)
-  const setScienceOpen = collapsibles.wireCollapsible("btn-toggle-science", "science-body", "#science");
-  const setCultureOpen = collapsibles.wireCollapsible("btn-toggle-culture", "culture-body", "#culture");
-  const setHistoryOpen = collapsibles.wireCollapsible("btn-toggle-history", "history-body", "#history");
-  const setWorldOpen = collapsibles.wireCollapsible("btn-toggle-world", "around-world-body", "#around-world");
-  collapsibles.wireCollapsible("btn-toggle-longreads", "longreads-body", "#longreads");
-  collapsibles.wireCollapsible("btn-toggle-pulse", "pulse-body", "#pulse");
-  setScienceOpen?.(true);
-  setCultureOpen?.(true);
-  setHistoryOpen?.(true);
-  setWorldOpen?.(true);
-  collapsibles.syncExpandAllButton();
 
   archiveNav.bind();
 
