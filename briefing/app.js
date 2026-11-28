@@ -16,6 +16,7 @@ import {
   renderEditionDate,
   initScrollSpy,
   focusSharedCardFromUrl,
+  anchorCollapsedSection,
   createCollapsibleManager,
   renderSourceChip,
   showToast,
@@ -754,15 +755,20 @@ function renderPositiveNews(positiveNews) {
 
 let syncExpandAllButton = () => {};
 
-function setLocalExpanded(expanded) {
+function setLocalExpanded(expanded, { anchor = false } = {}) {
   state.localExpanded = Boolean(expanded);
   if (els.localNewsBody) {
     els.localNewsBody.classList.toggle("hidden", !state.localExpanded);
   }
   if (els.btnToggleLocal) {
     els.btnToggleLocal.setAttribute("aria-expanded", String(state.localExpanded));
+    els.btnToggleLocal.setAttribute("aria-label", state.localExpanded ? "Collapse section" : "Expand section");
+    els.btnToggleLocal.title = state.localExpanded ? "Collapse" : "Expand";
     const lbl = els.btnToggleLocal.querySelector(".collapse-label");
     if (lbl) lbl.textContent = state.localExpanded ? "Collapse" : "Expand";
+  }
+  if (!state.localExpanded && anchor) {
+    anchorCollapsedSection(els.localSection);
   }
   syncExpandAllButton();
 }
@@ -1154,12 +1160,12 @@ async function bootstrap() {
 
   // Local news expand/collapse & location toggle
   els.btnToggleLocal?.addEventListener("click", () => {
-    setLocalExpanded(!state.localExpanded);
+    setLocalExpanded(!state.localExpanded, { anchor: true });
   });
   const localHeading = els.localSection?.querySelector(".section-header h2");
   if (localHeading) {
     localHeading.classList.add("collapsible-title");
-    localHeading.addEventListener("click", () => setLocalExpanded(!state.localExpanded));
+    localHeading.addEventListener("click", () => setLocalExpanded(!state.localExpanded, { anchor: true }));
   }
 
   els.localLocationToggle?.addEventListener("click", (e) => {

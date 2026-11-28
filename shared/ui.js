@@ -479,6 +479,19 @@ export function initScrollSpy() {
 
 /* ---------- Collapsible Sections & Expand/Collapse All ---------- */
 
+export function anchorCollapsedSection(sectionEl) {
+  if (!sectionEl || typeof window === "undefined") return;
+  const rootStyle = getComputedStyle(document.documentElement);
+  const stickyH = parseFloat(rootStyle.getPropertyValue("--sticky-masthead-h")) || 0;
+  const navH = parseFloat(rootStyle.getPropertyValue("--nav-height")) || 0;
+  const stickyOffset = stickyH + navH;
+  const rect = sectionEl.getBoundingClientRect();
+  if (rect.top < stickyOffset) {
+    const targetY = Math.max(0, window.scrollY + rect.top - stickyOffset - 8);
+    window.scrollTo({ top: targetY, behavior: "instant" });
+  }
+}
+
 export function createCollapsibleManager(btnExpandAll, { extraIsOpen = null, extraSetOpen = null } = {}) {
   const controllers = [];
 
@@ -500,11 +513,16 @@ export function createCollapsibleManager(btnExpandAll, { extraIsOpen = null, ext
     const body = document.getElementById(bodyId);
     if (!btn || !body) return null;
     const sectionEl = body.closest("section");
+    const anchorTarget = btn.closest(".sub-block") || sectionEl;
 
     const setOpen = (open) => {
       body.classList.toggle("hidden", !open);
-      if (sectionEl) sectionEl.classList.toggle("is-section-collapsed", !open);
+      if (sectionEl && anchorTarget === sectionEl) {
+        sectionEl.classList.toggle("is-section-collapsed", !open);
+      }
       btn.setAttribute("aria-expanded", String(open));
+      btn.setAttribute("aria-label", open ? "Collapse section" : "Expand section");
+      btn.title = open ? "Collapse" : "Expand";
       const lbl = btn.querySelector(".collapse-label");
       if (lbl) lbl.textContent = open ? "Collapse" : "Expand";
       syncExpandAllButton();
@@ -515,13 +533,19 @@ export function createCollapsibleManager(btnExpandAll, { extraIsOpen = null, ext
       (!sectionEl.classList.contains("hidden") && !sectionEl.classList.contains("section-user-hidden"));
     controllers.push({ setOpen, isOpen, isVisible });
 
-    btn.addEventListener("click", () => {
-      setOpen(body.classList.contains("hidden"));
-    });
+    const toggleFromUser = () => {
+      const nextOpen = body.classList.contains("hidden");
+      setOpen(nextOpen);
+      if (!nextOpen) {
+        anchorCollapsedSection(anchorTarget);
+      }
+    };
+
+    btn.addEventListener("click", toggleFromUser);
     const heading = btn.closest(".section-header, .sub-header")?.querySelector("h2, h3");
     if (heading) {
       heading.classList.add("collapsible-title");
-      heading.addEventListener("click", () => setOpen(body.classList.contains("hidden")));
+      heading.addEventListener("click", toggleFromUser);
     }
     if (navHash) {
       document.querySelector(`.nav-links a[href="${navHash}"]`)?.addEventListener("click", () => {
