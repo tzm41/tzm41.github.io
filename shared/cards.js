@@ -112,11 +112,13 @@ export function renderBriefBullets(
     resolveCategory = () => "Brief",
     useFallbackSentiment = true,
     bulletStyle = "regular",
+    getTtsButtonHtml = null,
+    getTtsId = null,
   } = {}
 ) {
   const isBulletMode = bulletStyle === "bullets";
   return bullets
-    .map((item) => {
+    .map((item, idx) => {
       const text = typeof item === "string" ? item : item?.text || "";
       const points =
         typeof item === "object" && Array.isArray(item?.points) && item.points.length
@@ -125,16 +127,21 @@ export function renderBriefBullets(
       const category =
         typeof item === "object" && item?.category ? item.category : resolveCategory(text);
       const sentiment = typeof item === "object" ? item?.sentiment : null;
+      const ttsId = typeof getTtsId === "function" ? getTtsId(item, idx) : "";
+      const ttsBtnHtml =
+        typeof getTtsButtonHtml === "function" ? getTtsButtonHtml(item, idx, ttsId) : "";
       const bodyHtml = isBulletMode
         ? `<ul class="exec-subbullets">${points
             .map((pt) => `<li>${highlightSummaryHtml(pt)}</li>`)
             .join("")}</ul>`
         : `<span class="exec-text">${highlightSummaryHtml(text)}</span>`;
+      const ttsAttr = ttsId ? ` data-tts-id="${escapeHtml(ttsId)}"` : "";
       return `
-        <li>
+        <li${ttsAttr}>
           <span class="exec-meta">
             ${renderHashedTag(category)}
             ${renderSentimentRing(sentiment, useFallbackSentiment ? text : "")}
+            ${ttsBtnHtml}
           </span>
           ${bodyHtml}
         </li>
@@ -163,6 +170,7 @@ export function renderCardShell({
   summaryHtml = "",
   calloutHtml = "",
   sourcesHtml = "",
+  ttsHtml = "",
   footerHtml = "",
 } = {}) {
   const badgeHtml = badgeLabel ? renderHashedTag(badgeLabel) : "";
@@ -188,7 +196,7 @@ export function renderCardShell({
     <h3>${headlineHtml}</h3>
     ${summaryHtml}
     ${calloutHtml}
-    ${sourcesHtml ? `<div class="source-links">${sourcesHtml}</div>` : ""}
+    ${sourcesHtml || ttsHtml ? `<div class="source-links">${sourcesHtml}${ttsHtml}</div>` : ""}
     ${footerHtml}
   `;
 
@@ -211,6 +219,7 @@ export function renderDailyStoryCard(
     showEditionTag = false,
     headerHtml = "",
     metaRightHtml = "",
+    ttsHtml = "",
     footerHtml = "",
     innerOnly = false,
   } = {}
@@ -254,6 +263,7 @@ export function renderDailyStoryCard(
     summaryHtml: `<p class="news-summary">${formatter.highlightSummaryHtml(story.summary, entityOpts)}</p>`,
     calloutHtml,
     sourcesHtml,
+    ttsHtml,
     footerHtml,
   });
 }
@@ -270,6 +280,7 @@ export function renderWeeklyStoryCard(
     bookmarkHtml = "",
     showSubtypeTag = true,
     headerHtml = "",
+    ttsHtml = "",
     footerHtml = "",
     innerOnly = false,
   } = {}
@@ -317,6 +328,7 @@ export function renderWeeklyStoryCard(
     summaryHtml: `<p class="news-summary">${formatter.highlightSummaryHtml(item.summary, entityOpts)}</p>`,
     calloutHtml,
     sourcesHtml,
+    ttsHtml,
     footerHtml,
   });
 }
@@ -333,6 +345,7 @@ export function renderAroundTheWorldCard(
     bookmarkHtml = "",
     showClose = true,
     headerHtml = "",
+    ttsHtml = "",
     footerHtml = "",
     innerOnly = true,
   } = {}
@@ -356,6 +369,9 @@ export function renderAroundTheWorldCard(
   `;
 
   if (variant === "popover") {
+    const wikiHtml = wikiUrl
+      ? `<a class="geo-fact-wiki" href="${escapeHtml(wikiUrl)}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a>`
+      : "";
     return `
       ${bookmarkHtml}
       <div class="geo-fact-head">
@@ -369,7 +385,7 @@ export function renderAroundTheWorldCard(
           <span class="geo-kind-badge is-${kind}">${kindLabel}</span>
           ${renderHashedTag(item.feature_type || kindLabel)}
         </div>
-        ${wikiUrl ? `<a class="geo-fact-wiki" href="${escapeHtml(wikiUrl)}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a>` : ""}
+        ${ttsHtml || wikiHtml ? `<div class="geo-fact-foot-actions">${ttsHtml}${wikiHtml}</div>` : ""}
       </div>
     `;
   }
@@ -386,6 +402,7 @@ export function renderAroundTheWorldCard(
     sourcesHtml: wikiUrl
       ? `<a class="geo-fact-wiki" href="${escapeHtml(wikiUrl)}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a>`
       : "",
+    ttsHtml,
     footerHtml,
   });
 }

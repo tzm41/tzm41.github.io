@@ -1877,6 +1877,359 @@ h3 {
   filter: brightness(1.06);
 }
 
+/* ---------- Device-Native TTS Controls & Floating Mini-Player ---------- */
+
+html:not(.tts-supported) .tts-btn,
+html:not(.tts-supported) .tts-player {
+  display: none !important;
+}
+
+.panel-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.tts-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.tts-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tts-icon svg {
+  width: 13px;
+  height: 13px;
+  display: block;
+}
+
+.tts-card-btn {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ink-muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 7px;
+}
+
+.tts-card-btn .tts-icon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.tts-card-btn:hover,
+.tts-card-btn:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tts-card-btn.is-playing,
+.tts-card-btn.is-paused {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.geo-fact-foot-actions .tts-card-btn {
+  margin-left: 0;
+}
+
+.tts-inline-btn {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink-muted);
+  flex-shrink: 0;
+}
+
+.tts-inline-btn .tts-icon svg {
+  width: 12.5px;
+  height: 12.5px;
+}
+
+.tts-inline-btn:hover,
+.tts-inline-btn:focus-visible {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: color-mix(in srgb, var(--accent) 26%, transparent);
+}
+
+.tts-inline-btn.is-playing,
+.tts-inline-btn.is-paused {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.tts-section-btn {
+  height: 32px;
+  padding: 0 11px;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--ink-secondary);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.tts-section-btn:hover,
+.tts-section-btn:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tts-section-btn.is-playing,
+.tts-section-btn.is-paused {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.tts-panel-btn {
+  height: 26px;
+  padding: 0 8px;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--ink-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.tts-panel-btn .tts-icon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.tts-panel-btn:hover,
+.tts-panel-btn:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tts-panel-btn.is-playing,
+.tts-panel-btn.is-paused {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.tts-btn:focus-visible,
+.tts-player-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.news-card.is-speaking,
+.positive-card.is-speaking,
+.geo-fact-popover.is-speaking,
+.geo-mobile-card.is-speaking {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent), var(--shadow-md);
+}
+
+.executive-list > li.is-speaking {
+  background: var(--accent-soft);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 3px 0 0 var(--accent);
+  padding: 6px 10px;
+  margin: -6px -10px;
+}
+
+.tts-player {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 88;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: min(560px, calc(100vw - 24px));
+  padding: 8px 12px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .tts-player {
+  background: #0f141c;
+  border-color: var(--border-strong);
+}
+
+.tts-player.hidden {
+  display: none;
+}
+
+.tts-eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.tts-eq span {
+  display: block;
+  width: 3px;
+  height: 5px;
+  border-radius: 2px;
+  background: var(--accent);
+  opacity: 0.5;
+  transition: height 0.15s ease, opacity 0.15s ease;
+}
+
+.tts-player.is-playing .tts-eq span {
+  opacity: 1;
+  animation: ttsEqBar 0.9s ease-in-out infinite;
+}
+
+.tts-player.is-playing .tts-eq span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.tts-player.is-playing .tts-eq span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes ttsEqBar {
+  0%,
+  100% {
+    height: 4px;
+  }
+  50% {
+    height: 14px;
+  }
+}
+
+.tts-player-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.tts-player-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tts-player-counter {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tts-player-counter.hidden {
+  display: none;
+}
+
+.tts-player-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.tts-player-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface-subtle);
+  color: var(--ink-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.tts-player-btn svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.tts-player-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tts-player-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.tts-player-btn.hidden {
+  display: none;
+}
+
+.tts-rate-btn {
+  min-width: 42px;
+}
+
+.tts-stop-btn {
+  background: transparent;
+}
+
+body.has-tts-player .auth-toast {
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+}
+
+body.has-tts-player .site-footer {
+  padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 520px) {
+  .tts-player {
+    gap: 8px;
+    padding: 7px 10px;
+  }
+
+  .tts-player-title {
+    font-size: 12.5px;
+  }
+}
+
 /* ---------- Standalone PWA Display Polish ---------- */
 
 @media (display-mode: standalone) {
@@ -1893,7 +2246,9 @@ h3 {
   .collapse-btn,
   .back-home,
   .nav-links a,
-  .bm-filter-tab {
+  .bm-filter-tab,
+  .tts-btn,
+  .tts-player-btn {
     -webkit-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;

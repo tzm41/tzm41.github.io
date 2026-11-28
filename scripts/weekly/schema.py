@@ -64,6 +64,10 @@ class WeeklyLearningItem(BaseModel):
     headline: str
     summary: str = Field(description="2-3 sentences of rich educational explanation using **bold** key insights and *italic* human names.")
     takeaway: str = Field(default="", description="1 concise sentence explaining why this discovery/work matters or what mental model it shifts.")
+    reader_text: str = Field(
+        default="",
+        description="Optional clean spoken/reader prose (plain text without markdown or parenthetical ticker syntax) for TTS playback.",
+    )
     sentiment: SentimentTag = "positive"
     sources: list[SourceLink] = Field(default_factory=list)
     entities: list[EntityIdentity] = Field(
@@ -110,6 +114,10 @@ class GeoFact(BaseModel):
     feature_type: str = Field(description="Short discipline tag: e.g. Tectonics, Volcanology, Karst, Deep Time (for geology) or Regional Dish, Street Food, Fermentation, Pastry, Culinary Heritage (for cuisine).")
     title: str = Field(description="Punchy 4-9 word title capturing the geological wonder or iconic dish.")
     fact: str = Field(description="2-3 engaging sentences explaining the geological fun fact or culinary history/technique, using **bold** for the key mechanism, ingredients, or number.")
+    reader_text: str = Field(
+        default="",
+        description="Optional clean spoken/reader prose (plain text without markdown or parenthetical ticker syntax) for TTS playback.",
+    )
     wiki_title: str = Field(default="", description="Optional exact English Wikipedia article title for further reading.")
 
     @model_validator(mode="after")
@@ -125,6 +133,10 @@ class LongReadItem(BaseModel):
     reading_time: str = Field(default="10 min read", description="Estimated reading time like '12 min read'.")
     headline: str
     summary: str = Field(description="2-3 sentences summarizing the essay's central argument and why it is worth reading.")
+    reader_text: str = Field(
+        default="",
+        description="Optional clean spoken/reader prose (plain text without markdown or parenthetical ticker syntax) for TTS playback.",
+    )
     sources: list[SourceLink] = Field(default_factory=list)
     entities: list[EntityIdentity] = Field(
         default_factory=list,

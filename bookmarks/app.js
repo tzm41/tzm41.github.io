@@ -33,6 +33,13 @@ import {
   renderAroundTheWorldCard,
   resolveLocalStoryTag,
 } from "../shared/cards.js";
+import {
+  initTts,
+  tts,
+  buildReaderText,
+  renderTtsCardButton,
+  bindTtsTriggers,
+} from "../shared/tts.js";
 
 const BRIEFING_DATA = "../briefing/data";
 const WEEKLY_DATA = "../weekly/data";
@@ -67,6 +74,7 @@ const state = {
 const els = {
   appRoot: document.getElementById("app-root"),
   countLabel: document.getElementById("bookmarks-count-label"),
+  btnTtsBookmarks: document.getElementById("btn-tts-bookmarks"),
   sortSelect: document.getElementById("bookmarks-sort"),
   btnClearExpired: document.getElementById("btn-clear-expired"),
   btnClearExpiredSection: document.getElementById("btn-clear-expired-section"),
@@ -237,6 +245,7 @@ function buildPreviewCardHtml(entry) {
 }
 
 function buildFallbackCardHtml(entry, noteText = "") {
+  entry.ttsItem = null;
   const { key, record, ttl } = entry;
   const safeHref = safeUrl(record.url);
   const titleHtml =
@@ -283,11 +292,19 @@ function buildRichCardHtml(entry) {
   if (record.edition === "daily" && (record.section === "top_news" || record.section === "positive_news")) {
     const story = extracted.story;
     const formatter = getFormatterForTexts([story.headline, story.summary, story.why_it_matters], true);
+    const built = buildReaderText(story, { kind: "story" });
+    entry.ttsItem = built.text
+      ? { id: key, title: built.title, text: built.text, lang: built.lang, sectionId: "bookmarks" }
+      : null;
+    const ttsHtml = entry.ttsItem
+      ? renderTtsCardButton(key, { title: entry.ttsItem.title, variant: "card" })
+      : "";
     return renderDailyStoryCard(story, {
       section: record.section,
       badgeLabel: typeLabel,
       formatter,
       bookmarkHtml,
+      ttsHtml,
       showEditionTag: false,
       headerHtml,
       footerHtml,
@@ -302,6 +319,14 @@ function buildRichCardHtml(entry) {
     const useEn = isBilingual ? entry.lang !== "native" : hasEn;
     const story = useEn ? extracted.storyEn : extracted.storyNative;
     const formatter = getFormatterForTexts([story.headline, story.summary, story.why_it_matters], true);
+    const ttsLang = useEn ? "en-US" : record.region === "china" ? "zh-CN" : "";
+    const built = buildReaderText(story, { kind: "story", lang: ttsLang });
+    entry.ttsItem = built.text
+      ? { id: key, title: built.title, text: built.text, lang: built.lang, sectionId: "bookmarks" }
+      : null;
+    const ttsHtml = entry.ttsItem
+      ? renderTtsCardButton(key, { title: entry.ttsItem.title, variant: "card" })
+      : "";
     const langToggleHtml = isBilingual
       ? `
         <div class="bm-lang-toggle" role="group" aria-label="Story language" data-lang-key="${escapeHtml(key)}">
@@ -316,6 +341,7 @@ function buildRichCardHtml(entry) {
       badgeLabel: typeLabel,
       formatter,
       bookmarkHtml,
+      ttsHtml,
       showEditionTag: false,
       headerHtml,
       metaRightHtml: langToggleHtml,
@@ -333,11 +359,21 @@ function buildRichCardHtml(entry) {
   ) {
     const item = extracted.item;
     const formatter = getFormatterForTexts([item.headline, item.summary, item.takeaway], false);
+    const built = buildReaderText(item, {
+      kind: record.section === "long_reads" ? "long_read" : "weekly",
+    });
+    entry.ttsItem = built.text
+      ? { id: key, title: built.title, text: built.text, lang: built.lang, sectionId: "bookmarks" }
+      : null;
+    const ttsHtml = entry.ttsItem
+      ? renderTtsCardButton(key, { title: entry.ttsItem.title, variant: "card" })
+      : "";
     return renderWeeklyStoryCard(item, {
       section: record.section,
       badgeLabel: typeLabel,
       formatter,
       bookmarkHtml,
+      ttsHtml,
       showSubtypeTag: false,
       headerHtml,
       footerHtml,
@@ -348,10 +384,18 @@ function buildRichCardHtml(entry) {
   if (record.edition === "weekly" && record.section === "around_the_world") {
     const item = extracted.item;
     const formatter = getFormatterForTexts([item.place, item.region, item.title, item.fact], false);
+    const built = buildReaderText(item, { kind: "geo" });
+    entry.ttsItem = built.text
+      ? { id: key, title: built.title, text: built.text, lang: built.lang, sectionId: "bookmarks" }
+      : null;
+    const ttsHtml = entry.ttsItem
+      ? renderTtsCardButton(key, { title: entry.ttsItem.title, variant: "card" })
+      : "";
     return renderAroundTheWorldCard(item, {
       variant: "card",
       formatter,
       bookmarkHtml,
+      ttsHtml,
       headerHtml,
       footerHtml,
       innerOnly: true,
@@ -404,6 +448,7 @@ function createCardEntry(record) {
     ttl,
     hydrated: false,
     extracted: null,
+    ttsItem: null,
     lang: record.lang || "en",
   };
 
@@ -432,8 +477,12 @@ function syncCardCacheFromStore() {
     }
   }
 
+  const snap = tts.getState();
   for (const key of [...state.cardCache.keys()]) {
     if (!activeKeys.has(key)) {
+      if (snap.status !== "idle" && (snap.currentId === key || snap.sectionId === "bookmarks")) {
+        tts.stop();
+      }
       state.cardCache.delete(key);
     }
   }
@@ -581,6 +630,21 @@ function updateCountsAndBanners() {
   }
 }
 
+function getVisiblePlayableBookmarks() {
+  const allEntries = [...state.cardCache.values()];
+  const filtered = allEntries
+    .filter((e) => e.ttl.status !== "expired" && matchesFilter(e, state.filter))
+    .sort(compareEntries)
+    .slice(0, state.visibleLimit);
+  return filtered.map((e) => e.ttsItem).filter((it) => it && it.text);
+}
+
+function updateBookmarksTtsButton() {
+  if (!els.btnTtsBookmarks) return;
+  const playable = getVisiblePlayableBookmarks();
+  els.btnTtsBookmarks.classList.toggle("hidden", playable.length === 0);
+}
+
 function renderLists() {
   updateCountsAndBanners();
 
@@ -598,6 +662,7 @@ function renderLists() {
   if (allEntries.length === 0) {
     els.availableSection?.classList.add("hidden");
     els.expiredSection?.classList.add("hidden");
+    updateBookmarksTtsButton();
     if (els.emptyState) {
       els.emptyState.innerHTML = `
         <h2>No bookmarks yet</h2>
@@ -615,6 +680,7 @@ function renderLists() {
   if (filtered.length === 0) {
     els.availableSection?.classList.add("hidden");
     els.expiredSection?.classList.add("hidden");
+    updateBookmarksTtsButton();
     if (els.emptyState) {
       els.emptyState.innerHTML = `
         <h2>No matching bookmarks</h2>
@@ -665,6 +731,7 @@ function renderLists() {
     els.expiredGrid.replaceChildren();
   }
 
+  updateBookmarksTtsButton();
   return visibleAvailable;
 }
 
@@ -764,6 +831,7 @@ async function hydrateArchiveGroup(edition, date) {
     fullJson = null;
     state.fetchedArchives.add(archiveKey);
     updateCountsAndBanners();
+    updateBookmarksTtsButton();
   } catch {
     for (const entry of state.cardCache.values()) {
       if (entry.record.edition !== edition || entry.record.date !== date) continue;
@@ -875,8 +943,18 @@ function bindEvents() {
     if (!key || !nextLang) return;
     const entry = state.cardCache.get(key);
     if (!entry || entry.lang === nextLang) return;
+    const snap = tts.getState();
+    if (snap.status !== "idle" && (snap.currentId === key || snap.sectionId === "bookmarks")) {
+      tts.stop();
+    }
     entry.lang = nextLang;
     entry.el.innerHTML = buildRichCardHtml(entry);
+    updateBookmarksTtsButton();
+  });
+
+  bindTtsTriggers(document.body, {
+    resolveItem: (id) => state.cardCache.get(id)?.ttsItem || null,
+    resolveSection: (secId) => (secId === "bookmarks" ? getVisiblePlayableBookmarks() : []),
   });
 
   // Delegated bookmark removal on /bookmarks/
@@ -886,6 +964,10 @@ function bindEvents() {
     {
       onToggle: (res) => {
         if (!res.saved && res.key) {
+          const snap = tts.getState();
+          if (snap.status !== "idle" && (snap.currentId === res.key || snap.sectionId === "bookmarks")) {
+            tts.stop();
+          }
           state.cardCache.delete(res.key);
           const visible = renderLists();
           if (state.indicesLoaded) {
@@ -945,6 +1027,7 @@ async function bootstrap() {
   // 1. UI primitives & auth (zero cold-load requests when signed out)
   initMasthead({ currentPage: "bookmarks" });
   initPwa();
+  initTts();
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
     setPreference("theme", pref);
   });

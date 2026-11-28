@@ -46,6 +46,14 @@ import {
   resolveLocalStoryTag,
 } from "../shared/cards.js";
 import {
+  initTts,
+  tts,
+  buildReaderText,
+  renderTtsCardButton,
+  createTtsRegistry,
+  bindTtsTriggers,
+} from "../shared/tts.js";
+import {
   fmtPct,
   fmtPrice,
   deltaClass,
@@ -273,6 +281,20 @@ const bookmarkRegistry = createBookmarkRegistry({
   getDate: () => state.briefing?.date || state.currentDate || "",
 });
 
+const ttsRegistry = createTtsRegistry();
+
+function stopTtsIfSection(...sectionIds) {
+  const snap = tts.getState();
+  if (snap.status === "idle") return;
+  if (snap.sectionId && sectionIds.includes(snap.sectionId)) {
+    tts.stop();
+    return;
+  }
+  if (snap.currentId && sectionIds.some((sec) => snap.currentId.startsWith(`${sec}:`))) {
+    tts.stop();
+  }
+}
+
 const entityFormatter = { formatEntitiesInPlain, highlightSummaryHtml };
 
 const marketsCtrl = createMarketsController({
@@ -386,11 +408,19 @@ function fmtLocalTimeOnly(isoStr) {
   });
 }
 
-function renderBriefBullets(bullets = []) {
+function renderBriefBullets(bullets = [], sectionId = "morning_brief") {
+  ttsRegistry.clearSection(sectionId);
   return renderSharedBriefBullets(bullets, {
     highlightSummaryHtml,
     resolveCategory: inferCategoryFromText,
     bulletStyle: state.briefStyle,
+    getTtsId: (_item, idx) => `${sectionId}:${idx}`,
+    getTtsButtonHtml: (item, _idx, ttsId) => {
+      const built = buildReaderText(item, { kind: "bullet", bulletStyle: state.briefStyle });
+      if (!built.text) return "";
+      ttsRegistry.register(sectionId, ttsId, built);
+      return renderTtsCardButton(ttsId, { title: built.title, variant: "inline" });
+    },
   });
 }
 
@@ -405,9 +435,10 @@ function renderExecutiveBrief(briefing) {
 
   const bullets = morning.bullets || [];
   if (!bullets.length) {
+    ttsRegistry.clearSection("morning_brief");
     els.executiveList.innerHTML = `<li>No executive summary items available for this edition.</li>`;
   } else {
-    els.executiveList.innerHTML = renderBriefBullets(bullets);
+    els.executiveList.innerHTML = renderBriefBullets(bullets, "morning_brief");
   }
 
   const afternoon = briefing.afternoon_brief;
@@ -418,8 +449,9 @@ function renderExecutiveBrief(briefing) {
         els.afternoonTimeTag.textContent = fmtLocalTimeOnly(afternoon.generated_at);
         els.afternoonTimeTag.title = `Generated ${fmtLocalTimestamp(afternoon.generated_at)}`;
       }
-      els.afternoonList.innerHTML = renderBriefBullets(afternoon.bullets);
+      els.afternoonList.innerHTML = renderBriefBullets(afternoon.bullets, "afternoon_brief");
     } else {
+      ttsRegistry.clearSection("afternoon_brief");
       els.afternoonPanel.classList.add("hidden");
       els.afternoonList.innerHTML = "";
     }
@@ -477,6 +509,7 @@ function inferCategoryFromText(text) {
 }
 
 function renderNewsCard(story, badgeLabel, continued, showEditionTag = false, bookmarkCtx = null) {
+  const sectionId = bookmarkCtx?.section || "top_news";
   const bookmarkHtml = bookmarkCtx
     ? bookmarkRegistry.register({
         section: bookmarkCtx.section,
@@ -489,17 +522,31 @@ function renderNewsCard(story, badgeLabel, continued, showEditionTag = false, bo
         url: story.sources?.[0]?.url || "",
       })
     : "";
+  const ttsLang =
+    bookmarkCtx?.lang === "en"
+      ? "en-US"
+      : bookmarkCtx?.region === "china" && bookmarkCtx?.lang === "native"
+      ? "zh-CN"
+      : "";
+  const ttsId = `${sectionId}:${bookmarkCtx?.region ? `${bookmarkCtx.region}:` : ""}${story?.id || story?.headline || ""}`;
+  const built = buildReaderText(story, { kind: "story", lang: ttsLang });
+  if (built.text) {
+    ttsRegistry.register(sectionId, ttsId, built);
+  }
+  const ttsHtml = built.text ? renderTtsCardButton(ttsId, { title: built.title, variant: "card" }) : "";
   return renderDailyStoryCard(story, {
-    section: bookmarkCtx?.section || "top_news",
+    section: sectionId,
     badgeLabel,
     formatter: entityFormatter,
     bookmarkHtml,
+    ttsHtml,
     continued,
     showEditionTag,
   });
 }
 
 function renderNews(stories = []) {
+  ttsRegistry.clearSection("top_news");
   const filtered =
     state.newsCategory === "All"
       ? stories
@@ -658,6 +705,7 @@ function renderPolitics(politics = {}) {
 
 function renderPositiveNews(positiveNews) {
   if (!els.positiveSection || !els.positiveNewsSlot) return;
+  ttsRegistry.clearSection("positive_news");
   const stories = Array.isArray(positiveNews)
     ? positiveNews.filter((s) => s && s.headline)
     : positiveNews && positiveNews.headline
@@ -681,11 +729,18 @@ function renderPositiveNews(positiveNews) {
         source: story.sources?.[0]?.name || "",
         url: story.sources?.[0]?.url || "",
       });
+      const ttsId = `positive_news:${story?.id || story?.headline || ""}`;
+      const built = buildReaderText(story, { kind: "story" });
+      if (built.text) {
+        ttsRegistry.register("positive_news", ttsId, built);
+      }
+      const ttsHtml = built.text ? renderTtsCardButton(ttsId, { title: built.title, variant: "card" }) : "";
       return renderDailyStoryCard(story, {
         section: "positive_news",
         badgeLabel: story.category || "Progress",
         formatter: entityFormatter,
         bookmarkHtml,
+        ttsHtml,
       });
     })
     .join("");
@@ -710,6 +765,7 @@ function setLocalExpanded(expanded) {
 
 function renderLocalNews(regions = []) {
   if (!els.localSection || !els.localLocationToggle || !els.localNewsGrid) return;
+  ttsRegistry.clearSection("local_news");
   if (!Array.isArray(regions) || !regions.length) {
     els.localSection.classList.add("hidden");
     els.localLocationToggle.innerHTML = "";
@@ -766,6 +822,7 @@ function renderLocalNews(regions = []) {
 function renderAll(briefing) {
   state.briefing = briefing;
   bookmarkRegistry.clear();
+  ttsRegistry.clear();
   buildTickerMap(briefing.markets);
   buildPersonNameRegex(briefing, state.companyFacts);
   els.editionDate.textContent = fmtReadableDate(briefing.date);
@@ -833,6 +890,7 @@ const archiveNav = createArchiveController({
 });
 
 async function loadBriefingForDate(dateStr) {
+  tts.stop();
   els.statusBanner.classList.add("hidden");
   const isLatest = !dateStr || dateStr === "latest";
   state.viewingLatest = isLatest;
@@ -883,6 +941,7 @@ async function bootstrap() {
 
   initMasthead({ currentPage: "daily" });
   initPwa();
+  initTts();
   els.navBookmarksCount = document.getElementById("nav-bookmarks-count");
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
     setPreference("theme", pref);
@@ -972,6 +1031,18 @@ async function bootstrap() {
   });
   syncExpandAllButton();
 
+  bindTtsTriggers(document.getElementById("app-root"), {
+    resolveItem: (id) => ttsRegistry.get(id),
+    resolveSection: (secId) => ttsRegistry.getSectionQueue(secId),
+    onBeforePlaySection: (secId) => {
+      if (secId === "morning_brief" || secId === "afternoon_brief") setExecutiveOpen?.(true);
+      else if (secId === "top_news") setNewsOpen?.(true);
+      else if (secId === "local_news") {
+        if (!state.localExpanded) setLocalExpanded(true);
+      } else if (secId === "positive_news") setPositiveOpen?.(true);
+    },
+  });
+
   // Delegated expand/collapse for continued-from-yesterday news cards
   document.getElementById("app-root")?.addEventListener("click", (e) => {
     const btn = e.target.closest(".card-toggle-btn");
@@ -990,6 +1061,7 @@ async function bootstrap() {
     const clicked = btn.dataset.category;
     state.newsCategory = state.newsCategory === clicked ? "All" : clicked;
     syncButtonGroup(els.newsFilters, (b) => b.dataset.category === state.newsCategory, "aria-selected");
+    stopTtsIfSection("top_news");
     if (state.briefing) renderNews(state.briefing.top_news);
   });
 
@@ -1067,6 +1139,7 @@ async function bootstrap() {
     state.localRegionId = btn.dataset.regionId;
     setPreference("local_region", state.localRegionId);
     if (!state.localExpanded) setLocalExpanded(true);
+    stopTtsIfSection("local_news");
     if (state.briefing) renderLocalNews(state.briefing.local_news);
   });
 
@@ -1076,6 +1149,7 @@ async function bootstrap() {
     state.localLang = btn.dataset.lang || "native";
     setPreference("local_lang", state.localLang);
     if (!state.localExpanded) setLocalExpanded(true);
+    stopTtsIfSection("local_news");
     if (state.briefing) renderLocalNews(state.briefing.local_news);
   });
 
@@ -1104,6 +1178,7 @@ async function bootstrap() {
         localChanged = true;
       }
       if (localChanged && state.briefing) {
+        stopTtsIfSection("local_news");
         renderLocalNews(state.briefing.local_news);
       }
       if (
@@ -1111,6 +1186,7 @@ async function bootstrap() {
         prefs.brief_style !== state.briefStyle
       ) {
         state.briefStyle = prefs.brief_style;
+        stopTtsIfSection("morning_brief", "afternoon_brief");
         if (state.briefing) renderExecutiveBrief(state.briefing);
       }
       if (

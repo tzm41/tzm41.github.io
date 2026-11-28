@@ -38,7 +38,7 @@
   <script src="../shared/theme-boot.js?v=2"></script>
   <link rel="stylesheet" href="../shared/tokens.css?v=2">
   <link rel="stylesheet" href="../shared/auth.css?v=3">
-  <link rel="stylesheet" href="../shared/briefing-base.css?v=11">
+  <link rel="stylesheet" href="../shared/briefing-base.css?v=12">
   <link rel="stylesheet" href="./styles.css?v=64">
 </head>
 <body>
@@ -133,7 +133,13 @@
             <div>
               <h2>Morning Brief</h2>
             </div>
-            <span class="mode-tag" id="synthesis-mode-tag"></span>
+            <div class="panel-header-actions">
+              <button type="button" class="tts-btn tts-panel-btn" data-tts-section="morning_brief" data-tts-title="Morning Brief" aria-label="Listen to Morning Brief" aria-pressed="false" title="Listen to Morning Brief">
+                <span class="tts-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span>
+                <span class="tts-btn-label">Listen</span>
+              </button>
+              <span class="mode-tag" id="synthesis-mode-tag"></span>
+            </div>
           </div>
           <ul class="executive-list" id="executive-list">
             <li class="skeleton-line"></li>
@@ -147,7 +153,13 @@
             <div>
               <h2>Afternoon Brief</h2>
             </div>
-            <span class="mode-tag" id="afternoon-time-tag"></span>
+            <div class="panel-header-actions">
+              <button type="button" class="tts-btn tts-panel-btn" data-tts-section="afternoon_brief" data-tts-title="Afternoon Brief" aria-label="Listen to Afternoon Brief" aria-pressed="false" title="Listen to Afternoon Brief">
+                <span class="tts-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span>
+                <span class="tts-btn-label">Listen</span>
+              </button>
+              <span class="mode-tag" id="afternoon-time-tag"></span>
+            </div>
           </div>
           <ul class="executive-list" id="afternoon-list"></ul>
         </article>
@@ -168,6 +180,10 @@
             <button type="button" class="filter-btn" data-category="Policy" role="tab" aria-selected="false">Policy</button>
             <button type="button" class="filter-btn" data-category="Science" role="tab" aria-selected="false">Science</button>
           </div>
+          <button type="button" class="tts-btn tts-section-btn" data-tts-section="top_news" data-tts-title="Top News" aria-label="Listen to Top News" aria-pressed="false" title="Listen to Top News">
+            <span class="tts-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span>
+            <span class="tts-btn-label">Listen</span>
+          </button>
           <button type="button" class="collapse-btn" id="btn-toggle-news" aria-expanded="true" aria-controls="news-body">
             <span class="collapse-label">Collapse</span>
             <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
@@ -302,6 +318,10 @@
             <button type="button" class="seg-btn" data-lang="native" aria-pressed="false">中文</button>
             <button type="button" class="seg-btn active" data-lang="en" aria-pressed="true">EN</button>
           </div>
+          <button type="button" class="tts-btn tts-section-btn" data-tts-section="local_news" data-tts-title="Local News" aria-label="Listen to Local News" aria-pressed="false" title="Listen to Local News">
+            <span class="tts-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span>
+            <span class="tts-btn-label">Listen</span>
+          </button>
           <button type="button" class="collapse-btn" id="btn-toggle-local" aria-expanded="false" aria-controls="local-news-body">
             <span class="collapse-label">Expand</span>
             <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
@@ -320,6 +340,10 @@
           <h2>Positive News</h2>
         </div>
         <div class="section-actions">
+          <button type="button" class="tts-btn tts-section-btn" data-tts-section="positive_news" data-tts-title="Positive News" aria-label="Listen to Positive News" aria-pressed="false" title="Listen to Positive News">
+            <span class="tts-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span>
+            <span class="tts-btn-label">Listen</span>
+          </button>
           <button type="button" class="collapse-btn" id="btn-toggle-positive" aria-expanded="false" aria-controls="positive-news-slot">
             <span class="collapse-label">Expand</span>
             <span class="collapse-chevron" aria-hidden="true">&#9662;</span>
@@ -338,6 +362,6 @@
     </div>
   </footer>
 
-  <script type="module" src="./app.js?v=117"></script>
+  <script type="module" src="./app.js?v=118"></script>
 </body>
 </html>

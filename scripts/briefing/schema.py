@@ -84,6 +84,10 @@ class NewsStory(BaseModel):
     headline: str
     summary: str
     why_it_matters: str
+    reader_text: str = Field(
+        default="",
+        description="Optional clean spoken/reader prose (plain text without markdown or parenthetical ticker syntax) for TTS playback.",
+    )
     sources: list[SourceLink] = Field(default_factory=list)
     sentiment: StorySentiment = "neutral"
     continued_from_prior: bool = False

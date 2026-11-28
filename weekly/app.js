@@ -46,6 +46,14 @@ import {
   renderWeeklyStoryCard,
   renderAroundTheWorldCard,
 } from "../shared/cards.js";
+import {
+  initTts,
+  tts,
+  buildReaderText,
+  renderTtsCardButton,
+  createTtsRegistry,
+  bindTtsTriggers,
+} from "../shared/tts.js";
 
 const DATA_BASE = "./data";
 const SHARED_DATA_BASE = "../briefing/data";
@@ -65,6 +73,20 @@ const bookmarkRegistry = createBookmarkRegistry({
   edition: "weekly",
   getDate: () => state.currentDate || state.edition?.date || "",
 });
+
+const ttsRegistry = createTtsRegistry();
+
+function stopTtsIfSection(...sectionIds) {
+  const snap = tts.getState();
+  if (snap.status === "idle") return;
+  if (snap.sectionId && sectionIds.includes(snap.sectionId)) {
+    tts.stop();
+    return;
+  }
+  if (snap.currentId && sectionIds.some((sec) => snap.currentId.startsWith(`${sec}:`))) {
+    tts.stop();
+  }
+}
 
 const els = {
   editionDate: document.getElementById("edition-date"),
@@ -162,21 +184,30 @@ function renderHeader(ed) {
   els.generatedMeta.textContent = `Published ${fmtLocalTimestamp(ed.generated_at)}`;
 }
 
-function renderBriefBullets(bullets = []) {
+function renderBriefBullets(bullets = [], sectionId = "digest") {
+  ttsRegistry.clearSection(sectionId);
   return renderSharedBriefBullets(bullets, {
     highlightSummaryHtml,
     resolveCategory: () => "Weekly",
     bulletStyle: state.briefStyle,
+    getTtsId: (_item, idx) => `${sectionId}:${idx}`,
+    getTtsButtonHtml: (item, _idx, ttsId) => {
+      const built = buildReaderText(item, { kind: "bullet", bulletStyle: state.briefStyle });
+      if (!built.text) return "";
+      ttsRegistry.register(sectionId, ttsId, built);
+      return renderTtsCardButton(ttsId, { title: built.title, variant: "inline" });
+    },
   });
 }
 
 function renderDigest(ed) {
   const bullets = ed.digest || [];
   if (!bullets.length) {
+    ttsRegistry.clearSection("digest");
     els.digestList.innerHTML = `<li class="empty-state">No weekly digest bullets available for this edition.</li>`;
     return;
   }
-  els.digestList.innerHTML = renderBriefBullets(bullets);
+  els.digestList.innerHTML = renderBriefBullets(bullets, "digest");
 }
 
 function renderFeaturedQuote(ed) {
@@ -200,6 +231,12 @@ function renderFeaturedQuote(ed) {
   `;
 }
 
+const LEARNING_SECTION_TITLES = {
+  science: "Science & Discovery",
+  culture: "Culture & Arts",
+  history: "History & Archaeology",
+};
+
 function renderLearningCard(item, sectionName) {
   const bookmarkHtml = bookmarkRegistry.register({
     section: sectionName,
@@ -210,19 +247,36 @@ function renderLearningCard(item, sectionName) {
     url: item.sources?.[0]?.url || "",
     label: "item",
   });
+  const ttsId = `${sectionName}:${item.id || item.headline || ""}`;
+  const built = buildReaderText(item, { kind: "weekly" });
+  if (built.text) {
+    ttsRegistry.register(sectionName, ttsId, built);
+  }
+  const ttsHtml = built.text ? renderTtsCardButton(ttsId, { title: built.title, variant: "card" }) : "";
 
   return renderWeeklyStoryCard(item, {
     section: sectionName,
     formatter: entityFormatter,
     bookmarkHtml,
+    ttsHtml,
     showSubtypeTag: true,
   });
 }
 
 function renderLearningSection(secData, narrativeEl, gridEl, emptyMsg, sectionName) {
+  ttsRegistry.clearSection(sectionName);
   const narrative = secData?.narrative || "";
   const items = secData?.items || [];
   narrativeEl.innerHTML = narrative ? highlightSummaryHtml(narrative) : "";
+  if (narrative) {
+    const builtNarr = buildReaderText(
+      { title: LEARNING_SECTION_TITLES[sectionName] || sectionName, narrative },
+      { kind: "narrative" }
+    );
+    if (builtNarr.text) {
+      ttsRegistry.register(sectionName, `${sectionName}:narrative`, builtNarr);
+    }
+  }
   if (!items.length) {
     gridEl.innerHTML = `<p class="empty-state">${escapeHtml(emptyMsg)}</p>`;
     return;
@@ -354,10 +408,17 @@ function buildGeoCardHtml(item, showClose = true) {
     url: wikiUrl,
     label: "item",
   });
+  const ttsId = `around_the_world:${item.id || item.place || item.title || ""}`;
+  const built = buildReaderText(item, { kind: "geo" });
+  if (built.text) {
+    ttsRegistry.register("around_the_world", ttsId, built);
+  }
+  const ttsHtml = built.text ? renderTtsCardButton(ttsId, { title: built.title, variant: "card" }) : "";
   return renderAroundTheWorldCard(item, {
     variant: "popover",
     formatter: entityFormatter,
     bookmarkHtml,
+    ttsHtml,
     showClose,
   });
 }
@@ -526,7 +587,8 @@ function bindWorldMapEvents() {
       e.target.closest?.(".geo-pin") ||
       e.target.closest?.(".geo-chip") ||
       e.target.closest?.(".geo-fact-popover") ||
-      e.target.closest?.(".geo-mobile-card")
+      e.target.closest?.(".geo-mobile-card") ||
+      e.target.closest?.(".tts-player")
     ) {
       return;
     }
@@ -634,6 +696,7 @@ function renderAroundTheWorld(ed) {
 }
 
 function renderLongReads(ed) {
+  ttsRegistry.clearSection("long_reads");
   const items = ed.long_reads || [];
   if (!items.length) {
     els.longreadsGrid.innerHTML = `<p class="empty-state">No long reads curated for this edition.</p>`;
@@ -650,10 +713,17 @@ function renderLongReads(ed) {
         url: lr.sources?.[0]?.url || "",
         label: "item",
       });
+      const ttsId = `long_reads:${lr.id || lr.headline || ""}`;
+      const built = buildReaderText(lr, { kind: "long_read" });
+      if (built.text) {
+        ttsRegistry.register("long_reads", ttsId, built);
+      }
+      const ttsHtml = built.text ? renderTtsCardButton(ttsId, { title: built.title, variant: "card" }) : "";
       return renderWeeklyStoryCard(lr, {
         section: "long_reads",
         formatter: entityFormatter,
         bookmarkHtml,
+        ttsHtml,
         showSubtypeTag: true,
       });
     })
@@ -663,10 +733,11 @@ function renderLongReads(ed) {
 function renderWeekInBrief(ed) {
   const items = ed.week_in_brief || [];
   if (!items.length) {
+    ttsRegistry.clearSection("week_in_brief");
     els.pulseList.innerHTML = `<li class="empty-state">No macro recap available for this week.</li>`;
     return;
   }
-  els.pulseList.innerHTML = renderBriefBullets(items);
+  els.pulseList.innerHTML = renderBriefBullets(items, "week_in_brief");
 }
 
 function renderSourceHealth(health = {}) {
@@ -682,6 +753,7 @@ function renderEdition(ed) {
   state.edition = ed;
   state.currentDate = ed.date;
   bookmarkRegistry.clear();
+  ttsRegistry.clear();
   state.personNameRe = buildPersonNameRegexFromTexts(collectEditionTexts(ed), state.companyFacts);
 
   renderHeader(ed);
@@ -730,6 +802,7 @@ const archiveNav = createArchiveController({
 });
 
 async function loadEdition(dateOrLatest = "latest", pushUrl = true) {
+  tts.stop();
   try {
     const isLatest = !dateOrLatest || dateOrLatest === "latest";
     state.viewingLatest = isLatest;
@@ -760,6 +833,7 @@ async function bootstrap() {
 
   initMasthead({ currentPage: "weekly" });
   initPwa();
+  initTts();
   els.navBookmarksCount = document.getElementById("nav-bookmarks-count");
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
     setPreference("theme", pref);
@@ -806,6 +880,19 @@ async function bootstrap() {
   });
   collapsibles.syncExpandAllButton();
 
+  bindTtsTriggers(appRoot, {
+    resolveItem: (id) => ttsRegistry.get(id),
+    resolveSection: (secId) => ttsRegistry.getSectionQueue(secId),
+    onBeforePlaySection: (secId) => {
+      if (secId === "digest") setOverviewOpen?.(true);
+      else if (secId === "science") setScienceOpen?.(true);
+      else if (secId === "culture") setCultureOpen?.(true);
+      else if (secId === "history") setHistoryOpen?.(true);
+      else if (secId === "long_reads") setLongreadsOpen?.(true);
+      else if (secId === "week_in_brief") setPulseOpen?.(true);
+    },
+  });
+
   initAuth({
     mountEl: els.authMount,
     bookmarksHref: "../bookmarks/",
@@ -829,9 +916,10 @@ async function bootstrap() {
         prefs.brief_style !== state.briefStyle
       ) {
         state.briefStyle = prefs.brief_style;
+        stopTtsIfSection("digest", "week_in_brief");
         if (state.edition) {
           renderDigest(state.edition);
-          renderPulse(state.edition);
+          renderWeekInBrief(state.edition);
         }
       }
     },

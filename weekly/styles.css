@@ -447,6 +447,13 @@
   gap: 8px;
 }
 
+.geo-fact-foot-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
 /* Mobile docked fun-fact card below map */
 .geo-mobile-card {
   position: relative;

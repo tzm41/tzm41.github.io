@@ -818,7 +818,7 @@ export function bindBookmarkToggle(
   const revealHandler = (e) => {
     if (e.pointerType !== "touch" && e.pointerType !== "pen") return;
     const target = e.target;
-    if (target?.closest?.(".bookmark-btn, .share-btn")) return;
+    if (target?.closest?.(".bookmark-btn, .share-btn, .tts-btn")) return;
     const card = target?.closest?.(CARD_SELECTOR);
     if (card && root.contains(card)) {
       setRevealedCard(card);
