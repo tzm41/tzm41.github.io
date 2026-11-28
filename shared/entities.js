@@ -117,7 +117,7 @@ export function findLongestMatches(text, baseTrie, overlayTrie = null) {
 let BASE_ENTITY_TRIE = buildPrefixTrie(Object.keys(PLACE_ALIASES));
 
 const MERGED_ENTITY_STORE = {
-  schema_version: "3.0",
+  schema_version: "4.0",
   updated_at: "",
   companies: {},
   indices: {},
@@ -125,23 +125,25 @@ const MERGED_ENTITY_STORE = {
   us_parties: {},
 };
 
-const loadedShards = new Set();
-const inFlightShards = new Map();
-let manifestCache = null;
-let manifestPromise = null;
+let entitiesLoaded = false;
+let entitiesPromise = null;
 const PRIMARY_ALIAS_KEYS = new Set();
 const KNOWN_PERSON_SET = new Set();
 let registryVersion = 0;
+
+/** Fallback title for italic mentions without an LLM-provided identity: the raw text minus honorifics. */
+export function resolvePersonFullName(rawName) {
+  return String(rawName || "").trim().replace(PERSON_PREFIX_STRIP_RE, "").trim();
+}
 
 export function getEntityRegistryVersion() {
   return registryVersion;
 }
 
 /**
- * Additively merge a sharded entity payload (`hot.json` or any cold shard) into
- * the live in-memory registries and incrementally insert new keys into `BASE_ENTITY_TRIE`.
- * Never wipes prior shards and preserves primary-over-ambiguous alias precedence
- * regardless of shard merge order.
+ * Additively merge an entity payload (`shared/data/entities.json`) into the live
+ * in-memory registries and incrementally insert new keys into `BASE_ENTITY_TRIE`,
+ * preserving primary-over-ambiguous alias precedence.
  */
 export function mergeEntityRegistry(shardJson) {
   if (!shardJson || typeof shardJson !== "object") return false;
@@ -250,15 +252,13 @@ export function hydrateEntityRegistry(entitiesJson) {
   for (const k of Object.keys(MERGED_ENTITY_STORE.us_parties)) delete MERGED_ENTITY_STORE.us_parties[k];
   MERGED_ENTITY_STORE.people.length = 0;
   MERGED_ENTITY_STORE.updated_at = "";
-  MERGED_ENTITY_STORE.schema_version = entitiesJson.schema_version || "3.0";
+  MERGED_ENTITY_STORE.schema_version = entitiesJson.schema_version || "4.0";
 
   PRIMARY_ALIAS_KEYS.clear();
   KNOWN_PERSON_SET.clear();
   BASE_PERSON_NAMES.length = 0;
-  loadedShards.clear();
-  inFlightShards.clear();
-  manifestCache = null;
-  manifestPromise = null;
+  entitiesLoaded = false;
+  entitiesPromise = null;
 
   DEFAULT_PERSON_NAME_RE = compilePersonNameRegex(BASE_PERSON_NAMES);
   BASE_ENTITY_TRIE = buildPrefixTrie(Object.keys(PLACE_ALIASES));
@@ -385,11 +385,19 @@ export function buildEntityIdentityMap(...entityLists) {
   return map;
 }
 
+function normalizeWikiTitle(title) {
+  return String(title || "").replace(/_/g, " ").trim();
+}
+
 function renderPersonSpan(raw, wikiTitleOverride = "") {
-  const title =
-    String(wikiTitleOverride || "").trim() ||
-    String(raw || "").trim().replace(PERSON_PREFIX_STRIP_RE, "").trim();
+  const title = normalizeWikiTitle(wikiTitleOverride) || resolvePersonFullName(raw);
   const attr = title ? ` class="person-mention" tabindex="0" data-wiki-title="${escapeHtml(title)}"` : "";
+  return `<em${attr}>${escapeHtml(raw)}</em>`;
+}
+
+function renderWorkSpan(raw, wikiTitle = "") {
+  const title = normalizeWikiTitle(wikiTitle) || String(raw || "").trim();
+  const attr = title ? ` class="work-mention" tabindex="0" data-wiki-title="${escapeHtml(title)}"` : "";
   return `<em${attr}>${escapeHtml(raw)}</em>`;
 }
 
@@ -520,6 +528,21 @@ export function createEntityFormatter({
     return out;
   };
 
+  const renderItalicMention = (raw, explicit, seen, pillCompanies, runOpts) => {
+    const wiki = explicit?.wiki_title || explicit?.canonical_name || "";
+    switch (explicit?.type) {
+      case "work":
+        return renderWorkSpan(raw, wiki);
+      case "company":
+      case "place":
+        return `<em>${decorateFlagsAndLogos(raw, seen, pillCompanies, runOpts)}</em>`;
+      case "none":
+        return `<em>${escapeHtml(raw)}</em>`;
+      default:
+        return renderPersonSpan(raw, wiki);
+    }
+  };
+
   const formatEntitiesInPlain = (segment, seen = new Set(), pillCompanies = false, opts = {}) => {
     if (!segment) return "";
     const runOpts = opts._prepared
@@ -535,8 +558,7 @@ export function createEntityFormatter({
       for (const m of segment.matchAll(EXPLICIT_ITALIC_RE)) {
         const idx = m.index ?? 0;
         if (idx > last) out += decorateFlagsAndLogos(segment.slice(last, idx), seen, pillCompanies, runOpts);
-        const explicit = entityMap?.get(m[1]);
-        out += renderPersonSpan(m[1], explicit?.type === "person" ? explicit.wiki_title || explicit.canonical_name : "");
+        out += renderItalicMention(m[1], entityMap?.get(m[1]) || null, seen, pillCompanies, runOpts);
         last = idx + m[0].length;
       }
       if (last < segment.length) out += decorateFlagsAndLogos(segment.slice(last), seen, pillCompanies, runOpts);
@@ -672,7 +694,7 @@ export function initFloatingTooltips(getCompanyFacts = () => null) {
   document.body.appendChild(tip);
 
   const SEL =
-    ".ticker-tag[data-ticker-tip], .ticker-tag[data-company-domain], .company-mention[data-company-domain], .quote-name[data-company-domain], .person-mention[data-wiki-title], .party-mention[data-wiki-title], .quote-prev-badge[data-tooltip], .sentiment-gauge[data-tooltip]";
+    ".ticker-tag[data-ticker-tip], .ticker-tag[data-company-domain], .company-mention[data-company-domain], .quote-name[data-company-domain], .person-mention[data-wiki-title], .work-mention[data-wiki-title], .party-mention[data-wiki-title], .quote-prev-badge[data-tooltip], .sentiment-gauge[data-tooltip]";
   let activeEl = null;
 
   const hide = () => {
@@ -691,15 +713,6 @@ export function initFloatingTooltips(getCompanyFacts = () => null) {
       includeWikiLink && wikiUrl
         ? `<div class="tip-wiki-row"><a class="tip-wiki-link" href="${wikiUrl}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a></div>`
         : "";
-
-    if (domain && !fact) {
-      activeEl = el;
-      ensureShardForDomain(domain).then((loadedFact) => {
-        if (loadedFact && activeEl === el && el.isConnected) {
-          show(el, includeWikiLink);
-        }
-      });
-    }
 
     if (fact && domain) {
       activeEl = el;
@@ -744,7 +757,7 @@ export function initFloatingTooltips(getCompanyFacts = () => null) {
       const label = el.dataset.wikiTitle;
       tip.innerHTML = includeWikiLink
         ? `<span>${escapeHtml(label)}</span> <a class="tip-wiki-link inline" href="${wikiUrl}" target="_blank" rel="noopener noreferrer">Wikipedia &nearr;</a>`
-        : `${escapeHtml(label)} · Click for Wikipedia &nearr;`;
+        : escapeHtml(label);
       tip.classList.remove("is-company");
       tip.classList.add("is-subtle");
       tip.classList.toggle("is-touch", Boolean(includeWikiLink));
@@ -853,95 +866,35 @@ export function initEntityOverlays({ getCompanyFacts, getCountryLeaders }) {
   });
 }
 
-const ENTITIES_DIR_URL = new URL("./data/entities/", import.meta.url).href;
-const ENTITIES_MANIFEST_URL = new URL("./data/entities/manifest.json", import.meta.url).href;
-
-function getEntityShardUrl(shardId) {
-  return new URL(`${encodeURIComponent(shardId)}.json`, ENTITIES_DIR_URL).href;
-}
-
-async function loadEntityManifest({ cache = "no-store" } = {}) {
-  if (manifestCache) return manifestCache;
-  if (manifestPromise) return manifestPromise;
-  manifestPromise = fetchJson(ENTITIES_MANIFEST_URL, { cache })
-    .then((json) => {
-      if (json && typeof json === "object") {
-        manifestCache = json;
-        return json;
-      }
-      return null;
-    })
-    .catch(() => null)
-    .finally(() => {
-      manifestPromise = null;
-    });
-  return manifestPromise;
-}
+const ENTITIES_URL = new URL("./data/entities.json", import.meta.url).href;
 
 /**
- * Ensure all requested entity shards are loaded and merged into the live store.
- * Deduplicates already-loaded shards and concurrent in-flight fetches, and fails
- * gracefully without poisoning `loadedShards`.
+ * Load the single shared entity store (`shared/data/entities.json`) once per page.
+ * Concurrent callers share one in-flight request; failures are not cached.
  */
-export async function ensureEntityShards(shardIds = [], { cache = "no-store" } = {}) {
-  const list = Array.isArray(shardIds) ? shardIds : [shardIds];
-  const uniqueIds = [
-    ...new Set(list.map((s) => String(s || "").trim()).filter(Boolean)),
-  ];
-
-  const tasks = [];
-  for (const shardId of uniqueIds) {
-    if (loadedShards.has(shardId)) continue;
-    let promise = inFlightShards.get(shardId);
-    if (!promise) {
-      promise = fetchJson(getEntityShardUrl(shardId), { cache })
-        .then((json) => {
-          if (json && typeof json === "object") {
-            mergeEntityRegistry(json);
-            loadedShards.add(shardId);
-            return true;
-          }
-          return false;
-        })
-        .catch(() => false)
-        .finally(() => {
-          inFlightShards.delete(shardId);
-        });
-      inFlightShards.set(shardId, promise);
-    }
-    tasks.push(promise);
+export async function loadEntityRegistry({ cache = "no-store" } = {}) {
+  if (entitiesLoaded) return MERGED_ENTITY_STORE;
+  if (!entitiesPromise) {
+    entitiesPromise = fetchJson(ENTITIES_URL, { cache })
+      .then((json) => {
+        if (json && typeof json === "object") {
+          mergeEntityRegistry(json);
+          entitiesLoaded = true;
+        }
+        return MERGED_ENTITY_STORE;
+      })
+      .catch(() => MERGED_ENTITY_STORE)
+      .finally(() => {
+        entitiesPromise = null;
+      });
   }
-
-  if (tasks.length) {
-    await Promise.all(tasks);
-  }
-  return MERGED_ENTITY_STORE;
+  return entitiesPromise;
 }
 
-/**
- * Lazily resolve a cold-shard company domain via `manifest.json` (fetched at most once)
- * and load its containing shard on demand.
- */
-export async function ensureShardForDomain(domain, { cache = "no-store" } = {}) {
-  const key = String(domain || "").trim().toLowerCase();
-  if (!key) return null;
-  if (MERGED_ENTITY_STORE.companies[key]) {
-    return MERGED_ENTITY_STORE.companies[key];
-  }
-  const manifest = await loadEntityManifest({ cache });
-  const shardId = manifest?.domain_shard?.[key];
-  if (!shardId) return null;
-  await ensureEntityShards([shardId], { cache });
-  return MERGED_ENTITY_STORE.companies[key] || null;
-}
-
-/**
- * Zero-waterfall bootstrap loader: fetches `entities/hot.json` and `country_leaders.json`
- * directly in parallel (never `manifest.json`).
- */
+/** Bootstrap loader: fetches `entities.json` and `country_leaders.json` in parallel. */
 export async function loadSharedEntityData(briefingDataBase, { cache = "no-store" } = {}) {
   const [, leadersRes] = await Promise.allSettled([
-    ensureEntityShards(["hot"], { cache }),
+    loadEntityRegistry({ cache }),
     fetchJson(`${briefingDataBase}/country_leaders.json`, { cache }),
   ]);
   return {

@@ -25,7 +25,6 @@ import {
   DEFAULT_PERSON_NAME_RE,
   buildPersonNameRegexFromTexts,
   createEntityFormatter,
-  ensureEntityShards,
   renderCountryFlagImg,
   initEntityOverlays,
   loadSharedEntityData,
@@ -817,9 +816,6 @@ async function loadEdition(dateOrLatest = "latest", pushUrl = true) {
       : `${DATA_BASE}/archive/${encodeURIComponent(dateOrLatest)}.json`;
 
     const ed = await fetchJson(url);
-    await ensureEntityShards(
-      Array.isArray(ed.entity_shards) && ed.entity_shards.length ? ed.entity_shards : ["hot"]
-    );
     renderEdition(ed);
 
     if (pushUrl) {

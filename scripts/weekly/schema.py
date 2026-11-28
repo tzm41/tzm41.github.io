@@ -27,12 +27,12 @@ class SourceLink(BaseModel):
     url: str
 
 
-EntityType = Literal["company", "person", "place", "none"]
+EntityType = Literal["company", "person", "place", "work", "none"]
 
 
 class EntityIdentity(BaseModel):
     mention: str = Field(description="Exact surface text as it appears in the item/edition.")
-    type: EntityType = Field(description="Semantic entity type: 'company', 'person', 'place', or 'none' to suppress false-positive auto-tagging.")
+    type: EntityType = Field(description="Semantic entity type: 'company', 'person', 'place', 'work' (named creative or titled works: games, films, books, albums, artworks, shows, missions, ships), or 'none' to suppress false-positive auto-tagging.")
     canonical_name: str = Field(default="", description="Full disambiguated canonical name.")
     domain: str = Field(default="", description="Primary web domain for logo lookup when type='company'.")
     country_code: str = Field(default="", description="2-letter lowercase ISO code when type='place'.")
@@ -207,10 +207,6 @@ class WeeklyBriefing(BaseModel):
     week_in_brief: list[PulseBullet]
     source_health: WeeklySourceHealth
     entities: list[EntityIdentity] = Field(default_factory=list)
-    entity_shards: list[str] = Field(
-        default_factory=list,
-        description="Entity shards required to render all companies mentioned in this edition (always starts with 'hot').",
-    )
 
     @model_validator(mode="after")
     def _dedupe_section_ids(self) -> WeeklyBriefing:

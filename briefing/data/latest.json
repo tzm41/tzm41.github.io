@@ -4009,8 +4009,150 @@
       ]
     }
   ],
-  "entities": [],
-  "entity_shards": [
-    "hot"
+  "entities": [
+    {
+      "mention": "Trump",
+      "type": "person",
+      "canonical_name": "Donald Trump",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Donald Trump"
+    },
+    {
+      "mention": "Zelensky",
+      "type": "person",
+      "canonical_name": "Volodymyr Zelenskyy",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Volodymyr Zelenskyy"
+    },
+    {
+      "mention": "Volodymyr Zelensky",
+      "type": "person",
+      "canonical_name": "Volodymyr Zelenskyy",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Volodymyr Zelenskyy"
+    },
+    {
+      "mention": "Donald Trump",
+      "type": "person",
+      "canonical_name": "Donald Trump",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Donald Trump"
+    },
+    {
+      "mention": "Vladimir Putin",
+      "type": "person",
+      "canonical_name": "Vladimir Putin",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Vladimir Putin"
+    },
+    {
+      "mention": "Antonio Tajani",
+      "type": "person",
+      "canonical_name": "Antonio Tajani",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Antonio Tajani"
+    },
+    {
+      "mention": "Pedro Sánchez",
+      "type": "person",
+      "canonical_name": "Pedro Sánchez",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Pedro Sánchez"
+    },
+    {
+      "mention": "Grand Theft Auto VI",
+      "type": "work",
+      "canonical_name": "Grand Theft Auto VI",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Grand Theft Auto VI"
+    },
+    {
+      "mention": "Paul Mackenzie",
+      "type": "person",
+      "canonical_name": "Paul Nthenge Mackenzie",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Paul Nthenge Mackenzie"
+    },
+    {
+      "mention": "Mackenzie",
+      "type": "person",
+      "canonical_name": "Paul Nthenge Mackenzie",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Paul Nthenge Mackenzie"
+    },
+    {
+      "mention": "Hitler",
+      "type": "person",
+      "canonical_name": "Adolf Hitler",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Adolf Hitler"
+    },
+    {
+      "mention": "Gérard Depardieu",
+      "type": "person",
+      "canonical_name": "Gérard Depardieu",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Gérard Depardieu"
+    },
+    {
+      "mention": "Benjamin Netanyahu",
+      "type": "person",
+      "canonical_name": "Benjamin Netanyahu",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Benjamin Netanyahu"
+    },
+    {
+      "mention": "Gadi Eisenkot",
+      "type": "person",
+      "canonical_name": "Gadi Eisenkot",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Gadi Eisenkot"
+    },
+    {
+      "mention": "Howard Lutnick",
+      "type": "person",
+      "canonical_name": "Howard Lutnick",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Howard Lutnick"
+    },
+    {
+      "mention": "JD Vance",
+      "type": "person",
+      "canonical_name": "JD Vance",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "JD Vance"
+    },
+    {
+      "mention": "Marco Rubio",
+      "type": "person",
+      "canonical_name": "Marco Rubio",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Marco Rubio"
+    },
+    {
+      "mention": "Ro Khanna",
+      "type": "person",
+      "canonical_name": "Ro Khanna",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Ro Khanna"
+    }
   ]
 }

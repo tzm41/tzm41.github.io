@@ -10,7 +10,6 @@
 import { escapeHtml, safeUrl, fmtShortDate, fetchJson } from "../shared/utils.js";
 import { initTheme, initMasthead, renderSourceChip, syncButtonGroup, showToast } from "../shared/ui.js";
 import {
-  ensureEntityShards,
   initEntityOverlays,
   loadSharedEntityData,
   createCachedPersonFormatter,
@@ -819,9 +818,6 @@ async function hydrateArchiveGroup(edition, date) {
     const resp = await fetch(url, { cache: cacheMode });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     let fullJson = await resp.json();
-    if (Array.isArray(fullJson?.entity_shards) && fullJson.entity_shards.length) {
-      await ensureEntityShards(fullJson.entity_shards, { cache: "no-cache" });
-    }
 
     // Extract ONLY matched bookmarked entries for this (edition, date)
     for (const entry of state.cardCache.values()) {

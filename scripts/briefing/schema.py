@@ -50,7 +50,7 @@ class SourceLink(BaseModel):
     url: str
 
 
-EntityType = Literal["company", "person", "place", "none"]
+EntityType = Literal["company", "person", "place", "work", "none"]
 
 
 class EntityIdentity(BaseModel):
@@ -58,11 +58,11 @@ class EntityIdentity(BaseModel):
         description="Exact surface text as it appears in the story/briefing (e.g., 'ABC', 'BOC', 'Georgia', 'Apple')."
     )
     type: EntityType = Field(
-        description="Semantic identity type: 'company' (for companies, banks, institutions), 'person', 'place', or 'none' to suppress false-positive auto-tagging."
+        description="Semantic identity type: 'company' (for companies, banks, institutions), 'person', 'place', 'work' (named creative or titled works: games, films, books, albums, artworks, shows, missions, ships), or 'none' to suppress false-positive auto-tagging."
     )
     canonical_name: str = Field(
         default="",
-        description="Full disambiguated canonical name (e.g., 'Agricultural Bank of China', 'Bank of China', 'Georgia (U.S. state)').",
+        description="Full disambiguated canonical name (e.g., 'Donald Trump' for mention 'Trump', 'Agricultural Bank of China', 'Grand Theft Auto VI', 'Georgia (U.S. state)').",
     )
     domain: str = Field(
         default="",
@@ -293,10 +293,6 @@ class DailyBriefing(BaseModel):
     entities: list[EntityIdentity] = Field(
         default_factory=list,
         description="Edition-wide semantically disambiguated entity identities for ambiguous acronyms, homonyms, or newly-mentioned entities across briefs and narratives.",
-    )
-    entity_shards: list[str] = Field(
-        default_factory=list,
-        description="Entity shards required to render all companies mentioned in this edition (always starts with 'hot').",
     )
 
     @model_validator(mode="after")

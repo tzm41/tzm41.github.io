@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ..common.entity_store import load_all_entities
+from ..common.entity_store import ENTITIES_PATH, load_all_entities
 
 # Repository paths
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -14,7 +14,6 @@ LATEST_PATH = DATA_DIR / "latest.json"
 INDEX_PATH = DATA_DIR / "index.json"
 MARKETS_LIVE_PATH = DATA_DIR / "markets_live.json"
 NEWS_MEMORY_PATH = DATA_DIR / "news_memory.json"
-ENTITIES_DIR = REPO_ROOT / "shared" / "data" / "entities"
 
 # Retention
 MAX_ARCHIVE_DAYS = 60
@@ -107,8 +106,8 @@ MARKET_BIG7: list[dict[str, str]] = [
 FEAR_GREED_URL = "https://production.dataviz.cnn.io/index/fearandgreed/graphdata"
 
 def _load_inline_ticker_directory() -> dict[str, tuple[str, str, list[str]]]:
-    """Derive inline stock/index lookup directly from the sharded shared/data/entities/ store."""
-    if not ENTITIES_DIR.exists():
+    """Derive inline stock/index lookup directly from shared/data/entities.json."""
+    if not ENTITIES_PATH.exists():
         return {}
     raw = load_all_entities()
     directory: dict[str, tuple[str, str, list[str]]] = {}
@@ -129,7 +128,7 @@ def _load_inline_ticker_directory() -> dict[str, tuple[str, str, list[str]]]:
     return directory
 
 
-# Global public stock & index directory derived from shared/data/entities/ (zero duplication)
+# Global public stock & index directory derived from shared/data/entities.json (zero duplication)
 INLINE_TICKER_DIRECTORY: dict[str, tuple[str, str, list[str]]] = _load_inline_ticker_directory()
 
 # 11 GICS SPDR Sector ETFs

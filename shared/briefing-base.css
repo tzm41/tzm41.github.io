@@ -897,6 +897,7 @@ h3 {
 }
 
 .person-mention[data-wiki-title],
+.work-mention[data-wiki-title],
 .party-mention[data-wiki-title] {
   cursor: help;
 }

@@ -108,10 +108,12 @@ Consolidated user-experience, visual, and interaction specification across `coli
 ---
 
 ## 9. Inline Entity Recognition & Hover/Tap Tooltips
-- **Two-Tier Sharded Entity Database (`shared/data/entities/`):**
-  - Split into `hot.json` (45 frequent + 26 pinned entities, indices, US parties, core people), 6 domain cold shards (`tech-ai`, `finance-banking`, `media-entertainment`, `aviation-space`, `consumer-energy-health`, `science-culture`), and `manifest.json` (`domain_shard` lookup map).
-  - Pages fetch `hot.json` + `country_leaders.json` directly in parallel (zero manifest waterfall), load only the cold shards declared in each edition's `entity_shards` list via incremental `O(text)` Prefix Trie insertion, and lazily fetch cold shards on hover if an unloaded domain is encountered.
-  - Maintained automatically via weekly recency-weighted rebalancing (14-day half-life across 30 Daily + 8 Weekly archives, 1.5× Weekly weight, rank 35/55 hysteresis deadband) inside `scripts/briefing/refresh_company_facts.py`.
+- **Single-File Entity Database (`shared/data/entities.json`, ~11 KB gzipped):**
+  - Companies (logos, facts, tickers), market indices, known people, and US party aliases in one file, loaded once per page in parallel with `country_leaders.json` and inserted into an `O(text)` Prefix Trie. Older editions always render with the latest data; editions never declare which entities they use.
+  - Valuations and CEOs are refreshed in place by `scripts/briefing/refresh_company_facts.py`.
+- **LLM Canonical Identities (`entities[]`):**
+  - Every `*italic*` mention (people and titled `work`s such as games, films, books) carries a top-level `entities[]` entry `{mention, type, canonical_name, wiki_title}` supplied by the LLM, so tooltips and Wikipedia links show full names (e.g. `Trump` → Donald Trump).
+  - Identities come only from the LLM — there is no manual mapping or surname inference. The publish step (`finalize_edition_entities`) de-duplicates entries and logs italic mentions missing one; mentions without an identity show their raw text as the tooltip title. `python3 -m scripts.common.entity_store --fill-editions` re-normalizes existing editions.
 - **Formatting:**
   - `**bold**` key takeaways (cleanly supporting nested `*italic*` human names without markdown boundary artifacts).
   - Per-paragraph icon/flag/logo deduplication (first mention shows badge/flag + dashed underline; repeat mentions keep the underline without repeating the icon).

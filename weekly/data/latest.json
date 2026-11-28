@@ -563,7 +563,142 @@
     "history": "ok",
     "long_reads": "ok"
   },
-  "entity_shards": [
-    "hot"
+  "entities": [
+    {
+      "mention": "M.C. Escher",
+      "type": "person",
+      "canonical_name": "M. C. Escher",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "M. C. Escher"
+    },
+    {
+      "mention": "William Morris",
+      "type": "person",
+      "canonical_name": "William Morris",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "William Morris"
+    },
+    {
+      "mention": "Dagomar Degroot",
+      "type": "person",
+      "canonical_name": "Dagomar Degroot",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Dagomar Degroot"
+    },
+    {
+      "mention": "Lina Ghotmeh",
+      "type": "person",
+      "canonical_name": "Lina Ghotmeh",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Lina Ghotmeh"
+    },
+    {
+      "mention": "Jan van Eyck",
+      "type": "person",
+      "canonical_name": "Jan van Eyck",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Jan van Eyck"
+    },
+    {
+      "mention": "Hubert van Eyck",
+      "type": "person",
+      "canonical_name": "Hubert van Eyck",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Hubert van Eyck"
+    },
+    {
+      "mention": "Alexander the Great",
+      "type": "person",
+      "canonical_name": "Alexander the Great",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Alexander the Great"
+    },
+    {
+      "mention": "Nikos Magouliotis",
+      "type": "person",
+      "canonical_name": "Nikos Magouliotis",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Nikos Magouliotis"
+    },
+    {
+      "mention": "Jean-François Pilâtre de Rozier",
+      "type": "person",
+      "canonical_name": "Jean-François Pilâtre de Rozier",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Jean-François Pilâtre de Rozier"
+    },
+    {
+      "mention": "Marquis d'Arlandes",
+      "type": "person",
+      "canonical_name": "François Laurent d'Arlandes",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "François Laurent d'Arlandes"
+    },
+    {
+      "mention": "Charles Darwin",
+      "type": "person",
+      "canonical_name": "Charles Darwin",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Charles Darwin"
+    },
+    {
+      "mention": "Albert Einstein",
+      "type": "person",
+      "canonical_name": "Albert Einstein",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Albert Einstein"
+    },
+    {
+      "mention": "Howard Carter",
+      "type": "person",
+      "canonical_name": "Howard Carter",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Howard Carter"
+    },
+    {
+      "mention": "Lord Carnarvon",
+      "type": "person",
+      "canonical_name": "George Herbert, 5th Earl of Carnarvon",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "George Herbert, 5th Earl of Carnarvon"
+    },
+    {
+      "mention": "Tomekichi Endo",
+      "type": "person",
+      "canonical_name": "Tomekichi Endo",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Tomekichi Endo"
+    },
+    {
+      "mention": "Dominic Walliman",
+      "type": "person",
+      "canonical_name": "Dominic Walliman",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Dominic Walliman"
+    },
+    {
+      "mention": "Alexander Pereira",
+      "type": "person",
+      "canonical_name": "Alexander Pereira",
+      "domain": "",
+      "country_code": "",
+      "wiki_title": "Alexander Pereira"
+    }
   ]
 }

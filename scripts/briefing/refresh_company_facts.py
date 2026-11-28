@@ -1,4 +1,4 @@
-"""Batched, sharded, and cascaded refresh for public entities in shared/data/entities/.
+"""Batched, cascaded refresh for public entities in shared/data/entities.json.
 
 Rate-limit-safe architecture:
 - Sharded selection (`--mode active|stale|all`, `--batch-size 40`): prioritizes recently
@@ -7,8 +7,8 @@ Rate-limit-safe architecture:
   - Stage 1 (fast): market cap via `yf.Ticker.fast_info` in paced chunks with exponential backoff.
   - Stage 2 (slow): CEO/leader check via `tk.info` ONLY on a 30-day cadence (`leader_refreshed_at`),
     avoiding ~97% of heavy `.info` API calls.
-- Incremental checkpointing: saves only dirty shards in `shared/data/entities/` after each chunk
-  so partial runs resume cleanly on the next execution, followed by scheduled hot/cold rebalancing.
+- Incremental checkpointing: saves `shared/data/entities.json` after each chunk with changes
+  so partial runs resume cleanly on the next execution.
 """
 
 from __future__ import annotations
@@ -24,8 +24,8 @@ from typing import Any
 
 import yfinance as yf
 
-from ..common.entity_store import load_all_entities, rebalance_hot_shard, save_entities_sharded
-from .config import ARCHIVE_DIR, ENTITIES_DIR, LATEST_PATH
+from ..common.entity_store import ENTITIES_PATH, REPO_ROOT, load_all_entities, save_entities
+from .config import ARCHIVE_DIR, LATEST_PATH
 
 _HONORIFIC_RE = re.compile(r"^(?:Mr\.|Ms\.|Mrs\.|Dr\.|Prof\.)\s+", re.IGNORECASE)
 _SUFFIX_RE = re.compile(
@@ -220,7 +220,7 @@ def _fetch_one_cascaded(item: tuple[str, str, bool]) -> tuple[str, str | None, s
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Batched, sharded, cascaded entity facts refresher.")
+    parser = argparse.ArgumentParser(description="Batched, cascaded entity facts refresher.")
     parser.add_argument("--mode", choices=["active", "stale", "all"], default="active")
     parser.add_argument("--batch-size", type=int, default=45, help="Max public entities per run (0 = unlimited).")
     parser.add_argument("--chunk-size", type=int, default=15, help="Tickers per paced chunk.")
@@ -229,8 +229,7 @@ def main() -> None:
     parser.add_argument("--max-age-days", type=int, default=7, help="Staleness window for valuations.")
     parser.add_argument("--leader-max-age-days", type=int, default=30, help="Cadence for heavy .info CEO checks.")
     parser.add_argument("--refresh-leaders", action="store_true", help="Force Stage 2 CEO check on selected targets.")
-    parser.add_argument("--rebalance", action="store_true", help="Force hot/cold shard rebalancing after refresh.")
-    parser.add_argument("--dry-run", action="store_true", help="Print selected shard without calling yfinance or writing files.")
+    parser.add_argument("--dry-run", action="store_true", help="Print selected targets without calling yfinance or writing files.")
     args = parser.parse_args()
 
     data: dict[str, Any] = load_all_entities()
@@ -276,24 +275,18 @@ def main() -> None:
                     updated_ceos.append(f"{companies[domain]['name']}: {old} -> {ceo_str}")
                     chunk_dirty.add(domain)
 
-        # Checkpoint progress after each chunk (writes only dirty shards)
+        # Checkpoint progress after each chunk with changes
         if chunk_dirty:
             data["updated_at"] = now_utc
-            save_entities_sharded(data, dirty_domains=chunk_dirty)
+            save_entities(data)
 
         if start + args.chunk_size < len(targets) and args.chunk_delay > 0:
             time.sleep(args.chunk_delay)
 
-    rebal = rebalance_hot_shard(force=args.rebalance)
     print(
         f"[entities] mode={args.mode}: refreshed {updated_caps}/{len(targets)} valuations, "
-        f"{checked_leaders} CEO checks (saved to {ENTITIES_DIR.relative_to(ENTITIES_DIR.parents[2])})"
+        f"{checked_leaders} CEO checks (saved to {ENTITIES_PATH.relative_to(REPO_ROOT)})"
     )
-    if rebal.get("rebalanced"):
-        print(
-            f"[entities] Rebalanced shards ({rebal['reason']}): hot={rebal['hot_count']}, "
-            f"promoted={len(rebal['promoted'])}, demoted={len(rebal['demoted'])}"
-        )
     if updated_ceos:
         print("[entities] Updated CEOs:", "; ".join(updated_ceos))
 

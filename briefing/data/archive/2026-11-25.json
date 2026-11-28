@@ -4360,7 +4360,5 @@
       ]
     }
   ],
-  "entity_shards": [
-    "hot"
-  ]
+  "entities": []
 }

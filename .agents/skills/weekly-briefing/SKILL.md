@@ -41,7 +41,8 @@ Read `/tmp/raw_weekly.json`, inspect the `instructions`, `synthesis_schema`, and
 **Formatting & Grounding Rules:**
 - Every story in `science`, `culture`, `history`, and `long_reads` must be grounded in `/tmp/raw_weekly.json` with **verbatim source URLs**.
 - Avoid repeating any story, place, dish, or quote from `recently_shown_3_editions` (the rolling 3-edition memory).
-- Wrap the single most illuminating takeaway in `**double asterisks**` and wrap human names in `*single asterisks*` so the UI renders bold highlights and person/Wikipedia links cleanly.
+- Wrap the single most illuminating takeaway in `**double asterisks**` and wrap human names and named creative/titled works (books, films, games, albums, artworks, shows, missions, ships) in `*single asterisks*` so the UI renders bold highlights and Wikipedia-linked tooltips cleanly.
+- Every distinct `*italic*` mention MUST have one top-level `entities` entry `{mention, type, canonical_name, wiki_title}` (`type` = `person` or `work`; `mention` = exact italic text; full `canonical_name` and exact English Wikipedia `wiki_title`, including short forms like `*Darwin*` → `Charles Darwin`). There is no automatic fallback: the publish step only logs italic mentions missing an entry.
 - When an item or digest contains an ambiguous acronym or homonym (e.g., `CMB` as cosmic microwave background vs China Merchants Bank, `Apple` as fruit, `Georgia` as U.S. state), populate `entities` (`{mention, type, canonical_name, domain, wiki_title}`) on the item or top-level `WeeklySynthesis` so the UI disambiguates it semantically.
 
 ### 4. Validate and publish JSON artifacts

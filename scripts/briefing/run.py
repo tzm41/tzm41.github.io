@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from ..common.entity_store import detect_edition_shards
+from ..common.entity_store import finalize_edition_entities
 from .config import (
     ARCHIVE_DIR,
     DATA_DIR,
@@ -34,6 +34,7 @@ from .schema import (
     AfternoonSynthesis,
     BriefSection,
     DailyBriefing,
+    EntityIdentity,
     GeminiBriefingSynthesis,
     SourceHealth,
 )
@@ -241,7 +242,7 @@ async def run_pipeline(
         raw_local=raw_local,
     )
 
-    briefing.entity_shards = detect_edition_shards(briefing.model_dump())
+    finalize_edition_entities(briefing, EntityIdentity, label=f"daily {briefing.date}")
 
     if dry_run:
         print("[run] Dry run enabled — skipping disk writes.")
@@ -272,7 +273,7 @@ def apply_external_synthesis(raw_bundle_path: str, synthesis_json_path: str) -> 
         raw_politics=bundle["raw_politics"],
         prior_briefing=prior,
     )
-    briefing.entity_shards = detect_edition_shards(briefing.model_dump())
+    finalize_edition_entities(briefing, EntityIdentity, label=f"daily {briefing.date}")
     _write_briefing_files(briefing)
     return briefing
 
@@ -436,7 +437,7 @@ def apply_afternoon_synthesis(synthesis_json_path: str) -> DailyBriefing:
             data["top_news"] = added + existing_morning
 
     briefing = DailyBriefing.model_validate(data)
-    briefing.entity_shards = detect_edition_shards(briefing.model_dump())
+    finalize_edition_entities(briefing, EntityIdentity, label=f"daily {briefing.date}")
     _write_briefing_files(briefing)
     return briefing
 

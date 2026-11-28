@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from ..common.entity_store import detect_edition_shards
+from ..common.entity_store import finalize_edition_entities
 from .config import ARCHIVE_DIR, DATA_DIR, INDEX_PATH, LATEST_PATH, MAX_ARCHIVE_WEEKS
 from .fetchers import (
     fetch_all_weekly_sources,
@@ -21,7 +21,7 @@ from .memory import (
     load_recent_weekly_memory,
     record_shown_weekly,
 )
-from .schema import WeeklyBriefing, WeeklySourceHealth, WeeklySynthesis
+from .schema import EntityIdentity, WeeklyBriefing, WeeklySourceHealth, WeeklySynthesis
 
 
 def _format_week_label(target_date: str) -> str:
@@ -112,7 +112,7 @@ def _build_synthesis_instructions(target_date: str, week_label: str) -> str:
         "Copy source URLs verbatim—never fabricate URLs or sources.\n"
         "2. Avoid repeating any story, place, dish, or quote listed in recently_shown_3_editions (items featured in the last 3 weekly editions).\n"
         "3. Use **double asterisks** around the single most illuminating takeaway/finding in each bullet or summary, "
-        "and *single asterisks* around human names (scientists, artists, historians, authors, leaders) so the UI renders them cleanly. "
+        "and *single asterisks* around human names (scientists, artists, historians, authors, leaders) and named creative/titled works (books, films, games, albums, artworks, missions), giving every distinct italic mention one top-level `entities` entry {mention, type: person|work, canonical_name, wiki_title}. "
         "For every item in 'digest' and 'week_in_brief', populate the required 'points' array with 1-3 standalone single-story bullet lines.\n"
         "4. Populate 'this_week_in_history' with 4 genuine, well-verified historical, scientific, or artistic anniversaries "
         f"that occurred during the calendar dates covered by {week_label}.\n"
@@ -195,7 +195,7 @@ def apply_synthesis(raw_path_str: str, synthesis_path_str: str, dry_run: bool = 
         source_health=health,
         entities=synthesis.entities,
     )
-    briefing.entity_shards = detect_edition_shards(briefing.model_dump())
+    finalize_edition_entities(briefing, EntityIdentity, label=f"weekly {briefing.date}")
 
     if dry_run:
         print(briefing.model_dump_json(indent=2))
