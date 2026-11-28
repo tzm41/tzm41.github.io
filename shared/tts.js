@@ -503,17 +503,19 @@ const CANTONESE_VOICE_RE = /cantonese|sin-?ji|zh[-_]hk/i;
 
 function scoreVoice(voice, targetLocale, isMobile) {
   const name = String(voice?.name || "");
-  const nameLower = name.toLowerCase();
+  const uri = String(voice?.voiceURI || "");
+  const combined = `${name} ${uri}`;
+  const combinedLower = combined.toLowerCase();
   const vLang = String(voice?.lang || "").toLowerCase().replace(/_/g, "-");
   let score = 0;
 
   if (NOVELTY_VOICE_RE.test(name)) score -= 120;
-  if (/\bcompact\b/i.test(name)) score -= 12;
+  if (/(?:\bcompact\b|\.compact\.)/i.test(combined)) score -= 12;
 
-  if (/\bpremium\b/i.test(name)) score += 60;
-  if (/\bsiri\b/i.test(name)) score += 55;
-  if (/\b(?:natural|neural)\b/i.test(name)) score += 50;
-  if (/\benhanced\b/i.test(name)) score += 45;
+  if (/(?:\bpremium\b|\.premium\.)/i.test(combined)) score += 60;
+  if (/(?:\bsiri\b|\.siri\.)/i.test(combined)) score += 55;
+  if (/\b(?:natural|neural)\b/i.test(combined)) score += 50;
+  if (/(?:\benhanced\b|\.enhanced\.)/i.test(combined)) score += 45;
   if (/\bgoogle\b/i.test(name)) score += 32;
 
   if (/ting-?ting/i.test(name)) score += 40;
@@ -527,7 +529,7 @@ function scoreVoice(voice, targetLocale, isMobile) {
   if (vLang === targetLocale) score += 25;
   if (isMobile && voice?.localService === true) score += 20;
   if (voice?.default === true) score += 5;
-  if (nameLower.includes("online")) score += isMobile ? -8 : 8;
+  if (combinedLower.includes("online")) score += isMobile ? -8 : 8;
 
   return score;
 }
