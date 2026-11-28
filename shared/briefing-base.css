@@ -2070,7 +2070,10 @@ h3 {
 /* ---------- Device-Native TTS Controls & Floating Mini-Player ---------- */
 
 html:not(.tts-supported) .tts-btn,
-html:not(.tts-supported) .tts-player {
+html:not(.tts-supported) .tts-player,
+html:not(.tts-supported) .tts-pref-only,
+html:not(.tts-enabled) .tts-btn,
+html:not(.tts-enabled) .tts-player {
   display: none !important;
 }
 

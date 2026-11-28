@@ -121,7 +121,7 @@ Consolidated user-experience, visual, and interaction specification across `coli
 ---
 
 ## 10. Reader-Friendly Text & Device-Native TTS Playback
-- **Progressive Feature Detection:** All `.tts-btn` and `.tts-player` UI is hidden by default (`html:not(.tts-supported)`) and revealed only on devices where `window.speechSynthesis` + `SpeechSynthesisUtterance` expose at least one voice.
+- **Progressive Feature Detection & Opt-In Toggle:** All `.tts-btn` and `.tts-player` UI is hidden by default (`html:not(.tts-supported)` / `html:not(.tts-enabled)`) and shown only when the device exposes `window.speechSynthesis` voices **and** the user turns on **Listen buttons** inside the **Customize** modal (`show_listen`, persisted locally and synced for signed-in users).
 - **Reader-Friendly Speech Normalization (`shared/tts.js`):** Uses optional `reader_text` when present or composes clean prose from structured item fields, stripping markdown/URLs/arrows and expanding market deltas (`(+0.54%)` → `up 0.54 percent` / `上涨0.54%`) across both `en-US` and `zh-CN` (China Local News).
 - **Controls & Placement:**
   - Per-card `Listen` pill right-aligned in `.source-links` (and `.geo-fact-foot-actions` on Around the World popovers) so it never crowds top-edge bookmark/share buttons.

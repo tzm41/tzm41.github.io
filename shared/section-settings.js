@@ -75,6 +75,8 @@ export function initSectionSettings({
   onApplied = null,
   getBriefStyle = null,
   onBriefStyleChange = null,
+  getShowListen = null,
+  onShowListenChange = null,
 } = {}) {
   const sectionMap = new Map(sections.map((s) => [s.id, s]));
   let current = normalizeSectionLayout(getInitialLayout(), sections);
@@ -85,6 +87,16 @@ export function initSectionSettings({
     const cur = styleVal === "bullets" ? "bullets" : "regular";
     modalEl.querySelectorAll("[data-ss-brief-style]").forEach((btn) => {
       const active = btn.dataset.ssBriefStyle === cur;
+      btn.classList.toggle("active", active);
+      btn.setAttribute("aria-pressed", String(active));
+    });
+  };
+
+  const syncShowListenUi = (enabledVal) => {
+    if (!modalEl) return;
+    const cur = Boolean(enabledVal);
+    modalEl.querySelectorAll("[data-ss-show-listen]").forEach((btn) => {
+      const active = (btn.dataset.ssShowListen === "on") === cur;
       btn.classList.toggle("active", active);
       btn.setAttribute("aria-pressed", String(active));
     });
@@ -193,6 +205,7 @@ export function initSectionSettings({
     modalEl.setAttribute("aria-modal", "true");
     modalEl.setAttribute("aria-label", `${pageLabel} Customization`);
     const curStyle = typeof getBriefStyle === "function" && getBriefStyle() === "bullets" ? "bullets" : "regular";
+    const curListen = typeof getShowListen === "function" && Boolean(getShowListen());
     const briefStyleHtml =
       typeof onBriefStyleChange === "function"
         ? `
@@ -208,16 +221,32 @@ export function initSectionSettings({
           </div>
         `
         : "";
+    const showListenHtml =
+      typeof onShowListenChange === "function"
+        ? `
+          <div class="ss-pref-row tts-pref-only" role="group" aria-label="Show listen buttons">
+            <div class="ss-pref-meta">
+              <span class="ss-pref-label">Listen buttons</span>
+              <span class="ss-pref-hint">Show text-to-speech playback controls on items</span>
+            </div>
+            <div class="ss-seg">
+              <button type="button" class="ss-seg-btn${!curListen ? " active" : ""}" data-ss-show-listen="off" aria-pressed="${!curListen}">Off</button>
+              <button type="button" class="ss-seg-btn${curListen ? " active" : ""}" data-ss-show-listen="on" aria-pressed="${curListen}">On</button>
+            </div>
+          </div>
+        `
+        : "";
     modalEl.innerHTML = `
       <div class="ss-modal">
         <div class="ss-header">
           <div>
             <h3>Customize</h3>
-            <p class="ss-sub">Adjust brief style, reorder sections, toggle visibility, or choose default collapse state.</p>
+            <p class="ss-sub">Adjust brief style, listen controls, section order, visibility, and default collapse state.</p>
           </div>
           <button type="button" class="ss-close" data-ss-close aria-label="Close customization">&times;</button>
         </div>
         ${briefStyleHtml}
+        ${showListenHtml}
         <div class="ss-list" data-section-settings-list></div>
         <div class="ss-footer">
           <button type="button" class="ss-reset-btn" data-ss-reset>Reset to defaults</button>
@@ -239,12 +268,23 @@ export function initSectionSettings({
         onBriefStyleChange(nextStyle);
         return;
       }
+      const listenBtn = e.target.closest("[data-ss-show-listen]");
+      if (listenBtn && typeof onShowListenChange === "function") {
+        const nextOn = listenBtn.dataset.ssShowListen === "on";
+        syncShowListenUi(nextOn);
+        onShowListenChange(nextOn);
+        return;
+      }
       if (e.target.closest("[data-ss-reset]")) {
         current = normalizeSectionLayout(null, sections);
         commit();
         if (typeof onBriefStyleChange === "function") {
           syncBriefStyleUi("regular");
           onBriefStyleChange("regular");
+        }
+        if (typeof onShowListenChange === "function") {
+          syncShowListenUi(false);
+          onShowListenChange(false);
         }
         return;
       }
@@ -299,6 +339,9 @@ export function initSectionSettings({
     if (typeof getBriefStyle === "function") {
       syncBriefStyleUi(getBriefStyle());
     }
+    if (typeof getShowListen === "function") {
+      syncShowListenUi(getShowListen());
+    }
     renderRows();
     modalEl.classList.remove("hidden");
     modalEl.querySelector("[data-ss-close]")?.focus();
@@ -321,6 +364,7 @@ export function initSectionSettings({
     closeModal,
     applyLayout,
     syncBriefStyle: syncBriefStyleUi,
+    syncShowListen: syncShowListenUi,
     getLayout: () => ({
       order: [...current.order],
       hidden: [...current.hidden],

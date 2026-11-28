@@ -50,6 +50,7 @@ import {
 } from "../shared/cards.js";
 import {
   initTts,
+  setTtsEnabled,
   tts,
   buildReaderText,
   renderTtsCardButton,
@@ -839,6 +840,8 @@ async function bootstrap() {
   initMasthead({ currentPage: "weekly" });
   initPwa();
   initTts();
+  state.showListen = Boolean(initialPrefs?.show_listen);
+  setTtsEnabled(state.showListen);
   els.navBookmarksCount = document.getElementById("nav-bookmarks-count");
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
     setPreference("theme", pref);
@@ -882,6 +885,12 @@ async function bootstrap() {
         renderDigest(state.edition);
         renderWeekInBrief(state.edition);
       }
+    },
+    getShowListen: () => state.showListen,
+    onShowListenChange: (nextOn) => {
+      state.showListen = Boolean(nextOn);
+      setPreference("show_listen", state.showListen);
+      setTtsEnabled(state.showListen);
     },
     sections: [
       { id: "overview", label: "Sunday Digest", defaultCollapsed: false, setOpen: setOverviewOpen },
@@ -937,6 +946,11 @@ async function bootstrap() {
           renderDigest(state.edition);
           renderWeekInBrief(state.edition);
         }
+      }
+      if (typeof prefs.show_listen === "boolean" && prefs.show_listen !== state.showListen) {
+        state.showListen = prefs.show_listen;
+        sectionSettings.syncShowListen(state.showListen);
+        setTtsEnabled(state.showListen);
       }
     },
   });

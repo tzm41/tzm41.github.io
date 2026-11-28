@@ -30,6 +30,7 @@ const PREF_KEYS = new Set([
   "market_tf",
   "world_kind_filter",
   "brief_style",
+  "show_listen",
   "daily_sections",
   "weekly_sections",
   "updated_at",
@@ -317,6 +318,13 @@ function validatePreferences(raw) {
           return { ok: false, message: "Invalid preferences.brief_style." };
         }
         out.brief_style = val;
+        break;
+      case "show_listen":
+        if (val === null) continue;
+        if (typeof val !== "boolean") {
+          return { ok: false, message: "Invalid preferences.show_listen." };
+        }
+        out.show_listen = val;
         break;
       case "daily_sections":
       case "weekly_sections": {

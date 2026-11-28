@@ -25,7 +25,7 @@ import {
   bindBookmarkToggle,
   onBookmarksChange,
 } from "../shared/bookmarks.js";
-import { initAuth, setPreference, getSyncState, onSyncStatusChange } from "../shared/auth.js";
+import { initAuth, getLocalPreferences, setPreference, getSyncState, onSyncStatusChange } from "../shared/auth.js";
 import { initPwa } from "../shared/pwa.js";
 import {
   renderCardShell,
@@ -36,6 +36,7 @@ import {
 } from "../shared/cards.js";
 import {
   initTts,
+  setTtsEnabled,
   tts,
   buildReaderText,
   renderTtsCardButton,
@@ -1032,6 +1033,7 @@ async function bootstrap() {
   initMasthead({ currentPage: "bookmarks" });
   initPwa();
   initTts();
+  setTtsEnabled(Boolean(getLocalPreferences()?.show_listen));
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
     setPreference("theme", pref);
   });
@@ -1046,6 +1048,9 @@ async function bootstrap() {
     onPreferencesApplied: (prefs) => {
       if (prefs?.theme) {
         themeCtrl.apply(prefs.theme, { silent: true, persist: true });
+      }
+      if (typeof prefs?.show_listen === "boolean") {
+        setTtsEnabled(prefs.show_listen);
       }
     },
     onAuthChange: () => renderFooterSyncIndicator(),

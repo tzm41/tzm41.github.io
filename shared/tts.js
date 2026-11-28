@@ -1237,3 +1237,13 @@ export function initTts() {
   tts.subscribe(syncTtsDom);
   syncTtsDom();
 }
+
+export function setTtsEnabled(enabled) {
+  const on = Boolean(enabled);
+  if (typeof document !== "undefined" && document.documentElement) {
+    document.documentElement.classList.toggle("tts-enabled", on);
+  }
+  if (!on) {
+    tts.stop();
+  }
+}

@@ -37,6 +37,7 @@ const PREF_SUBKEYS = [
   "market_tf",
   "world_kind_filter",
   "brief_style",
+  "show_listen",
   "daily_sections",
   "weekly_sections",
 ];
@@ -170,6 +171,7 @@ export function getLocalPreferences() {
     market_tf: blob.market_tf ?? null,
     world_kind_filter: blob.world_kind_filter ?? null,
     brief_style: blob.brief_style ?? "regular",
+    show_listen: blob.show_listen === true,
     daily_sections: blob.daily_sections ?? null,
     weekly_sections: blob.weekly_sections ?? null,
     updated_at: Number.isFinite(Number(blob.updated_at)) ? Math.floor(Number(blob.updated_at)) : 0,
@@ -189,6 +191,10 @@ function persistLocalPreferencesRaw(prefs) {
       market_tf: prefs.market_tf ?? existing.market_tf ?? null,
       world_kind_filter: prefs.world_kind_filter ?? existing.world_kind_filter ?? null,
       brief_style: prefs.brief_style ?? existing.brief_style ?? "regular",
+      show_listen:
+        typeof prefs.show_listen === "boolean"
+          ? prefs.show_listen
+          : Boolean(existing.show_listen === true),
       daily_sections: prefs.daily_sections !== undefined ? prefs.daily_sections : (existing.daily_sections ?? null),
       weekly_sections: prefs.weekly_sections !== undefined ? prefs.weekly_sections : (existing.weekly_sections ?? null),
       updated_at: Number.isFinite(Number(prefs.updated_at))
@@ -417,12 +423,13 @@ function updateBookmarkCountUi() {
 
 function buildStatePayload() {
   const { items, deleted } = exportForSync();
+  const { show_listen: _localOnlyListen, ...syncPrefs } = getLocalPreferences();
   return {
     schema_version: 1,
     base_rev: session?.rev ?? 0,
     base_hash: session?.hash ?? "",
     rev_sig: session?.rev_sig ?? "",
-    preferences: getLocalPreferences(),
+    preferences: syncPrefs,
     bookmarks: items,
     deleted,
   };

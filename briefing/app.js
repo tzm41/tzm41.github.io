@@ -49,6 +49,7 @@ import {
 } from "../shared/cards.js";
 import {
   initTts,
+  setTtsEnabled,
   tts,
   buildReaderText,
   renderTtsCardButton,
@@ -953,6 +954,8 @@ async function bootstrap() {
   initMasthead({ currentPage: "daily" });
   initPwa();
   initTts();
+  state.showListen = Boolean(initialPrefs?.show_listen);
+  setTtsEnabled(state.showListen);
   els.navBookmarksCount = document.getElementById("nav-bookmarks-count");
   const themeCtrl = initTheme(els.themeToggle, (_resolved, pref) => {
     setPreference("theme", pref);
@@ -1036,6 +1039,12 @@ async function bootstrap() {
       setPreference("brief_style", state.briefStyle);
       stopTtsIfSection("morning_brief", "afternoon_brief");
       if (state.briefing) renderExecutiveBrief(state.briefing);
+    },
+    getShowListen: () => state.showListen,
+    onShowListenChange: (nextOn) => {
+      state.showListen = Boolean(nextOn);
+      setPreference("show_listen", state.showListen);
+      setTtsEnabled(state.showListen);
     },
     sections: [
       { id: "executive", label: "Overview & Briefs", defaultCollapsed: false, setOpen: setExecutiveOpen },
@@ -1207,6 +1216,11 @@ async function bootstrap() {
         sectionSettings.syncBriefStyle(state.briefStyle);
         stopTtsIfSection("morning_brief", "afternoon_brief");
         if (state.briefing) renderExecutiveBrief(state.briefing);
+      }
+      if (typeof prefs.show_listen === "boolean" && prefs.show_listen !== state.showListen) {
+        state.showListen = prefs.show_listen;
+        sectionSettings.syncShowListen(state.showListen);
+        setTtsEnabled(state.showListen);
       }
       if (
         ["1d", "5d", "30d"].includes(prefs.market_tf) &&
