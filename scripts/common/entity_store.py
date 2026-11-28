@@ -217,14 +217,73 @@ def normalize_edition_entities(edition_dict: dict[str, Any]) -> tuple[list[dict[
     return top_level, missing
 
 
+_SOURCE_BIAS_RULE_RE = re.compile(r"^\s*\[/(.+)/([a-z]*),", re.MULTILINE)
+
+
+def _load_source_bias_patterns() -> list[re.Pattern[str]]:
+    ui_path = REPO_ROOT / "shared" / "ui.js"
+    if not ui_path.exists():
+        return []
+    text = ui_path.read_text(encoding="utf-8")
+    m = re.search(r"export const SOURCE_BIAS_RULES\s*=\s*\[(.*?)\n\];", text, re.DOTALL)
+    if not m:
+        return []
+    patterns: list[re.Pattern[str]] = []
+    for pat, flags_str in _SOURCE_BIAS_RULE_RE.findall(m.group(1)):
+        flags = re.IGNORECASE if "i" in flags_str else 0
+        try:
+            patterns.append(re.compile(pat, flags))
+        except re.error:
+            continue
+    return patterns
+
+
+def _collect_source_names(obj: Any, out: set[str]) -> None:
+    if isinstance(obj, list):
+        for item in obj:
+            _collect_source_names(item, out)
+        return
+    if isinstance(obj, dict):
+        sources = obj.get("sources")
+        if isinstance(sources, list):
+            for s in sources:
+                if isinstance(s, dict):
+                    name = str(s.get("name") or "").strip()
+                    if name:
+                        out.add(name)
+        src = obj.get("source")
+        if isinstance(src, str) and src.strip():
+            out.add(src.strip())
+        for k, v in obj.items():
+            if k not in ("sources", "source"):
+                _collect_source_names(v, out)
+
+
+def find_unrated_sources(edition_dict: dict[str, Any]) -> list[str]:
+    """Return sorted source names in an edition that do not match `SOURCE_BIAS_RULES` in `shared/ui.js`."""
+    patterns = _load_source_bias_patterns()
+    if not patterns:
+        return []
+    names: set[str] = set()
+    _collect_source_names(edition_dict, names)
+    return sorted(n for n in names if not any(p.search(n) for p in patterns))
+
+
 def finalize_edition_entities(briefing: Any, entity_cls: Any, *, label: str = "edition") -> Any:
     """Normalize LLM-provided `entities[]` on a Pydantic edition model before it is written."""
-    entities, missing = normalize_edition_entities(briefing.model_dump())
+    dumped = briefing.model_dump()
+    entities, missing = normalize_edition_entities(dumped)
     briefing.entities = [entity_cls.model_validate(e) for e in entities]
     if missing:
         print(
             f"[entities] {label}: {len(missing)} italic mention(s) without an LLM identity "
             f"(rendered as plain person tooltips): {', '.join(missing)}"
+        )
+    unrated = find_unrated_sources(dumped)
+    if unrated:
+        print(
+            f"[sources] {label}: {len(unrated)} source(s) missing from SOURCE_BIAS_RULES in shared/ui.js: "
+            f"{', '.join(unrated)}"
         )
     return briefing
 

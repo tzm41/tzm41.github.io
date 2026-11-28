@@ -3,7 +3,7 @@
  * Scope: / (Home, Daily Briefing, Weekly Briefing, Bookmarks)
  */
 
-const SW_VERSION = "2026-11-28-14";
+const SW_VERSION = "2026-11-28-15";
 const STATIC_CACHE = `briefings-static-${SW_VERSION}`;
 const DATA_CACHE = `briefings-data-${SW_VERSION}`;
 const ARCHIVE_CACHE = `briefings-archive-${SW_VERSION}`;

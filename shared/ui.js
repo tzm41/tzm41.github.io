@@ -598,18 +598,24 @@ export function buildHalfRingSvg(pos, dotColor) {
 
 export const SOURCE_BIAS_RULES = [
   [/reuters|ap news|associated press/i, "Center · Wire", "center", 0.5],
-  [/bloomberg|cnbc|financial times|ft中文网|wall street journal|wsj|marketplace/i, "Center · Business", "center", 0.5],
-  [/quanta|nature|science|sciencedaily|nasa|space\.com|phys\.org|new scientist|scientific american|nautilus/i, "Center · Science", "center", 0.5],
+  [/bloomberg|cnbc|financial times|ft中文网|wall street journal|wsj|marketplace|business journals/i, "Center · Business", "center", 0.5],
+  [/quanta|nature|science|sciencedaily|nasa|space\.com|phys\.org|new scientist|scientific american|nautilus|mongabay/i, "Center · Science", "center", 0.5],
   [/smithsonian|archaeology|history today|public domain review|open culture|aeon|psyche|atlas obscura|lapham|heritagedaily|works in progress|marginalian/i, "Center · History & Ideas", "center", 0.5],
   [/hyperallergic|colossal|dezeen|archdaily|literary hub|lithub|pitchfork|artnet/i, "Center · Arts & Culture", "center", 0.5],
-  [/bbc/i, "Center-Left · Public", "left", 0.36],
+  [/institute for the study of war|\bisw\b/i, "Center · Think Tank", "center", 0.5],
+  [/中国科大新闻网|大学新闻网|university news|mit news/i, "Center · Research / Univ.", "center", 0.5],
+  [/fair observer/i, "Center · Analysis", "center", 0.5],
+  [/tribune-democrat/i, "Center · Local", "center", 0.5],
+  [/kalshi|polymarket/i, "Prediction Market", "neutral", 0.5],
+  [/bbc|pbs/i, "Center-Left · Public", "left", 0.36],
   [/the hill|politico|courthouse news|stars and stripes|the economist/i, "Center", "center", 0.5],
   [/deutsche welle|rfi|al jazeera/i, "Center-Left · Int'l public", "left", 0.36],
   [/npr/i, "Lean Left · Public", "left", 0.24],
-  [/new york times|纽约时报|washington post|sacramento bee|ktvu|abc news|the atlantic|new yorker/i, "Lean Left", "left", 0.24],
+  [/new york times|纽约时报|washington post|sacramento bee|san francisco chronicle|mercury news|ktvu|abc news|the atlantic|new yorker/i, "Lean Left", "left", 0.24],
   [/guardian/i, "Left-Center", "left", 0.28],
   [/fox news|new york post/i, "Lean Right", "right", 0.78],
   [/arstechnica|ars technica|the verge|techcrunch|mit technology review|good news network|solidot/i, "Center · Tech / Specialty", "center", 0.5],
+  [/united24/i, "State-affiliated (UA)", "state", 0.5],
   [/中新网|新华社|人民日报|外交部|cgtn|global times/i, "State-affiliated (CN)", "state", 0.5],
   [/澎湃|thepaper/i, "State-owned (CN) · Urban", "state", 0.5],
   [/财新|caixin|第一财经|yicai|界面|jiemian/i, "Business / Market (CN)", "center", 0.5],
@@ -634,10 +640,8 @@ export function lookupSourceBias(name) {
 }
 
 export function renderSourceChip(src) {
-  const bias = lookupSourceBias(src.name);
-  const biasAttr = bias
-    ? ` data-bias="${escapeHtml(bias.text)}" data-bias-tone="${escapeHtml(bias.tone)}" data-bias-pos="${bias.pos}"`
-    : "";
+  const bias = lookupSourceBias(src.name) || { text: "Source · Unrated", tone: "neutral", pos: 0.5 };
+  const biasAttr = ` data-bias="${escapeHtml(bias.text)}" data-bias-tone="${escapeHtml(bias.tone)}" data-bias-pos="${bias.pos}"`;
   return `<a class="source-chip"${biasAttr} href="${safeUrl(src.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(src.name)} &nearr;</a>`;
 }
 

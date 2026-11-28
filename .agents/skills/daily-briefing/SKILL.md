@@ -35,7 +35,8 @@ Use this skill whenever the user asks to generate, refresh, or publish their dai
    python3 -m scripts.briefing.run --apply-synthesis /tmp/raw_briefing.json /tmp/synthesis.json
    rm -f /tmp/raw_briefing.json /tmp/synthesis.json
    ```
-5. **Conditional company facts & country leaders refresh**:
+5. **Conditional company facts, country leaders, & source bias coverage**:
+   - If `--apply-synthesis` logs any `[sources] ... missing from SOURCE_BIAS_RULES in shared/ui.js`, add matching bias rules to `SOURCE_BIAS_RULES` in `shared/ui.js` (and include `shared/ui.js` in the commit) so **every** source chip in the edition has a specific bias rating.
    - If any of today's synthesized news reports a **new CEO/leadership change, funding round, valuation, IPO, or acquisition** for a company or frontier AI lab tracked in `shared/data/entities.json`, update that entry (and `updated_at`) in `shared/data/entities.json` and run `python3 -m scripts.briefing.refresh_company_facts`.
    - If any of today's synthesized news reports a **new head of state / head of government, election victory, inauguration, resignation, or leadership transition** for any country or territory in `briefing/data/country_leaders.json`, update that entry (and `updated_at`) in `briefing/data/country_leaders.json` and validate with `python3 -m json.tool briefing/data/country_leaders.json > /dev/null`.
 6. **Commit and push** to GitHub Pages:

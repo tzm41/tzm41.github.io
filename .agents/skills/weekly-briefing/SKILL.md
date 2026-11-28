@@ -55,6 +55,8 @@ This validates the synthesis with Pydantic v2 and writes:
 - `weekly/data/index.json`
 - `weekly/data/weekly_memory.json` (rolling 3-edition memory)
 
+If `--apply-synthesis` logs any `[sources] ... missing from SOURCE_BIAS_RULES in shared/ui.js`, add matching bias rules to `SOURCE_BIAS_RULES` in `shared/ui.js` (and include `shared/ui.js` in the commit) so **every** source chip in the edition has a specific bias rating.
+
 ### 5. Commit and push to GitHub Pages
 ```bash
 git add weekly/data/ weekly/index.html weekly/og-latest.png && git commit -m "chore(weekly): update weekly briefing ($(date -u +%Y-%m-%d))" && git pull --rebase origin master && git push origin master
