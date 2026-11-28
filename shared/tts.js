@@ -702,17 +702,6 @@ export function createTtsEngine({ synth, UtteranceCtor, storage, isMobile } = {}
     utt.lang = item.lang || "en-US";
     utt.rate = rate;
 
-    let voices = [];
-    try {
-      voices = s.getVoices?.() || [];
-    } catch {
-      voices = [];
-    }
-    const ranked = rankVoices(voices, utt.lang, { isMobile: mobileFlag });
-    if (ranked.length) {
-      utt.voice = ranked[0];
-    }
-
     currentUtterance = utt;
 
     utt.onend = () => {
